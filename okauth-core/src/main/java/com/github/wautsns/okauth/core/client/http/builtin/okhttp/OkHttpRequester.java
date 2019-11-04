@@ -32,8 +32,8 @@ public class OkHttpRequester extends Requester {
     private OkHttpRequester(OkHttpRequester requester) {
         super(requester);
         this.okHttpClient = requester.okHttpClient;
-        this.builder = new Request.Builder(requester.builder.build());
-        this.formMap = requester.formMap;
+        this.builder = new Request.Builder(requester.builder.url(requester.getUrl()).build());
+        if (requester.formMap != null) { this.formMap = new HashMap<>(requester.formMap); }
     }
 
     @Override
@@ -50,13 +50,13 @@ public class OkHttpRequester extends Requester {
     }
 
     @Override
-    public Requester multate() {
+    public Requester mutate() {
         return new OkHttpRequester(this);
     }
 
     @Override
     protected Response get(ResponseReader responseReader) throws IOException {
-        builder.get().url(url);
+        builder.get().url(getUrl());
         return execute(responseReader);
     }
 
@@ -64,7 +64,7 @@ public class OkHttpRequester extends Requester {
     protected Response post(ResponseReader responseReader) throws IOException {
         Builder formBodyBuilder = new FormBody.Builder();
         formMap.forEach(formBodyBuilder::add);
-        builder.post(formBodyBuilder.build()).url(url);
+        builder.post(formBodyBuilder.build()).url(getUrl());
         return execute(responseReader);
     }
 

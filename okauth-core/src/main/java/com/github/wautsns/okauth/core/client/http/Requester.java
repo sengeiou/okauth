@@ -3,6 +3,7 @@ package com.github.wautsns.okauth.core.client.http;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Map;
 
 /**
  *
@@ -13,13 +14,13 @@ public abstract class Requester {
     public enum HttpMethod { GET, POST }
 
     private HttpMethod httpMethod;
-    protected String url;
+    private String url;
     private boolean containsQuery;
 
-    protected Requester(HttpMethod httpMethod, String url) {
+    public Requester(HttpMethod httpMethod, String url) {
         this.httpMethod = httpMethod;
         this.url = url;
-        this.containsQuery = (url.lastIndexOf('?') == -1);
+        this.containsQuery = (url.lastIndexOf('?') >= 0);
     }
 
     protected Requester(Requester requester) {
@@ -34,15 +35,19 @@ public abstract class Requester {
 
     public abstract Requester addHeader(String name, String value);
 
+    public String getUrl() {
+        return url;
+    }
+
     public Requester addQuery(String name, String value) {
         try {
-            return addQueryWithUrlEncodedValue(name, URLEncoder.encode(value, "UTF-8"));
+            return addUrlEncodedQuery(name, URLEncoder.encode(value, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("unreachable");
         }
     }
 
-    public Requester addQueryWithUrlEncodedValue(String name, String value) {
+    public Requester addUrlEncodedQuery(String name, String value) {
         if (containsQuery) {
             url += '&';
         } else {
@@ -55,7 +60,12 @@ public abstract class Requester {
 
     public abstract Requester addFormItem(String name, String value);
 
-    public abstract Requester multate();
+    public Requester addFormItems(Map<String, String> formItems) {
+        formItems.forEach(this::addFormItem);
+        return this;
+    }
+
+    public abstract Requester mutate();
 
     public Response exchangeForJson() throws IOException {
         return exchange(ResponseReader.JSON);
