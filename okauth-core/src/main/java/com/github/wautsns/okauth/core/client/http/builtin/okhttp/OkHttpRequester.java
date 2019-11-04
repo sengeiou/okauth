@@ -9,7 +9,6 @@ import com.github.wautsns.okauth.core.client.http.Response;
 import com.github.wautsns.okauth.core.client.http.ResponseReader;
 
 import okhttp3.FormBody;
-import okhttp3.FormBody.Builder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
@@ -62,7 +61,7 @@ public class OkHttpRequester extends Requester {
 
     @Override
     protected Response post(ResponseReader responseReader) throws IOException {
-        Builder formBodyBuilder = new FormBody.Builder();
+        FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formMap.forEach(formBodyBuilder::add);
         builder.post(formBodyBuilder.build()).url(getUrl());
         return execute(responseReader);
