@@ -1,7 +1,8 @@
-package com.github.wautsns.okauth.core.client.http;
+package com.github.wautsns.okauth.core.client.util.http;
 
 import java.util.Map;
 
+import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OkAuthException;
 
 /**
@@ -18,7 +19,7 @@ public class Response {
         this.data = data;
     }
 
-    public Response check(String openPlatform, String errorName, String errorDescriptionName)
+    public Response check(OpenPlatform openPlatform, String errorName, String errorDescriptionName)
             throws OkAuthException {
         Object temp = data.get(errorName);
         String error;

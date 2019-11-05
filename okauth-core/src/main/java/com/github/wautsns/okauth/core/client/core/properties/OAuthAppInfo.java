@@ -1,4 +1,4 @@
-package com.github.wautsns.okauth.core.client;
+package com.github.wautsns.okauth.core.client.core.properties;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -9,7 +9,6 @@ import java.net.URLEncoder;
  */
 public class OAuthAppInfo {
 
-    private String openPlatform;
     private String clientId;
     private String clientSecret;
     private String redirectUri;
@@ -20,17 +19,6 @@ public class OAuthAppInfo {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("unreachable");
         }
-    }
-
-    /** Get {@link #openPlatform}. */
-    public String getOpenPlatform() {
-        return openPlatform;
-    }
-
-    /** Set {@link #openPlatform}. */
-    public OAuthAppInfo setOpenPlatform(String openPlatform) {
-        this.openPlatform = openPlatform;
-        return this;
     }
 
     /** Get {@link #clientId}. */

@@ -1,4 +1,4 @@
-package com.github.wautsns.okauth.core.client.dto;
+package com.github.wautsns.okauth.core.client.core.dto;
 
 /**
  *

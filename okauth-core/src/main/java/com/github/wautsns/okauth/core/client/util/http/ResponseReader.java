@@ -1,4 +1,4 @@
-package com.github.wautsns.okauth.core.client.http;
+package com.github.wautsns.okauth.core.client.util.http;
 
 import java.io.IOException;
 import java.io.InputStream;

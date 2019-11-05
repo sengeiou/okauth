@@ -2,8 +2,8 @@ package com.github.wautsns.okauth.core.client.builtin.gitee;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.github.wautsns.okauth.core.client.dto.OAuthUser;
-import com.github.wautsns.okauth.core.client.http.Response;
+import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
+import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
  *
@@ -22,7 +22,7 @@ public class GiteeUser extends OAuthUser {
     }
 
     @Override
-    public String getNickName() {
+    public String getNickname() {
         return getString("name");
     }
 

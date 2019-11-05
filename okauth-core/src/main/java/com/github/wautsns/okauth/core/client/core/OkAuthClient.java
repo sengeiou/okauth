@@ -1,11 +1,12 @@
-package com.github.wautsns.okauth.core.client;
+package com.github.wautsns.okauth.core.client.core;
 
 import java.io.IOException;
 
-import com.github.wautsns.okauth.core.client.dto.OAuthRedirectUriQuery;
-import com.github.wautsns.okauth.core.client.dto.OAuthToken;
-import com.github.wautsns.okauth.core.client.dto.OAuthUser;
-import com.github.wautsns.okauth.core.client.http.Requesters;
+import com.github.wautsns.okauth.core.client.core.dto.OAuthRedirectUriQuery;
+import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
+import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
+import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
+import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.exception.OkAuthException;
 
 /**
@@ -15,16 +16,14 @@ import com.github.wautsns.okauth.core.exception.OkAuthException;
 public abstract class OkAuthClient {
 
     protected final OAuthAppInfo oauthAppInfo;
-    protected final Requesters requesters;
+    protected final Requester requester;
 
-    protected OkAuthClient(OAuthAppInfo oAuthAppInfo, Requesters requesters) {
+    protected OkAuthClient(OAuthAppInfo oAuthAppInfo, Requester requester) {
         this.oauthAppInfo = oAuthAppInfo;
-        this.requesters = requesters;
+        this.requester = requester;
     }
 
-    public String getOpenPlatform() {
-        return oauthAppInfo.getOpenPlatform();
-    }
+    public abstract OpenPlatform getOpenPlatform();
 
     public abstract String initAuthorizeUrl(String state);
 

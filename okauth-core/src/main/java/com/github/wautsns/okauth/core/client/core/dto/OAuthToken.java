@@ -1,6 +1,6 @@
-package com.github.wautsns.okauth.core.client.dto;
+package com.github.wautsns.okauth.core.client.core.dto;
 
-import com.github.wautsns.okauth.core.client.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
  *

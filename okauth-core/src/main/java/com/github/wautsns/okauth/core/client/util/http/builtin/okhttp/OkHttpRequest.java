@@ -1,56 +1,56 @@
-package com.github.wautsns.okauth.core.client.http.builtin.okhttp;
+package com.github.wautsns.okauth.core.client.util.http.builtin.okhttp;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.wautsns.okauth.core.client.http.Requester;
-import com.github.wautsns.okauth.core.client.http.Response;
-import com.github.wautsns.okauth.core.client.http.ResponseReader;
+import com.github.wautsns.okauth.core.client.util.http.Request;
+import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.ResponseReader;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import okhttp3.Request.Builder;
 
 /**
  *
  * @author wautsns
  */
-public class OkHttpRequester extends Requester {
+public class OkHttpRequest extends Request {
 
     private final OkHttpClient okHttpClient;
-    private final Request.Builder builder;
+    private final Builder builder;
     private Map<String, String> formMap;
 
-    public OkHttpRequester(HttpMethod httpMethod, String url, OkHttpClient okHttpClient) {
+    public OkHttpRequest(HttpMethod httpMethod, String url, OkHttpClient okHttpClient) {
         super(httpMethod, url);
         this.okHttpClient = okHttpClient;
-        this.builder = new Request.Builder();
+        this.builder = new Builder();
     }
 
-    private OkHttpRequester(OkHttpRequester requester) {
+    private OkHttpRequest(OkHttpRequest requester) {
         super(requester);
         this.okHttpClient = requester.okHttpClient;
-        this.builder = new Request.Builder(requester.builder.url(requester.getUrl()).build());
+        this.builder = new Builder(requester.builder.url(requester.getUrl()).build());
         if (requester.formMap != null) { this.formMap = new HashMap<>(requester.formMap); }
     }
 
     @Override
-    public Requester addHeader(String name, String value) {
+    public Request addHeader(String name, String value) {
         builder.addHeader(name, value);
         return this;
     }
 
     @Override
-    public Requester addFormItem(String name, String value) {
+    public Request addFormItem(String name, String value) {
         if (formMap == null) { formMap = new HashMap<>(8); }
         formMap.put(name, value);
         return this;
     }
 
     @Override
-    public Requester mutate() {
-        return new OkHttpRequester(this);
+    public Request mutate() {
+        return new OkHttpRequest(this);
     }
 
     @Override
@@ -68,8 +68,7 @@ public class OkHttpRequester extends Requester {
     }
 
     private Response execute(ResponseReader responseReader) throws IOException {
-        Request request = builder.build();
-        okhttp3.Response response = okHttpClient.newCall(request).execute();
+        okhttp3.Response response = okHttpClient.newCall(builder.build()).execute();
         return new Response(
             response.code(),
             responseReader.read(response.body().byteStream()));

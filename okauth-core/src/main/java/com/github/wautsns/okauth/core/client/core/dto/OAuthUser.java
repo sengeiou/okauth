@@ -1,6 +1,6 @@
-package com.github.wautsns.okauth.core.client.dto;
+package com.github.wautsns.okauth.core.client.core.dto;
 
-import com.github.wautsns.okauth.core.client.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
  *
@@ -14,7 +14,7 @@ public abstract class OAuthUser extends OAuthData {
 
     public abstract String getOpenId();
 
-    public abstract String getNickName();
+    public abstract String getNickname();
 
     public abstract String getAvatarUrl();
 

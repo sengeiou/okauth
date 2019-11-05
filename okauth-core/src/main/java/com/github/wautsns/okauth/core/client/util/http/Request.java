@@ -1,4 +1,4 @@
-package com.github.wautsns.okauth.core.client.http;
+package com.github.wautsns.okauth.core.client.util.http;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @author wautsns
  */
-public abstract class Requester {
+public abstract class Request {
 
     public enum HttpMethod { GET, POST }
 
@@ -17,29 +17,29 @@ public abstract class Requester {
     private String url;
     private boolean containsQuery;
 
-    public Requester(HttpMethod httpMethod, String url) {
+    public Request(HttpMethod httpMethod, String url) {
         this.httpMethod = httpMethod;
         this.url = url;
         this.containsQuery = (url.lastIndexOf('?') >= 0);
     }
 
-    protected Requester(Requester requester) {
+    protected Request(Request requester) {
         this.httpMethod = requester.httpMethod;
         this.url = requester.url;
         this.containsQuery = requester.containsQuery;
     }
 
-    public Requester acceptJson() {
+    public Request acceptJson() {
         return addHeader("Accept", "application/json");
     }
 
-    public abstract Requester addHeader(String name, String value);
+    public abstract Request addHeader(String name, String value);
 
     public String getUrl() {
         return url;
     }
 
-    public Requester addQuery(String name, String value) {
+    public Request addQuery(String name, String value) {
         try {
             return addUrlEncodedQuery(name, URLEncoder.encode(value, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -47,7 +47,7 @@ public abstract class Requester {
         }
     }
 
-    public Requester addUrlEncodedQuery(String name, String value) {
+    public Request addUrlEncodedQuery(String name, String value) {
         if (containsQuery) {
             url += '&';
         } else {
@@ -58,14 +58,14 @@ public abstract class Requester {
         return this;
     }
 
-    public abstract Requester addFormItem(String name, String value);
+    public abstract Request addFormItem(String name, String value);
 
-    public Requester addFormItems(Map<String, String> formItems) {
+    public Request addFormItems(Map<String, String> formItems) {
         formItems.forEach(this::addFormItem);
         return this;
     }
 
-    public abstract Requester mutate();
+    public abstract Request mutate();
 
     public Response exchangeForJson() throws IOException {
         return exchange(ResponseReader.JSON);
