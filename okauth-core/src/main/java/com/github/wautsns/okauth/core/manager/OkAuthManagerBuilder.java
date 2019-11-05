@@ -1,6 +1,5 @@
 package com.github.wautsns.okauth.core.manager;
 
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,8 +25,14 @@ public class OkAuthManagerBuilder {
 
     public OkAuthManagerBuilder register(
             OpenPlatform openPlatform, OAuthAppInfo oAuthAppInfo, Requester requester) {
-        clients.put(openPlatform, openPlatform.constructOkAuthClient(oAuthAppInfo, requester));
-        return this;
+        OkAuthClient old = clients.put(
+            openPlatform,
+            openPlatform.constructOkAuthClient(oAuthAppInfo, requester));
+        if (old == null) { return this; }
+        throw new RuntimeException(
+            "There are two open platform with the same identifier(or duplicate registration): "
+                + "old: " + old.getOpenPlatform()
+                + "new: " + openPlatform);
     }
 
     public OkAuthManagerBuilder register(OkAuthClientProperties properties) {
@@ -52,29 +57,29 @@ public class OkAuthManagerBuilder {
             Class<?> temp2 = Class.forName(temp1[0]);
             if (!OpenPlatform.class.isAssignableFrom(temp2)) {
                 throw new RuntimeException(String.format(
-                    "Open platform [%s] should implement %s",
+                    "Open platform [%s] should be an enumeration that implements %s",
                     temp2, OpenPlatform.class));
             }
             openPlatformClass = (Class<? extends OpenPlatform>) temp2;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        if (openPlatformClass.isEnum()) {
-            openPlatform = findOpenPlatform(openPlatformClass.getEnumConstants(), identifier);
-            if (openPlatform != null) { return openPlatform; }
-            throw new RuntimeException((identifier == null)
-                ? "Please give an identifier for " + openPlatformClass
-                : String.format("There is no identifier named '%s' in %s",
-                    identifier, openPlatformClass));
-        } else if (!Modifier.isAbstract(openPlatformClass.getModifiers())) {
-            try {
-                return openPlatformClass.newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException(
-                    openPlatformClass + " should contain a public no-arg constructor.");
-            }
+        if (!openPlatformClass.isEnum()) {
+            throw new RuntimeException(String.format(
+                "Open platform [%s] should be an enumeration.", openPlatformClass));
         }
-        throw new RuntimeException("Illegal property value(ok-oauth-client): " + okAuthClient);
+        OpenPlatform[] openPlatforms = openPlatformClass.getEnumConstants();
+        openPlatform = findOpenPlatform(openPlatforms, identifier);
+        if (openPlatform != null) { return openPlatform; }
+        if (identifier != null) {
+            throw new RuntimeException(String.format(
+                "There is no identifier named '%s' in %s",
+                identifier, openPlatformClass));
+        } else if (openPlatforms.length == 1) {
+            return openPlatforms[0];
+        } else {
+            throw new RuntimeException("Please give an identifier for " + openPlatformClass);
+        }
     }
 
     private <T extends OpenPlatform> OpenPlatform findOpenPlatform(
