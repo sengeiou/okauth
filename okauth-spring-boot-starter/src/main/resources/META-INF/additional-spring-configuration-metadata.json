@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "okauth",
+  "type": "com.github.wautsns.okauth.springbootstarter.properties.OkAuthProperties",
+  "description": "properties for okauth"
+}]}
