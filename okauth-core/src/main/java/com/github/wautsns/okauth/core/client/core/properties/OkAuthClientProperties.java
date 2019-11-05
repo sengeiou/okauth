@@ -8,18 +8,18 @@ import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthHttpProp
  */
 public class OkAuthClientProperties {
 
-    private String okAuthClient;
+    private String openPlatform;
     private OAuthAppInfo oauthAppInfo;
-    private OkAuthHttpProperties okauthHttpProperties = new OkAuthHttpProperties();
+    private OkAuthHttpProperties http = new OkAuthHttpProperties();
 
-    /** Get {@link #okAuthClient}. */
-    public String getOkAuthClient() {
-        return okAuthClient;
+    /** Get {@link #openPlatform}. */
+    public String getOpenPlatform() {
+        return openPlatform;
     }
 
-    /** Set {@link #okAuthClient}. */
-    public OkAuthClientProperties setOkAuthClient(String okAuthClient) {
-        this.okAuthClient = okAuthClient;
+    /** Set {@link #openPlatform}. */
+    public OkAuthClientProperties setOpenPlatform(String openPlatform) {
+        this.openPlatform = openPlatform;
         return this;
     }
 
@@ -34,15 +34,14 @@ public class OkAuthClientProperties {
         return this;
     }
 
-    /** Get {@link #okauthHttpProperties}. */
-    public OkAuthHttpProperties getOkauthHttpProperties() {
-        return okauthHttpProperties;
+    /** Get {@link #http}. */
+    public OkAuthHttpProperties getHttp() {
+        return http;
     }
 
-    /** Set {@link #okauthHttpProperties}. */
-    public OkAuthClientProperties setOkauthHttpProperties(
-            OkAuthHttpProperties okauthHttpProperties) {
-        this.okauthHttpProperties = okauthHttpProperties;
+    /** Set {@link #http}. */
+    public OkAuthClientProperties setHttp(OkAuthHttpProperties http) {
+        this.http = http;
         return this;
     }
 

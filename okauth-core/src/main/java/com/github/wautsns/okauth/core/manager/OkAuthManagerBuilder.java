@@ -24,10 +24,10 @@ public class OkAuthManagerBuilder {
     }
 
     public OkAuthManagerBuilder register(
-            OpenPlatform openPlatform, OAuthAppInfo oAuthAppInfo, Requester requester) {
+            OpenPlatform openPlatform, OAuthAppInfo oauthAppInfo, Requester requester) {
         OkAuthClient old = clients.put(
             openPlatform,
-            openPlatform.constructOkAuthClient(oAuthAppInfo, requester));
+            openPlatform.constructOkAuthClient(oauthAppInfo, requester));
         if (old == null) { return this; }
         throw new RuntimeException(
             "There are two open platform with the same identifier(or duplicate registration): "
@@ -37,9 +37,9 @@ public class OkAuthManagerBuilder {
 
     public OkAuthManagerBuilder register(OkAuthClientProperties properties) {
         return register(
-            parseOkAuthClient(properties.getOkAuthClient()),
+            parseOpenPlatform(properties.getOpenPlatform()),
             properties.getOauthAppInfo(),
-            parseRequester(properties.getOkauthHttpProperties()));
+            parseRequester(properties.getHttp()));
     }
 
     // ------------------------- BEGIN -------------------------
@@ -47,20 +47,20 @@ public class OkAuthManagerBuilder {
     // ---------------------------------------------------------
 
     @SuppressWarnings("unchecked")
-    private OpenPlatform parseOkAuthClient(String okAuthClient) {
-        OpenPlatform openPlatform = findOpenPlatform(BuiltInOpenPlatform.values(), okAuthClient);
-        if (openPlatform != null) { return openPlatform; }
-        String[] temp1 = okAuthClient.split(":", 2);
-        String identifier = (temp1.length == 2) ? temp1[1] : null;
+    private OpenPlatform parseOpenPlatform(String openPlatform) {
+        OpenPlatform temp1 = findOpenPlatform(BuiltInOpenPlatform.values(), openPlatform);
+        if (temp1 != null) { return temp1; }
+        String[] temp2 = openPlatform.split(":", 2);
+        String identifier = (temp2.length == 2) ? temp2[1] : null;
         Class<? extends OpenPlatform> openPlatformClass;
         try {
-            Class<?> temp2 = Class.forName(temp1[0]);
-            if (!OpenPlatform.class.isAssignableFrom(temp2)) {
+            Class<?> temp3 = Class.forName(temp2[0]);
+            if (!OpenPlatform.class.isAssignableFrom(temp3)) {
                 throw new RuntimeException(String.format(
                     "Open platform [%s] should be an enumeration that implements %s",
-                    temp2, OpenPlatform.class));
+                    temp3, OpenPlatform.class));
             }
-            openPlatformClass = (Class<? extends OpenPlatform>) temp2;
+            openPlatformClass = (Class<? extends OpenPlatform>) temp3;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -69,8 +69,8 @@ public class OkAuthManagerBuilder {
                 "Open platform [%s] should be an enumeration.", openPlatformClass));
         }
         OpenPlatform[] openPlatforms = openPlatformClass.getEnumConstants();
-        openPlatform = findOpenPlatform(openPlatforms, identifier);
-        if (openPlatform != null) { return openPlatform; }
+        temp1 = findOpenPlatform(openPlatforms, identifier);
+        if (temp1 != null) { return temp1; }
         if (identifier != null) {
             throw new RuntimeException(String.format(
                 "There is no identifier named '%s' in %s",

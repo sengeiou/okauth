@@ -28,7 +28,7 @@ public class GiteeOkAuthClient extends OkAuthClient {
         authorizeUrlPrefix = "https://gitee.com/oauth/authorize"
             + "?response_type=code"
             + "&client_id=" + oauthAppInfo.getClientId()
-            + "&redirect_uri=" + oauthAppInfo.getUrlEncodedRedirectUri()
+            + "&redirect_uri=" + urlEncode(oauthAppInfo.getRedirectUri())
             + "&state=";
         tokenRequest = requester
             .post("https://gitee.com/oauth/token")

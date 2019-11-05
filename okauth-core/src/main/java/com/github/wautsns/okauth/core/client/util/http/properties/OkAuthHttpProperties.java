@@ -15,7 +15,7 @@ public class OkAuthHttpProperties {
     private Integer maxIdleConnections = 5;
     private Long keepAlive = 5L * 60_000;
     private TimeUnit keepAliveTimeUnit = TimeUnit.MILLISECONDS;
-    private Integer connectTimeoutMilliSeconds = 5_000;
+    private Integer connectTimeoutMilliseconds = 5_000;
 
     /** Get {@link #requesterClass}. */
     public Class<? extends Requester> getRequesterClass() {
@@ -62,13 +62,14 @@ public class OkAuthHttpProperties {
     }
 
     /** Get {@link #connectTimeoutMilliSeconds}. */
-    public Integer getConnectTimeoutMilliSeconds() {
-        return connectTimeoutMilliSeconds;
+    public Integer getConnectTimeoutMilliseconds() {
+        return connectTimeoutMilliseconds;
     }
 
     /** Set {@link #connectTimeoutMilliSeconds}. */
-    public void setConnectTimeoutMilliSeconds(Integer connectTimeoutMilliSeconds) {
-        this.connectTimeoutMilliSeconds = connectTimeoutMilliSeconds;
+    public OkAuthHttpProperties setConnectTimeoutMilliseconds(Integer connectTimeoutMilliseconds) {
+        this.connectTimeoutMilliseconds = connectTimeoutMilliseconds;
+        return this;
     }
 
 }

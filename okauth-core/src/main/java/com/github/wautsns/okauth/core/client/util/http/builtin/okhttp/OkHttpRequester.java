@@ -3,8 +3,8 @@ package com.github.wautsns.okauth.core.client.util.http.builtin.okhttp;
 import java.util.concurrent.TimeUnit;
 
 import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Request.HttpMethod;
+import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthHttpProperties;
 
 import okhttp3.ConnectionPool;
@@ -25,7 +25,7 @@ public class OkHttpRequester extends Requester {
     public OkHttpRequester(OkAuthHttpProperties okAuthHttpConfiguration) {
         this.okHttpClient = new OkHttpClient.Builder()
             .connectTimeout(
-                okAuthHttpConfiguration.getConnectTimeoutMilliSeconds(),
+                okAuthHttpConfiguration.getConnectTimeoutMilliseconds(),
                 TimeUnit.MILLISECONDS)
             .readTimeout(3, TimeUnit.SECONDS)
             .writeTimeout(3, TimeUnit.SECONDS)

@@ -1,8 +1,5 @@
 package com.github.wautsns.okauth.core.client.core.properties;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 /**
  *
  * @author wautsns
@@ -12,14 +9,6 @@ public class OAuthAppInfo {
     private String clientId;
     private String clientSecret;
     private String redirectUri;
-
-    public String getUrlEncodedRedirectUri() {
-        try {
-            return URLEncoder.encode(redirectUri, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("unreachable");
-        }
-    }
 
     /** Get {@link #clientId}. */
     public String getClientId() {
