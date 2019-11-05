@@ -16,12 +16,19 @@
         </developer>
     </developers>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.github.wautsns</groupId>
-            <artifactId>okauth-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.wautsns</groupId>
+                <artifactId>okauth-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.wautsns</groupId>
+                <artifactId>okauth-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

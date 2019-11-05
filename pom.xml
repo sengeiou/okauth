@@ -29,6 +29,7 @@
 
     <modules>
         <module>okauth-core</module>
+        <module>okauth-spring-boot-starter</module>
     </modules>
 
     <dependencyManagement>
