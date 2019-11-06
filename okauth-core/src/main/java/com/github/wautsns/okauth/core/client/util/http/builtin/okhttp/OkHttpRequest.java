@@ -7,6 +7,7 @@ import java.util.Map;
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 import com.github.wautsns.okauth.core.client.util.http.ResponseReader;
+import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -54,24 +55,28 @@ public class OkHttpRequest extends Request {
     }
 
     @Override
-    protected Response get(ResponseReader responseReader) throws IOException {
+    protected Response get(ResponseReader responseReader) throws OkAuthIOException {
         builder.get().url(getUrl());
         return execute(responseReader);
     }
 
     @Override
-    protected Response post(ResponseReader responseReader) throws IOException {
+    protected Response post(ResponseReader responseReader) throws OkAuthIOException {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formMap.forEach(formBodyBuilder::add);
         builder.post(formBodyBuilder.build()).url(getUrl());
         return execute(responseReader);
     }
 
-    private Response execute(ResponseReader responseReader) throws IOException {
-        okhttp3.Response response = okHttpClient.newCall(builder.build()).execute();
-        return new Response(
-            response.code(),
-            responseReader.read(response.body().byteStream()));
+    private Response execute(ResponseReader responseReader) throws OkAuthIOException {
+        try {
+            okhttp3.Response response = okHttpClient.newCall(builder.build()).execute();
+            return new Response(
+                response.code(),
+                responseReader.read(response.body().byteStream()));
+        } catch (IOException ioException) {
+            throw new OkAuthIOException(ioException);
+        }
     }
 
 }

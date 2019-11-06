@@ -1,9 +1,10 @@
 package com.github.wautsns.okauth.core.client.util.http;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
+
+import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
  *
@@ -67,11 +68,11 @@ public abstract class Request {
 
     public abstract Request mutate();
 
-    public Response exchangeForJson() throws IOException {
+    public Response exchangeForJson() throws OkAuthIOException {
         return exchange(ResponseReader.JSON);
     }
 
-    public Response exchange(ResponseReader responseReader) throws IOException {
+    public Response exchange(ResponseReader responseReader) throws OkAuthIOException {
         if (httpMethod == HttpMethod.GET) {
             return get(responseReader);
         } else if (httpMethod == HttpMethod.POST) {
@@ -81,8 +82,8 @@ public abstract class Request {
         }
     }
 
-    protected abstract Response get(ResponseReader responseReader) throws IOException;
+    protected abstract Response get(ResponseReader responseReader) throws OkAuthIOException;
 
-    protected abstract Response post(ResponseReader responseReader) throws IOException;
+    protected abstract Response post(ResponseReader responseReader) throws OkAuthIOException;
 
 }

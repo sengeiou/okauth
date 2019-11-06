@@ -19,7 +19,7 @@ public class OkAuthManager {
         this.clients = clients;
     }
 
-    public OkAuthClient getClient(String openPlatform) {
+    public OkAuthClient getClient(String openPlatform) throws OkAuthException {
         for (Entry<OpenPlatform, OkAuthClient> entry : clients.entrySet()) {
             if (entry.getKey().getIdentifier().equalsIgnoreCase(openPlatform)) {
                 return entry.getValue();
@@ -28,7 +28,7 @@ public class OkAuthManager {
         return getClient((OpenPlatform) null);
     }
 
-    public OkAuthClient getClient(OpenPlatform openPlatform) {
+    public OkAuthClient getClient(OpenPlatform openPlatform) throws OkAuthException {
         OkAuthClient client = clients.get(openPlatform);
         if (client != null) { return client; }
         throw new OkAuthException(

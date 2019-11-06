@@ -1,6 +1,5 @@
 package com.github.wautsns.okauth.core.client.core;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -10,6 +9,7 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.exception.OkAuthException;
+import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
  *
@@ -30,12 +30,13 @@ public abstract class OkAuthClient {
     public abstract String initAuthorizeUrl(String state);
 
     public abstract OAuthToken exchangeForToken(OAuthRedirectUriQuery redirectUriQuery)
-            throws OkAuthException, IOException;
+            throws OkAuthException, OkAuthIOException;
 
-    public abstract OAuthUser exchangeForUser(OAuthToken token) throws OkAuthException, IOException;
+    public abstract OAuthUser exchangeForUser(OAuthToken token)
+            throws OkAuthException, OkAuthIOException;
 
     public OAuthUser exchangeForUser(OAuthRedirectUriQuery redirectUriQuery)
-            throws OkAuthException, IOException {
+            throws OkAuthException, OkAuthIOException {
         return exchangeForUser(exchangeForToken(redirectUriQuery));
     }
 

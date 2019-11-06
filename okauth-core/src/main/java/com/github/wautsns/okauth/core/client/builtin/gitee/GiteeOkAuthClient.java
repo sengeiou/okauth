@@ -1,7 +1,5 @@
 package com.github.wautsns.okauth.core.client.builtin.gitee;
 
-import java.io.IOException;
-
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
@@ -11,6 +9,7 @@ import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.exception.OkAuthException;
+import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
  *
@@ -52,7 +51,7 @@ public class GiteeOkAuthClient extends OkAuthClient {
 
     @Override
     public GiteeToken exchangeForToken(OAuthRedirectUriQuery redirectUriQuery)
-            throws OkAuthException, IOException {
+            throws OkAuthException, OkAuthIOException {
         return new GiteeToken(tokenRequest.mutate()
             .addFormItem("code", redirectUriQuery.getCode())
             .exchangeForJson()
@@ -60,7 +59,7 @@ public class GiteeOkAuthClient extends OkAuthClient {
     }
 
     @Override
-    public GiteeUser exchangeForUser(OAuthToken token) throws OkAuthException, IOException {
+    public GiteeUser exchangeForUser(OAuthToken token) throws OkAuthException, OkAuthIOException {
         return new GiteeUser(userRequest.mutate()
             .addQuery("access_token", token.getAccessToken())
             .exchangeForJson()
