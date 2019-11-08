@@ -21,17 +21,21 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
  *
  * @author wautsns
  */
-public class UnregisteredOpenPlatformException extends OkAuthException {
+public class UnsupportedOpenPlatformException extends OkAuthException {
 
     /** serialVersionUID */
     private static final long serialVersionUID = 2890456280967581931L;
 
-    public UnregisteredOpenPlatformException(OpenPlatform openPlatform) {
+    public UnsupportedOpenPlatformException(OpenPlatform openPlatform) {
         super(
             openPlatform,
             "UNREGISTERED_OPEN_PLATFORM",
             String.format("%S is not registered.",
                 (openPlatform == null) ? "DEFAULT CLIENT" : openPlatform.getIdentifier()));
+    }
+
+    public UnsupportedOpenPlatformException(String identifier) {
+        super(null, "UNREGISTERED_OPEN_PLATFORM", identifier + " is not registered.");
     }
 
 }

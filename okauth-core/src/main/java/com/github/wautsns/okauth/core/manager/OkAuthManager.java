@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OkAuthException;
+import com.github.wautsns.okauth.core.exception.UnsupportedOpenPlatformException;
 
 /**
  *
@@ -40,16 +41,13 @@ public class OkAuthManager {
                 return entry.getValue();
             }
         }
-        return getClient((OpenPlatform) null);
+        throw new UnsupportedOpenPlatformException(openPlatform);
     }
 
     public OkAuthClient getClient(OpenPlatform openPlatform) throws OkAuthException {
         OkAuthClient client = clients.get(openPlatform);
         if (client != null) { return client; }
-        throw new OkAuthException(
-            openPlatform,
-            "UNREGISTERED_OPEN_PLATFORM",
-            String.format("Client of %s is not registered.", openPlatform.getIdentifier()));
+        throw new UnsupportedOpenPlatformException(openPlatform);
     }
 
 }
