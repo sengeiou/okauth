@@ -21,15 +21,21 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequester;
 
 /**
+ * Okauth requester properties.
  *
  * @author wautsns
  */
-public class OkAuthHttpProperties {
+public class OkAuthRequesterProperties {
 
+    /** requester class, default is {@link OkHttpRequester} */
     private Class<? extends Requester> requesterClass = OkHttpRequester.class;
+    /** max idle connection, default is 5 */
     private Integer maxIdleConnections = 5;
+    /** keep alive, default is 300_000 */
     private Long keepAlive = 5L * 60_000;
+    /** keep alive time unit, default is {@link TimeUnit#MILLISECONDS} */
     private TimeUnit keepAliveTimeUnit = TimeUnit.MILLISECONDS;
+    /** connect time out milliseconds, default is 5_000 */
     private Integer connectTimeoutMilliseconds = 5_000;
 
     /** Get {@link #requesterClass}. */
@@ -38,7 +44,7 @@ public class OkAuthHttpProperties {
     }
 
     /** Set {@link #requesterClass}. */
-    public OkAuthHttpProperties setRequesterClass(Class<? extends Requester> requesterClass) {
+    public OkAuthRequesterProperties setRequesterClass(Class<? extends Requester> requesterClass) {
         this.requesterClass = requesterClass;
         return this;
     }
@@ -49,7 +55,7 @@ public class OkAuthHttpProperties {
     }
 
     /** Set {@link #maxIdleConnections}. */
-    public OkAuthHttpProperties setMaxIdleConnections(Integer maxIdleConnections) {
+    public OkAuthRequesterProperties setMaxIdleConnections(Integer maxIdleConnections) {
         this.maxIdleConnections = maxIdleConnections;
         return this;
     }
@@ -60,7 +66,7 @@ public class OkAuthHttpProperties {
     }
 
     /** Set {@link #keepAlive}. */
-    public OkAuthHttpProperties setKeepAlive(Long keepAlive) {
+    public OkAuthRequesterProperties setKeepAlive(Long keepAlive) {
         this.keepAlive = keepAlive;
         return this;
     }
@@ -71,7 +77,7 @@ public class OkAuthHttpProperties {
     }
 
     /** Set {@link #keepAliveTimeUnit}. */
-    public OkAuthHttpProperties setKeepAliveTimeUnit(TimeUnit keepAliveTimeUnit) {
+    public OkAuthRequesterProperties setKeepAliveTimeUnit(TimeUnit keepAliveTimeUnit) {
         this.keepAliveTimeUnit = keepAliveTimeUnit;
         return this;
     }
@@ -82,7 +88,8 @@ public class OkAuthHttpProperties {
     }
 
     /** Set {@link #connectTimeoutMilliSeconds}. */
-    public OkAuthHttpProperties setConnectTimeoutMilliseconds(Integer connectTimeoutMilliseconds) {
+    public OkAuthRequesterProperties setConnectTimeoutMilliseconds(
+            Integer connectTimeoutMilliseconds) {
         this.connectTimeoutMilliseconds = connectTimeoutMilliseconds;
         return this;
     }

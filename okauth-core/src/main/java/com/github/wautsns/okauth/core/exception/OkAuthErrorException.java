@@ -15,24 +15,34 @@
  */
 package com.github.wautsns.okauth.core.exception;
 
+import com.github.wautsns.okauth.core.client.core.OpenPlatform;
+
 /**
  *
  * @author wautsns
  */
-public class UnsupportedOpenPlatformException extends OkAuthException {
+public class OkAuthErrorException extends OkAuthException {
 
     /** serialVersionUID */
-    private static final long serialVersionUID = 2890456280967581931L;
+    private static final long serialVersionUID = -5934099746259324746L;
 
-    private final String identifier;
+    private final OpenPlatform openPlatform;
+    private final String error;
 
-    public UnsupportedOpenPlatformException(String identifier) {
-        this.identifier = identifier;
+    public OkAuthErrorException(OpenPlatform openPlatform, String error, String message) {
+        super(message);
+        this.openPlatform = openPlatform;
+        this.error = error;
     }
 
-    /** Get {@link #identifier}. */
-    public String getIdentifier() {
-        return identifier;
+    /** Get {@link #openPlatform}. */
+    public OpenPlatform getOpenPlatform() {
+        return openPlatform;
+    }
+
+    /** Get {@link #error}. */
+    public String getError() {
+        return error;
     }
 
 }

@@ -15,39 +15,33 @@
  */
 package com.github.wautsns.okauth.core.client.util.http;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
- * Universal response.
+ * Built-in response input stream reader.
  *
  * @author wautsns
  */
-public class Response {
+public enum BuiltInResponseInputStreamReader implements ResponseInputStreamReader {
 
-    /** response status code */
-    private final int statusCode;
-    /** response data map */
-    private final Map<String, Object> data;
+    JSON {
 
-    /**
-     * Construct a response.
-     *
-     * @param statusCode response status code
-     * @param data response data map, require nonnull
-     */
-    public Response(int statusCode, Map<String, Object> data) {
-        this.statusCode = statusCode;
-        this.data = data;
-    }
+        private final ObjectMapper objectMapper = new ObjectMapper();
+        private final JavaType mapType = objectMapper
+            .getTypeFactory()
+            .constructMapType(Map.class, String.class, Object.class);
 
-    /** Get {@link #statusCode}. */
-    public int getStatusCode() {
-        return statusCode;
-    }
+        @Override
+        public Map<String, Object> read(InputStream inputStream) throws IOException {
+            return objectMapper.readValue(inputStream, mapType);
+        }
 
-    /** Get {@link #data}. */
-    public Map<String, Object> getData() {
-        return data;
-    }
+    },
+    ;
 
 }

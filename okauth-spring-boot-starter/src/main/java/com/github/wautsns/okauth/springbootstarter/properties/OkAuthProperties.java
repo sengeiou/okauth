@@ -22,12 +22,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import com.github.wautsns.okauth.core.client.core.properties.OkAuthClientProperties;
 
 /**
+ * Okauth properties.
  *
  * @author wautsns
  */
 @ConfigurationProperties(prefix = "okauth")
 public class OkAuthProperties {
 
+    /** okauth clients */
     private List<OkAuthClientProperties> clients;
 
     /** Get {@link #clients}. */

@@ -23,34 +23,45 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.exception.OkAuthException;
+import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
+ * Gitee okauth client.
  *
  * @author wautsns
+ * @see <a href="https://gitee.com/api/v5/oauth_doc">gitee oauth doc</a>
  */
 public class GiteeOkAuthClient extends OkAuthClient {
 
+    /** authorize url prefix */
     private final String authorizeUrlPrefix;
-    private final Request tokenRequest;
-    private final Request userRequest;
+    /** token request template */
+    private final Request tokenRequestTemplate;
+    /** user request template */
+    private final Request userRequestTemplate;
 
+    /**
+     * Construct a gitee okauth client.
+     *
+     * @param oauthAppInfo oauth application info, require nonnull
+     * @param requester requester, require nonnull
+     */
     public GiteeOkAuthClient(
-            OAuthAppInfo oAuthAppInfo, Requester requester) {
-        super(oAuthAppInfo, requester);
+            OAuthAppInfo oauthAppInfo, Requester requester) {
+        super(oauthAppInfo, requester);
         authorizeUrlPrefix = "https://gitee.com/oauth/authorize"
             + "?response_type=code"
             + "&client_id=" + oauthAppInfo.getClientId()
             + "&redirect_uri=" + urlEncode(oauthAppInfo.getRedirectUri())
             + "&state=";
-        tokenRequest = requester
+        tokenRequestTemplate = requester
             .post("https://gitee.com/oauth/token")
             .addFormItem("grant_type", "authorization_code")
             .addFormItem("client_id", oauthAppInfo.getClientId())
             .addFormItem("client_secret", oauthAppInfo.getClientSecret())
             .addFormItem("redirect_uri", oauthAppInfo.getRedirectUri());
-        userRequest = requester
+        userRequestTemplate = requester
             .get("https://gitee.com/api/v5/user");
     }
 
@@ -66,19 +77,18 @@ public class GiteeOkAuthClient extends OkAuthClient {
 
     @Override
     public GiteeToken exchangeForToken(OAuthRedirectUriQuery redirectUriQuery)
-            throws OkAuthException, OkAuthIOException {
-        return new GiteeToken(tokenRequest.mutate()
+            throws OkAuthErrorException, OkAuthIOException {
+        return new GiteeToken(checkResponse(tokenRequestTemplate.mutate()
             .addFormItem("code", redirectUriQuery.getCode())
-            .exchangeForJson()
-            .check(getOpenPlatform(), "error", "error_description"));
+            .exchangeForJson(), "error", "error_description"));
     }
 
     @Override
-    public GiteeUser exchangeForUser(OAuthToken token) throws OkAuthException, OkAuthIOException {
-        return new GiteeUser(userRequest.mutate()
+    public GiteeUser exchangeForUser(OAuthToken token)
+            throws OkAuthErrorException, OkAuthIOException {
+        return new GiteeUser(checkResponse(userRequestTemplate.mutate()
             .addQuery("access_token", token.getAccessToken())
-            .exchangeForJson()
-            .check(getOpenPlatform(), "error", "error_description"));
+            .exchangeForJson(), "error", "error_description"));
     }
 
 }

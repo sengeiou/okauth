@@ -16,13 +16,17 @@
 package com.github.wautsns.okauth.core.client.core.properties;
 
 /**
+ * OAuth application info.
  *
  * @author wautsns
  */
 public class OAuthAppInfo {
 
+    /** client id */
     private String clientId;
+    /** client secrect */
     private String clientSecret;
+    /** redirect uri */
     private String redirectUri;
 
     /** Get {@link #clientId}. */

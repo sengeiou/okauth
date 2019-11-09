@@ -15,26 +15,46 @@
  */
 package com.github.wautsns.okauth.core.client.core.properties;
 
-import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthHttpProperties;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
 
 /**
+ * Okauth client properties.
  *
  * @author wautsns
  */
 public class OkAuthClientProperties {
 
-    private String openPlatform;
+    /**
+     * open platform expression
+     *
+     * <p>There are three types of expressions:
+     * <ol>
+     * <li>built-in open platform name(case insensitive) like "github"...(optional values see
+     * {@linkplain BuiltInOpenPlatform})</li>
+     * <li>simple extended open platform like "a.b.c.Github"(`a.b.c.Github` can only have one
+     * enumeration constant)</li>
+     * <li>composite extended open platform like "a.b.c.ExtendedOpenPlatform:xyz"(string after ':'
+     * is a case insensitive identifier)</li>
+     * </ol>
+     * *** All the classes mentioned above(like `a.b.c.Github`, `a.b.c.ExtendedOpenPlatform`)
+     * <strong>must be enumeration that implements {@linkplain OpenPlatform}</strong> ***
+     */
+    private String openPlatformExpr;
+    /** oauth application info */
     private OAuthAppInfo oauthAppInfo;
-    private OkAuthHttpProperties http = new OkAuthHttpProperties();
+    /** okauth requester properties */
+    private OkAuthRequesterProperties requester = new OkAuthRequesterProperties();
 
-    /** Get {@link #openPlatform}. */
-    public String getOpenPlatform() {
-        return openPlatform;
+    /** Get {@link #openPlatformExpr}. */
+    public String getOpenPlatformExpr() {
+        return openPlatformExpr;
     }
 
-    /** Set {@link #openPlatform}. */
-    public OkAuthClientProperties setOpenPlatform(String openPlatform) {
-        this.openPlatform = openPlatform;
+    /** Set {@link #openPlatformExpr}. */
+    public OkAuthClientProperties setOpenPlatformExpr(String openPlatformExpr) {
+        this.openPlatformExpr = openPlatformExpr;
         return this;
     }
 
@@ -49,15 +69,14 @@ public class OkAuthClientProperties {
         return this;
     }
 
-    /** Get {@link #http}. */
-    public OkAuthHttpProperties getHttp() {
-        return http;
+    /** Get {@link #requester}. */
+    public OkAuthRequesterProperties getRequester() {
+        return requester;
     }
 
-    /** Set {@link #http}. */
-    public OkAuthClientProperties setHttp(OkAuthHttpProperties http) {
-        this.http = http;
-        return this;
+    /** Set {@link #requester}. */
+    public void setRequester(OkAuthRequesterProperties requester) {
+        this.requester = requester;
     }
 
 }

@@ -18,42 +18,54 @@ package com.github.wautsns.okauth.core.client.util.http.builtin.okhttp;
 import java.util.concurrent.TimeUnit;
 
 import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.Request.HttpMethod;
+import com.github.wautsns.okauth.core.client.util.http.Request.Method;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthHttpProperties;
+import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
 
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 
 /**
+ * Okhttp3 requester.
+ *
+ * <p>Based on okhttp3.
  *
  * @author wautsns
  */
 public class OkHttpRequester extends Requester {
 
+    /** okhttp3 client */
     private final OkHttpClient okHttpClient;
 
+    /**
+     * Construct okhttp requester.
+     *
+     * @param okHttpClient okhttp client, require nonnull
+     */
     public OkHttpRequester(OkHttpClient okHttpClient) {
         this.okHttpClient = okHttpClient;
     }
 
-    public OkHttpRequester(OkAuthHttpProperties okAuthHttpConfiguration) {
+    /**
+     * Construct okhttp requester.
+     *
+     * @param properties okauth http properties, require nonnull
+     */
+    public OkHttpRequester(OkAuthRequesterProperties properties) {
         this.okHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(
-                okAuthHttpConfiguration.getConnectTimeoutMilliseconds(),
-                TimeUnit.MILLISECONDS)
+            .connectTimeout(properties.getConnectTimeoutMilliseconds(), TimeUnit.MILLISECONDS)
             .readTimeout(3, TimeUnit.SECONDS)
             .writeTimeout(3, TimeUnit.SECONDS)
             .connectionPool(new ConnectionPool(
-                okAuthHttpConfiguration.getMaxIdleConnections(),
-                okAuthHttpConfiguration.getKeepAlive(),
-                okAuthHttpConfiguration.getKeepAliveTimeUnit()))
+                properties.getMaxIdleConnections(),
+                properties.getKeepAlive(),
+                properties.getKeepAliveTimeUnit()))
             .build();
     }
 
     @Override
-    protected Request create(HttpMethod httpMethod, String url) {
-        return new OkHttpRequest(httpMethod, url, okHttpClient);
+    protected Request create(Method httpMethod, String url) {
+        return new OkHttpRequest(okHttpClient, httpMethod, url);
     }
 
 }

@@ -20,9 +20,8 @@ import java.io.IOException;
 /**
  *
  * @author wautsns
- * @version 0.1.0 Nov 06, 2019
  */
-public class OkAuthIOException extends RuntimeException {
+public class OkAuthIOException extends OkAuthException {
 
     /** serialVersionUID */
     private static final long serialVersionUID = -5985811988466801848L;

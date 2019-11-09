@@ -23,19 +23,32 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.exception.OkAuthException;
+import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
+ * Github okauth client.
  *
  * @author wautsns
+ * @see <a
+ *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
+ *      oauth doc</a>
  */
 public class GithubOkAuthClient extends OkAuthClient {
 
+    /** authorize url prefix */
     private final String authorizeUrlPrefix;
+    /** token request template */
     private final Request tokenRequest;
+    /** user request template */
     private final Request userRequest;
 
+    /**
+     * Construct a github okauth client.
+     *
+     * @param oauthAppInfo oauth application info, require nonnull
+     * @param requester requester, require nonnull
+     */
     public GithubOkAuthClient(
             OAuthAppInfo oAuthAppInfo, Requester requester) {
         super(oAuthAppInfo, requester);
@@ -63,19 +76,18 @@ public class GithubOkAuthClient extends OkAuthClient {
 
     @Override
     public GithubToken exchangeForToken(OAuthRedirectUriQuery redirectUriQuery)
-            throws OkAuthException, OkAuthIOException {
-        return new GithubToken(tokenRequest.mutate()
+            throws OkAuthErrorException, OkAuthIOException {
+        return new GithubToken(checkResponse(tokenRequest.mutate()
             .addQuery("code", redirectUriQuery.getCode())
-            .exchangeForJson()
-            .check(getOpenPlatform(), "error", "error_description"));
+            .exchangeForJson(), "error", "error_description"));
     }
 
     @Override
-    public GithubUser exchangeForUser(OAuthToken token) throws OkAuthException, OkAuthIOException {
-        return new GithubUser(userRequest.mutate()
+    public GithubUser exchangeForUser(OAuthToken token)
+            throws OkAuthErrorException, OkAuthIOException {
+        return new GithubUser(checkResponse(userRequest.mutate()
             .addQuery("access_token", token.getAccessToken())
-            .exchangeForJson()
-            .check(getOpenPlatform(), "error", "error_description"));
+            .exchangeForJson(), "error", "error_description"));
     }
 
 }

@@ -18,15 +18,22 @@ package com.github.wautsns.okauth.core.client.core.dto;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
+ * Abstract oauth token.
  *
  * @author wautsns
  */
 public abstract class OAuthToken extends OAuthData {
 
+    /**
+     * Construct an oauth token.
+     *
+     * @param response response, require nonnull
+     */
     public OAuthToken(Response response) {
         super(response.getData());
     }
 
+    /** Get access token. */
     public abstract String getAccessToken();
 
 }

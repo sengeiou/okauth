@@ -21,7 +21,7 @@ import java.util.Map;
 
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Response;
-import com.github.wautsns.okauth.core.client.util.http.ResponseReader;
+import com.github.wautsns.okauth.core.client.util.http.ResponseInputStreamReader;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 import okhttp3.FormBody;
@@ -29,26 +29,46 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request.Builder;
 
 /**
+ * Okhttp3 request.
+ *
+ * <p>Based on okhttp3.
  *
  * @author wautsns
  */
 public class OkHttpRequest extends Request {
 
+    /** okhttp3 client */
     private final OkHttpClient okHttpClient;
+    /** okhttp3 request builder */
     private final Builder builder;
-    private Map<String, String> formMap;
+    /** form data map */
+    private Map<String, String> form;
 
-    public OkHttpRequest(HttpMethod httpMethod, String url, OkHttpClient okHttpClient) {
-        super(httpMethod, url);
+    /**
+     * Construct an okhttp3 request.
+     *
+     * @param okHttpClient okhttp3 client, require nonnull
+     * @param method request method, require nonnull
+     * @param url request url, require nonnull
+     */
+    public OkHttpRequest(OkHttpClient okHttpClient, Method method, String url) {
+        super(method, url);
         this.okHttpClient = okHttpClient;
         this.builder = new Builder();
     }
 
+    /**
+     * Construct an okhttp3 request.
+     *
+     * <p>Copy the ok http client, builder and form according to the given request.
+     *
+     * @param requester template, require nonnull
+     */
     private OkHttpRequest(OkHttpRequest requester) {
         super(requester);
         this.okHttpClient = requester.okHttpClient;
         this.builder = new Builder(requester.builder.url(requester.getUrl()).build());
-        if (requester.formMap != null) { this.formMap = new HashMap<>(requester.formMap); }
+        if (requester.form != null) { this.form = new HashMap<>(requester.form); }
     }
 
     @Override
@@ -59,8 +79,8 @@ public class OkHttpRequest extends Request {
 
     @Override
     public Request addFormItem(String name, String value) {
-        if (formMap == null) { formMap = new HashMap<>(8); }
-        formMap.put(name, value);
+        if (form == null) { form = new HashMap<>(8); }
+        form.put(name, value);
         return this;
     }
 
@@ -70,25 +90,32 @@ public class OkHttpRequest extends Request {
     }
 
     @Override
-    protected Response get(ResponseReader responseReader) throws OkAuthIOException {
+    protected Response get(ResponseInputStreamReader reader) throws OkAuthIOException {
         builder.get().url(getUrl());
-        return execute(responseReader);
+        return execute(reader);
     }
 
     @Override
-    protected Response post(ResponseReader responseReader) throws OkAuthIOException {
+    protected Response post(ResponseInputStreamReader reader) throws OkAuthIOException {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        formMap.forEach(formBodyBuilder::add);
+        form.forEach(formBodyBuilder::add);
         builder.post(formBodyBuilder.build()).url(getUrl());
-        return execute(responseReader);
+        return execute(reader);
     }
 
-    private Response execute(ResponseReader responseReader) throws OkAuthIOException {
+    /**
+     * Do execute request.
+     *
+     * @param reader response input stream reader, require nonnull
+     * @return response
+     * @throws OkAuthIOException if an IO exception occurs
+     */
+    private Response execute(ResponseInputStreamReader reader) throws OkAuthIOException {
         try {
             okhttp3.Response response = okHttpClient.newCall(builder.build()).execute();
             return new Response(
                 response.code(),
-                responseReader.read(response.body().byteStream()));
+                reader.read(response.body().byteStream()));
         } catch (IOException ioException) {
             throw new OkAuthIOException(ioException);
         }

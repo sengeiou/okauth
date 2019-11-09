@@ -18,19 +18,28 @@ package com.github.wautsns.okauth.core.client.core.dto;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
+ * Abstract oauth user.
  *
  * @author wautsns
  */
 public abstract class OAuthUser extends OAuthData {
 
+    /**
+     * Construct an oauth user.
+     *
+     * @param response, require nonnull
+     */
     public OAuthUser(Response response) {
         super(response.getData());
     }
 
+    /** Get open id. */
     public abstract String getOpenId();
 
+    /** Get nickname. */
     public abstract String getNickname();
 
+    /** Get avatar url. */
     public abstract String getAvatarUrl();
 
 }

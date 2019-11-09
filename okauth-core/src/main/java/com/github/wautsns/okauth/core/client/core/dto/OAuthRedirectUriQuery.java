@@ -15,13 +15,21 @@
  */
 package com.github.wautsns.okauth.core.client.core.dto;
 
+import java.io.Serializable;
+
 /**
+ * OAuth redirect uri query.
  *
  * @author wautsns
  */
-public class OAuthRedirectUriQuery {
+public class OAuthRedirectUriQuery implements Serializable {
 
+    /** serialVersionUID */
+    private static final long serialVersionUID = 285186839588163899L;
+
+    /** authorization code */
     private String code;
+    /** state */
     private String state;
 
     /** Get {@link #code}. */

@@ -15,22 +15,42 @@
  */
 package com.github.wautsns.okauth.core.client.util.http;
 
-import com.github.wautsns.okauth.core.client.util.http.Request.HttpMethod;
+import com.github.wautsns.okauth.core.client.util.http.Request.Method;
 
 /**
+ * Abstract requester for creating {@linkplain Request request}.
  *
  * @author wautsns
  */
 public abstract class Requester {
 
-    protected abstract Request create(HttpMethod httpMethod, String url);
+    /**
+     * Create request.
+     *
+     * @param method request method, require nonnull
+     * @param url request url, require nonnull
+     * @return request
+     */
+    protected abstract Request create(Method method, String url);
 
+    /**
+     * Create GET request.
+     *
+     * @param url request url, require nonnull
+     * @return GET request
+     */
     public Request get(String url) {
-        return create(HttpMethod.GET, url);
+        return create(Method.GET, url);
     }
 
+    /**
+     * Create POST request.
+     *
+     * @param url request url, require nonnull
+     * @return POST request
+     */
     public Request post(String url) {
-        return create(HttpMethod.POST, url);
+        return create(Method.POST, url);
     }
 
 }

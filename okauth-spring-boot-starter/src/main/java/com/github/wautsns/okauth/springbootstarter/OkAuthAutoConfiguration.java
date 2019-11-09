@@ -24,6 +24,7 @@ import com.github.wautsns.okauth.core.manager.OkAuthManagerBuilder;
 import com.github.wautsns.okauth.springbootstarter.properties.OkAuthProperties;
 
 /**
+ * Okauth auto-configuration.
  *
  * @author wautsns
  */

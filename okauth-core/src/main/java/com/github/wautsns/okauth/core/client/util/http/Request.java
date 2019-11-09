@@ -22,39 +22,89 @@ import java.util.Map;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
+ * Abstract request for open platform interaction.
  *
  * @author wautsns
+ * @see Requester
  */
 public abstract class Request {
 
-    public enum HttpMethod { GET, POST }
+    /** request methods */
+    public enum Method { GET, POST }
 
-    private HttpMethod httpMethod;
+    /** request method */
+    private Method method;
+    /** request url */
     private String url;
+    /** if the request url contains query */
     private boolean containsQuery;
 
-    public Request(HttpMethod httpMethod, String url) {
-        this.httpMethod = httpMethod;
+    /**
+     * Construct a request.
+     *
+     * <p>Method is {@linkplain Method#GET GET}.
+     *
+     * @param url request url, require nonnull
+     */
+    public Request(String url) {
+        this(Method.GET, url);
+    }
+
+    /**
+     * Construct a request.
+     *
+     * @param method request method, require nonnull
+     * @param url request url, require nonnull
+     */
+    public Request(Method method, String url) {
+        this.method = method;
         this.url = url;
         this.containsQuery = (url.lastIndexOf('?') >= 0);
     }
 
+    /**
+     * Construct a request.
+     *
+     * <p>Copy the method, url and containsQuery according to the given request.
+     *
+     * @param requester template, require nonnull
+     */
     protected Request(Request requester) {
-        this.httpMethod = requester.httpMethod;
+        this.method = requester.method;
         this.url = requester.url;
         this.containsQuery = requester.containsQuery;
     }
 
+    /**
+     * Add header "Accept" with value "application/json"
+     *
+     * @return self reference
+     */
     public Request acceptJson() {
         return addHeader("Accept", "application/json");
     }
 
+    /**
+     * Add header.
+     *
+     * @param name header name, require nonnull
+     * @param value header value, require nonnull
+     * @return self reference
+     */
     public abstract Request addHeader(String name, String value);
 
+    /** Get {@link #url}. */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Add query.
+     *
+     * @param name query name, require nonnull
+     * @param value query value(will be url encoded), require nonnull
+     * @return self reference
+     */
     public Request addQuery(String name, String value) {
         try {
             return addUrlEncodedQuery(name, URLEncoder.encode(value, "UTF-8"));
@@ -63,6 +113,13 @@ public abstract class Request {
         }
     }
 
+    /**
+     * Add query.
+     *
+     * @param name query name, require nonnull
+     * @param value url encoded query value, require nonnull
+     * @return self reference
+     */
     public Request addUrlEncodedQuery(String name, String value) {
         if (containsQuery) {
             url += '&';
@@ -74,31 +131,76 @@ public abstract class Request {
         return this;
     }
 
+    /**
+     * Add form item.
+     *
+     * @param name form item name, require nonnull
+     * @param value form item value, require nonnull
+     * @return self reference
+     */
     public abstract Request addFormItem(String name, String value);
 
-    public Request addFormItems(Map<String, String> formItems) {
-        formItems.forEach(this::addFormItem);
+    /**
+     * Add form items.
+     *
+     * @param form form, require nonnull
+     * @return self reference
+     */
+    public Request addForm(Map<String, String> form) {
+        form.forEach(this::addFormItem);
         return this;
     }
 
+    /**
+     * Mutate into a new identical request.
+     *
+     * @return a new request
+     */
     public abstract Request mutate();
 
+    /**
+     * Exchange with json response reader.
+     *
+     * @return response
+     * @throws OkAuthIOException if an IO exception occurs
+     */
     public Response exchangeForJson() throws OkAuthIOException {
-        return exchange(ResponseReader.JSON);
+        return exchange(BuiltInResponseInputStreamReader.JSON);
     }
 
-    public Response exchange(ResponseReader responseReader) throws OkAuthIOException {
-        if (httpMethod == HttpMethod.GET) {
-            return get(responseReader);
-        } else if (httpMethod == HttpMethod.POST) {
-            return post(responseReader);
+    /**
+     * Exchange.
+     *
+     * @param reader response input stream reader, require nonnull
+     * @return response
+     * @throws OkAuthIOException if an IO exception occurs
+     */
+    public Response exchange(ResponseInputStreamReader reader) throws OkAuthIOException {
+        if (method == Method.GET) {
+            return get(reader);
+        } else if (method == Method.POST) {
+            return post(reader);
         } else {
-            return get(responseReader);
+            throw new RuntimeException("unreachable");
         }
     }
 
-    protected abstract Response get(ResponseReader responseReader) throws OkAuthIOException;
+    /**
+     * GET request.
+     *
+     * @param reader response input stream reader, require nonnull
+     * @return response
+     * @throws OkAuthIOException if an IO exception occurs
+     */
+    protected abstract Response get(ResponseInputStreamReader reader) throws OkAuthIOException;
 
-    protected abstract Response post(ResponseReader responseReader) throws OkAuthIOException;
+    /**
+     * POST request.
+     *
+     * @param reader response input stream reader, require nonnull
+     * @return response
+     * @throws OkAuthIOException if an IO exception occurs
+     */
+    protected abstract Response post(ResponseInputStreamReader reader) throws OkAuthIOException;
 
 }

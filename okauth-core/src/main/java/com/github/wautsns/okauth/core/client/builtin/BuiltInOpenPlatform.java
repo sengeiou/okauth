@@ -25,6 +25,7 @@ import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 
 /**
+ * Built-in open platform.
  *
  * @author wautsns
  */
@@ -34,13 +35,16 @@ public enum BuiltInOpenPlatform implements OpenPlatform {
     GITHUB("github", GithubOkAuthClient::new),
     ;
 
+    /** identifier */
     private final String identifier;
-    private final BiFunction<OAuthAppInfo, Requester, OkAuthClient> okAuthClientConstructor;
+    /** function to initialize an okauth client */
+    private final BiFunction<OAuthAppInfo, Requester, OkAuthClient> okAuthClientInitializer;
 
     private BuiltInOpenPlatform(
-            String identifier, BiFunction<OAuthAppInfo, Requester, OkAuthClient> constructor) {
+            String identifier,
+            BiFunction<OAuthAppInfo, Requester, OkAuthClient> okAuthClientInitializer) {
         this.identifier = identifier;
-        this.okAuthClientConstructor = constructor;
+        this.okAuthClientInitializer = okAuthClientInitializer;
     }
 
     @Override
@@ -49,8 +53,8 @@ public enum BuiltInOpenPlatform implements OpenPlatform {
     }
 
     @Override
-    public OkAuthClient constructOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
-        return okAuthClientConstructor.apply(oauthAppInfo, requester);
+    public OkAuthClient initOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+        return okAuthClientInitializer.apply(oauthAppInfo, requester);
     }
 
 }

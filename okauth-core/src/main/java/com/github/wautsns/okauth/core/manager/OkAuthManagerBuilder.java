@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.manager;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,101 +25,151 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.core.properties.OkAuthClientProperties;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthHttpProperties;
+import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequester;
+import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
+import com.github.wautsns.okauth.core.exception.OkAuthInitializeException;
 
 /**
+ * {@linkplain OkAuthManager okauth manager}'s builder
  *
  * @author wautsns
  */
 public class OkAuthManagerBuilder {
 
+    /** registered clients */
     private Map<OpenPlatform, OkAuthClient> clients = new HashMap<>();
 
+    /**
+     * Build an okauth manager.
+     *
+     * @return okauth manager
+     */
     public OkAuthManager build() {
         return new OkAuthManager(clients);
     }
 
+    /**
+     * Register an okauth client.
+     *
+     * <p>Use default requester: {@linkplain OkHttpRequester ok http requester}.
+     *
+     * @param openPlatform open platform, require nonnull
+     * @param oauthAppInfo oauth application info(e.g. clientId, clientSecret...), require nonnull
+     * @param okauthHttpProperties oauth http properties, require nonnull
+     * @return self reference
+     * @throws OkAuthInitializeException if the `openPlatform` has been registered
+     */
     public OkAuthManagerBuilder register(
-            OpenPlatform openPlatform, OAuthAppInfo oauthAppInfo, Requester requester) {
-        OkAuthClient old = clients.put(
-            openPlatform,
-            openPlatform.constructOkAuthClient(oauthAppInfo, requester));
-        if (old == null) { return this; }
-        throw new RuntimeException(
-            "There are two open platform with the same identifier(or duplicate registration): "
-                + "old: " + old.getOpenPlatform()
-                + "new: " + openPlatform);
+            OpenPlatform openPlatform, OAuthAppInfo oauthAppInfo,
+            OkAuthRequesterProperties okauthHttpProperties)
+            throws OkAuthInitializeException {
+        return register(openPlatform, oauthAppInfo, new OkHttpRequester(okauthHttpProperties));
     }
 
-    public OkAuthManagerBuilder register(OkAuthClientProperties properties) {
+    /**
+     * Register an okauth client.
+     *
+     * @param openPlatform open platform, require nonnull
+     * @param oauthAppInfo oauth application info(e.g. clientId, clientSecret...), require nonnull
+     * @param requester http requester, require nonnull
+     * @return self reference
+     * @throws OkAuthInitializeException if the `openPlatform` has been registered
+     */
+    public OkAuthManagerBuilder register(
+            OpenPlatform openPlatform, OAuthAppInfo oauthAppInfo, Requester requester)
+            throws OkAuthInitializeException {
+        OkAuthClient old = clients.put(
+            openPlatform,
+            openPlatform.initOkAuthClient(oauthAppInfo, requester));
+        if (old == null) { return this; }
+        throw new OkAuthInitializeException(
+            "Duplicate registered oauth client(open platform identifier:  "
+                + openPlatform.getIdentifier() + ")");
+    }
+
+    /**
+     * Register an okauth client.
+     *
+     * @param properties okauth client properties, require nonnull
+     * @return self reference
+     * @throws OkAuthInitializeException if the okauth client can not be registered
+     */
+    public OkAuthManagerBuilder register(OkAuthClientProperties properties)
+            throws OkAuthInitializeException {
         return register(
-            parseOpenPlatform(properties.getOpenPlatform()),
+            parseOpenPlatformExpr(properties.getOpenPlatformExpr()),
             properties.getOauthAppInfo(),
-            parseRequester(properties.getHttp()));
+            initRequester(properties.getRequester()));
     }
 
     // ------------------------- BEGIN -------------------------
-    // -------------------- private methods --------------------
+    // ------------------------ assists ------------------------
     // ---------------------------------------------------------
 
+    /**
+     * Parse open platform expression.
+     *
+     * @param openPlatformExpr {@linkplain OkAuthClientProperties#openPlatformExpr open platform
+     *        expression}, require nonnull
+     * @return open platform
+     * @throws OkAuthInitializeException if the expression can not be parsed
+     */
     @SuppressWarnings("unchecked")
-    private OpenPlatform parseOpenPlatform(String openPlatform) {
-        OpenPlatform temp1 = findOpenPlatform(BuiltInOpenPlatform.values(), openPlatform);
-        if (temp1 != null) { return temp1; }
-        String[] temp2 = openPlatform.split(":", 2);
-        String identifier = (temp2.length == 2) ? temp2[1] : null;
+    private OpenPlatform parseOpenPlatformExpr(String openPlatformExpr)
+            throws OkAuthInitializeException {
+        // First, try if the expr is a built-in simple open platform name.
+        OpenPlatform[] openPlatforms = BuiltInOpenPlatform.values();
+        OpenPlatform openPlatform = Arrays.stream(openPlatforms)
+            .filter(op -> op.getIdentifier().equalsIgnoreCase(openPlatformExpr))
+            .findFirst().orElse(null);
+        if (openPlatform != null) { return openPlatform; }
+        // The expr is extended open platform.
+        String[] classAndIdentifier = openPlatformExpr.split(":", 2);
+        // Parse open platform class
         Class<? extends OpenPlatform> openPlatformClass;
         try {
-            Class<?> temp3 = Class.forName(temp2[0]);
-            if (!OpenPlatform.class.isAssignableFrom(temp3)) {
-                throw new RuntimeException(String.format(
-                    "Open platform [%s] should be an enumeration that implements %s",
-                    temp3, OpenPlatform.class));
+            Class<?> temp1 = Class.forName(classAndIdentifier[0]);
+            if (!OpenPlatform.class.isAssignableFrom(temp1) || !temp1.isEnum()) {
+                throw new OkAuthInitializeException(String.format(
+                    "%s should be an enumeration that implements %s", temp1, OpenPlatform.class));
             }
-            openPlatformClass = (Class<? extends OpenPlatform>) temp3;
+            openPlatformClass = (Class<? extends OpenPlatform>) temp1;
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new OkAuthInitializeException(e);
         }
-        if (!openPlatformClass.isEnum()) {
-            throw new RuntimeException(String.format(
-                "Open platform [%s] should be an enumeration.", openPlatformClass));
-        }
-        OpenPlatform[] openPlatforms = openPlatformClass.getEnumConstants();
-        temp1 = findOpenPlatform(openPlatforms, identifier);
-        if (temp1 != null) { return temp1; }
+        openPlatforms = openPlatformClass.getEnumConstants();
+        String identifier = (classAndIdentifier.length == 2) ? classAndIdentifier[1] : null;
         if (identifier != null) {
-            throw new RuntimeException(String.format(
-                "There is no identifier named '%s' in %s",
-                identifier, openPlatformClass));
+            return Arrays.stream(openPlatforms)
+                .filter(op -> op.getIdentifier().equalsIgnoreCase(identifier))
+                .findFirst().orElseThrow(() -> new OkAuthInitializeException(String.format(
+                    "There is no identifier named '%s' in %s", identifier, openPlatformClass)));
         } else if (openPlatforms.length == 1) {
             return openPlatforms[0];
         } else {
-            throw new RuntimeException("Please give an identifier for " + openPlatformClass);
+            throw new OkAuthInitializeException(
+                "Please give an identifier for " + openPlatformClass);
         }
     }
 
-    private <T extends OpenPlatform> OpenPlatform findOpenPlatform(
-            T[] openPlatforms, String identifier) {
-        if (identifier == null) { return null; }
-        for (T openPlatform : openPlatforms) {
-            if (openPlatform.getIdentifier().equalsIgnoreCase(identifier)) {
-                return openPlatform;
-            }
-        }
-        return null;
-    }
-
-    private Requester parseRequester(OkAuthHttpProperties properties) {
+    /**
+     * Initialize a requester.
+     *
+     * @param properties okauth requester properties, require nonnull
+     * @return requester
+     * @throws OkAuthInitializeException if the requester can not be initialized
+     */
+    private Requester initRequester(OkAuthRequesterProperties properties)
+            throws OkAuthInitializeException {
         Class<? extends Requester> requesterClass = properties.getRequesterClass();
         try {
             return requesterClass
-                .getConstructor(OkAuthHttpProperties.class)
+                .getConstructor(OkAuthRequesterProperties.class)
                 .newInstance(properties);
         } catch (Exception e) {
-            throw new RuntimeException(
-                requesterClass
-                    + " should contain a public constructor with arg type of"
-                    + OkAuthHttpProperties.class);
+            throw new OkAuthInitializeException(String.format(
+                "%s should contain a public constructor with arg type of %s",
+                requesterClass, OkAuthRequesterProperties.class));
         }
     }
 

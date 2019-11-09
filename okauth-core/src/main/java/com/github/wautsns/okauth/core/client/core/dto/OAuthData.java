@@ -18,28 +18,50 @@ package com.github.wautsns.okauth.core.client.core.dto;
 import java.util.Map;
 
 /**
+ * OAuth data.
  *
  * @author wautsns
  */
 class OAuthData {
 
+    /** data map */
     private final Map<String, Object> data;
 
+    /**
+     * Construct an oauth data.
+     *
+     * @param data data map, require nonnull
+     */
     protected OAuthData(Map<String, Object> data) {
         this.data = data;
     }
 
+    /**
+     * Get string value.
+     *
+     * @param name value name, require nonnull
+     * @return value assosiated with the param `name`, or {@code null} if no value assosiated with
+     *         the param
+     */
     public String getString(String name) {
         Object value = data.get(name);
         return (value == null) ? null : value.toString();
     }
 
+    /**
+     * Get map value.
+     *
+     * @param name value name, require nonnull
+     * @return value assosiated with the param `name`, or {@code null} if no value assosiated with
+     *         the param or the value is not instance of {@code Map}
+     */
     @SuppressWarnings("unchecked")
     public Map<String, Object> getMap(String name) {
         Object value = data.get(name);
         return (value instanceof Map) ? (Map<String, Object>) value : null;
     }
 
+    /** Get {@link #data}. */
     public Map<String, Object> getData() {
         return data;
     }

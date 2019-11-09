@@ -19,29 +19,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 /**
+ * Response input stream reader.
  *
  * @author wautsns
  */
-public enum ResponseReader {
+public interface ResponseInputStreamReader {
 
-    JSON {
-
-        private final ObjectMapper objectMapper = new ObjectMapper();
-        private final JavaType mapType = objectMapper
-            .getTypeFactory()
-            .constructMapType(Map.class, String.class, Object.class);
-
-        @Override
-        public Map<String, Object> read(InputStream inputStream) throws IOException {
-            return objectMapper.readValue(inputStream, mapType);
-        }
-
-    };
-
-    public abstract Map<String, Object> read(InputStream inputStream) throws IOException;
+    /**
+     * Read input stream as data map.
+     *
+     * @param inputStream input stream, require nonnull
+     * @return data map
+     * @throws IOException if IO exception occurs.
+     */
+    Map<String, Object> read(InputStream inputStream) throws IOException;
 
 }
