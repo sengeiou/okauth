@@ -17,23 +17,41 @@ package com.github.wautsns.okauth.core.client.core.dto;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 /**
  * OAuth data.
  *
  * @author wautsns
  */
+@JsonNaming(SnakeCaseStrategy.class)
 class OAuthData {
 
     /** data map */
-    private final Map<String, Object> data;
+    private final Map<String, Object> originalDataMap;
 
     /**
      * Construct an oauth data.
      *
-     * @param data data map, require nonnull
+     * @param originalDataMap original data map, require nonnull
      */
-    protected OAuthData(Map<String, Object> data) {
-        this.data = data;
+    protected OAuthData(Map<String, Object> originalDataMap) {
+        this.originalDataMap = originalDataMap;
+    }
+
+    /**
+     * Get value.
+     *
+     * @param <T> type of the value
+     * @param name value name, require nonnull
+     * @return value assosiated with the param `name`, or {@code null} if no value assosiated with
+     *         the param
+     * @throws ClassCastException if the actual value is not instance of the type
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T get(String name) {
+        return (T) originalDataMap.get(name);
     }
 
     /**
@@ -44,7 +62,7 @@ class OAuthData {
      *         the param
      */
     public String getString(String name) {
-        Object value = data.get(name);
+        Object value = originalDataMap.get(name);
         return (value == null) ? null : value.toString();
     }
 
@@ -57,13 +75,13 @@ class OAuthData {
      */
     @SuppressWarnings("unchecked")
     public Map<String, Object> getMap(String name) {
-        Object value = data.get(name);
+        Object value = originalDataMap.get(name);
         return (value instanceof Map) ? (Map<String, Object>) value : null;
     }
 
-    /** Get {@link #data}. */
-    public Map<String, Object> getData() {
-        return data;
+    /** Get {@link #originalDataMap}. */
+    public Map<String, Object> getOriginalDataMap() {
+        return originalDataMap;
     }
 
 }

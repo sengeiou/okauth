@@ -15,9 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.core;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
+import com.github.wautsns.okauth.core.client.core.dto.OAuthAuthorizeUrlExtendedQuery;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthRedirectUriQuery;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
@@ -45,7 +43,7 @@ public abstract class OkAuthClient {
      * @param oauthAppInfo oauth app info, require nonnull
      * @param requester requester, require nonnull
      */
-    protected OkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public OkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
         this.oauthAppInfo = oauthAppInfo;
         this.requester = requester;
     }
@@ -56,20 +54,30 @@ public abstract class OkAuthClient {
     /**
      * Initialize an authorize url.
      *
-     * @param state url query(Do not underestimate it, because it can use to prevent CSRF)
+     * @param query oauth authorize url extended query
      * @return authorize url
      */
-    public abstract String initAuthorizeUrl(String state);
+    public String initAuthorizeUrl(OAuthAuthorizeUrlExtendedQuery query) {
+        return doInitAuthorizeUrl((query != null) ? query : new OAuthAuthorizeUrlExtendedQuery());
+    }
+
+    /**
+     * Do initialize authorize url.
+     *
+     * @param query oauth authorize url extended query, require nonnull
+     * @return authorize url
+     */
+    protected abstract String doInitAuthorizeUrl(OAuthAuthorizeUrlExtendedQuery query);
 
     /**
      * Exchange for oauth token.
      *
-     * @param redirectUriQuery redirect uri query, require nonnull
+     * @param query redirect uri query, require nonnull
      * @return oauth token
      * @throws OkAuthErrorException if an oauth exception occurs
      * @throws OkAuthIOException if an IO exception occurs
      */
-    public abstract OAuthToken exchangeForToken(OAuthRedirectUriQuery redirectUriQuery)
+    public abstract OAuthToken exchangeForToken(OAuthRedirectUriQuery query)
             throws OkAuthErrorException, OkAuthIOException;
 
     /**
@@ -101,23 +109,9 @@ public abstract class OkAuthClient {
     // ---------------------------------------------------------
 
     /**
-     * Url encode.
-     *
-     * @param text any text, require nonnull
-     * @return url encoded text
-     */
-    protected String urlEncode(String text) {
-        try {
-            return URLEncoder.encode(text, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Check response.
      *
-     * @param response response
+     * @param response response, require nonnull
      * @param errorName error name
      * @param errorDescriptionName error description name
      * @return response

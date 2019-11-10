@@ -16,15 +16,12 @@
 package com.github.wautsns.okauth.core.client.builtin.gitee;
 
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
-import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
-import com.github.wautsns.okauth.core.client.core.dto.OAuthRedirectUriQuery;
-import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
+import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Request;
+import com.github.wautsns.okauth.core.client.core.standard.oauth2.StandardOAuth2Client;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
-import com.github.wautsns.okauth.core.exception.OkAuthIOException;
+import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
  * Gitee okauth client.
@@ -32,14 +29,7 @@ import com.github.wautsns.okauth.core.exception.OkAuthIOException;
  * @author wautsns
  * @see <a href="https://gitee.com/api/v5/oauth_doc">gitee oauth doc</a>
  */
-public class GiteeOkAuthClient extends OkAuthClient {
-
-    /** authorize url prefix */
-    private final String authorizeUrlPrefix;
-    /** token request template */
-    private final Request tokenRequestTemplate;
-    /** user request template */
-    private final Request userRequestTemplate;
+public class GiteeOkAuthClient extends StandardOAuth2Client {
 
     /**
      * Construct a gitee okauth client.
@@ -47,48 +37,33 @@ public class GiteeOkAuthClient extends OkAuthClient {
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public GiteeOkAuthClient(
-            OAuthAppInfo oauthAppInfo, Requester requester) {
+    public GiteeOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
         super(oauthAppInfo, requester);
-        authorizeUrlPrefix = "https://gitee.com/oauth/authorize"
-            + "?response_type=code"
-            + "&client_id=" + oauthAppInfo.getClientId()
-            + "&redirect_uri=" + urlEncode(oauthAppInfo.getRedirectUri())
-            + "&state=";
-        tokenRequestTemplate = requester
-            .post("https://gitee.com/oauth/token")
-            .addFormItem("grant_type", "authorization_code")
-            .addFormItem("client_id", oauthAppInfo.getClientId())
-            .addFormItem("client_secret", oauthAppInfo.getClientSecret())
-            .addFormItem("redirect_uri", oauthAppInfo.getRedirectUri());
-        userRequestTemplate = requester
-            .get("https://gitee.com/api/v5/user");
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatform.GITHUB;
+        return BuiltInOpenPlatform.GITEE;
     }
 
     @Override
-    public String initAuthorizeUrl(String state) {
-        return authorizeUrlPrefix + state;
+    protected String getAuthorizeUrl() {
+        return "https://gitee.com/oauth/authorize";
     }
 
     @Override
-    public GiteeToken exchangeForToken(OAuthRedirectUriQuery redirectUriQuery)
-            throws OkAuthErrorException, OkAuthIOException {
-        return new GiteeToken(checkResponse(tokenRequestTemplate.mutate()
-            .addFormItem("code", redirectUriQuery.getCode())
-            .exchangeForJson(), "error", "error_description"));
+    protected String getTokenUrl() {
+        return "https://gitee.com/oauth/token";
     }
 
     @Override
-    public GiteeUser exchangeForUser(OAuthToken token)
-            throws OkAuthErrorException, OkAuthIOException {
-        return new GiteeUser(checkResponse(userRequestTemplate.mutate()
-            .addQuery("access_token", token.getAccessToken())
-            .exchangeForJson(), "error", "error_description"));
+    protected String getUserUrl() {
+        return "https://gitee.com/api/v5/user";
+    }
+
+    @Override
+    protected OAuthUser initOAuthUser(Response response) {
+        return new GiteeUser(response);
     }
 
 }

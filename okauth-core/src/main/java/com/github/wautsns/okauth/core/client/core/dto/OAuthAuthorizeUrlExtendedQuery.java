@@ -18,17 +18,15 @@ package com.github.wautsns.okauth.core.client.core.dto;
 import java.io.Serializable;
 
 /**
- * OAuth redirect uri query.
+ * OAuth authorize url extended query.
  *
  * @author wautsns
  */
-public class OAuthRedirectUriQuery implements Serializable {
+public class OAuthAuthorizeUrlExtendedQuery implements Serializable {
 
     /** serialVersionUID */
-    private static final long serialVersionUID = 285186839588163899L;
+    private static final long serialVersionUID = -4632390700462116748L;
 
-    /** authorization code */
-    private String code;
     /**
      * The application generates a random string and includes it in the request. It should then
      * check that the same value is returned after the user authorizes the app. This is used to
@@ -36,17 +34,11 @@ public class OAuthRedirectUriQuery implements Serializable {
      * attacks</a>.
      */
     private String state;
-
-    /** Get {@link #code}. */
-    public String getCode() {
-        return code;
-    }
-
-    /** Set {@link #code}. */
-    public OAuthRedirectUriQuery setCode(String code) {
-        this.code = code;
-        return this;
-    }
+    /**
+     * One or more space-separated strings indicating which permissions the application is
+     * requesting. The specific OAuth API you’re using will define the scopes that it supports.
+     */
+    private String scope;
 
     /** Get {@link #state}. */
     public String getState() {
@@ -54,9 +46,18 @@ public class OAuthRedirectUriQuery implements Serializable {
     }
 
     /** Set {@link #state}. */
-    public OAuthRedirectUriQuery setState(String state) {
+    public void setState(String state) {
         this.state = state;
-        return this;
+    }
+
+    /** Get {@link #scope}. */
+    public String getScope() {
+        return scope;
+    }
+
+    /** Set {@link #scope}. */
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
 }

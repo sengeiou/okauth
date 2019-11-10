@@ -15,8 +15,6 @@
  */
 package com.github.wautsns.okauth.core.client.util.http;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Map;
 
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
@@ -35,20 +33,7 @@ public abstract class Request {
     /** request method */
     private Method method;
     /** request url */
-    private String url;
-    /** if the request url contains query */
-    private boolean containsQuery;
-
-    /**
-     * Construct a request.
-     *
-     * <p>Method is {@linkplain Method#GET GET}.
-     *
-     * @param url request url, require nonnull
-     */
-    public Request(String url) {
-        this(Method.GET, url);
-    }
+    private Url url;
 
     /**
      * Construct a request.
@@ -58,21 +43,19 @@ public abstract class Request {
      */
     public Request(Method method, String url) {
         this.method = method;
-        this.url = url;
-        this.containsQuery = (url.lastIndexOf('?') >= 0);
+        this.url = new Url(url);
     }
 
     /**
      * Construct a request.
      *
-     * <p>Copy the method, url and containsQuery according to the given request.
+     * <p>Copy the method and url according to the given request.
      *
-     * @param requester template, require nonnull
+     * @param request request prototype, require nonnull
      */
-    protected Request(Request requester) {
-        this.method = requester.method;
-        this.url = requester.url;
-        this.containsQuery = requester.containsQuery;
+    protected Request(Request request) {
+        this.method = request.method;
+        this.url = request.url.mutate();
     }
 
     /**
@@ -95,39 +78,34 @@ public abstract class Request {
 
     /** Get {@link #url}. */
     public String getUrl() {
-        return url;
+        return url.toString();
     }
 
     /**
-     * Add query.
+     * Add query param.
      *
-     * @param name query name, require nonnull
-     * @param value query value(will be url encoded), require nonnull
+     * <p>If the value is {@code null}, it is not added.
+     *
+     * @param name query param name, require nonnull
+     * @param value query param value(will be url encoded if not null)
      * @return self reference
      */
-    public Request addQuery(String name, String value) {
-        try {
-            return addUrlEncodedQuery(name, URLEncoder.encode(value, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("unreachable");
-        }
+    public Request addQueryParam(String name, String value) {
+        url.addQueryParam(name, value);
+        return this;
     }
 
     /**
-     * Add query.
+     * Add url encoded query param.
      *
-     * @param name query name, require nonnull
-     * @param value url encoded query value, require nonnull
+     * <p>If the value is {@code null}, it is not added.
+     *
+     * @param name query param name, require nonnull
+     * @param value url encoded query param value
      * @return self reference
      */
-    public Request addUrlEncodedQuery(String name, String value) {
-        if (containsQuery) {
-            url += '&';
-        } else {
-            url += '?';
-            containsQuery = true;
-        }
-        url += name + '=' + value;
+    public Request addUrlEncodedQueryParam(String name, String value) {
+        url.addUrlEncodedQueryParam(name, value);
         return this;
     }
 

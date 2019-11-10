@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.github;
+package com.github.wautsns.okauth.core.client.core.standard.oauth2;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -21,25 +21,45 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
- * Github token.
+ * Standard oauth token.
  *
  * @author wautsns
  */
 @JsonNaming(SnakeCaseStrategy.class)
-public class GithubToken extends OAuthToken {
+public class StandardOAuth2Token extends OAuthToken {
 
     /**
-     * Construct a github token.
+     * Construct a standard oauth token.
      *
      * @param response response, require nonnull
      */
-    public GithubToken(Response response) {
+    public StandardOAuth2Token(Response response) {
         super(response);
     }
 
     @Override
     public String getAccessToken() {
         return getString("access_token");
+    }
+
+    /** Get token type. */
+    public String getTokenType() {
+        return getString("token_type");
+    }
+
+    /** Get expires in. */
+    public Long getExpiresIn() {
+        return get("expires_in");
+    }
+
+    /** Get refresh token. */
+    public String getRefreshToken() {
+        return getString("refresh_token");
+    }
+
+    /** Get scope. */
+    public String getScope() {
+        return getString("scope");
     }
 
 }

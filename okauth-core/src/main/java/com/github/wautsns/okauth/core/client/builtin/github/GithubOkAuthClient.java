@@ -16,15 +16,12 @@
 package com.github.wautsns.okauth.core.client.builtin.github;
 
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
-import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
-import com.github.wautsns.okauth.core.client.core.dto.OAuthRedirectUriQuery;
-import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
+import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Request;
+import com.github.wautsns.okauth.core.client.core.standard.oauth2.StandardOAuth2Client;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
-import com.github.wautsns.okauth.core.exception.OkAuthIOException;
+import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
  * Github okauth client.
@@ -34,14 +31,7 @@ import com.github.wautsns.okauth.core.exception.OkAuthIOException;
  *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
  *      oauth doc</a>
  */
-public class GithubOkAuthClient extends OkAuthClient {
-
-    /** authorize url prefix */
-    private final String authorizeUrlPrefix;
-    /** token request template */
-    private final Request tokenRequest;
-    /** user request template */
-    private final Request userRequest;
+public class GithubOkAuthClient extends StandardOAuth2Client {
 
     /**
      * Construct a github okauth client.
@@ -49,45 +39,34 @@ public class GithubOkAuthClient extends OkAuthClient {
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public GithubOkAuthClient(
-            OAuthAppInfo oAuthAppInfo, Requester requester) {
-        super(oAuthAppInfo, requester);
-        authorizeUrlPrefix = "https://github.com/login/oauth/authorize"
-            + "?client_id=" + oauthAppInfo.getClientId()
-            + "&state=";
-        tokenRequest = requester
-            .get("https://github.com/login/oauth/access_token")
-            .acceptJson()
-            .addQuery("client_id", oauthAppInfo.getClientId())
-            .addQuery("client_secret", oauthAppInfo.getClientSecret());
-        userRequest = requester
-            .get("https://api.github.com/user");
+    public GithubOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+        super(oauthAppInfo, requester);
+        tokenRequestPrototype.acceptJson();
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatform.GITEE;
+        return BuiltInOpenPlatform.GITHUB;
     }
 
     @Override
-    public String initAuthorizeUrl(String state) {
-        return authorizeUrlPrefix + state;
+    protected String getAuthorizeUrl() {
+        return "https://github.com/login/oauth/authorize";
     }
 
     @Override
-    public GithubToken exchangeForToken(OAuthRedirectUriQuery redirectUriQuery)
-            throws OkAuthErrorException, OkAuthIOException {
-        return new GithubToken(checkResponse(tokenRequest.mutate()
-            .addQuery("code", redirectUriQuery.getCode())
-            .exchangeForJson(), "error", "error_description"));
+    protected String getTokenUrl() {
+        return "https://github.com/login/oauth/access_token";
     }
 
     @Override
-    public GithubUser exchangeForUser(OAuthToken token)
-            throws OkAuthErrorException, OkAuthIOException {
-        return new GithubUser(checkResponse(userRequest.mutate()
-            .addQuery("access_token", token.getAccessToken())
-            .exchangeForJson(), "error", "error_description"));
+    protected String getUserUrl() {
+        return "https://api.github.com/user";
+    }
+
+    @Override
+    protected OAuthUser initOAuthUser(Response response) {
+        return new GithubUser(response);
     }
 
 }
