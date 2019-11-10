@@ -15,7 +15,7 @@ okauth 是一个**开放平台授权登录（即第三方登录）**的工具类
 入门级使用(基于 okauth-spring-boot-starter)
 -------------------------------------------
 
-1.  引入依赖
+1.  引入依赖(目前尚未发布至中央仓库)
 
     ``` xml
     <dependency>
@@ -36,10 +36,10 @@ okauth 是一个**开放平台授权登录（即第三方登录）**的工具类
         oauth-app-info:
            client-id: your client id
            client-secret: your client secret
-           redirect-uri: your app redirect uri
+           redirect-uri: your redirect uri
     ```
 
-3.  简单使用
+3.  引入 OkAuthManager 并使用
 
     ``` java
     // ...
@@ -74,10 +74,10 @@ okauth 是一个**开放平台授权登录（即第三方登录）**的工具类
 目前已支持的开放平台
 --------------------
 
-| 🏢 开放平台 |                                                                               ✅ OkAuthClient                                                                               |                                           📄 官方文档                                          |
-|:----------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------:|
-|   Github   | [GithubOkAuthClient](https://github.com/wautsns/okauth/blob/master/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/github/GithubOkAuthClient.java) | [查看官方文档](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/) |
-|    Gitee   |   [GiteeOkAuthClient](https://github.com/wautsns/okauth/blob/master/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/gitee/GiteeOkAuthClient.java)  |                       [查看官方文档](https://gitee.com/api/v5/oauth_doc)                      |
-|    Baidu   |   [BaiduOkAuthClient](https://github.com/wautsns/okauth/blob/master/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/baidu/BaiduOkAuthClient.java)  |           [查看官方文档](http://developer.baidu.com/wiki/index.php?title=docs/oauth)          |
+| 🏢 开放平台 | ✅ OkAuthClient | 📄 官方文档 |
+|:----------:|:---------------:|:----------:|
+| Github | [GithubOkAuthClient](https://github.com/wautsns/okauth/blob/master/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/github/GithubOkAuthClient.java) | [查看官方文档](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/) |
+| Gitee | [GiteeOkAuthClient](https://github.com/wautsns/okauth/blob/master/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/gitee/GiteeOkAuthClient.java) | [查看官方文档](https://gitee.com/api/v5/oauth_doc) |
+| Baidu | [BaiduOkAuthClient](https://github.com/wautsns/okauth/blob/master/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/baidu/BaiduOkAuthClient.java) | [查看官方文档](http://developer.baidu.com/wiki/index.php?title=docs/oauth) |
 
 
