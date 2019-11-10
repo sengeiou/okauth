@@ -17,6 +17,7 @@ package com.github.wautsns.okauth.core.client.builtin;
 
 import java.util.function.BiFunction;
 
+import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.github.GithubOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
@@ -33,6 +34,7 @@ public enum BuiltInOpenPlatform implements OpenPlatform {
 
     GITEE("gitee", GiteeOkAuthClient::new),
     GITHUB("github", GithubOkAuthClient::new),
+    BAIDU("baidu", BaiduOkAuthClient::new),
     ;
 
     /** identifier */
