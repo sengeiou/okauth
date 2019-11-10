@@ -124,8 +124,8 @@ public abstract class StandardOAuth2Client extends OkAuthClient {
      * @return user request
      */
     protected Request mutateUserRequest(OAuthToken token) {
-        return tokenRequestPrototype.mutate()
-            .addFormItem("access_token", token.getAccessToken());
+        return userRequestPrototype.mutate()
+            .addQueryParam("access_token", token.getAccessToken());
     }
 
     // ------------------------- BEGIN -------------------------
