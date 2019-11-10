@@ -73,12 +73,14 @@ public class OkHttpRequest extends Request {
 
     @Override
     public Request addHeader(String name, String value) {
+        if (value == null) { return this; }
         builder.addHeader(name, value);
         return this;
     }
 
     @Override
     public Request addFormItem(String name, String value) {
+        if (value == null) { return this; }
         if (form == null) { form = new HashMap<>(8); }
         form.put(name, value);
         return this;
@@ -98,7 +100,7 @@ public class OkHttpRequest extends Request {
     @Override
     protected Response post(ResponseInputStreamReader reader) throws OkAuthIOException {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        form.forEach(formBodyBuilder::add);
+        if (form != null) { form.forEach(formBodyBuilder::add); }
         builder.post(formBodyBuilder.build()).url(getUrl());
         return execute(reader);
     }

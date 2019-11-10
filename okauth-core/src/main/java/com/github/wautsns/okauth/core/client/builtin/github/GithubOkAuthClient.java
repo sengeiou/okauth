@@ -17,9 +17,11 @@ package com.github.wautsns.okauth.core.client.builtin.github;
 
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.core.standard.oauth2.StandardOAuth2Client;
+import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
@@ -41,7 +43,7 @@ public class GithubOkAuthClient extends StandardOAuth2Client {
      */
     public GithubOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
         super(oauthAppInfo, requester);
-        tokenRequestPrototype.acceptJson();
+        tokenRequestPrototype.addHeaderAcceptJson();
     }
 
     @Override
@@ -60,8 +62,14 @@ public class GithubOkAuthClient extends StandardOAuth2Client {
     }
 
     @Override
-    protected String getUserUrl() {
-        return "https://api.github.com/user";
+    protected Request initUserRequest(Requester requester) {
+        return requester.get("https://api.github.com/user");
+    }
+
+    @Override
+    protected Request mutateUserRequest(OAuthToken token) {
+        return userRequestPrototype.mutate()
+            .addHeaderAuthorization("token " + token.getAccessToken());
     }
 
     @Override

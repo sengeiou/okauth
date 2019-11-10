@@ -59,21 +59,14 @@ public class BaiduOkAuthClient extends StandardOAuth2Client {
     }
 
     @Override
-    protected OAuthToken initOAuthToken(Response response) {
-        return new BaiduToken(response);
-    }
-
-    @Override
-    protected String getUserUrl() {
-        return "http://openapi.baidu.com/rest/2.0/passport/users/getLoggedInUser";
+    protected Request initUserRequest(Requester requester) {
+        return requester.get("https://openapi.baidu.com/rest/2.0/passport/users/getInfo");
     }
 
     @Override
     protected Request mutateUserRequest(OAuthToken token) {
-        BaiduToken baiduToken = (BaiduToken) token;
-        return super.mutateUserRequest(token)
-            .addQueryParam("session_key", baiduToken.getSessionKey())
-            .addQueryParam("session_secret", baiduToken.getSessionSecret());
+        return userRequestPrototype.mutate()
+            .addQueryParam("access_token", token.getAccessToken());
     }
 
     @Override

@@ -36,8 +36,11 @@ import com.github.wautsns.okauth.core.exception.OkAuthIOException;
  */
 public abstract class StandardOAuth2Client extends OkAuthClient {
 
+    /** authorize url prototype */
     protected final Url authorizeUrlPrototype;
+    /** token request prototype */
     protected final Request tokenRequestPrototype;
+    /** user request prototype */
     protected final Request userRequestPrototype;
 
     /**
@@ -58,8 +61,7 @@ public abstract class StandardOAuth2Client extends OkAuthClient {
             .addFormItem("redirect_uri", oauthAppInfo.getRedirectUri())
             .addFormItem("client_id", oauthAppInfo.getClientId())
             .addFormItem("client_secret", oauthAppInfo.getClientSecret());
-        userRequestPrototype = requester
-            .get(getUserUrl());
+        userRequestPrototype = initUserRequest(requester);
     }
 
     @Override
@@ -117,17 +119,6 @@ public abstract class StandardOAuth2Client extends OkAuthClient {
         return new StandardOAuth2Token(response);
     }
 
-    /**
-     * Mutate a user request.
-     *
-     * @param token oauth token, require nonnull
-     * @return user request
-     */
-    protected Request mutateUserRequest(OAuthToken token) {
-        return userRequestPrototype.mutate()
-            .addQueryParam("access_token", token.getAccessToken());
-    }
-
     // ------------------------- BEGIN -------------------------
     // -- The following info is provided by the open platform ---
     // ---------------------------------------------------------
@@ -138,8 +129,21 @@ public abstract class StandardOAuth2Client extends OkAuthClient {
     /** Get token url. */
     protected abstract String getTokenUrl();
 
-    /** Get user url. */
-    protected abstract String getUserUrl();
+    /**
+     * Initialize a user request.
+     *
+     * @param requester requester
+     * @return user request
+     */
+    protected abstract Request initUserRequest(Requester requester);
+
+    /**
+     * Mutate a user request.
+     *
+     * @param token oauth token, require nonnull
+     * @return user request
+     */
+    protected abstract Request mutateUserRequest(OAuthToken token);
 
     /**
      * Initialize an oauth user.

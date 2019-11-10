@@ -39,12 +39,12 @@ public class BaiduUser extends OAuthUser {
 
     @Override
     public String getOpenId() {
-        return getString("uid");
+        return getString("userid");
     }
 
     @Override
     public String getNickname() {
-        return getString("uname");
+        return getString("username");
     }
 
     @Override

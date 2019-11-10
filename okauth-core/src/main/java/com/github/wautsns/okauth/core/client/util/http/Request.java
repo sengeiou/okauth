@@ -58,28 +58,42 @@ public abstract class Request {
         this.url = request.url.mutate();
     }
 
+    /** Get {@link #url}. */
+    public String getUrl() {
+        return url.toString();
+    }
+
     /**
      * Add header "Accept" with value "application/json"
      *
      * @return self reference
      */
-    public Request acceptJson() {
+    public Request addHeaderAcceptJson() {
         return addHeader("Accept", "application/json");
+    }
+
+    /**
+     * Add header "Authorization".
+     *
+     * <p>If the value is {@code null}, it is not added.
+     *
+     * @param authorization header value
+     * @return
+     */
+    public Request addHeaderAuthorization(String authorization) {
+        return addHeader("Authorization", authorization);
     }
 
     /**
      * Add header.
      *
+     * <p>If the value is {@code null}, it is not added.
+     *
      * @param name header name, require nonnull
-     * @param value header value, require nonnull
+     * @param value header value
      * @return self reference
      */
     public abstract Request addHeader(String name, String value);
-
-    /** Get {@link #url}. */
-    public String getUrl() {
-        return url.toString();
-    }
 
     /**
      * Add query param.
@@ -112,8 +126,10 @@ public abstract class Request {
     /**
      * Add form item.
      *
+     * <p>If the value is {@code null}, it is not added.
+     *
      * @param name form item name, require nonnull
-     * @param value form item value, require nonnull
+     * @param value form item value
      * @return self reference
      */
     public abstract Request addFormItem(String name, String value);
@@ -121,10 +137,13 @@ public abstract class Request {
     /**
      * Add form items.
      *
+     * <p>If the form is {@code null}, it is not added.
+     *
      * @param form form, require nonnull
      * @return self reference
      */
     public Request addForm(Map<String, String> form) {
+        if (form == null) { return this; }
         form.forEach(this::addFormItem);
         return this;
     }
