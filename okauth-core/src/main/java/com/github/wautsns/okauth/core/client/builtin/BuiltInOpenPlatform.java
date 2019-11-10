@@ -32,8 +32,8 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
  */
 public enum BuiltInOpenPlatform implements OpenPlatform {
 
-    GITEE("gitee", GiteeOkAuthClient::new),
     GITHUB("github", GithubOkAuthClient::new),
+    GITEE("gitee", GiteeOkAuthClient::new),
     BAIDU("baidu", BaiduOkAuthClient::new),
     ;
 
@@ -42,6 +42,12 @@ public enum BuiltInOpenPlatform implements OpenPlatform {
     /** function to initialize an okauth client */
     private final BiFunction<OAuthAppInfo, Requester, OkAuthClient> okAuthClientInitializer;
 
+    /**
+     * Contruct a built-in open platform
+     *
+     * @param identifier open platform identifier
+     * @param okAuthClientInitializer okauth client initializer
+     */
     private BuiltInOpenPlatform(
             String identifier,
             BiFunction<OAuthAppInfo, Requester, OkAuthClient> okAuthClientInitializer) {
