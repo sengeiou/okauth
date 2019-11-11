@@ -29,6 +29,11 @@ public class OkAuthRequesterProperties {
 
     /** requester class, default is {@link OkHttpRequester} */
     private Class<? extends Requester> requesterClass = OkHttpRequester.class;
+    /**
+     * max concurrent requests, default is 64(by default, each open platform is independent of each
+     * other)
+     */
+    private Integer maxConcurrentRequests = 64;
     /** max idle connection, default is 5 */
     private Integer maxIdleConnections = 5;
     /** keep alive, default is 300_000 */
@@ -46,6 +51,17 @@ public class OkAuthRequesterProperties {
     /** Set {@link #requesterClass}. */
     public OkAuthRequesterProperties setRequesterClass(Class<? extends Requester> requesterClass) {
         this.requesterClass = requesterClass;
+        return this;
+    }
+
+    /** Get {@link #maxConcurrentRequests}. */
+    public Integer getMaxConcurrentRequests() {
+        return maxConcurrentRequests;
+    }
+
+    /** Set {@link #maxConcurrentRequests}. */
+    public OkAuthRequesterProperties setMaxConcurrentRequests(Integer maxConcurrentRequests) {
+        this.maxConcurrentRequests = maxConcurrentRequests;
         return this;
     }
 

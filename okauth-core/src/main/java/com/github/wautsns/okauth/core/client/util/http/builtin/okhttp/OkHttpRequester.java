@@ -23,7 +23,9 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
 
 import okhttp3.ConnectionPool;
+import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
 
 /**
  * Okhttp3 requester.
@@ -52,15 +54,20 @@ public class OkHttpRequester extends Requester {
      * @param properties okauth http properties, require nonnull
      */
     public OkHttpRequester(OkAuthRequesterProperties properties) {
-        this.okHttpClient = new OkHttpClient.Builder()
+          Builder builder = new OkHttpClient.Builder()
             .connectTimeout(properties.getConnectTimeoutMilliseconds(), TimeUnit.MILLISECONDS)
             .readTimeout(3, TimeUnit.SECONDS)
             .writeTimeout(3, TimeUnit.SECONDS)
             .connectionPool(new ConnectionPool(
                 properties.getMaxIdleConnections(),
                 properties.getKeepAlive(),
-                properties.getKeepAliveTimeUnit()))
-            .build();
+                properties.getKeepAliveTimeUnit()));
+          Dispatcher dispatcher = builder.getDispatcher$okhttp();
+          dispatcher.setMaxRequests(properties.getMaxConcurrentRequests());
+          // a requester is recommended to be used for only one open platform,
+          // so max requests equals to max requests per host
+          dispatcher.setMaxRequestsPerHost(properties.getMaxConcurrentRequests());
+          this.okHttpClient = builder.build();
     }
 
     @Override
