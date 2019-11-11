@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.core.standard.oauth2;
+package com.github.wautsns.okauth.core.client.core.standard;
 
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthAuthorizeUrlExtendedQuery;
@@ -34,7 +34,7 @@ import com.github.wautsns.okauth.core.exception.OkAuthIOException;
  * @author wautsns
  * @see <a href="https://oauth.net/2/grant-types/authorization-code/">standard oauth2.0 doc</a>
  */
-public abstract class StandardOAuth2Client extends OkAuthClient {
+public abstract class StandardOAuthClient extends OkAuthClient {
 
     /** authorize url prototype */
     protected final Url authorizeUrlPrototype;
@@ -49,7 +49,7 @@ public abstract class StandardOAuth2Client extends OkAuthClient {
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public StandardOAuth2Client(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public StandardOAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
         super(oauthAppInfo, requester);
         authorizeUrlPrototype = new Url(getAuthorizeUrl())
             .addQueryParam("response_type", "code")
@@ -61,7 +61,7 @@ public abstract class StandardOAuth2Client extends OkAuthClient {
             .addFormItem("redirect_uri", oauthAppInfo.getRedirectUri())
             .addFormItem("client_id", oauthAppInfo.getClientId())
             .addFormItem("client_secret", oauthAppInfo.getClientSecret());
-        userRequestPrototype = initUserRequest(requester);
+        userRequestPrototype = initUserRequestPrototype(requester);
     }
 
     @Override
@@ -84,6 +84,43 @@ public abstract class StandardOAuth2Client extends OkAuthClient {
         return initOAuthUser(exchangeAndCheck(mutateUserRequest(token)));
     }
 
+    // ------------------------- BEGIN -------------------------
+    // ------------------------ assists ------------------------
+    // ---------------------------------------------------------
+
+    /** Get authorize url. */
+    protected abstract String getAuthorizeUrl();
+
+    /** Get token url. */
+    protected abstract String getTokenUrl();
+
+    /**
+     * Mutate a token request.
+     *
+     * @param query redirect uri query, require nonnull
+     * @return token request
+     */
+    protected Request mutateTokenRequest(OAuthRedirectUriQuery query) {
+        return tokenRequestPrototype.mutate()
+            .addFormItem("code", query.getCode());
+    }
+
+    /**
+     * Initialize a user request.
+     *
+     * @param requester requester
+     * @return user request
+     */
+    protected abstract Request initUserRequestPrototype(Requester requester);
+
+    /**
+     * Mutate a user request.
+     *
+     * @param token oauth token, require nonnull
+     * @return user request
+     */
+    protected abstract Request mutateUserRequest(OAuthToken token);
+
     /**
      * Exchange and check.
      *
@@ -98,52 +135,15 @@ public abstract class StandardOAuth2Client extends OkAuthClient {
     }
 
     /**
-     * Mutate a token request.
-     *
-     * @param query redirect uri query, require nonnull
-     * @return token request
-     */
-    protected Request mutateTokenRequest(OAuthRedirectUriQuery query) {
-        return tokenRequestPrototype.mutate()
-            .addFormItem("code", query.getCode());
-    }
-
-    /**
      * Initialize an oauth token.
      *
      * @param response response after checking
      * @return oauth token
-     * @see StandardOAuth2Token
+     * @see StandardOAuthToken
      */
     protected OAuthToken initOAuthToken(Response response) {
-        return new StandardOAuth2Token(response);
+        return new StandardOAuthToken(response);
     }
-
-    // ------------------------- BEGIN -------------------------
-    // -- The following info is provided by the open platform ---
-    // ---------------------------------------------------------
-
-    /** Get authorize url. */
-    protected abstract String getAuthorizeUrl();
-
-    /** Get token url. */
-    protected abstract String getTokenUrl();
-
-    /**
-     * Initialize a user request.
-     *
-     * @param requester requester
-     * @return user request
-     */
-    protected abstract Request initUserRequest(Requester requester);
-
-    /**
-     * Mutate a user request.
-     *
-     * @param token oauth token, require nonnull
-     * @return user request
-     */
-    protected abstract Request mutateUserRequest(OAuthToken token);
 
     /**
      * Initialize an oauth user.

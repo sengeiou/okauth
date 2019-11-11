@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.core.standard.oauth2;
+package com.github.wautsns.okauth.core.client.core.standard;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -26,14 +26,14 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
  * @author wautsns
  */
 @JsonNaming(SnakeCaseStrategy.class)
-public class StandardOAuth2Token extends OAuthToken {
+public class StandardOAuthToken extends OAuthToken {
 
     /**
      * Construct a standard oauth token.
      *
      * @param response response, require nonnull
      */
-    public StandardOAuth2Token(Response response) {
+    public StandardOAuthToken(Response response) {
         super(response);
     }
 

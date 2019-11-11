@@ -16,7 +16,6 @@
 package com.github.wautsns.okauth.core.client.core.properties;
 
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
-import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
 
 /**
@@ -29,17 +28,25 @@ public class OkAuthClientProperties {
     /**
      * open platform expression
      *
-     * <p>There are three types of expressions:
+     * <p>There are two types of expressions:
      * <ol>
-     * <li>built-in open platform name(case insensitive) like "github"...(optional values see
-     * {@linkplain BuiltInOpenPlatform})</li>
-     * <li>simple extended open platform like "a.b.c.Github"(`a.b.c.Github` can only have one
-     * enumeration constant)</li>
-     * <li>composite extended open platform like "a.b.c.ExtendedOpenPlatform:xyz"(string after ':'
-     * is a case insensitive identifier)</li>
+     * <li>
+     * built-in open platform<br/>
+     * For built-in open platform clients, use the short name (case insensitive, but to match the
+     * identifier of the specified client), the specific configurable identifier can be found in
+     * `{@link BuiltInOpenPlatform}`
+     * </li>
+     * <li>
+     * extended open platform<br>
+     * Need to implement the interface `OpenPlatform`, the specific implementation can refer to
+     * `{@link BuiltInOpenPlatform}`<br/>
+     * Assume that there is an enumeration `a.b.c.ExtendedOpenPlatform` that meets the requirements
+     * and that the enumeration class has an enumeration value of `XYZ("xyz",...)`, and the
+     * expression is `a.b.c.ExtendedOpenPlatform:xyz` , `xyz` after `:` is case insensitive.
+     * <strong>Special, when the enumeration class contains only one enumeration value, it can be
+     * omitted.</strong>
+     * </li>
      * </ol>
-     * *** All the classes mentioned above(like `a.b.c.Github`, `a.b.c.ExtendedOpenPlatform`)
-     * <strong>must be enumeration that implements {@linkplain OpenPlatform}</strong> ***
      */
     private String openPlatformExpr;
     /** oauth application info */

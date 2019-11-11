@@ -20,7 +20,7 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.core.standard.oauth2.StandardOAuth2Client;
+import com.github.wautsns.okauth.core.client.core.standard.StandardOAuthClient;
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
@@ -31,7 +31,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
  * @author wautsns
  * @see <a href="https://gitee.com/api/v5/oauth_doc">gitee oauth doc</a>
  */
-public class GiteeOkAuthClient extends StandardOAuth2Client {
+public class GiteeOkAuthClient extends StandardOAuthClient {
 
     /**
      * Construct a gitee okauth client.
@@ -59,7 +59,7 @@ public class GiteeOkAuthClient extends StandardOAuth2Client {
     }
 
     @Override
-    protected Request initUserRequest(Requester requester) {
+    protected Request initUserRequestPrototype(Requester requester) {
         return requester.get("https://gitee.com/api/v5/user");
     }
 

@@ -20,7 +20,7 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.core.standard.oauth2.StandardOAuth2Client;
+import com.github.wautsns.okauth.core.client.core.standard.StandardOAuthClient;
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
@@ -33,7 +33,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
  *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
  *      oauth doc</a>
  */
-public class GithubOkAuthClient extends StandardOAuth2Client {
+public class GithubOkAuthClient extends StandardOAuthClient {
 
     /**
      * Construct a github okauth client.
@@ -62,7 +62,7 @@ public class GithubOkAuthClient extends StandardOAuth2Client {
     }
 
     @Override
-    protected Request initUserRequest(Requester requester) {
+    protected Request initUserRequestPrototype(Requester requester) {
         return requester.get("https://api.github.com/user");
     }
 
