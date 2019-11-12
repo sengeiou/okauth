@@ -105,8 +105,8 @@ public OkAuthManager initOkAuthManager() {
 4. [`OAuthToken`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/dto/OAuthToken.java "点击查看源码")  
 	抽象出的 OAuth2.0 令牌, 提供了如下一些方法:
 	1. `String getAccessToken()` : 获取访问令牌
-	2. `T get(String name)` : 获取指定名称的属性值
-	3. `String getString(String name)` : 获取指定名称的属性值,  若值不为 `null`  , 并且类型不为 `String` , 则会调用 `toString()`
+	2. `T get(String name)` : 获取指定名称的值
+	3. `String getString(String name)` : 获取指定名称的字符串形式值, 若值为 `null` , 则返回 `null` ; 若值是 `String` , `Number` 或 `Boolean` 的实例, 则通过 `toString()` 返回字符串; 否则返回对应 `JSON` 字符串
 	4. `Map<String, Object> getMap(String name)` : 获取指定名称的 `Map`, 若类型不为 `Map` 则会返回 `null`
 	5. `Map<String, Object> getOriginalDataMap()` : 获取原始数据集
 5. [`OAuthUser`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/dto/OAuthUser.java "点击查看源码")  

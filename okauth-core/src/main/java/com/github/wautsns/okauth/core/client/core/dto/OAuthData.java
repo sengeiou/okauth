@@ -17,6 +17,8 @@ package com.github.wautsns.okauth.core.client.core.dto;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -27,6 +29,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
  */
 @JsonNaming(SnakeCaseStrategy.class)
 class OAuthData {
+
+    private static final ObjectMapper OM = new ObjectMapper();
 
     /** data map */
     private final Map<String, Object> originalDataMap;
@@ -57,13 +61,26 @@ class OAuthData {
     /**
      * Get string value.
      *
+     * <ul>
+     * <li>If the value is {@code null}, {@code null} will be returned.</li>
+     * <li>If the value is instance of {@code String} or {@code Number} or {@code Boolean},
+     * {@code value.toString()} will be returned.</li>
+     * <li>Otherwise, the json string of the value will be returned.</>
+     * </ul>
+     *
      * @param name value name, require nonnull
-     * @return value assosiated with the param `name`, or {@code null} if no value assosiated with
-     *         the param
+     * @return value string assosiated with the param `name`
      */
     public String getString(String name) {
         Object value = originalDataMap.get(name);
-        return (value == null) ? null : value.toString();
+        if (value instanceof String) { return (String) value; }
+        if (value == null) { return null; }
+        if (value instanceof Number || value instanceof Boolean) { return value.toString(); }
+        try {
+            return OM.writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
