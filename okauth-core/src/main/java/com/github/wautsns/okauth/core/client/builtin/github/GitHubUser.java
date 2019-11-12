@@ -29,7 +29,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 public class GitHubUser extends OAuthUser {
 
     /**
-     * Construct a github token.
+     * Construct a GitHub user.
      *
      * @param response response, require nonnull
      */

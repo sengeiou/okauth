@@ -29,7 +29,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 public class GiteeUser extends OAuthUser {
 
     /**
-     * Construct a gitee user.
+     * Construct a Gitee user.
      *
      * @param response response, require nonnull
      */

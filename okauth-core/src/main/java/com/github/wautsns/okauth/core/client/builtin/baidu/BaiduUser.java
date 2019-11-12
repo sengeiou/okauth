@@ -29,7 +29,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 public class BaiduUser extends OAuthUser {
 
     /**
-     * Construct a baidu token.
+     * Construct a Baidu user.
      *
      * @param response response, require nonnull
      */
