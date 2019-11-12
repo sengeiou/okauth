@@ -1,4 +1,4 @@
-okauth 目前仍处于开发阶段, 尚未经过大量测试.
+**okauth 目前仍处于开发阶段, 尚未经过大量测试.**
 
 # 1 概述
 
@@ -67,9 +67,9 @@ okauth:
 
 配置项 `open-platform-expr` 是开放平台客户端的表达式, 有如下两种类型:
 
-1. 已内置的开放平台
+1. 已内置的开放平台  
 	对于已内置的开放平台客户端, 使用简称即可(不区分大小写, 但要符合指定客户端的标识符), 具体的可配置标识符见 [`BuiltInOpenPlatform`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/BuiltInOpenPlatform.java "点击查看源码")
-2. 扩展的开放平台(需要是枚举, 且实现接口 [`OpenPlatform`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/OpenPlatform.java "点击查看源码") , 具体实现可以参考 [`BuiltInOpenPlatform`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/BuiltInOpenPlatform.java "点击查看源码") )
+2. 扩展的开放平台(需要是枚举, 且实现接口 [`OpenPlatform`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/OpenPlatform.java "点击查看源码") , 具体实现可以参考 [`BuiltInOpenPlatform`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/BuiltInOpenPlatform.java "点击查看源码") )  
 	假定有枚举 `a.b.c.ExtendedOpenPlatform` 符合要求 , 并且该枚举类中有一个枚举值为 `XYZ("xyz",...)` , 则表达式为 `a.b.c.ExtendedOpenPlatform:xyz` , 其中 `:` 后面的 `xyz` 不区分大小写. **特别的, 当枚举类中仅包含一个枚举值时, 可省略不写**
 
 ### 2.2.2 非 Spring Boot 环境
@@ -100,7 +100,6 @@ public OkAuthManager initOkAuthManager() {
 	该类是 OAuth2.0 授权码模式中, 用户授权后, 开放平台重定向至指定 url 时所携带的参数, 目前包含两个属性 `code` 与 `state` . 由于某些开放平台可能返回的属性名不叫 `code` 与 `state` , 为便于兼容与扩展便有了该类.
 3. [`OkAuthManager`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/manager/OkAuthManager.java "点击查看源码")  
 	该类统一管理了所有已注册的开放平台客户端, 并提供了两个方法用于获取指定的客户端(不会返回 `null` ): 
-	
 	1. `getClient(String caseInsensitiveIdentifier)` : 通过标识符(不区分大小写)获取客户端(**更常用**)
 	2. `getClient(OpenPlatform openPlatform)` : 通过 `OpenPlatform` 枚举值获取客户端
 4. [`OAuthToken`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/dto/OAuthToken.java "点击查看源码")  
@@ -133,18 +132,18 @@ public OkAuthManager initOkAuthManager() {
 // ...
     private final OkAuthManager okAuthManager;
 
-	@GetMapping("/cmd/redirect-to-authorize-url")
-	public String redirectToAuthorizeUrl(String openPlatform) throws OkAuthException {
+    @GetMapping("/cmd/redirect-to-authorize-url")
+    public String redirectToAuthorizeUrl(String openPlatform) throws OkAuthException {
         String state = "generate state and save if needed";
         return "redirect:" + okAuthManager.getClient(openPlatform)
             .initAuthorizeUrl(new OAuthAuthorizeUrlExtendedQuery()
-            	.setState(state)
+                .setState(state)
                 .setScope("if needed"));
     }
 
     @GetMapping("/cmd/handle-authorize-callback/{openPlatform}")
     public String handleAuthorizeCallback(
-        	// some open platforms' callback url may not support query
+            // some open platforms' callback url may not support query
             @PathVariable String openPlatform,
             OAuthRedirectUriQuery query)
             throws OkAuthException, Exception {
