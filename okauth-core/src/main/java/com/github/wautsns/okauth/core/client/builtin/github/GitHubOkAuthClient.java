@@ -26,14 +26,14 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
- * Github okauth client.
+ * GitHub okauth client.
  *
  * @author wautsns
  * @see <a
  *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
  *      oauth doc</a>
  */
-public class GithubOkAuthClient extends StandardOAuthClient {
+public class GitHubOkAuthClient extends StandardOAuthClient {
 
     /**
      * Construct a github okauth client.
@@ -41,7 +41,7 @@ public class GithubOkAuthClient extends StandardOAuthClient {
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public GithubOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public GitHubOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
         super(oauthAppInfo, requester);
         tokenRequestPrototype.addHeaderAcceptJson();
     }
@@ -74,7 +74,7 @@ public class GithubOkAuthClient extends StandardOAuthClient {
 
     @Override
     protected OAuthUser initOAuthUser(Response response) {
-        return new GithubUser(response);
+        return new GitHubUser(response);
     }
 
 }

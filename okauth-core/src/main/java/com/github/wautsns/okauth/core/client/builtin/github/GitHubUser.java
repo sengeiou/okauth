@@ -21,19 +21,19 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
- * Github user.
+ * GitHub user.
  *
  * @author wautsns
  */
 @JsonNaming(SnakeCaseStrategy.class)
-public class GithubUser extends OAuthUser {
+public class GitHubUser extends OAuthUser {
 
     /**
      * Construct a github token.
      *
      * @param response response, require nonnull
      */
-    public GithubUser(Response response) {
+    public GitHubUser(Response response) {
         super(response);
     }
 
