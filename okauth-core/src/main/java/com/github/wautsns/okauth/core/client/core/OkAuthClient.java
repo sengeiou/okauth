@@ -15,13 +15,14 @@
  */
 package com.github.wautsns.okauth.core.client.core;
 
-import com.github.wautsns.okauth.core.client.core.dto.OAuthAuthorizeUrlExtendedQuery;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthRedirectUriQuery;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
+import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.Url;
 import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
@@ -37,6 +38,13 @@ public abstract class OkAuthClient {
     /** requester */
     protected final Requester requester;
 
+    /** authorize url prototype */
+    protected final Url authorizeUrlPrototype;
+    /** token request prototype */
+    protected final Request tokenRequestPrototype;
+    /** user request prototype */
+    protected final Request userRequestPrototype;
+
     /**
      * Construct an okauth client.
      *
@@ -46,62 +54,108 @@ public abstract class OkAuthClient {
     public OkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
         this.oauthAppInfo = oauthAppInfo;
         this.requester = requester;
+        this.authorizeUrlPrototype = initAuthorizeUrlPrototype();
+        this.tokenRequestPrototype = initTokenRequestPrototype();
+        this.userRequestPrototype = initUserRequestPrototype();
     }
 
     /** Get open platform. */
     public abstract OpenPlatform getOpenPlatform();
 
+    // ------------------------- BEGIN -------------------------
+    // --------------------- authorize url ---------------------
+    // ---------------------------------------------------------
+
+    /**
+     * Initialize authorize url prototype.
+     *
+     * @return authorize url prototype
+     */
+    protected abstract Url initAuthorizeUrlPrototype();
+
     /**
      * Initialize an authorize url.
      *
-     * @param query oauth authorize url extended query
+     * @param state the param is used to prevent CSRF attacks
      * @return authorize url
      */
-    public String initAuthorizeUrl(OAuthAuthorizeUrlExtendedQuery query) {
-        return doInitAuthorizeUrl((query != null) ? query : new OAuthAuthorizeUrlExtendedQuery());
+    public String initAuthorizeUrl(String state) {
+        return authorizeUrlPrototype.mutate()
+            .addQueryParam("state", state)
+            .toString();
     }
 
-    /**
-     * Do initialize authorize url.
-     *
-     * @param query oauth authorize url extended query, require nonnull
-     * @return authorize url
-     */
-    protected abstract String doInitAuthorizeUrl(OAuthAuthorizeUrlExtendedQuery query);
+    // ------------------------- BEGIN -------------------------
+    // ---------------------- oauth token ----------------------
+    // ---------------------------------------------------------
 
     /**
-     * Exchange for oauth token.
+     * Initialize token request prototype.
+     *
+     * @return token request prototype
+     */
+    protected abstract Request initTokenRequestPrototype();
+
+    /**
+     * Mutate a token request.
+     *
+     * @param query redirect uri query, require nonnull
+     * @return token request
+     */
+    protected abstract Request mutateTokenRequest(OAuthRedirectUriQuery query);
+
+    /**
+     * Exchange query for oauth token.
      *
      * @param query redirect uri query, require nonnull
      * @return oauth token
      * @throws OkAuthErrorException if an oauth exception occurs
      * @throws OkAuthIOException if an IO exception occurs
      */
-    public abstract OAuthToken exchangeForToken(OAuthRedirectUriQuery query)
+    public abstract OAuthToken exchangeQueryForToken(OAuthRedirectUriQuery query)
             throws OkAuthErrorException, OkAuthIOException;
 
+    // ------------------------- BEGIN -------------------------
+    // ----------------------- oauth user ----------------------
+    // ---------------------------------------------------------
+
     /**
-     * Exchange for oauth user.
+     * Initialize a user request.
+     *
+     * @return user request
+     */
+    protected abstract Request initUserRequestPrototype();
+
+    /**
+     * Mutate a user request.
+     *
+     * @param token oauth token, require nonnull
+     * @return user request
+     */
+    protected abstract Request mutateUserRequest(OAuthToken token);
+
+    /**
+     * Exchange token for oauth user.
      *
      * @param token oauth token, require nonnull
      * @return oauth user
      * @throws OkAuthErrorException if an oauth exception occurs
      * @throws OkAuthIOException if an IO exception occurs
      */
-    public abstract OAuthUser exchangeForUser(OAuthToken token)
+    public abstract OAuthUser exchangeTokenForUser(OAuthToken token)
             throws OkAuthErrorException, OkAuthIOException;
 
     /**
-     * Exchange for oauth token.
+     * Exchange query for user.
      *
-     * @param redirectUriQuery, require nonnull
+     * @param query redirect uri query, require nonnull
      * @return oauth user
      * @throws OkAuthErrorException if an oauth exception occurs
      * @throws OkAuthIOException if an IO exception occurs
      */
-    public OAuthUser exchangeForUser(OAuthRedirectUriQuery redirectUriQuery)
+    public OAuthUser exchangeQueryForUser(OAuthRedirectUriQuery query)
             throws OkAuthErrorException, OkAuthIOException {
-        return exchangeForUser(exchangeForToken(redirectUriQuery));
+        return exchangeTokenForUser(exchangeQueryForToken(query));
     }
 
     // ------------------------- BEGIN -------------------------

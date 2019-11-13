@@ -22,7 +22,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
  *
  * @author wautsns
  */
-public abstract class OAuthToken extends OAuthData {
+public class OAuthToken extends OAuthData {
 
     /**
      * Construct an oauth token.
@@ -34,6 +34,8 @@ public abstract class OAuthToken extends OAuthData {
     }
 
     /** Get access token. */
-    public abstract String getAccessToken();
+    public String getAccessToken() {
+        return get("access_token");
+    }
 
 }

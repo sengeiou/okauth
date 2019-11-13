@@ -17,10 +17,10 @@ package com.github.wautsns.okauth.core.client.builtin.baidu;
 
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.core.StandardOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.core.standard.StandardOAuthClient;
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
@@ -31,7 +31,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
  * @author wautsns
  * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth">baidu oauth doc</a>
  */
-public class BaiduOkAuthClient extends StandardOAuthClient {
+public class BaiduOkAuthClient extends StandardOkAuthClient {
 
     /**
      * Construct a baidu okauth client.
@@ -59,7 +59,7 @@ public class BaiduOkAuthClient extends StandardOAuthClient {
     }
 
     @Override
-    protected Request initUserRequestPrototype(Requester requester) {
+    protected Request initUserRequestPrototype() {
         return requester.get("https://openapi.baidu.com/rest/2.0/passport/users/getInfo");
     }
 
