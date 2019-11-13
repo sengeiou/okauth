@@ -28,6 +28,7 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequester;
 import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
 import com.github.wautsns.okauth.core.exception.OkAuthInitializeException;
+import com.github.wautsns.okauth.core.manager.properties.OkAuthProperties;
 
 /**
  * {@linkplain OkAuthManager okauth manager}'s builder
@@ -88,18 +89,38 @@ public class OkAuthManagerBuilder {
     }
 
     /**
-     * Register an okauth client.
+     * Register ok auth clients.
      *
-     * @param properties okauth client properties, require nonnull
+     * @param properties okauth properties.
      * @return self reference
-     * @throws OkAuthInitializeException if the okauth client can not be registered
      */
-    public OkAuthManagerBuilder register(OkAuthClientProperties properties)
-            throws OkAuthInitializeException {
-        return register(
-            parseOpenPlatformExpr(properties.getOpenPlatformExpr()),
-            properties.getOauthAppInfo(),
-            initRequester(properties.getRequester()));
+    public OkAuthManagerBuilder register(OkAuthProperties properties) {
+        OkAuthRequesterProperties defaultRequester = properties.getDefaultRequester();
+        for (OkAuthClientProperties client : properties.getClients()) {
+            OkAuthRequesterProperties requester = client.getRequester();
+            if (requester.getRequesterClass() == null) {
+                requester.setRequesterClass(defaultRequester.getRequesterClass());
+            }
+            if (requester.getMaxConcurrentRequests() == null) {
+                requester.setMaxConcurrentRequests(defaultRequester.getMaxConcurrentRequests());
+            }
+            if (requester.getMaxIdleConnections() == null) {
+                requester.setMaxIdleConnections(defaultRequester.getMaxIdleConnections());
+            }
+            if (requester.getKeepAlive() == null || requester.getKeepAliveTimeUnit() == null) {
+                requester.setKeepAlive(defaultRequester.getKeepAlive());
+                requester.setKeepAliveTimeUnit(defaultRequester.getKeepAliveTimeUnit());
+            }
+            if (requester.getConnectTimeoutMilliseconds() == null) {
+                requester.setConnectTimeoutMilliseconds(
+                    defaultRequester.getConnectTimeoutMilliseconds());
+            }
+            register(
+                parseOpenPlatformExpr(client.getOpenPlatformExpr()),
+                client.getOauthAppInfo(),
+                initRequester(requester));
+        }
+        return this;
     }
 
     // ------------------------- BEGIN -------------------------

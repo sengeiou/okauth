@@ -82,8 +82,9 @@ public class OkAuthClientProperties {
     }
 
     /** Set {@link #requester}. */
-    public void setRequester(OkAuthRequesterProperties requester) {
+    public OkAuthClientProperties setRequester(OkAuthRequesterProperties requester) {
         this.requester = requester;
+        return this;
     }
 
 }

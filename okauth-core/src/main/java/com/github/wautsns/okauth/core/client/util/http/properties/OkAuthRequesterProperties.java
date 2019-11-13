@@ -28,20 +28,17 @@ import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequ
 public class OkAuthRequesterProperties {
 
     /** requester class, default is {@link OkHttpRequester} */
-    private Class<? extends Requester> requesterClass = OkHttpRequester.class;
-    /**
-     * max concurrent requests, default is 64(by default, each open platform is independent of each
-     * other)
-     */
-    private Integer maxConcurrentRequests = 64;
-    /** max idle connection, default is 5 */
-    private Integer maxIdleConnections = 5;
-    /** keep alive, default is 300_000 */
-    private Long keepAlive = 5L * 60_000;
-    /** keep alive time unit, default is {@link TimeUnit#MILLISECONDS} */
+    private Class<? extends Requester> requesterClass;
+    /** max concurrent requests */
+    private Integer maxConcurrentRequests;
+    /** max idle connection */
+    private Integer maxIdleConnections;
+    /** keep alive, if the keepAliveTimeUnit is not set, the value is invalid */
+    private Long keepAlive;
+    /** keep alive time unit, if the keepAlive is not set, the value is invalid */
     private TimeUnit keepAliveTimeUnit = TimeUnit.MILLISECONDS;
-    /** connect time out milliseconds, default is 5_000 */
-    private Integer connectTimeoutMilliseconds = 5_000;
+    /** connect time out milliseconds */
+    private Integer connectTimeoutMilliseconds;
 
     /** Get {@link #requesterClass}. */
     public Class<? extends Requester> getRequesterClass() {

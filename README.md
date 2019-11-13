@@ -79,15 +79,16 @@ okauth:
 ``` java
 public OkAuthManager initOkAuthManager() {
     OkAuthManagerBuilder builder = new OkAuthManagerBuilder();
-    builder.register(new OkAuthClientProperties()
-        // see 2.2.1 for details of the open-platform-expr
-        .setOpenPlatformExpr("github")
-        .setOauthAppInfo(new OAuthAppInfo()
-            .setClientId("client id")
-            .setClientSecret("client secret")
-            .setRedirectUri("redirect uri")));
-    // register other open platforms...
-    return builder.build();
+    OkAuthProperties properties = new OkAuthProperties();
+    properties.setClients(Arrays.asList(
+        new OkAuthClientProperties()
+            // see 2.2.1 for details of the open-platform-expr
+            .setOpenPlatformExpr("github")
+            .setOauthAppInfo(new OAuthAppInfo()
+                .setClientId("client id")
+                .setClientSecret("client secret")
+                .setRedirectUri("redirect uri"))));
+    return builder.register(properties).build();
 }
 ```
 
@@ -118,7 +119,7 @@ public OkAuthManager initOkAuthManager() {
 	1. `OpenPlatform getOpenPlatform()` : 获取该客户端对应的 `OpenPlatform` 枚举值
 	2. `String initAuthorizeUrl(String code)` : 初始化一个 authorize url
 	3. `OAuthToken exchangeQueryForToken(OAuthRedirectUriQuery query)` : 用 `query` 交换令牌
-	4. `OAuthUser exchangeTokenForUser(OAuthToken)` : 用令牌交换用户信息
+	4. `OAuthUser exchangeTokenForUser(OAuthToken token)` : 用令牌交换用户信息
 	5. `OAuthUser exchangeQueryForUser(OAuthRedirectUriQuery query)` : 用 `query` 直接交换用户信息
 
 	**同时 okauth 提供了 [`StandardOkAuthClient`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/StandardOkAuthClient.java "点击查看源码") 以便于对遵循了标准 OAuth2.0 的开放平台进行更容易的扩展.**
@@ -165,17 +166,22 @@ okauth 底层默认使用的是 `okhttp3` 作为与开放平台交互的 http �
 ``` yaml
 # application.yaml
 okauth:
+  # default requester for all clients, the default values are as follows
+  default-requester:
+    # requester-class: in general, no need to set
+    max-concurrent-requests: 64
+    max-idle-connections: 5
+    keep-alive: 300000
+    keep-alive-time-unit: milliseconds
+    connect-timeout-milliseconds: 5000
   clients:
+    # the value here will override the value in default requester
+    # keep-alive, keep-alive-time-unit must be set together, otherwise use default value
+  - requester:
+      max-concurrent-requests: 200
+      connect-timeout-milliseconds: 7000
     # open-platform-expr: ...
     # oauth-app-info: ...
-  - requester:
-      # requester-class: in general, no need to set
-      # the default values are as follows
-      max-concurrent-requests: 64
-      max-idle-connections: 5
-      keep-alive: 300000
-      keep-alive-time-unit: milliseconds
-      connect-timeout-milliseconds: 5000
   # other open platforms...
 ```
 
@@ -184,19 +190,16 @@ okauth:
 ``` java
 public OkAuthManager initOkAuthManager() {
     OkAuthManagerBuilder builder = new OkAuthManagerBuilder();
-    builder.register(new OkAuthClientProperties()
-        // .setOpenPlatformExpr(...)
-        // .setOauthAppInfo(...)
-        .setRequester(new OkAuthRequesterProperties()
-            // .setRequesterClass() in general, no need to set
-            // the default values are as follows
-            .setMaxConcurrentRequests(64)
-            .setMaxIdleConnections(5)
-            .setKeepAlive(5L * 60_000)
-            .setKeepAliveTimeUnit(TimeUnit.MILLISECONDS)
-            .setConnectTimeoutMilliseconds(5_000));
-    // register other open platforms...
-    return builder.build();
+    OkAuthProperties properties = new OkAuthProperties();
+    // see properties.getDefaultRequester() for details of default value
+    properties.setClients(Arrays.asList(
+        new OkAuthClientProperties()
+            // .setOpenPlatformExpr(...)
+            // .setOauthAppInfo(...)
+            .setRequester(new OkAuthRequesterProperties()
+                .setMaxConcurrentRequests(200)
+                .setConnectTimeoutMilliseconds(7_000))));
+    return builder.register(properties).build();
 }
 ```
 
