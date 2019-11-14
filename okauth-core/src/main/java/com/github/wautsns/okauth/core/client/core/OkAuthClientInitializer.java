@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.core.client.core;
+
+import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
+import com.github.wautsns.okauth.core.client.util.http.Requester;
 
 /**
+ * Okauth client initializer interface.
  *
  * @author wautsns
  */
-public class UnsupportedOpenPlatformException extends OkAuthException {
+public interface OkAuthClientInitializer extends OpenPlatform {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 2890456280967581931L;
-
-    private final String identifier;
-
-    public UnsupportedOpenPlatformException(String identifier) {
-        super(identifier + " is not supported");
-        this.identifier = identifier;
-    }
-
-    /** Get {@link #identifier}. */
-    public String getIdentifier() {
-        return identifier;
-    }
+    /**
+     * Initialize an okauth client.
+     *
+     * @param oauthAppInfo oauth application info, require nonnull
+     * @param requester requester, require nonnull
+     * @return okauth client
+     */
+    OkAuthClient initOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester);
 
 }

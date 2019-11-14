@@ -17,6 +17,8 @@ package com.github.wautsns.okauth.core.client.builtin.gitee;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
@@ -35,6 +37,11 @@ public class GiteeUser extends OAuthUser {
      */
     public GiteeUser(Response response) {
         super(response);
+    }
+
+    @Override
+    public OpenPlatform getOpenPlatform() {
+        return BuiltInOpenPlatform.GITEE;
     }
 
     @Override

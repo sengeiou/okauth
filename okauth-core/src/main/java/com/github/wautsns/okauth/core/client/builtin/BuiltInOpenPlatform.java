@@ -21,7 +21,7 @@ import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
-import com.github.wautsns.okauth.core.client.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.core.OkAuthClientInitializer;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 
@@ -30,17 +30,17 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
  *
  * @author wautsns
  */
-public enum BuiltInOpenPlatform implements OpenPlatform {
+public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
 
-    GITHUB("GitHub", GitHubOkAuthClient::new),
-    GITEE("Gitee", GiteeOkAuthClient::new),
     BAIDU("Baidu", BaiduOkAuthClient::new),
+    GITEE("Gitee", GiteeOkAuthClient::new),
+    GITHUB("GitHub", GitHubOkAuthClient::new),
     ;
 
     /** identifier */
     private final String identifier;
     /** function to initialize an okauth client */
-    private final BiFunction<OAuthAppInfo, Requester, OkAuthClient> okAuthClientInitializer;
+    private final BiFunction<OAuthAppInfo, Requester, OkAuthClient> okauthClientInitializer;
 
     /**
      * Contruct a built-in open platform
@@ -52,7 +52,7 @@ public enum BuiltInOpenPlatform implements OpenPlatform {
             String identifier,
             BiFunction<OAuthAppInfo, Requester, OkAuthClient> okAuthClientInitializer) {
         this.identifier = identifier;
-        this.okAuthClientInitializer = okAuthClientInitializer;
+        this.okauthClientInitializer = okAuthClientInitializer;
     }
 
     @Override
@@ -62,7 +62,7 @@ public enum BuiltInOpenPlatform implements OpenPlatform {
 
     @Override
     public OkAuthClient initOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
-        return okAuthClientInitializer.apply(oauthAppInfo, requester);
+        return okauthClientInitializer.apply(oauthAppInfo, requester);
     }
 
 }

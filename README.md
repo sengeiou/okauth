@@ -69,7 +69,7 @@ okauth:
 
 1. 已内置的开放平台  
 	对于已内置的开放平台客户端, 使用简称即可(不区分大小写, 但要符合指定客户端的标识符), 具体的可配置标识符见 [`BuiltInOpenPlatform`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/BuiltInOpenPlatform.java "点击查看源码")
-2. 扩展的开放平台(需要是枚举, 且实现接口 [`OpenPlatform`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/OpenPlatform.java "点击查看源码") , 具体实现可以参考 [`BuiltInOpenPlatform`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/BuiltInOpenPlatform.java "点击查看源码") )  
+2. 扩展的开放平台(需要是枚举, 且实现接口 [`OkAuthClientInitializer`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/OkAuthClientInitializer.java "点击查看源码") , 具体实现可以参考 [`BuiltInOpenPlatform`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/BuiltInOpenPlatform.java "点击查看源码") )  
 	假定有枚举 `a.b.c.ExtendedOpenPlatform` 符合要求 , 并且该枚举类中有一个枚举值为 `XYZ("xyz",...)` , 则表达式为 `a.b.c.ExtendedOpenPlatform:xyz` , 其中 `:` 后面的 `xyz` 不区分大小写. **特别的, 当枚举类中仅包含一个枚举值时, 可省略不写**
 
 ### 2.2.2 非 Spring Boot 环境
@@ -149,9 +149,9 @@ public OkAuthManager initOkAuthManager() {
         // oauthUser will not be null, because if an error occurs(like
         // code is invalid), an OkAuthException will be thrown
         OAuthUser oauthUser = client.exchangeQueryForUser(query);
-        String identifier = client.getOpenPlatform().getIdentifier();
+        String identifier = oauthUser.getOpenPlatform().getIdentifier();
         String openId = oauthUser.getOpenId();
-        // next, select user id by identifier and openId and continue
+        // next, select user id by identifier and openId, and continue
         // processing according to your business logic...
     }
 // ...

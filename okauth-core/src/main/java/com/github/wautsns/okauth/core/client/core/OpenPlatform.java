@@ -17,9 +17,6 @@ package com.github.wautsns.okauth.core.client.core;
 
 import java.io.Serializable;
 
-import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
-
 /**
  * Open platform interface.
  *
@@ -29,14 +26,5 @@ public interface OpenPlatform extends Serializable {
 
     /** Get open platform identifier. */
     String getIdentifier();
-
-    /**
-     * Initialize an okauth client.
-     *
-     * @param oauthAppInfo oauth application info, require nonnull
-     * @param requester requester, require nonnull
-     * @return okauth client
-     */
-    OkAuthClient initOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester);
 
 }

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
+import com.github.wautsns.okauth.core.client.core.OkAuthClientInitializer;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.core.properties.OkAuthClientProperties;
@@ -54,38 +55,41 @@ public class OkAuthManagerBuilder {
      *
      * <p>Use default requester: {@linkplain OkHttpRequester ok http requester}.
      *
-     * @param openPlatform open platform, require nonnull
+     * @param okauthClientInitializer okauth client initializer, require nonnull
      * @param oauthAppInfo oauth application info(e.g. clientId, clientSecret...), require nonnull
      * @param okauthHttpProperties oauth http properties, require nonnull
      * @return self reference
      * @throws OkAuthInitializeException if the `openPlatform` has been registered
      */
     public OkAuthManagerBuilder register(
-            OpenPlatform openPlatform, OAuthAppInfo oauthAppInfo,
-            OkAuthRequesterProperties okauthHttpProperties)
+            OkAuthClientInitializer okauthClientInitializer,
+            OAuthAppInfo oauthAppInfo, OkAuthRequesterProperties okauthHttpProperties)
             throws OkAuthInitializeException {
-        return register(openPlatform, oauthAppInfo, new OkHttpRequester(okauthHttpProperties));
+        return register(
+            okauthClientInitializer,
+            oauthAppInfo, new OkHttpRequester(okauthHttpProperties));
     }
 
     /**
      * Register an okauth client.
      *
-     * @param openPlatform open platform, require nonnull
+     * @param okauthClientInitializer okauth client initializer, require nonnull
      * @param oauthAppInfo oauth application info(e.g. clientId, clientSecret...), require nonnull
      * @param requester http requester, require nonnull
      * @return self reference
      * @throws OkAuthInitializeException if the `openPlatform` has been registered
      */
     public OkAuthManagerBuilder register(
-            OpenPlatform openPlatform, OAuthAppInfo oauthAppInfo, Requester requester)
+            OkAuthClientInitializer okauthClientInitializer,
+            OAuthAppInfo oauthAppInfo, Requester requester)
             throws OkAuthInitializeException {
         OkAuthClient old = clients.put(
-            openPlatform,
-            openPlatform.initOkAuthClient(oauthAppInfo, requester));
+            okauthClientInitializer,
+            okauthClientInitializer.initOkAuthClient(oauthAppInfo, requester));
         if (old == null) { return this; }
         throw new OkAuthInitializeException(
             "Duplicate registered oauth client(open platform identifier:  "
-                + openPlatform.getIdentifier() + ")");
+                + okauthClientInitializer.getIdentifier() + ")");
     }
 
     /**
@@ -96,30 +100,10 @@ public class OkAuthManagerBuilder {
      */
     public OkAuthManagerBuilder register(OkAuthProperties properties) {
         OkAuthRequesterProperties defaultRequester = properties.getDefaultRequester();
-        for (OkAuthClientProperties client : properties.getClients()) {
-            OkAuthRequesterProperties requester = client.getRequester();
-            if (requester.getRequesterClass() == null) {
-                requester.setRequesterClass(defaultRequester.getRequesterClass());
-            }
-            if (requester.getMaxConcurrentRequests() == null) {
-                requester.setMaxConcurrentRequests(defaultRequester.getMaxConcurrentRequests());
-            }
-            if (requester.getMaxIdleConnections() == null) {
-                requester.setMaxIdleConnections(defaultRequester.getMaxIdleConnections());
-            }
-            if (requester.getKeepAlive() == null || requester.getKeepAliveTimeUnit() == null) {
-                requester.setKeepAlive(defaultRequester.getKeepAlive());
-                requester.setKeepAliveTimeUnit(defaultRequester.getKeepAliveTimeUnit());
-            }
-            if (requester.getConnectTimeoutMilliseconds() == null) {
-                requester.setConnectTimeoutMilliseconds(
-                    defaultRequester.getConnectTimeoutMilliseconds());
-            }
-            register(
-                parseOpenPlatformExpr(client.getOpenPlatformExpr()),
-                client.getOauthAppInfo(),
-                initRequester(requester));
-        }
+        properties.getClients().forEach(client -> register(
+            parseOpenPlatformExpr(client.getOpenPlatformExpr()),
+            client.getOauthAppInfo(),
+            initRequester(fillingRequesterProperties(defaultRequester, client.getRequester()))));
         return this;
     }
 
@@ -128,48 +112,77 @@ public class OkAuthManagerBuilder {
     // ---------------------------------------------------------
 
     /**
+     * Filling the okauth requester properties with default properties.
+     *
+     * @param defaultProperties default properties
+     * @param properties target properties
+     */
+    private OkAuthRequesterProperties fillingRequesterProperties(
+            OkAuthRequesterProperties defaultProperties,
+            OkAuthRequesterProperties properties) {
+        if (properties.getRequesterClass() == null) {
+            properties.setRequesterClass(defaultProperties.getRequesterClass());
+        }
+        if (properties.getMaxConcurrentRequests() == null) {
+            properties.setMaxConcurrentRequests(defaultProperties.getMaxConcurrentRequests());
+        }
+        if (properties.getMaxIdleConnections() == null) {
+            properties.setMaxIdleConnections(defaultProperties.getMaxIdleConnections());
+        }
+        if (properties.getKeepAlive() == null || properties.getKeepAliveTimeUnit() == null) {
+            properties.setKeepAlive(defaultProperties.getKeepAlive());
+            properties.setKeepAliveTimeUnit(defaultProperties.getKeepAliveTimeUnit());
+        }
+        if (properties.getConnectTimeoutMilliseconds() == null) {
+            properties.setConnectTimeoutMilliseconds(
+                defaultProperties.getConnectTimeoutMilliseconds());
+        }
+        return properties;
+    }
+
+    /**
      * Parse open platform expression.
      *
      * @param openPlatformExpr {@linkplain OkAuthClientProperties#openPlatformExpr open platform
      *        expression}, require nonnull
-     * @return open platform
+     * @return okauth client initialization
      * @throws OkAuthInitializeException if the expression can not be parsed
      */
     @SuppressWarnings("unchecked")
-    private OpenPlatform parseOpenPlatformExpr(String openPlatformExpr)
+    private OkAuthClientInitializer parseOpenPlatformExpr(String openPlatformExpr)
             throws OkAuthInitializeException {
         // First, try if the expr is a built-in simple open platform name.
-        OpenPlatform[] openPlatforms = BuiltInOpenPlatform.values();
-        OpenPlatform openPlatform = Arrays.stream(openPlatforms)
-            .filter(op -> op.getIdentifier().equalsIgnoreCase(openPlatformExpr))
+        OkAuthClientInitializer[] initializers = BuiltInOpenPlatform.values();
+        OkAuthClientInitializer initializer = Arrays.stream(initializers)
+            .filter(openPlatform -> openPlatform.getIdentifier().equalsIgnoreCase(openPlatformExpr))
             .findFirst().orElse(null);
-        if (openPlatform != null) { return openPlatform; }
-        // The expr is extended open platform.
+        if (initializer != null) { return initializer; }
+        // The expr is extended okauth client initializer.
         String[] classAndIdentifier = openPlatformExpr.split(":", 2);
         // Parse open platform class
-        Class<? extends OpenPlatform> openPlatformClass;
+        Class<? extends OkAuthClientInitializer> initializerClass;
         try {
             Class<?> temp1 = Class.forName(classAndIdentifier[0]);
-            if (!OpenPlatform.class.isAssignableFrom(temp1) || !temp1.isEnum()) {
+            if (!OkAuthClientInitializer.class.isAssignableFrom(temp1) || !temp1.isEnum()) {
                 throw new OkAuthInitializeException(String.format(
                     "%s should be an enumeration that implements %s", temp1, OpenPlatform.class));
             }
-            openPlatformClass = (Class<? extends OpenPlatform>) temp1;
+            initializerClass = (Class<? extends OkAuthClientInitializer>) temp1;
         } catch (ClassNotFoundException e) {
             throw new OkAuthInitializeException(e);
         }
-        openPlatforms = openPlatformClass.getEnumConstants();
+        initializers = initializerClass.getEnumConstants();
         String identifier = (classAndIdentifier.length == 2) ? classAndIdentifier[1] : null;
         if (identifier != null) {
-            return Arrays.stream(openPlatforms)
+            return Arrays.stream(initializers)
                 .filter(op -> op.getIdentifier().equalsIgnoreCase(identifier))
                 .findFirst().orElseThrow(() -> new OkAuthInitializeException(String.format(
-                    "There is no identifier named '%s' in %s", identifier, openPlatformClass)));
-        } else if (openPlatforms.length == 1) {
-            return openPlatforms[0];
+                    "There is no identifier named '%s' in %s", identifier, initializerClass)));
+        } else if (initializers.length == 1) {
+            return initializers[0];
         } else {
             throw new OkAuthInitializeException(
-                "Please give an identifier for " + openPlatformClass);
+                "Please give an identifier in " + initializerClass);
         }
     }
 
