@@ -15,7 +15,11 @@
  */
 package com.github.wautsns.okauth.core.client.util.http;
 
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.function.BiConsumer;
 
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
@@ -34,6 +38,10 @@ public abstract class Request {
     private Method method;
     /** request url */
     private Url url;
+    /** request headers */
+    private LinkedList<String> headers;
+    /** request form(items are url encoded) */
+    private LinkedList<String> form;
 
     /**
      * Construct a request.
@@ -49,13 +57,15 @@ public abstract class Request {
     /**
      * Construct a request.
      *
-     * <p>Copy the method and url according to the given request.
+     * <p>Copy the method, url, headers and form according to the given request.
      *
      * @param request request prototype, require nonnull
      */
     protected Request(Request request) {
         this.method = request.method;
         this.url = request.url.mutate();
+        if (request.headers != null) { this.headers = new LinkedList<>(request.headers); }
+        if (request.form != null) { this.form = new LinkedList<>(request.form); }
     }
 
     /** Get {@link #url}. */
@@ -93,7 +103,13 @@ public abstract class Request {
      * @param value header value
      * @return self reference
      */
-    public abstract Request addHeader(String name, String value);
+    public Request addHeader(String name, String value) {
+        if (value == null) { return this; }
+        if (headers == null) { headers = new LinkedList<>(); }
+        headers.addLast(name);
+        headers.addLast(value);
+        return this;
+    }
 
     /**
      * Add query param.
@@ -129,22 +145,32 @@ public abstract class Request {
      * <p>If the value is {@code null}, it is not added.
      *
      * @param name form item name, require nonnull
+     * @param value form item value(will be url encoded if not null)
+     * @return self reference
+     */
+    public Request addFormItem(String name, String value) {
+        if (value == null) { return this; }
+        try {
+            return addUrlEncodedFormItem(name, URLEncoder.encode(value, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("unreachable");
+        }
+    }
+
+    /**
+     * Add url encoded form item.
+     *
+     * <p>If the value is {@code null}, it is not added.
+     *
+     * @param name form item name, require nonnull
      * @param value form item value
      * @return self reference
      */
-    public abstract Request addFormItem(String name, String value);
-
-    /**
-     * Add form items.
-     *
-     * <p>If the form is {@code null}, it is not added.
-     *
-     * @param form form, require nonnull
-     * @return self reference
-     */
-    public Request addForm(Map<String, String> form) {
-        if (form == null) { return this; }
-        form.forEach(this::addFormItem);
+    public Request addUrlEncodedFormItem(String name, String value) {
+        if (value == null) { return this; }
+        if (form == null) { form = new LinkedList<>(); }
+        form.addLast(name);
+        form.addLast(value);
         return this;
     }
 
@@ -174,30 +200,59 @@ public abstract class Request {
      */
     public Response exchange(ResponseInputStreamReader reader) throws OkAuthIOException {
         if (method == Method.GET) {
-            return get(reader);
+            return doGet(reader);
         } else if (method == Method.POST) {
-            return post(reader);
+            return doPost(reader);
         } else {
             throw new RuntimeException("unreachable");
         }
     }
 
     /**
-     * GET request.
+     * For each header.
      *
-     * @param reader response input stream reader, require nonnull
-     * @return response
-     * @throws OkAuthIOException if an IO exception occurs
+     * @param consumer header name-value consumer
      */
-    protected abstract Response get(ResponseInputStreamReader reader) throws OkAuthIOException;
+    protected void forEachHeader(BiConsumer<String, String> consumer) {
+        if (headers == null) { return; }
+        for (Iterator<String> i = headers.iterator(); i.hasNext();) {
+            consumer.accept(i.next(), i.next());
+        }
+    }
 
     /**
-     * POST request.
+     * For each url encoded form item.
+     *
+     * @param consumer form item name-value consumer
+     */
+    protected void forEachFormItem(BiConsumer<String, String> consumer) {
+        if (form == null) { return; }
+        for (Iterator<String> i = form.iterator(); i.hasNext();) {
+            consumer.accept(i.next(), i.next());
+        }
+    }
+
+    /**
+     * Do GET request.
+     *
+     * <p>*** Remember to call {@link #forEachHeader(BiConsumer)}
      *
      * @param reader response input stream reader, require nonnull
      * @return response
      * @throws OkAuthIOException if an IO exception occurs
      */
-    protected abstract Response post(ResponseInputStreamReader reader) throws OkAuthIOException;
+    protected abstract Response doGet(ResponseInputStreamReader reader) throws OkAuthIOException;
+
+    /**
+     * Do POST request.
+     *
+     * <p>*** Remember to call {@link #forEachHeader(BiConsumer)} and
+     * {@link #forEachFormItem(BiConsumer)}.
+     *
+     * @param reader response input stream reader, require nonnull
+     * @return response
+     * @throws OkAuthIOException if an IO exception occurs
+     */
+    protected abstract Response doPost(ResponseInputStreamReader reader) throws OkAuthIOException;
 
 }

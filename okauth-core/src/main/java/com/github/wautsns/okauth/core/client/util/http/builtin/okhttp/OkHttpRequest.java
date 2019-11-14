@@ -16,8 +16,6 @@
 package com.github.wautsns.okauth.core.client.util.http.builtin.okhttp;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Response;
@@ -38,52 +36,30 @@ import okhttp3.Request.Builder;
 public class OkHttpRequest extends Request {
 
     /** okhttp3 client */
-    private final OkHttpClient okHttpClient;
-    /** okhttp3 request builder */
-    private final Builder builder;
-    /** form data map */
-    private Map<String, String> form;
+    private final OkHttpClient okhttpClient;
 
     /**
      * Construct an okhttp3 request.
      *
-     * @param okHttpClient okhttp3 client, require nonnull
+     * @param okhttpClient okhttp3 client, require nonnull
      * @param method request method, require nonnull
      * @param url request url, require nonnull
      */
-    public OkHttpRequest(OkHttpClient okHttpClient, Method method, String url) {
+    public OkHttpRequest(OkHttpClient okhttpClient, Method method, String url) {
         super(method, url);
-        this.okHttpClient = okHttpClient;
-        this.builder = new Builder();
+        this.okhttpClient = okhttpClient;
     }
 
     /**
      * Construct an okhttp3 request.
      *
-     * <p>Copy the ok http client, builder and form according to the given request.
+     * <p>Copy the okhttp client according to the given request.
      *
      * @param requester template, require nonnull
      */
     private OkHttpRequest(OkHttpRequest requester) {
         super(requester);
-        this.okHttpClient = requester.okHttpClient;
-        this.builder = requester.builder.url(requester.getUrl()).build().newBuilder();
-        if (requester.form != null) { this.form = new HashMap<>(requester.form); }
-    }
-
-    @Override
-    public Request addHeader(String name, String value) {
-        if (value == null) { return this; }
-        builder.addHeader(name, value);
-        return this;
-    }
-
-    @Override
-    public Request addFormItem(String name, String value) {
-        if (value == null) { return this; }
-        if (form == null) { form = new HashMap<>(8); }
-        form.put(name, value);
-        return this;
+        this.okhttpClient = requester.okhttpClient;
     }
 
     @Override
@@ -92,29 +68,33 @@ public class OkHttpRequest extends Request {
     }
 
     @Override
-    protected Response get(ResponseInputStreamReader reader) throws OkAuthIOException {
-        builder.get().url(getUrl());
-        return execute(reader);
+    protected Response doGet(ResponseInputStreamReader reader) throws OkAuthIOException {
+        Builder builder = new Builder().get().url(getUrl());
+        forEachHeader(builder::addHeader);
+        return execute(builder.build(), reader);
     }
 
     @Override
-    protected Response post(ResponseInputStreamReader reader) throws OkAuthIOException {
+    protected Response doPost(ResponseInputStreamReader reader) throws OkAuthIOException {
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        if (form != null) { form.forEach(formBodyBuilder::add); }
-        builder.post(formBodyBuilder.build()).url(getUrl());
-        return execute(reader);
+        forEachFormItem(formBodyBuilder::addEncoded);
+        Builder builder = new Builder().post(formBodyBuilder.build()).url(getUrl());
+        forEachHeader(builder::addHeader);
+        return execute(builder.build(), reader);
     }
 
     /**
-     * Do execute request.
+     * Execute request.
      *
+     * @param request okhttp3 request
      * @param reader response input stream reader, require nonnull
      * @return response
      * @throws OkAuthIOException if an IO exception occurs
      */
-    private Response execute(ResponseInputStreamReader reader) throws OkAuthIOException {
+    private Response execute(okhttp3.Request request, ResponseInputStreamReader reader)
+            throws OkAuthIOException {
         try {
-            okhttp3.Response response = okHttpClient.newCall(builder.build()).execute();
+            okhttp3.Response response = okhttpClient.newCall(request).execute();
             return new Response(
                 response.code(),
                 reader.read(response.body().byteStream()));
