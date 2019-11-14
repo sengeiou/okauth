@@ -65,7 +65,7 @@ public class WeChatOkAuthClient extends OkAuthClient {
 
     @Override
     protected Request initTokenRequestPrototype() {
-        return requester.get("https://api.weixin.qq.com/sns/oauth2/access_token")
+        return Request.initGet("https://api.weixin.qq.com/sns/oauth2/access_token")
             .addQueryParam("appid", oauthAppInfo.getClientId())
             .addQueryParam("secret", oauthAppInfo.getClientSecret())
             .addQueryParam("grant_type", "authorization_code");
@@ -89,7 +89,7 @@ public class WeChatOkAuthClient extends OkAuthClient {
 
     @Override
     protected Request initUserRequestPrototype() {
-        return requester.get("https://api.weixin.qq.com/sns/userinfo");
+        return Request.initGet("https://api.weixin.qq.com/sns/userinfo");
     }
 
     @Override
@@ -114,7 +114,7 @@ public class WeChatOkAuthClient extends OkAuthClient {
      */
     private Response exchangeAndCheck(Request request)
             throws OkAuthErrorException, OkAuthIOException {
-        return checkResponse(request.exchangeForJson(), "errcode", "errmsg");
+        return checkResponse(requester.exchange(request), "errcode", "errmsg");
     }
 
 }

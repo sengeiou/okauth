@@ -63,7 +63,7 @@ public class GitHubOkAuthClient extends StandardOkAuthClient {
 
     @Override
     protected Request initUserRequestPrototype() {
-        return requester.get("https://api.github.com/user");
+        return Request.initGet("https://api.github.com/user");
     }
 
     @Override

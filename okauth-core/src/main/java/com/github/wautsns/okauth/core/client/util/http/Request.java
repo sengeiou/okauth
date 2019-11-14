@@ -21,18 +21,59 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
-import com.github.wautsns.okauth.core.exception.OkAuthIOException;
-
 /**
- * Abstract request for open platform interaction.
+ * Request for open platform interaction.
  *
  * @author wautsns
  * @see Requester
  */
-public abstract class Request {
+public class Request {
 
     /** request methods */
     public enum Method { GET, POST }
+
+    /**
+     * Initialize a GET request and the response input stream reader is JSON.
+     *
+     * @param url request url, require nonnull
+     * @return request
+     */
+    public static Request initGet(String url) {
+        return init(Method.GET, url);
+    }
+
+    /**
+     * Initialize a POST request and the response input stream reader is JSON.
+     *
+     * @param url request url, require nonnull
+     * @return request
+     */
+    public static Request initPost(String url) {
+        return init(Method.POST, url);
+    }
+
+    /**
+     * Initialize a request and the response input stream reader is JSON.
+     *
+     * @param method request method, require nonnull
+     * @param url request url, require nonnull
+     * @return request
+     */
+    public static Request init(Method method, String url) {
+        return new Request(method, url, BuiltInResponseInputStreamReader.JSON);
+    }
+
+    /**
+     * Initialize a request.
+     *
+     * @param method request method, require nonnull
+     * @param url request url, require nonnull
+     * @param reader response input stream reader, require nonnull
+     * @return request
+     */
+    public static Request init(Method method, String url, ResponseInputStreamReader reader) {
+        return new Request(method, url, reader);
+    }
 
     /** request method */
     private Method method;
@@ -42,30 +83,41 @@ public abstract class Request {
     private LinkedList<String> headers;
     /** request form(items are url encoded) */
     private LinkedList<String> form;
+    /** response input stream reader */
+    private ResponseInputStreamReader responseInputStreamReader;
 
     /**
      * Construct a request.
      *
      * @param method request method, require nonnull
      * @param url request url, require nonnull
+     * @param responseInputStreamReader response input stream reader
      */
-    public Request(Method method, String url) {
+    private Request(
+            Method method, String url, ResponseInputStreamReader responseInputStreamReader) {
         this.method = method;
         this.url = new Url(url);
+        this.responseInputStreamReader = responseInputStreamReader;
     }
 
     /**
      * Construct a request.
      *
-     * <p>Copy the method, url, headers and form according to the given request.
+     * <p>Copy request according to the given request.
      *
      * @param request request prototype, require nonnull
      */
-    protected Request(Request request) {
+    private Request(Request request) {
         this.method = request.method;
         this.url = request.url.mutate();
         if (request.headers != null) { this.headers = new LinkedList<>(request.headers); }
         if (request.form != null) { this.form = new LinkedList<>(request.form); }
+        this.responseInputStreamReader = request.responseInputStreamReader;
+    }
+
+    /** Get {@link #method}. */
+    public Method getMethod() {
+        return method;
     }
 
     /** Get {@link #url}. */
@@ -109,6 +161,18 @@ public abstract class Request {
         headers.addLast(name);
         headers.addLast(value);
         return this;
+    }
+
+    /**
+     * For each header.
+     *
+     * @param consumer header name-value consumer
+     */
+    public void forEachHeader(BiConsumer<String, String> consumer) {
+        if (headers == null) { return; }
+        for (Iterator<String> i = headers.iterator(); i.hasNext();) {
+            consumer.accept(i.next(), i.next());
+        }
     }
 
     /**
@@ -175,57 +239,11 @@ public abstract class Request {
     }
 
     /**
-     * Mutate into a new identical request.
-     *
-     * @return a new request
-     */
-    public abstract Request mutate();
-
-    /**
-     * Exchange with json response reader.
-     *
-     * @return response
-     * @throws OkAuthIOException if an IO exception occurs
-     */
-    public Response exchangeForJson() throws OkAuthIOException {
-        return exchange(BuiltInResponseInputStreamReader.JSON);
-    }
-
-    /**
-     * Exchange.
-     *
-     * @param reader response input stream reader, require nonnull
-     * @return response
-     * @throws OkAuthIOException if an IO exception occurs
-     */
-    public Response exchange(ResponseInputStreamReader reader) throws OkAuthIOException {
-        if (method == Method.GET) {
-            return doGet(reader);
-        } else if (method == Method.POST) {
-            return doPost(reader);
-        } else {
-            throw new RuntimeException("unreachable");
-        }
-    }
-
-    /**
-     * For each header.
-     *
-     * @param consumer header name-value consumer
-     */
-    protected void forEachHeader(BiConsumer<String, String> consumer) {
-        if (headers == null) { return; }
-        for (Iterator<String> i = headers.iterator(); i.hasNext();) {
-            consumer.accept(i.next(), i.next());
-        }
-    }
-
-    /**
      * For each url encoded form item.
      *
      * @param consumer form item name-value consumer
      */
-    protected void forEachFormItem(BiConsumer<String, String> consumer) {
+    public void forEachUrlEncodedFormItem(BiConsumer<String, String> consumer) {
         if (form == null) { return; }
         for (Iterator<String> i = form.iterator(); i.hasNext();) {
             consumer.accept(i.next(), i.next());
@@ -233,26 +251,17 @@ public abstract class Request {
     }
 
     /**
-     * Do GET request.
+     * Mutate a request.
      *
-     * <p>*** Remember to call {@link #forEachHeader(BiConsumer)}
-     *
-     * @param reader response input stream reader, require nonnull
-     * @return response
-     * @throws OkAuthIOException if an IO exception occurs
+     * @return a request
      */
-    protected abstract Response doGet(ResponseInputStreamReader reader) throws OkAuthIOException;
+    public Request mutate() {
+        return new Request(this);
+    }
 
-    /**
-     * Do POST request.
-     *
-     * <p>*** Remember to call {@link #forEachHeader(BiConsumer)} and
-     * {@link #forEachFormItem(BiConsumer)}.
-     *
-     * @param reader response input stream reader, require nonnull
-     * @return response
-     * @throws OkAuthIOException if an IO exception occurs
-     */
-    protected abstract Response doPost(ResponseInputStreamReader reader) throws OkAuthIOException;
+    /** Get {@link #responseInputStreamReader}. */
+    public ResponseInputStreamReader getResponseInputStreamReader() {
+        return responseInputStreamReader;
+    }
 
 }

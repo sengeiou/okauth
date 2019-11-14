@@ -43,7 +43,7 @@ public class Url {
     /**
      * Construct a url.
      *
-     * @param url, require nonnull
+     * @param url url prototype, require nonnull
      */
     private Url(Url url) {
         this.url = url.url;

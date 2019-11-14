@@ -15,7 +15,9 @@
  */
 package com.github.wautsns.okauth.core.client.util.http;
 
-import com.github.wautsns.okauth.core.client.util.http.Request.Method;
+import java.util.function.BiConsumer;
+
+import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
  * Abstract requester for creating {@linkplain Request request}.
@@ -25,32 +27,46 @@ import com.github.wautsns.okauth.core.client.util.http.Request.Method;
 public abstract class Requester {
 
     /**
-     * Create request.
+     * Exchange.
      *
-     * @param method request method, require nonnull
-     * @param url request url, require nonnull
-     * @return request
+     * @param request request, require nonnull
+     * @return response
+     * @throws OkAuthIOException
      */
-    protected abstract Request create(Method method, String url);
-
-    /**
-     * Create GET request.
-     *
-     * @param url request url, require nonnull
-     * @return GET request
-     */
-    public Request get(String url) {
-        return create(Method.GET, url);
+    public Response exchange(Request request)
+            throws OkAuthIOException {
+        switch (request.getMethod()) {
+            case GET:
+                return doGet(request);
+            case POST:
+                return doPost(request);
+            default:
+                throw new RuntimeException("unreachable");
+        }
     }
 
     /**
-     * Create POST request.
+     * Do GET request.
      *
-     * @param url request url, require nonnull
-     * @return POST request
+     * <p>*** Remember to call {@link #forEachHeader(BiConsumer)}
+     *
+     * @param request request, require nonnull
+     * @return response
+     * @throws OkAuthIOException if an IO exception occurs
      */
-    public Request post(String url) {
-        return create(Method.POST, url);
-    }
+    protected abstract Response doGet(Request request) throws OkAuthIOException;
+
+    /**
+     * Do POST request.
+     *
+     * <p>*** Remember to call {@link #forEachHeader(BiConsumer)} and
+     * {@link #forEachUrlEncodedFormItem(BiConsumer)}.
+     *
+     * @param request request, require nonnull
+     * @param reader response input stream reader, require nonnull
+     * @return response
+     * @throws OkAuthIOException if an IO exception occurs
+     */
+    protected abstract Response doPost(Request request) throws OkAuthIOException;
 
 }

@@ -15,15 +15,19 @@
  */
 package com.github.wautsns.okauth.core.client.util.http.builtin.okhttp;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.Request.Method;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
+import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.ResponseInputStreamReader;
 import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
+import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 import okhttp3.ConnectionPool;
 import okhttp3.Dispatcher;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
 
@@ -51,7 +55,7 @@ public class OkHttpRequester extends Requester {
     /**
      * Construct okhttp requester.
      *
-     * @param properties okauth http properties, require nonnull
+     * @param properties okauth http properties, require nonnull(and all properties are not null)
      */
     public OkHttpRequester(OkAuthRequesterProperties properties) {
         Builder builder = new OkHttpClient.Builder()
@@ -72,8 +76,41 @@ public class OkHttpRequester extends Requester {
     }
 
     @Override
-    protected Request create(Method httpMethod, String url) {
-        return new OkHttpRequest(okhttpClient, httpMethod, url);
+    protected Response doGet(Request request) throws OkAuthIOException {
+        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
+        builder.get().url(request.getUrl());
+        request.forEachHeader(builder::addHeader);
+        return doExecute(builder.build(), request.getResponseInputStreamReader());
+    }
+
+    @Override
+    protected Response doPost(Request request) throws OkAuthIOException {
+        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
+        request.forEachHeader(builder::addHeader);
+        FormBody.Builder formBodyBuilder = new FormBody.Builder();
+        request.forEachUrlEncodedFormItem(formBodyBuilder::addEncoded);
+        builder.post(formBodyBuilder.build()).url(request.getUrl());
+        return doExecute(builder.build(), request.getResponseInputStreamReader());
+    }
+
+    /**
+     * Do execute request.
+     *
+     * @param request okhttp3 request, require nonnull
+     * @param reader response input stream reader, require nonnull
+     * @return response
+     * @throws OkAuthIOException if an IO exception occurs
+     */
+    private Response doExecute(okhttp3.Request request, ResponseInputStreamReader reader)
+            throws OkAuthIOException {
+        try {
+            okhttp3.Response response = okhttpClient.newCall(request).execute();
+            return new Response(
+                response.code(),
+                reader.read(response.body().byteStream()));
+        } catch (IOException ioException) {
+            throw new OkAuthIOException(ioException);
+        }
     }
 
 }

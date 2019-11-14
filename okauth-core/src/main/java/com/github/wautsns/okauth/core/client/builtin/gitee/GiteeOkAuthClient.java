@@ -60,7 +60,7 @@ public class GiteeOkAuthClient extends StandardOkAuthClient {
 
     @Override
     protected Request initUserRequestPrototype() {
-        return requester.get("https://gitee.com/api/v5/user");
+        return Request.initGet("https://gitee.com/api/v5/user");
     }
 
     @Override

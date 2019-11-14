@@ -73,8 +73,7 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
      */
     @Override
     protected Request initTokenRequestPrototype() {
-        return requester
-            .post(getTokenUrl())
+        return Request.initPost(getTokenUrl())
             .addFormItem("grant_type", "authorization_code")
             .addFormItem("client_id", oauthAppInfo.getClientId())
             .addFormItem("client_secret", oauthAppInfo.getClientSecret())
@@ -142,7 +141,7 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
      */
     protected Response exchangeAndCheck(Request request)
             throws OkAuthErrorException, OkAuthIOException {
-        return checkResponse(request.exchangeForJson(), "error", "error_description");
+        return checkResponse(requester.exchange(request), "error", "error_description");
     }
 
 }

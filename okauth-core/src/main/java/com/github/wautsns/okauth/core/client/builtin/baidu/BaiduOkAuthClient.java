@@ -60,7 +60,7 @@ public class BaiduOkAuthClient extends StandardOkAuthClient {
 
     @Override
     protected Request initUserRequestPrototype() {
-        return requester.get("https://openapi.baidu.com/rest/2.0/passport/users/getInfo");
+        return Request.initGet("https://openapi.baidu.com/rest/2.0/passport/users/getInfo");
     }
 
     @Override
