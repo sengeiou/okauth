@@ -1,4 +1,4 @@
-**okauth 目前仍处于开发阶段, 尚未经过大量测试.**
+***okauth 目前仍处于开发阶段, 尚未经过大量测试.***
 
 # 1 概述
 
@@ -214,8 +214,8 @@ public OkAuthManager initOkAuthManager() {
 # 4 目前已支持的开放平台
 
 | 🏢 开放平台 | ✅ OkAuthClient | 📄 官方文档 |
-|:----------:|:---------------:|:----------:|
+|:----------|:---------------:|:----------:|
 | Baidu | [BaiduOkAuthClient](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/baidu/BaiduOkAuthClient.java "点击查看源码") | [查看官方文档](http://developer.baidu.com/wiki/index.php?title=docs/oauth) |
 | Gitee | [GiteeOkAuthClient](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/gitee/GiteeOkAuthClient.java "点击查看源码") | [查看官方文档](https://gitee.com/api/v5/oauth_doc) |
 | GitHub | [GitHubOkAuthClient](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/github/GitHubOkAuthClient.java "点击查看源码") | [查看官方文档](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/) |
-| ~~WeChat~~ | [尚未经过测试](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/baidu/BaiduOkAuthClient.java "点击查看源码") | [查看官方文档](https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html) |
+| ~~WeChat~~ | [***尚未经过测试***](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/wechat/WeChatOkAuthClient.java "点击查看源码") | [查看官方文档](https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html) |
