@@ -20,6 +20,7 @@ import java.util.function.BiFunction;
 import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOkAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.wechat.WeChatOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClientInitializer;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
@@ -35,6 +36,7 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
     BAIDU("Baidu", BaiduOkAuthClient::new),
     GITEE("Gitee", GiteeOkAuthClient::new),
     GITHUB("GitHub", GitHubOkAuthClient::new),
+    WECHAT("WeChat", WeChatOkAuthClient::new),
     ;
 
     /** identifier */
@@ -46,13 +48,13 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
      * Contruct a built-in open platform
      *
      * @param identifier open platform identifier
-     * @param okAuthClientInitializer okauth client initializer
+     * @param okauthClientInitializer okauth client initializer
      */
     private BuiltInOpenPlatform(
             String identifier,
-            BiFunction<OAuthAppInfo, Requester, OkAuthClient> okAuthClientInitializer) {
+            BiFunction<OAuthAppInfo, Requester, OkAuthClient> okauthClientInitializer) {
         this.identifier = identifier;
-        this.okauthClientInitializer = okAuthClientInitializer;
+        this.okauthClientInitializer = okauthClientInitializer;
     }
 
     @Override
