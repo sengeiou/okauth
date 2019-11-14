@@ -37,15 +37,15 @@ import okhttp3.OkHttpClient.Builder;
 public class OkHttpRequester extends Requester {
 
     /** okhttp3 client */
-    private final OkHttpClient okHttpClient;
+    private final OkHttpClient okhttpClient;
 
     /**
      * Construct okhttp requester.
      *
-     * @param okHttpClient okhttp client, require nonnull
+     * @param okhttpClient okhttp client, require nonnull
      */
-    public OkHttpRequester(OkHttpClient okHttpClient) {
-        this.okHttpClient = okHttpClient;
+    public OkHttpRequester(OkHttpClient okhttpClient) {
+        this.okhttpClient = okhttpClient;
     }
 
     /**
@@ -54,7 +54,7 @@ public class OkHttpRequester extends Requester {
      * @param properties okauth http properties, require nonnull
      */
     public OkHttpRequester(OkAuthRequesterProperties properties) {
-          Builder builder = new OkHttpClient.Builder()
+        Builder builder = new OkHttpClient.Builder()
             .connectTimeout(properties.getConnectTimeoutMilliseconds(), TimeUnit.MILLISECONDS)
             .readTimeout(3, TimeUnit.SECONDS)
             .writeTimeout(3, TimeUnit.SECONDS)
@@ -62,17 +62,18 @@ public class OkHttpRequester extends Requester {
                 properties.getMaxIdleConnections(),
                 properties.getKeepAlive(),
                 properties.getKeepAliveTimeUnit()));
-          Dispatcher dispatcher = builder.getDispatcher$okhttp();
-          dispatcher.setMaxRequests(properties.getMaxConcurrentRequests());
-          // a requester is recommended to be used for only one open platform,
-          // so max requests equals to max requests per host
-          dispatcher.setMaxRequestsPerHost(properties.getMaxConcurrentRequests());
-          this.okHttpClient = builder.build();
+        OkHttpClient client = builder.build();
+        Dispatcher dispatcher = client.dispatcher();
+        dispatcher.setMaxRequests(properties.getMaxConcurrentRequests());
+        // a requester is recommended to be used for only one open platform,
+        // so max requests equals to max requests per host
+        dispatcher.setMaxRequestsPerHost(properties.getMaxConcurrentRequests());
+        this.okhttpClient = client;
     }
 
     @Override
     protected Request create(Method httpMethod, String url) {
-        return new OkHttpRequest(okHttpClient, httpMethod, url);
+        return new OkHttpRequest(okhttpClient, httpMethod, url);
     }
 
 }

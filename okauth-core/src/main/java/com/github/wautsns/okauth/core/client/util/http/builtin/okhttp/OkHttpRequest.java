@@ -67,7 +67,7 @@ public class OkHttpRequest extends Request {
     private OkHttpRequest(OkHttpRequest requester) {
         super(requester);
         this.okHttpClient = requester.okHttpClient;
-        this.builder = new Builder(requester.builder.url(requester.getUrl()).build());
+        this.builder = requester.builder.url(requester.getUrl()).build().newBuilder();
         if (requester.form != null) { this.form = new HashMap<>(requester.form); }
     }
 
