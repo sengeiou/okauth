@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import com.github.wautsns.okauth.core.manager.OkAuthManager;
 import com.github.wautsns.okauth.core.manager.OkAuthManagerBuilder;
 import com.github.wautsns.okauth.core.manager.properties.OkAuthProperties;
+import com.github.wautsns.okauth.springbootstarter.properties.SpringBootOkAuthProperties;
 
 /**
  * Okauth auto-configuration.
@@ -29,7 +30,7 @@ import com.github.wautsns.okauth.core.manager.properties.OkAuthProperties;
  * @author wautsns
  */
 @Configuration
-@EnableConfigurationProperties(OkAuthProperties.class)
+@EnableConfigurationProperties(SpringBootOkAuthProperties.class)
 public class OkAuthAutoConfiguration {
 
     @Bean
