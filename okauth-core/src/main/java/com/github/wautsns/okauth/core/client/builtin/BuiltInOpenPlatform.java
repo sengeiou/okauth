@@ -20,6 +20,7 @@ import java.util.function.BiFunction;
 import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOkAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.microblog.MicroBlogOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.wechat.WeChatOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClientInitializer;
@@ -36,6 +37,7 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
     BAIDU("Baidu", BaiduOkAuthClient::new),
     GITEE("Gitee", GiteeOkAuthClient::new),
     GITHUB("GitHub", GitHubOkAuthClient::new),
+    MICROBLOG("MicroBlog", MicroBlogOkAuthClient::new),
     WECHAT("WeChat", WeChatOkAuthClient::new),
     ;
 

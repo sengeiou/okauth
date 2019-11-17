@@ -128,17 +128,21 @@ public OkAuthManager initOkAuthManager() {
 在大致了解了上述几个类后, 接下来给出一个使用的样例.
 
 ``` java
-// ...
-    private final OkAuthManager okAuthManager;
+@Controller
+@RequestMapping("/api/cmd")
+@RequiredArgsConstructor // lombok annotation
+public class OAuthController {
 
-    @GetMapping("/cmd/redirect-to-authorize-url")
+    private final OkAuthManager okauthManager;
+
+    @GetMapping("/redirect-to-authorize-url")
     public String redirectToAuthorizeUrl(String openPlatform) throws OkAuthException {
         String state = "generate state and save if needed";
-        return "redirect:" + okAuthManager.getClient(openPlatform)
+        return "redirect:" + okauthManager.getClient(openPlatform)
             .initAuthorizeUrl(state);
     }
 
-    @GetMapping("/cmd/handle-authorize-callback/{openPlatform}")
+    @GetMapping("/handle-authorize-callback/{openPlatform}")
     public String handleAuthorizeCallback(
             // some open platforms' callback url may not support query
             @PathVariable String openPlatform,
@@ -146,7 +150,7 @@ public OkAuthManager initOkAuthManager() {
             throws OkAuthException, Exception {
         String state = query.getState();
         // check state if needed(state is used to prevent CSRF attacks)
-        OkAuthClient client = okAuthManager.getClient(openPlatform);
+        OkAuthClient client = okauthManager.getClient(openPlatform);
         // oauthUser will not be null, because if an error occurs(like
         // code is invalid), an OkAuthException will be thrown
         OAuthUser oauthUser = client.exchangeQueryForUser(query);
@@ -155,7 +159,8 @@ public OkAuthManager initOkAuthManager() {
         // next, select user id by identifier and openId, and continue
         // processing according to your business logic...
     }
-// ...
+
+}
 ```
 
 ## 2.4 http 客户端配置
@@ -218,4 +223,5 @@ public OkAuthManager initOkAuthManager() {
 | Baidu | [BaiduOkAuthClient](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/baidu/BaiduOkAuthClient.java "点击查看源码") | [查看官方文档](http://developer.baidu.com/wiki/index.php?title=docs/oauth) |
 | Gitee | [GiteeOkAuthClient](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/gitee/GiteeOkAuthClient.java "点击查看源码") | [查看官方文档](https://gitee.com/api/v5/oauth_doc) |
 | GitHub | [GitHubOkAuthClient](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/github/GitHubOkAuthClient.java "点击查看源码") | [查看官方文档](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/) |
+| ~~MicroBlog~~ | [***尚未经过测试***](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/microblog/MicroBlogOkAuthClient.java "点击查看源码") | [查看官方文档](https://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6%E8%AF%B4%E6%98%8E) |
 | ~~WeChat~~ | [***尚未经过测试***](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/wechat/WeChatOkAuthClient.java "点击查看源码") | [查看官方文档](https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html) |
