@@ -25,6 +25,44 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 /**
  * GitHub user.
  *
+ * <p>Take the author as an example:
+ *
+ * <pre>
+ * {
+ *     "login": "wautsns",
+ *     "id": 39336604,
+ *     "node_id": "MDQ6VXNlcjM5MzM2NjA0",
+ *     "avatar_url": "https://avatars2.githubusercontent.com/u/39336604?v=4",
+ *     "gravatar_id": "",
+ *     "url": "https://api.github.com/users/wautsns",
+ *     "html_url": "https://github.com/wautsns",
+ *     "followers_url": "https://api.github.com/users/wautsns/followers",
+ *     "following_url": "https://api.github.com/users/wautsns/following{/other_user}",
+ *     "gists_url": "https://api.github.com/users/wautsns/gists{/gist_id}",
+ *     "starred_url": "https://api.github.com/users/wautsns/starred{/owner}{/repo}",
+ *     "subscriptions_url": "https://api.github.com/users/wautsns/subscriptions",
+ *     "organizations_url": "https://api.github.com/users/wautsns/orgs",
+ *     "repos_url": "https://api.github.com/users/wautsns/repos",
+ *     "events_url": "https://api.github.com/users/wautsns/events{/privacy}",
+ *     "received_events_url": "https://api.github.com/users/wautsns/received_events",
+ *     "type": "User",
+ *     "site_admin": false,
+ *     "name": "wautsns",
+ *     "company": null,
+ *     "blog": "",
+ *     "location": null,
+ *     "email": null,
+ *     "hireable": null,
+ *     "bio": null,
+ *     "public_repos": 8,
+ *     "public_gists": 0,
+ *     "followers": 0,
+ *     "following": 0,
+ *     "created_at": "2018-05-16T12:17:46Z",
+ *     "updated_at": "2019-11-16T05:40:10Z"
+ * }
+ * </pre>
+ *
  * @author wautsns
  */
 @JsonNaming(SnakeCaseStrategy.class)
