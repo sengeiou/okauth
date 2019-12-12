@@ -47,7 +47,7 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
     private final BiFunction<OAuthAppInfo, Requester, OkAuthClient> okauthClientInitializer;
 
     /**
-     * Contruct a built-in open platform
+     * Construct a built-in open platform
      *
      * @param identifier open platform identifier
      * @param okauthClientInitializer okauth client initializer

@@ -162,12 +162,12 @@ public class OkAuthManagerBuilder {
         // Parse open platform class
         Class<? extends OkAuthClientInitializer> initializerClass;
         try {
-            Class<?> temp1 = Class.forName(classAndIdentifier[0]);
-            if (!OkAuthClientInitializer.class.isAssignableFrom(temp1) || !temp1.isEnum()) {
+            Class<?> temp = Class.forName(classAndIdentifier[0]);
+            if (!OkAuthClientInitializer.class.isAssignableFrom(temp) || !temp.isEnum()) {
                 throw new OkAuthInitializeException(String.format(
-                    "%s should be an enumeration that implements %s", temp1, OpenPlatform.class));
+                    "%s should be an enumeration that implements %s", temp, OpenPlatform.class));
             }
-            initializerClass = (Class<? extends OkAuthClientInitializer>) temp1;
+            initializerClass = (Class<? extends OkAuthClientInitializer>) temp;
         } catch (ClassNotFoundException e) {
             throw new OkAuthInitializeException(e);
         }
@@ -175,7 +175,7 @@ public class OkAuthManagerBuilder {
         String identifier = (classAndIdentifier.length == 2) ? classAndIdentifier[1] : null;
         if (identifier != null) {
             return Arrays.stream(initializers)
-                .filter(op -> op.getIdentifier().equalsIgnoreCase(identifier))
+                .filter(openPlatform -> openPlatform.getIdentifier().equalsIgnoreCase(identifier))
                 .findFirst().orElseThrow(() -> new OkAuthInitializeException(String.format(
                     "There is no identifier named '%s' in %s", identifier, initializerClass)));
         } else if (initializers.length == 1) {
