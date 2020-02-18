@@ -22,9 +22,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
+import com.github.wautsns.okauth.core.client.util.http.Response.MapDateInputStreamReader;
+
 /**
  * Request for open platform interaction.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  * @see Requester
  */
@@ -33,59 +36,16 @@ public class Request {
     /** request methods */
     public enum Method { GET, POST }
 
-    /**
-     * Initialize a GET request and the response input stream reader is JSON.
-     *
-     * @param url request url, require nonnull
-     * @return request
-     */
-    public static Request initGet(String url) {
-        return init(Method.GET, url);
-    }
-
-    /**
-     * Initialize a POST request and the response input stream reader is JSON.
-     *
-     * @param url request url, require nonnull
-     * @return request
-     */
-    public static Request initPost(String url) {
-        return init(Method.POST, url);
-    }
-
-    /**
-     * Initialize a request and the response input stream reader is JSON.
-     *
-     * @param method request method, require nonnull
-     * @param url request url, require nonnull
-     * @return request
-     */
-    public static Request init(Method method, String url) {
-        return new Request(method, url, BuiltInResponseInputStreamReader.JSON);
-    }
-
-    /**
-     * Initialize a request.
-     *
-     * @param method request method, require nonnull
-     * @param url request url, require nonnull
-     * @param reader response input stream reader, require nonnull
-     * @return request
-     */
-    public static Request init(Method method, String url, ResponseInputStreamReader reader) {
-        return new Request(method, url, reader);
-    }
-
     /** request method */
     private Method method;
     /** request url */
-    private Url url;
+    private RequestUrl url;
     /** request headers */
     private LinkedList<String> headers;
     /** request form(items are url encoded) */
     private LinkedList<String> form;
     /** response input stream reader */
-    private ResponseInputStreamReader responseInputStreamReader;
+    private MapDateInputStreamReader responseInputStreamReader;
 
     /**
      * Construct a request.
@@ -95,9 +55,9 @@ public class Request {
      * @param responseInputStreamReader response input stream reader
      */
     private Request(
-            Method method, String url, ResponseInputStreamReader responseInputStreamReader) {
+            Method method, String url, MapDateInputStreamReader responseInputStreamReader) {
         this.method = method;
-        this.url = new Url(url);
+        this.url = new RequestUrl(url);
         this.responseInputStreamReader = responseInputStreamReader;
     }
 
@@ -182,7 +142,7 @@ public class Request {
      * <p>If the value is {@code null}, it is not added.
      *
      * @param name query param name, require nonnull
-     * @param value query param value(will be url encoded if not null)
+     * @param value query param value(will be url encoded)
      * @return self reference
      */
     public Request addQueryParam(String name, String value) {
@@ -210,7 +170,7 @@ public class Request {
      * <p>If the value is {@code null}, it is not added.
      *
      * @param name form item name, require nonnull
-     * @param value form item value(will be url encoded if not null)
+     * @param value form item value(will be url encoded)
      * @return self reference
      */
     public Request addFormItem(String name, String value) {
@@ -252,17 +212,62 @@ public class Request {
     }
 
     /**
-     * Mutate a request.
+     * Mutate into a new identical request.
      *
-     * @return a request
+     * @return a new request
      */
     public Request mutate() {
         return new Request(this);
     }
 
     /** Get {@link #responseInputStreamReader}. */
-    public ResponseInputStreamReader getResponseInputStreamReader() {
+    public MapDateInputStreamReader getResponseInputStreamReader() {
         return responseInputStreamReader;
+    }
+
+    // -------------------- initialization ----------------------------------------
+
+    /**
+     * Initialize a GET request and the response input stream reader is JSON.
+     *
+     * @param url request url, require nonnull
+     * @return request
+     */
+    public static Request initGet(String url) {
+        return init(Method.GET, url);
+    }
+
+    /**
+     * Initialize a POST request and the response input stream reader is JSON.
+     *
+     * @param url request url, require nonnull
+     * @return request
+     */
+    public static Request initPost(String url) {
+        return init(Method.POST, url);
+    }
+
+    /**
+     * Initialize a request and the response input stream reader is JSON.
+     *
+     * @param method request method, require nonnull
+     * @param url request url, require nonnull
+     * @return request
+     */
+    public static Request init(Method method, String url) {
+        return new Request(method, url, Response.INPUT_STREAM_READER_JSON);
+    }
+
+    /**
+     * Initialize a request.
+     *
+     * @param method request method, require nonnull
+     * @param url request url, require nonnull
+     * @param reader response input stream reader, require nonnull
+     * @return request
+     */
+    public static Request init(Method method, String url, MapDateInputStreamReader reader) {
+        return new Request(method, url, reader);
     }
 
 }

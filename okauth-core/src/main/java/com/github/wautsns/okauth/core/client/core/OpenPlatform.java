@@ -20,6 +20,7 @@ import java.io.Serializable;
 /**
  * Open platform interface.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public interface OpenPlatform extends Serializable {

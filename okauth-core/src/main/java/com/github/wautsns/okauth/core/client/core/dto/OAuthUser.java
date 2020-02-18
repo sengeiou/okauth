@@ -15,12 +15,12 @@
  */
 package com.github.wautsns.okauth.core.client.core.dto;
 
-import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
  * Abstract oauth user.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public abstract class OAuthUser extends OAuthData {
@@ -35,7 +35,7 @@ public abstract class OAuthUser extends OAuthData {
     }
 
     /** Get open platform identifier. */
-    public abstract OpenPlatform getOpenPlatform();
+    public abstract String getOpenPlatformIdentifier();
 
     /** Get open id. */
     public abstract String getOpenId();

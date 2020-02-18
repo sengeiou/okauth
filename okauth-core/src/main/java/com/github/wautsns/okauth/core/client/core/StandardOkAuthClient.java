@@ -22,13 +22,14 @@ import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
-import com.github.wautsns.okauth.core.client.util.http.Url;
+import com.github.wautsns.okauth.core.client.util.http.RequestUrl;
 import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
  * Standard OAuth2.0 client.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  * @see <a href="https://oauth.net/2/grant-types/authorization-code/">standard oauth2.0 doc</a>
  */
@@ -44,24 +45,20 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
         super(oauthAppInfo, requester);
     }
 
-    // ------------------------- BEGIN -------------------------
-    // --------------------- authorize url ---------------------
-    // ---------------------------------------------------------
+    // -------------------- authorize url ----------------------------------------
 
     /** Get authorize url. */
     protected abstract String getAuthorizeUrl();
 
     @Override
-    protected Url initAuthorizeUrlPrototype() {
-        return new Url(getAuthorizeUrl())
+    protected RequestUrl initAuthorizeUrlPrototype() {
+        return new RequestUrl(getAuthorizeUrl())
             .addQueryParam("response_type", "code")
             .addQueryParam("client_id", oauthAppInfo.getClientId())
             .addQueryParam("redirect_uri", oauthAppInfo.getRedirectUri());
     }
 
-    // ------------------------- BEGIN -------------------------
-    // ---------------------- oauth token ----------------------
-    // ---------------------------------------------------------
+    // --------------------- oauth token ------------------------------------------
 
     /** Get token url. */
     protected abstract String getTokenUrl();
@@ -109,14 +106,12 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
         return initOAuthToken(exchangeAndCheck(mutateTokenRequest(query)));
     }
 
-    // ------------------------- BEGIN -------------------------
-    // ----------------------- oauth user ----------------------
-    // ---------------------------------------------------------
+    // --------------------- oauth user ------------------------------------------
 
     /**
      * Initialize an oauth user.
      *
-     * @param response response after checking
+     * @param response response after checking, require nonnull
      * @return oauth user
      */
     protected abstract OAuthUser initOAuthUser(Response response);
@@ -127,9 +122,7 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
         return initOAuthUser(exchangeAndCheck(mutateUserRequest(token)));
     }
 
-    // ------------------------- BEGIN -------------------------
-    // ------------------------ assists ------------------------
-    // ---------------------------------------------------------
+    // ----------------------- utils ----------------------------------------------
 
     /**
      * Exchange and check.

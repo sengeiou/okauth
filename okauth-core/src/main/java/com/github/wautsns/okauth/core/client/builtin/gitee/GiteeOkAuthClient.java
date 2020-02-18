@@ -28,6 +28,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 /**
  * Gitee okauth client.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  * @see <a href="https://gitee.com/api/v5/oauth_doc">gitee oauth doc</a>
  */

@@ -18,6 +18,7 @@ package com.github.wautsns.okauth.core.client.core.properties;
 /**
  * OAuth application info.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public class OAuthAppInfo {

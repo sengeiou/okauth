@@ -13,32 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.util.http.properties;
+package com.github.wautsns.okauth.core.client.util.http;
 
 import java.util.concurrent.TimeUnit;
 
-import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequester;
 
 /**
- * Okauth requester properties.
+ * Requester properties.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
-public class OkAuthRequesterProperties {
+public class RequesterProperties {
 
     /** requester class, default is {@link OkHttpRequester} */
-    private Class<? extends Requester> requesterClass;
-    /** max concurrent requests */
-    private Integer maxConcurrentRequests;
-    /** max idle connection */
-    private Integer maxIdleConnections;
-    /** keep alive, if the keepAliveTimeUnit is not set, the value is invalid */
-    private Long keepAlive;
-    /** keep alive time unit, if the keepAlive is not set, the value is invalid */
+    private Class<? extends Requester> requesterClass = OkHttpRequester.class;
+    /** connect time out milliseconds, default is 7_000 */
+    private Integer connectTimeoutMilliseconds = 7_000;
+    /** max concurrent requests, default is 64 */
+    private Integer maxConcurrentRequests = 64;
+    /** max idle connection, default is 5 */
+    private Integer maxIdleConnections = 5;
+    /**
+     * keep alive, default is 5L * 60_000 with time unit millisenconds
+     *
+     * @see #keepAliveTimeUnit
+     */
+    private Long keepAlive = 5L * 60_000;
+    /**
+     * keep alive time unit, default is milliseconds
+     *
+     * @see #keepAlive
+     */
     private TimeUnit keepAliveTimeUnit = TimeUnit.MILLISECONDS;
-    /** connect time out milliseconds */
-    private Integer connectTimeoutMilliseconds;
 
     /** Get {@link #requesterClass}. */
     public Class<? extends Requester> getRequesterClass() {
@@ -46,8 +54,20 @@ public class OkAuthRequesterProperties {
     }
 
     /** Set {@link #requesterClass}. */
-    public OkAuthRequesterProperties setRequesterClass(Class<? extends Requester> requesterClass) {
+    public RequesterProperties setRequesterClass(Class<? extends Requester> requesterClass) {
         this.requesterClass = requesterClass;
+        return this;
+    }
+
+    /** Get {@link #connectTimeoutMilliSeconds}. */
+    public Integer getConnectTimeoutMilliseconds() {
+        return connectTimeoutMilliseconds;
+    }
+
+    /** Set {@link #connectTimeoutMilliSeconds}. */
+    public RequesterProperties setConnectTimeoutMilliseconds(
+            Integer connectTimeoutMilliseconds) {
+        this.connectTimeoutMilliseconds = connectTimeoutMilliseconds;
         return this;
     }
 
@@ -57,7 +77,7 @@ public class OkAuthRequesterProperties {
     }
 
     /** Set {@link #maxConcurrentRequests}. */
-    public OkAuthRequesterProperties setMaxConcurrentRequests(Integer maxConcurrentRequests) {
+    public RequesterProperties setMaxConcurrentRequests(Integer maxConcurrentRequests) {
         this.maxConcurrentRequests = maxConcurrentRequests;
         return this;
     }
@@ -68,7 +88,7 @@ public class OkAuthRequesterProperties {
     }
 
     /** Set {@link #maxIdleConnections}. */
-    public OkAuthRequesterProperties setMaxIdleConnections(Integer maxIdleConnections) {
+    public RequesterProperties setMaxIdleConnections(Integer maxIdleConnections) {
         this.maxIdleConnections = maxIdleConnections;
         return this;
     }
@@ -79,7 +99,7 @@ public class OkAuthRequesterProperties {
     }
 
     /** Set {@link #keepAlive}. */
-    public OkAuthRequesterProperties setKeepAlive(Long keepAlive) {
+    public RequesterProperties setKeepAlive(Long keepAlive) {
         this.keepAlive = keepAlive;
         return this;
     }
@@ -90,20 +110,8 @@ public class OkAuthRequesterProperties {
     }
 
     /** Set {@link #keepAliveTimeUnit}. */
-    public OkAuthRequesterProperties setKeepAliveTimeUnit(TimeUnit keepAliveTimeUnit) {
+    public RequesterProperties setKeepAliveTimeUnit(TimeUnit keepAliveTimeUnit) {
         this.keepAliveTimeUnit = keepAliveTimeUnit;
-        return this;
-    }
-
-    /** Get {@link #connectTimeoutMilliSeconds}. */
-    public Integer getConnectTimeoutMilliseconds() {
-        return connectTimeoutMilliseconds;
-    }
-
-    /** Set {@link #connectTimeoutMilliSeconds}. */
-    public OkAuthRequesterProperties setConnectTimeoutMilliseconds(
-            Integer connectTimeoutMilliseconds) {
-        this.connectTimeoutMilliseconds = connectTimeoutMilliseconds;
         return this;
     }
 

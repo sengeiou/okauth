@@ -19,35 +19,36 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
- * Url.
+ * Request url.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
-public class Url {
+public class RequestUrl {
 
     /** url */
-    private String urlString;
+    private String url;
     /** if the url has query */
     private boolean hasQuery;
 
     /**
      * Construct a url.
      *
-     * @param urlString url, require nonnull
+     * @param url url, require nonnull
      */
-    public Url(String urlString) {
-        this.urlString = urlString;
-        this.hasQuery = (urlString.lastIndexOf('?') >= 0);
+    public RequestUrl(String url) {
+        this.url = url;
+        this.hasQuery = (url.lastIndexOf('?') >= 0);
     }
 
     /**
      * Construct a url.
      *
-     * @param urlString url prototype, require nonnull
+     * @param url url prototype, require nonnull
      */
-    private Url(Url urlString) {
-        this.urlString = urlString.urlString;
-        this.hasQuery = urlString.hasQuery;
+    private RequestUrl(RequestUrl url) {
+        this.url = url.url;
+        this.hasQuery = url.hasQuery;
     }
 
     /**
@@ -59,7 +60,7 @@ public class Url {
      * @param value query param value(will be url encoded if not null)
      * @return self reference
      */
-    public Url addQueryParam(String name, String value) {
+    public RequestUrl addQueryParam(String name, String value) {
         if (value == null) { return this; }
         try {
             return addUrlEncodedQueryParam(name, URLEncoder.encode(value, "UTF-8"));
@@ -77,30 +78,30 @@ public class Url {
      * @param value url encoded query param value
      * @return self reference
      */
-    public Url addUrlEncodedQueryParam(String name, String value) {
+    public RequestUrl addUrlEncodedQueryParam(String name, String value) {
         if (value == null) { return this; }
         if (hasQuery) {
-            urlString += '&';
+            url += '&';
         } else {
-            urlString += '?';
+            url += '?';
             hasQuery = true;
         }
-        urlString += name + '=' + value;
+        url += name + '=' + value;
         return this;
     }
 
     /**
-     * Mutate into a new identical url prototype.
+     * Mutate into a new identical url.
      *
-     * @return a new prototype
+     * @return a new request url
      */
-    public Url mutate() {
-        return new Url(this);
+    public RequestUrl mutate() {
+        return new RequestUrl(this);
     }
 
     @Override
     public String toString() {
-        return urlString;
+        return url;
     }
 
 }

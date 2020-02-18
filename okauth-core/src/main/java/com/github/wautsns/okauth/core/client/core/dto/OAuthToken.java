@@ -20,6 +20,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 /**
  * Abstract oauth token.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public class OAuthToken extends OAuthData {

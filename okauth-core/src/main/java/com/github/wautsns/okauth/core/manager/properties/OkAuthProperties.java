@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.github.wautsns.okauth.core.client.core.properties.OkAuthClientProperties;
+import com.github.wautsns.okauth.core.client.util.http.RequesterProperties;
 import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequester;
-import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
 
 /**
  * Okauth properties.
@@ -42,7 +42,7 @@ public class OkAuthProperties {
      * <li>connect timeout milliseconds: 5_000</li>
      * </ul>
      */
-    private OkAuthRequesterProperties defaultRequester = new OkAuthRequesterProperties()
+    private RequesterProperties defaultRequester = new RequesterProperties()
         .setRequesterClass(OkHttpRequester.class)
         .setMaxConcurrentRequests(64)
         .setMaxIdleConnections(5)
@@ -53,12 +53,12 @@ public class OkAuthProperties {
     private List<OkAuthClientProperties> clients;
 
     /** Get {@link #defaultRequester}. */
-    public OkAuthRequesterProperties getDefaultRequester() {
+    public RequesterProperties getDefaultRequester() {
         return defaultRequester;
     }
 
     /** Set {@link #defaultRequester}. */
-    public OkAuthProperties setDefaultRequester(OkAuthRequesterProperties defaultRequester) {
+    public OkAuthProperties setDefaultRequester(RequesterProperties defaultRequester) {
         this.defaultRequester = defaultRequester;
         return this;
     }

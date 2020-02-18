@@ -28,6 +28,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 /**
  * Baidu okauth client.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth">baidu oauth doc</a>
  */
