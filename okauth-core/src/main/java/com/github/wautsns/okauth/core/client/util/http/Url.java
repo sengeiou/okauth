@@ -26,28 +26,28 @@ import java.net.URLEncoder;
 public class Url {
 
     /** url */
-    private String url;
+    private String urlString;
     /** if the url has query */
     private boolean hasQuery;
 
     /**
      * Construct a url.
      *
-     * @param url url, require nonnull
+     * @param urlString url, require nonnull
      */
-    public Url(String url) {
-        this.url = url;
-        this.hasQuery = (url.lastIndexOf('?') >= 0);
+    public Url(String urlString) {
+        this.urlString = urlString;
+        this.hasQuery = (urlString.lastIndexOf('?') >= 0);
     }
 
     /**
      * Construct a url.
      *
-     * @param url url prototype, require nonnull
+     * @param urlString url prototype, require nonnull
      */
-    private Url(Url url) {
-        this.url = url.url;
-        this.hasQuery = url.hasQuery;
+    private Url(Url urlString) {
+        this.urlString = urlString.urlString;
+        this.hasQuery = urlString.hasQuery;
     }
 
     /**
@@ -64,7 +64,7 @@ public class Url {
         try {
             return addUrlEncodedQueryParam(name, URLEncoder.encode(value, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("unreachable");
+            throw new IllegalStateException(e);
         }
     }
 
@@ -80,12 +80,12 @@ public class Url {
     public Url addUrlEncodedQueryParam(String name, String value) {
         if (value == null) { return this; }
         if (hasQuery) {
-            url += '&';
+            urlString += '&';
         } else {
-            url += '?';
+            urlString += '?';
             hasQuery = true;
         }
-        url += name + '=' + value;
+        urlString += name + '=' + value;
         return this;
     }
 
@@ -100,7 +100,7 @@ public class Url {
 
     @Override
     public String toString() {
-        return url;
+        return urlString;
     }
 
 }

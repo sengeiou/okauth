@@ -16,6 +16,7 @@
 package com.github.wautsns.okauth.core.client.util.http.builtin.okhttp;
 
 import java.io.IOException;
+
 import java.util.concurrent.TimeUnit;
 
 import com.github.wautsns.okauth.core.client.util.http.Request;
@@ -105,9 +106,7 @@ public class OkHttpRequester extends Requester {
             throws OkAuthIOException {
         try {
             okhttp3.Response response = okhttpClient.newCall(request).execute();
-            return new Response(
-                response.code(),
-                reader.read(response.body().byteStream()));
+            return new Response(response.code(), reader.read(response.body().byteStream()));
         } catch (IOException ioException) {
             throw new OkAuthIOException(ioException);
         }
