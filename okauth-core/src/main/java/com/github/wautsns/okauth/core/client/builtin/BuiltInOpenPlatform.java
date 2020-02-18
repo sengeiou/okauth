@@ -30,6 +30,7 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
 /**
  * Built-in open platform.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
@@ -37,7 +38,11 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
     BAIDU("Baidu", BaiduOkAuthClient::new),
     GITEE("Gitee", GiteeOkAuthClient::new),
     GITHUB("GitHub", GitHubOkAuthClient::new),
+    /** @deprecated not tested */
+    @Deprecated
     MICROBLOG("MicroBlog", MicroBlogOkAuthClient::new),
+    /** @deprecated not tested */
+    @Deprecated
     WECHAT("WeChat", WeChatOkAuthClient::new),
     ;
 
@@ -47,7 +52,7 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
     private final BiFunction<OAuthAppInfo, Requester, OkAuthClient> okauthClientInitializer;
 
     /**
-     * Construct a built-in open platform
+     * Construct a built-in open platform.
      *
      * @param identifier open platform identifier
      * @param okauthClientInitializer okauth client initializer

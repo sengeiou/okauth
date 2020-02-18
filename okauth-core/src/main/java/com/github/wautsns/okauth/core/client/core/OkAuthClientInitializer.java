@@ -21,6 +21,7 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
 /**
  * Okauth client initializer interface.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public interface OkAuthClientInitializer extends OpenPlatform {

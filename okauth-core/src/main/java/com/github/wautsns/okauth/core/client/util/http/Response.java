@@ -15,11 +15,18 @@
  */
 package com.github.wautsns.okauth.core.client.util.http;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Universal response.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public class Response {
@@ -48,6 +55,29 @@ public class Response {
     /** Get {@link #data}. */
     public Map<String, Object> getData() {
         return data;
+    }
+
+    // --------------- map data input stream reader ------------------------------
+
+    public static final MapDateInputStreamReader INPUT_STREAM_READER_JSON =
+        new MapDateInputStreamReader() {
+
+            private final ObjectMapper objectMapper = new ObjectMapper();
+            private final JavaType mapType =
+                objectMapper.getTypeFactory().constructMapType(Map.class, String.class,
+                    Object.class);
+
+            @Override
+            public Map<String, Object> read(InputStream inputStream) throws IOException {
+                return objectMapper.readValue(inputStream, mapType);
+            }
+
+        };
+
+    public interface MapDateInputStreamReader {
+
+        Map<String, Object> read(InputStream inputStream) throws IOException;
+
     }
 
 }

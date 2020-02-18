@@ -26,8 +26,8 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.core.properties.OkAuthClientProperties;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
+import com.github.wautsns.okauth.core.client.util.http.RequesterProperties;
 import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequester;
-import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
 import com.github.wautsns.okauth.core.exception.OkAuthInitializeException;
 import com.github.wautsns.okauth.core.manager.properties.OkAuthProperties;
 
@@ -63,7 +63,7 @@ public class OkAuthManagerBuilder {
      */
     public OkAuthManagerBuilder register(
             OkAuthClientInitializer okauthClientInitializer,
-            OAuthAppInfo oauthAppInfo, OkAuthRequesterProperties okauthHttpProperties) {
+            OAuthAppInfo oauthAppInfo, RequesterProperties okauthHttpProperties) {
         return register(
             okauthClientInitializer,
             oauthAppInfo, new OkHttpRequester(okauthHttpProperties));
@@ -97,7 +97,7 @@ public class OkAuthManagerBuilder {
      * @return self reference
      */
     public OkAuthManagerBuilder register(OkAuthProperties properties) {
-        OkAuthRequesterProperties defaultRequester = properties.getDefaultRequester();
+        RequesterProperties defaultRequester = properties.getDefaultRequester();
         properties.getClients().forEach(client -> register(
             parseOpenPlatformExpr(client.getOpenPlatformExpr()),
             client.getOauthAppInfo(),
@@ -115,9 +115,9 @@ public class OkAuthManagerBuilder {
      * @param defaultProperties default properties
      * @param properties target properties
      */
-    private OkAuthRequesterProperties fillingRequesterProperties(
-            OkAuthRequesterProperties defaultProperties,
-            OkAuthRequesterProperties properties) {
+    private RequesterProperties fillingRequesterProperties(
+            RequesterProperties defaultProperties,
+            RequesterProperties properties) {
         if (properties.getRequesterClass() == null) {
             properties.setRequesterClass(defaultProperties.getRequesterClass());
         }
@@ -190,16 +190,16 @@ public class OkAuthManagerBuilder {
      * @return requester
      * @throws OkAuthInitializeException if the requester can not be initialized
      */
-    private Requester initRequester(OkAuthRequesterProperties properties) {
+    private Requester initRequester(RequesterProperties properties) {
         Class<? extends Requester> requesterClass = properties.getRequesterClass();
         try {
             return requesterClass
-                .getConstructor(OkAuthRequesterProperties.class)
+                .getConstructor(RequesterProperties.class)
                 .newInstance(properties);
         } catch (Exception e) {
             throw new OkAuthInitializeException(String.format(
                 "%s should contain a public constructor with arg type of %s",
-                requesterClass, OkAuthRequesterProperties.class));
+                requesterClass, RequesterProperties.class));
         }
     }
 

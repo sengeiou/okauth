@@ -18,34 +18,17 @@ package com.github.wautsns.okauth.core.client.builtin.wechat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
-import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
  * WeChat user.
  *
- * <p>Official example:
- *
- * <pre>
- * {
- *     "openid":"OPENID",
- *     "nickname":"NICKNAME",
- *     "sex":1,
- *     "province":"PROVINCE",
- *     "city":"CITY",
- *     "country":"COUNTRY",
- *     "headimgurl": "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0",
- *     "privilege":[
- *         "PRIVILEGE1",
- *         "PRIVILEGE2"
- *     ],
- *     "unionid": " o6_bmasdasdsad6_2sgVt7hMZOPfL"
- * }
- * </pre>
- *
+ * @deprecated not tested
+ * @since Feb 18, 2020
  * @author wautsns
  */
+@Deprecated
 @JsonNaming(SnakeCaseStrategy.class)
 public class WeChatUser extends OAuthUser {
 
@@ -59,8 +42,8 @@ public class WeChatUser extends OAuthUser {
     }
 
     @Override
-    public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatform.WECHAT;
+    public String getOpenPlatformIdentifier() {
+        return BuiltInOpenPlatform.WECHAT.getIdentifier();
     }
 
     @Override

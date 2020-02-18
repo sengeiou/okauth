@@ -28,6 +28,7 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 /**
  * GitHub okauth client.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  * @see <a
  *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github

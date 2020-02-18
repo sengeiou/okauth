@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 import com.github.wautsns.okauth.core.client.util.http.Request;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
+import com.github.wautsns.okauth.core.client.util.http.RequesterProperties;
 import com.github.wautsns.okauth.core.client.util.http.Response;
-import com.github.wautsns.okauth.core.client.util.http.ResponseInputStreamReader;
-import com.github.wautsns.okauth.core.client.util.http.properties.OkAuthRequesterProperties;
+import com.github.wautsns.okauth.core.client.util.http.Response.MapDateInputStreamReader;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 import okhttp3.ConnectionPool;
@@ -37,6 +37,7 @@ import okhttp3.OkHttpClient.Builder;
  *
  * <p>Based on okhttp3.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public class OkHttpRequester extends Requester {
@@ -56,9 +57,9 @@ public class OkHttpRequester extends Requester {
     /**
      * Construct okhttp requester.
      *
-     * @param properties okauth http properties, require nonnull(and all properties are not null)
+     * @param properties okauth http properties, require nonnull(and all properties require nonnull)
      */
-    public OkHttpRequester(OkAuthRequesterProperties properties) {
+    public OkHttpRequester(RequesterProperties properties) {
         Builder builder = new OkHttpClient.Builder()
             .connectTimeout(properties.getConnectTimeoutMilliseconds(), TimeUnit.MILLISECONDS)
             .readTimeout(3, TimeUnit.SECONDS)
@@ -102,7 +103,7 @@ public class OkHttpRequester extends Requester {
      * @return response
      * @throws OkAuthIOException if an IO exception occurs
      */
-    private Response doExecute(okhttp3.Request request, ResponseInputStreamReader reader)
+    private Response doExecute(okhttp3.Request request, MapDateInputStreamReader reader)
             throws OkAuthIOException {
         try {
             okhttp3.Response response = okhttpClient.newCall(request).execute();

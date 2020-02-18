@@ -20,15 +20,16 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Request;
+import com.github.wautsns.okauth.core.client.util.http.RequestUrl;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
-import com.github.wautsns.okauth.core.client.util.http.Url;
 import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
  * Abstract okauth client.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public abstract class OkAuthClient {
@@ -39,7 +40,7 @@ public abstract class OkAuthClient {
     protected final Requester requester;
 
     /** authorize url prototype */
-    protected final Url authorizeUrlPrototype;
+    protected final RequestUrl authorizeUrlPrototype;
     /** token request prototype */
     protected final Request tokenRequestPrototype;
     /** user request prototype */
@@ -62,21 +63,19 @@ public abstract class OkAuthClient {
     /** Get open platform. */
     public abstract OpenPlatform getOpenPlatform();
 
-    // ------------------------- BEGIN -------------------------
-    // --------------------- authorize url ---------------------
-    // ---------------------------------------------------------
+    // -------------------- authorize url ----------------------------------------
 
     /**
      * Initialize authorize url prototype.
      *
      * @return authorize url prototype
      */
-    protected abstract Url initAuthorizeUrlPrototype();
+    protected abstract RequestUrl initAuthorizeUrlPrototype();
 
     /**
      * Initialize an authorize url.
      *
-     * @param state the param is used to prevent CSRF attacks
+     * @param state see {@linkplain OAuthRedirectUriQuery#state} for details
      * @return authorize url
      */
     public String initAuthorizeUrl(String state) {
@@ -85,9 +84,7 @@ public abstract class OkAuthClient {
             .toString();
     }
 
-    // ------------------------- BEGIN -------------------------
-    // ---------------------- oauth token ----------------------
-    // ---------------------------------------------------------
+    // --------------------- oauth token ------------------------------------------
 
     /**
      * Initialize token request prototype.
@@ -97,10 +94,10 @@ public abstract class OkAuthClient {
     protected abstract Request initTokenRequestPrototype();
 
     /**
-     * Mutate a token request.
+     * Mutate into a new identical token request.
      *
      * @param query redirect uri query, require nonnull
-     * @return token request
+     * @return a new token request
      */
     protected abstract Request mutateTokenRequest(OAuthRedirectUriQuery query);
 
@@ -115,22 +112,20 @@ public abstract class OkAuthClient {
     public abstract OAuthToken exchangeQueryForToken(OAuthRedirectUriQuery query)
             throws OkAuthErrorException, OkAuthIOException;
 
-    // ------------------------- BEGIN -------------------------
-    // ----------------------- oauth user ----------------------
-    // ---------------------------------------------------------
+    // --------------------- oauth user ------------------------------------------
 
     /**
-     * Initialize a user request.
+     * Initialize a user request prototype.
      *
-     * @return user request
+     * @return user request prototype
      */
     protected abstract Request initUserRequestPrototype();
 
     /**
-     * Mutate a user request.
+     * Mutate into a new identical user request.
      *
      * @param token oauth token, require nonnull
-     * @return user request
+     * @return a new user request
      */
     protected abstract Request mutateUserRequest(OAuthToken token);
 
@@ -158,9 +153,7 @@ public abstract class OkAuthClient {
         return exchangeTokenForUser(exchangeQueryForToken(query));
     }
 
-    // ------------------------- BEGIN -------------------------
-    // ------------------------ assists ------------------------
-    // ---------------------------------------------------------
+    // ----------------------- utils ----------------------------------------------
 
     /**
      * Check response.

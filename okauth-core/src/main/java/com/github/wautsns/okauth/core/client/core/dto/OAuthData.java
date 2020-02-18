@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 /**
  * OAuth data.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 @JsonNaming(SnakeCaseStrategy.class)
@@ -32,7 +33,7 @@ class OAuthData {
 
     private static final ObjectMapper OM = new ObjectMapper();
 
-    /** data map */
+    /** original data map */
     private final Map<String, Object> originalDataMap;
 
     /**
@@ -49,9 +50,7 @@ class OAuthData {
      *
      * @param <T> type of the value
      * @param name value name, require nonnull
-     * @return value assosiated with the param `name`, or {@code null} if no value assosiated with
-     *         the param
-     * @throws ClassCastException if the actual value is not instance of the type
+     * @return value assosiated with the name, or {@code null} if no value assosiated with the name
      */
     @SuppressWarnings("unchecked")
     public <T> T get(String name) {
@@ -69,7 +68,8 @@ class OAuthData {
      * </ul>
      *
      * @param name value name, require nonnull
-     * @return value string assosiated with the param `name`
+     * @return value string assosiated with the name, or {@code null} if no value assosiated with
+     *         the name
      */
     public String getString(String name) {
         Object value = originalDataMap.get(name);
@@ -87,8 +87,8 @@ class OAuthData {
      * Get map value.
      *
      * @param name value name, require nonnull
-     * @return value assosiated with the param `name`, or {@code null} if no value assosiated with
-     *         the param or the value is not instance of {@code Map}
+     * @return value assosiated with the name, or {@code null} if no value assosiated with the name
+     *         or the value is not instance of {@code Map}
      */
     @SuppressWarnings("unchecked")
     public Map<String, Object> getMap(String name) {

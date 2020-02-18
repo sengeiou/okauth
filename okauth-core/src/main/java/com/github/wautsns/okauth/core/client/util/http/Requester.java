@@ -21,8 +21,9 @@ import com.github.wautsns.okauth.core.client.util.http.Request.Method;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
- * Abstract requester for creating {@linkplain Request request}.
+ * Abstract requester for exchanging.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public abstract class Requester {
@@ -48,24 +49,22 @@ public abstract class Requester {
     /**
      * Do GET request.
      *
-     * <p>*** Remember to call {@link #forEachHeader(BiConsumer)}
-     *
      * @param request request, require nonnull
      * @return response
      * @throws OkAuthIOException if an IO exception occurs
+     * @see Request#forEachHeader(BiConsumer)
      */
     protected abstract Response doGet(Request request) throws OkAuthIOException;
 
     /**
      * Do POST request.
      *
-     * <p>*** Remember to call {@link #forEachHeader(BiConsumer)} and
-     * {@link #forEachUrlEncodedFormItem(BiConsumer)}.
-     *
      * @param request request, require nonnull
      * @param reader response input stream reader, require nonnull
      * @return response
      * @throws OkAuthIOException if an IO exception occurs
+     * @see Request#forEachHeader(BiConsumer)
+     * @see Request#forEachUrlEncodedFormItem(BiConsumer)
      */
     protected abstract Response doPost(Request request) throws OkAuthIOException;
 

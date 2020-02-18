@@ -23,6 +23,7 @@ import com.github.wautsns.okauth.core.manager.properties.OkAuthProperties;
  * Extends from {@link OkAuthProperties}, just add
  * {@code @ConfigurationProperties(prefix = "okauth")}.
  *
+ * @since Feb 19, 2020
  * @author wautsns
  */
 @ConfigurationProperties(prefix = "okauth")

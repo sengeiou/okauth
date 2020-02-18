@@ -23,20 +23,23 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Request;
+import com.github.wautsns.okauth.core.client.util.http.RequestUrl;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
-import com.github.wautsns.okauth.core.client.util.http.Url;
 import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
  * WeChat okauth client.
  *
+ * @deprecated not tested
+ * @since Feb 18, 2020
  * @author wautsns
  * @see <a
  *      href="https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html">WeChat
  *      oauth doc</a>
  */
+@Deprecated
 public class WeChatOkAuthClient extends OkAuthClient {
 
     /**
@@ -55,8 +58,8 @@ public class WeChatOkAuthClient extends OkAuthClient {
     }
 
     @Override
-    protected Url initAuthorizeUrlPrototype() {
-        return new Url("https://open.weixin.qq.com/connect/qrconnect")
+    protected RequestUrl initAuthorizeUrlPrototype() {
+        return new RequestUrl("https://open.weixin.qq.com/connect/qrconnect")
             .addQueryParam("appid", oauthAppInfo.getClientId())
             .addQueryParam("redirect_uri", oauthAppInfo.getRedirectUri())
             .addQueryParam("response_type", "code")

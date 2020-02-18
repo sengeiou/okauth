@@ -20,6 +20,7 @@ import java.io.Serializable;
 /**
  * OAuth redirect uri query.
  *
+ * @since Feb 18, 2020
  * @author wautsns
  */
 public class OAuthRedirectUriQuery implements Serializable {
