@@ -26,6 +26,7 @@
         <dependency>
             <groupId>com.github.wautsns</groupId>
             <artifactId>okauth-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
