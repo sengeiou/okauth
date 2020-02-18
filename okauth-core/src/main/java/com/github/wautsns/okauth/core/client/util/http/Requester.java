@@ -17,6 +17,7 @@ package com.github.wautsns.okauth.core.client.util.http;
 
 import java.util.function.BiConsumer;
 
+import com.github.wautsns.okauth.core.client.util.http.Request.Method;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
@@ -35,14 +36,13 @@ public abstract class Requester {
      */
     public Response exchange(Request request)
             throws OkAuthIOException {
-        switch (request.getMethod()) {
-            case GET:
-                return doGet(request);
-            case POST:
-                return doPost(request);
-            default:
-                throw new RuntimeException("unreachable");
+        Method method = request.getMethod();
+        if (method == Method.GET) {
+            return doGet(request);
+        } else if (method == Method.POST) {
+            return doPost(request);
         }
+        throw new IllegalStateException();
     }
 
     /**

@@ -63,8 +63,7 @@ public class OkAuthManagerBuilder {
      */
     public OkAuthManagerBuilder register(
             OkAuthClientInitializer okauthClientInitializer,
-            OAuthAppInfo oauthAppInfo, OkAuthRequesterProperties okauthHttpProperties)
-            throws OkAuthInitializeException {
+            OAuthAppInfo oauthAppInfo, OkAuthRequesterProperties okauthHttpProperties) {
         return register(
             okauthClientInitializer,
             oauthAppInfo, new OkHttpRequester(okauthHttpProperties));
@@ -81,8 +80,7 @@ public class OkAuthManagerBuilder {
      */
     public OkAuthManagerBuilder register(
             OkAuthClientInitializer okauthClientInitializer,
-            OAuthAppInfo oauthAppInfo, Requester requester)
-            throws OkAuthInitializeException {
+            OAuthAppInfo oauthAppInfo, Requester requester) {
         OkAuthClient old = clients.put(
             okauthClientInitializer,
             okauthClientInitializer.initOkAuthClient(oauthAppInfo, requester));
@@ -149,8 +147,7 @@ public class OkAuthManagerBuilder {
      * @throws OkAuthInitializeException if the expression can not be parsed
      */
     @SuppressWarnings("unchecked")
-    private OkAuthClientInitializer parseOpenPlatformExpr(String openPlatformExpr)
-            throws OkAuthInitializeException {
+    private OkAuthClientInitializer parseOpenPlatformExpr(String openPlatformExpr) {
         // First, try if the expr is a built-in simple open platform name.
         OkAuthClientInitializer[] initializers = BuiltInOpenPlatform.values();
         OkAuthClientInitializer initializer = Arrays.stream(initializers)
@@ -193,8 +190,7 @@ public class OkAuthManagerBuilder {
      * @return requester
      * @throws OkAuthInitializeException if the requester can not be initialized
      */
-    private Requester initRequester(OkAuthRequesterProperties properties)
-            throws OkAuthInitializeException {
+    private Requester initRequester(OkAuthRequesterProperties properties) {
         Class<? extends Requester> requesterClass = properties.getRequesterClass();
         try {
             return requesterClass

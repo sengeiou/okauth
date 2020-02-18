@@ -17,6 +17,7 @@ package com.github.wautsns.okauth.core.client.util.http;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
@@ -217,7 +218,7 @@ public class Request {
         try {
             return addUrlEncodedFormItem(name, URLEncoder.encode(value, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("unreachable");
+            throw new IllegalStateException(e);
         }
     }
 
