@@ -31,7 +31,7 @@ import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequ
 import com.github.wautsns.okauth.core.exception.OkAuthInitializeException;
 
 /**
- * {@linkplain OkAuthManager okauth manager}'s builder
+ * {@linkplain OkAuthManager okauth manager}'s builder.
  *
  * @author wautsns
  */
@@ -78,8 +78,8 @@ public class OkAuthManagerBuilder {
      * @throws OkAuthInitializeException if the openPlatform has been registered
      */
     public OkAuthManagerBuilder register(
-            OkAuthClientInitializer okauthClientInitializer,
-            OAuthAppInfo oauthAppInfo, Requester requester) {
+            OkAuthClientInitializer okauthClientInitializer, OAuthAppInfo oauthAppInfo,
+            Requester requester) {
         OkAuthClient old = clients.put(
             okauthClientInitializer,
             okauthClientInitializer.initOkAuthClient(oauthAppInfo, requester));
@@ -173,7 +173,7 @@ public class OkAuthManagerBuilder {
                 .newInstance(properties);
         } catch (Exception e) {
             throw new OkAuthInitializeException(String.format(
-                "%s should contain a public constructor with arg type of %s",
+                "%s can't not initialize by constructor with arg type of %s",
                 requesterClass, RequesterProperties.class), e);
         }
     }
