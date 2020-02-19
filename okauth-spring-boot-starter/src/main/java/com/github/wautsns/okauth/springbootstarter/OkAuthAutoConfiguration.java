@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.github.wautsns.okauth.core.manager.OkAuthManager;
 import com.github.wautsns.okauth.core.manager.OkAuthManagerBuilder;
-import com.github.wautsns.okauth.core.manager.properties.OkAuthProperties;
+import com.github.wautsns.okauth.core.manager.OkAuthProperties;
 import com.github.wautsns.okauth.springbootstarter.properties.SpringBootOkAuthProperties;
 
 /**

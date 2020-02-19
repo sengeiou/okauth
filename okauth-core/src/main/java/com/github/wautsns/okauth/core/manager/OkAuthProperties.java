@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.manager.properties;
+package com.github.wautsns.okauth.core.manager;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,25 +30,23 @@ import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequ
 public class OkAuthProperties {
 
     /**
-     * default requester.<br/>
-     *
-     * default values are as follows.
+     * default requester and the default values are as follows<br/>
      * <ul>
-     * <li>requester class: OkHttpRequester.class</li>
-     * <li>max concurrent requests: 64</li>
-     * <li>max idle connections: 5</li>
-     * <li>keep alive: 5L * 60_000</li>
-     * <li>keep alive time unit: TimeUnit.MILLISECONDS</li>
-     * <li>connect timeout milliseconds: 5_000</li>
+     * <li>requestClass: {@linkplain OkHttpRequester}.class</li>
+     * <li>connectTimeoutMilliseconds: 7_000</li>
+     * <li>maxConcurrentRequests: 64</li>
+     * <li>maxIdleConnections: 8</li>
+     * <li>keepAlive: 5 * 60_000</li>
+     * <li>keepAliveTimeUnit: {@linkplain TimeUnit#MILLISECONDS}</li>
      * </ul>
      */
     private RequesterProperties defaultRequester = new RequesterProperties()
         .setRequesterClass(OkHttpRequester.class)
-        .setMaxConcurrentRequests(64)
-        .setMaxIdleConnections(5)
+        .setConnectTimeoutMilliseconds(7_000)
+        .setMaxConcurrentRequests(32)
+        .setMaxIdleConnections(8)
         .setKeepAlive(5L * 60_000)
-        .setKeepAliveTimeUnit(TimeUnit.MILLISECONDS)
-        .setConnectTimeoutMilliseconds(5_000);
+        .setKeepAliveTimeUnit(TimeUnit.MILLISECONDS);
     /** okauth clients */
     private List<OkAuthClientProperties> clients;
 
@@ -57,9 +55,9 @@ public class OkAuthProperties {
         return defaultRequester;
     }
 
-    /** Set {@link #defaultRequester}. */
+    /** Set {@link #defaultRequester}(The null value will be filled with default value). */
     public OkAuthProperties setDefaultRequester(RequesterProperties defaultRequester) {
-        this.defaultRequester = defaultRequester;
+        this.defaultRequester = defaultRequester.fillNullPropertiesWithThat(this.defaultRequester);
         return this;
     }
 

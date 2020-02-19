@@ -29,7 +29,6 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.RequesterProperties;
 import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequester;
 import com.github.wautsns.okauth.core.exception.OkAuthInitializeException;
-import com.github.wautsns.okauth.core.manager.properties.OkAuthProperties;
 
 /**
  * {@linkplain OkAuthManager okauth manager}'s builder
@@ -76,7 +75,7 @@ public class OkAuthManagerBuilder {
      * @param oauthAppInfo oauth application info(e.g. clientId, clientSecret...), require nonnull
      * @param requester http requester, require nonnull
      * @return self reference
-     * @throws OkAuthInitializeException if the `openPlatform` has been registered
+     * @throws OkAuthInitializeException if the openPlatform has been registered
      */
     public OkAuthManagerBuilder register(
             OkAuthClientInitializer okauthClientInitializer,
@@ -98,45 +97,21 @@ public class OkAuthManagerBuilder {
      */
     public OkAuthManagerBuilder register(OkAuthProperties properties) {
         RequesterProperties defaultRequester = properties.getDefaultRequester();
-        properties.getClients().forEach(client -> register(
-            parseOpenPlatformExpr(client.getOpenPlatformExpr()),
-            client.getOauthAppInfo(),
-            initRequester(fillingRequesterProperties(defaultRequester, client.getRequester()))));
+        properties.getClients().forEach(client -> {
+            RequesterProperties requester = client.getRequester();
+            if (requester == null) {
+                requester = new RequesterProperties();
+                client.setRequester(requester);
+            }
+            register(
+                parseOpenPlatformExpr(client.getOpenPlatformExpr()),
+                client.getOauthAppInfo(),
+                initRequester(requester.fillNullPropertiesWithThat(defaultRequester)));
+        });
         return this;
     }
 
-    // ------------------------- BEGIN -------------------------
-    // ------------------------ assists ------------------------
-    // ---------------------------------------------------------
-
-    /**
-     * Filling the okauth requester properties with default properties.
-     *
-     * @param defaultProperties default properties
-     * @param properties target properties
-     */
-    private RequesterProperties fillingRequesterProperties(
-            RequesterProperties defaultProperties,
-            RequesterProperties properties) {
-        if (properties.getRequesterClass() == null) {
-            properties.setRequesterClass(defaultProperties.getRequesterClass());
-        }
-        if (properties.getMaxConcurrentRequests() == null) {
-            properties.setMaxConcurrentRequests(defaultProperties.getMaxConcurrentRequests());
-        }
-        if (properties.getMaxIdleConnections() == null) {
-            properties.setMaxIdleConnections(defaultProperties.getMaxIdleConnections());
-        }
-        if (properties.getKeepAlive() == null || properties.getKeepAliveTimeUnit() == null) {
-            properties.setKeepAlive(defaultProperties.getKeepAlive());
-            properties.setKeepAliveTimeUnit(defaultProperties.getKeepAliveTimeUnit());
-        }
-        if (properties.getConnectTimeoutMilliseconds() == null) {
-            properties.setConnectTimeoutMilliseconds(
-                defaultProperties.getConnectTimeoutMilliseconds());
-        }
-        return properties;
-    }
+    // ----------------------- utils ----------------------------------------------
 
     /**
      * Parse open platform expression.
@@ -199,7 +174,7 @@ public class OkAuthManagerBuilder {
         } catch (Exception e) {
             throw new OkAuthInitializeException(String.format(
                 "%s should contain a public constructor with arg type of %s",
-                requesterClass, RequesterProperties.class));
+                requesterClass, RequesterProperties.class), e);
         }
     }
 
