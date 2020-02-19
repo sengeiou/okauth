@@ -60,10 +60,15 @@ public class MicroBlogOkAuthClient extends StandardOkAuthClient {
         return Request.initGet("https://api.weibo.com/2/users/show.json");
     }
 
+    /**
+     * Mutate a user request with query param `access_token` and `uid`.
+     *
+     * @param token oauth token, require nonnull
+     * @return a new user request
+     */
     @Override
     protected Request mutateUserRequest(OAuthToken token) {
-        return userRequestPrototype.mutate()
-            .addQueryParam("access_token", token.getAccessToken())
+        return super.mutateUserRequest(token)
             .addQueryParam("uid", token.getString("uid"));
     }
 

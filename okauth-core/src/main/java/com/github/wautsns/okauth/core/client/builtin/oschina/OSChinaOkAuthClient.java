@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.github;
+package com.github.wautsns.okauth.core.client.builtin.oschina;
 
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
@@ -25,50 +25,48 @@ import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
 /**
- * GitHub okauth client.
+ * OSChina okauth client.
  *
- * @since Feb 18, 2020
+ * @since Feb 19, 2020
  * @author wautsns
- * @see <a
- *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
- *      oauth doc</a>
+ * @see <a href="https://www.oschina.net/openapi/docs">OSChina oauth doc</a>
  */
-public class GitHubOkAuthClient extends StandardOkAuthClient {
+public class OSChinaOkAuthClient extends StandardOkAuthClient {
 
     /**
-     * Construct a github okauth client.
+     * Construct a OSChina okauth client.
      *
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public GitHubOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public OSChinaOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
         super(oauthAppInfo, requester);
         tokenRequestPrototype.addHeaderAcceptJson();
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatform.GITHUB;
+        return BuiltInOpenPlatform.OSCHINA;
     }
 
     @Override
     protected String getAuthorizeUrl() {
-        return "https://github.com/login/oauth/authorize";
+        return "https://www.oschina.net/action/oauth2/authorize";
     }
 
     @Override
     protected String getTokenUrl() {
-        return "https://github.com/login/oauth/access_token";
+        return "https://www.oschina.net/action/openapi/token";
     }
 
     @Override
     protected Request initUserRequestPrototype() {
-        return Request.initGet("https://api.github.com/user");
+        return Request.initGet("https://www.oschina.net/action/openapi/user");
     }
 
     @Override
     protected OAuthUser initOAuthUser(Response response) {
-        return new GitHubUser(response);
+        return new OSChinaUser(response);
     }
 
 }

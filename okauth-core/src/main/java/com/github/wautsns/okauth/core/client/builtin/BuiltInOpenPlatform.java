@@ -21,6 +21,7 @@ import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.microblog.MicroBlogOkAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOkAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.wechat.WeChatOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClientInitializer;
@@ -39,6 +40,7 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
     GITEE("Gitee", GiteeOkAuthClient::new),
     GITHUB("GitHub", GitHubOkAuthClient::new),
     MICROBLOG("MicroBlog", MicroBlogOkAuthClient::new),
+    OSCHINA("OSChina", OSChinaOkAuthClient::new),
     /** @deprecated not tested */
     @Deprecated
     WECHAT("WeChat", WeChatOkAuthClient::new),

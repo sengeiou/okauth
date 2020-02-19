@@ -20,9 +20,9 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Request;
+import com.github.wautsns.okauth.core.client.util.http.RequestUrl;
 import com.github.wautsns.okauth.core.client.util.http.Requester;
 import com.github.wautsns.okauth.core.client.util.http.Response;
-import com.github.wautsns.okauth.core.client.util.http.RequestUrl;
 import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
@@ -50,6 +50,13 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
     /** Get authorize url. */
     protected abstract String getAuthorizeUrl();
 
+    /**
+     * Initialize oauth authorize url with query param `response_type`(=code), `client_id` and
+     * `redirect_uri`.
+     *
+     * @return authorized url prototype
+     * @see #getAuthorizeUrl()
+     */
     @Override
     protected RequestUrl initAuthorizeUrlPrototype() {
         return new RequestUrl(getAuthorizeUrl())
@@ -64,7 +71,8 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
     protected abstract String getTokenUrl();
 
     /**
-     * Initialize token request prototype.
+     * Initialize token post prototype with form item `grant_type`(=authorization_code),
+     * `client_id`, `client_secret` and `redirect_uri`.
      *
      * @return token request prototype
      */
@@ -78,10 +86,10 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
     }
 
     /**
-     * Mutate a token request.
+     * Mutate a token request with form item `code`.
      *
      * @param query redirect uri query, require nonnull
-     * @return token request
+     * @return a new token request
      */
     @Override
     protected Request mutateTokenRequest(OAuthRedirectUriQuery query) {
@@ -107,6 +115,18 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
     }
 
     // --------------------- oauth user ------------------------------------------
+
+    /**
+     * Mutate a user request with query param `access_token`.
+     *
+     * @param token oauth token, require nonnull
+     * @return a new user request
+     */
+    @Override
+    protected Request mutateUserRequest(OAuthToken token) {
+        return userRequestPrototype.mutate()
+            .addQueryParam("access_token", token.getAccessToken());
+    }
 
     /**
      * Initialize an oauth user.
