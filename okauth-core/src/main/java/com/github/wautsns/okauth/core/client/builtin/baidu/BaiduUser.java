@@ -18,6 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.baidu;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
@@ -40,8 +41,8 @@ public class BaiduUser extends OAuthUser {
     }
 
     @Override
-    public String getOpenPlatformIdentifier() {
-        return BuiltInOpenPlatform.BAIDU.getIdentifier();
+    public OpenPlatform getOpenPlatform() {
+        return BuiltInOpenPlatform.BAIDU;
     }
 
     @Override

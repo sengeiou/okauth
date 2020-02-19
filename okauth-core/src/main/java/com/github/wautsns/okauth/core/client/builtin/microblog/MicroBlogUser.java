@@ -16,6 +16,7 @@
 package com.github.wautsns.okauth.core.client.builtin.microblog;
 
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.util.http.Response;
 
@@ -37,8 +38,8 @@ public class MicroBlogUser extends OAuthUser {
     }
 
     @Override
-    public String getOpenPlatformIdentifier() {
-        return BuiltInOpenPlatform.MICROBLOG.getIdentifier();
+    public OpenPlatform getOpenPlatform() {
+        return BuiltInOpenPlatform.MICROBLOG;
     }
 
     @Override

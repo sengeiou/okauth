@@ -100,11 +100,13 @@ public OkAuthManager initOkAuthManager() {
 	5. `Map<String, Object> getOriginalDataMap()` : 获取原始数据集
 4. [`OAuthUser`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/dto/OAuthUser.java "点击查看源码")  
 	抽象出的 OAuth2.0 用户信息, 提供了如下一些方法:
-	1. `String getOpenPlatformIdentifier()` : 获取该用户所在的开放平台
-	2. `String getOpenId()` : 获取用户在开放平台的唯一标识符
-	3. `String getNickname()` : 获取用户昵称
-	4. `String getAvatarUrl()` : 获取用户头像
-	5. 还有其他的一些方法与上述 `3. OAuthToken` 的 2, 3, 4, 5 相同, 这里不作赘述
+	
+	1. `OpenPlatform getOpenPlatform()` : 获取该用户所在的开放平台
+	2. `String getOpenPlatformIdentifier()` : 获取该用户所在的开放平台标识符
+	3. `String getOpenId()` : 获取用户在开放平台的唯一标识符
+	4. `String getNickname()` : 获取用户昵称
+	5. `String getAvatarUrl()` : 获取用户头像
+	6. 还有其他的一些方法与上述 `3. OAuthToken` 的 2, 3, 4, 5 相同, 这里不作赘述
 5. [`OkAuthClient`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/OkAuthClient.java "点击查看源码")  
 	所有开放平台客户端都需要继承该父类, 该类提供了以下几个方法:
 	1. `OpenPlatform getOpenPlatform()` : 获取该客户端对应的开放平台
