@@ -24,7 +24,7 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.UnsupportedOpenPlatformException;
 
 /**
- * {@linkplain OkAuthClient okauth clients}' manager
+ * {@linkplain OkAuthClient okauth clients}' manager.
  *
  * @author wautsns
  * @see OkAuthManagerBuilder
@@ -67,8 +67,7 @@ public class OkAuthManager {
      * @return client assosiated with the identifier
      * @throws UnsupportedOpenPlatformException if no client is assosiated with the identifier
      */
-    public OkAuthClient getClient(String identifier)
-            throws UnsupportedOpenPlatformException {
+    public OkAuthClient getClient(String identifier) throws UnsupportedOpenPlatformException {
         OkAuthClient client = cache.get(identifier);
         if (client != null) { return client; }
         for (Entry<OpenPlatform, OkAuthClient> entry : clients.entrySet()) {
