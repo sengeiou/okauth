@@ -18,7 +18,6 @@ package com.github.wautsns.okauth.core.client.builtin.baidu;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.StandardOkAuthClient;
-import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.util.http.Request;
@@ -62,12 +61,6 @@ public class BaiduOkAuthClient extends StandardOkAuthClient {
     @Override
     protected Request initUserRequestPrototype() {
         return Request.initGet("https://openapi.baidu.com/rest/2.0/passport/users/getInfo");
-    }
-
-    @Override
-    protected Request mutateUserRequest(OAuthToken token) {
-        return userRequestPrototype.mutate()
-            .addQueryParam("access_token", token.getAccessToken());
     }
 
     @Override
