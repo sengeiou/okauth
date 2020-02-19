@@ -38,8 +38,6 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
     BAIDU("Baidu", BaiduOkAuthClient::new),
     GITEE("Gitee", GiteeOkAuthClient::new),
     GITHUB("GitHub", GitHubOkAuthClient::new),
-    /** @deprecated not tested */
-    @Deprecated
     MICROBLOG("MicroBlog", MicroBlogOkAuthClient::new),
     /** @deprecated not tested */
     @Deprecated

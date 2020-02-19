@@ -28,14 +28,12 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 /**
  * MicroBlog okauth client.
  *
- * @deprecated not tested
  * @since Feb 18, 2020
  * @author wautsns
  * @see <a
  *      href="https://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6%E8%AF%B4%E6%98%8E">MicroBlog
  *      oauth doc</a>
  */
-@Deprecated
 public class MicroBlogOkAuthClient extends StandardOkAuthClient {
 
     public MicroBlogOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {

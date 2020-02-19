@@ -17,8 +17,6 @@ package com.github.wautsns.okauth.core.client.util.http;
 
 import java.util.concurrent.TimeUnit;
 
-import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequester;
-
 /**
  * Requester properties.
  *
@@ -27,26 +25,18 @@ import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequ
  */
 public class RequesterProperties {
 
-    /** requester class, default is {@link OkHttpRequester} */
-    private Class<? extends Requester> requesterClass = OkHttpRequester.class;
-    /** connect time out milliseconds, default is 7_000 */
-    private Integer connectTimeoutMilliseconds = 7_000;
-    /** max concurrent requests, default is 64 */
-    private Integer maxConcurrentRequests = 64;
-    /** max idle connection, default is 5 */
-    private Integer maxIdleConnections = 5;
-    /**
-     * keep alive, default is 5L * 60_000 with time unit millisenconds
-     *
-     * @see #keepAliveTimeUnit
-     */
-    private Long keepAlive = 5L * 60_000;
-    /**
-     * keep alive time unit, default is milliseconds
-     *
-     * @see #keepAlive
-     */
-    private TimeUnit keepAliveTimeUnit = TimeUnit.MILLISECONDS;
+    /** requester class */
+    private Class<? extends Requester> requesterClass;
+    /** connect time out milliseconds */
+    private Integer connectTimeoutMilliseconds;
+    /** max concurrent requests */
+    private Integer maxConcurrentRequests;
+    /** max idle connection */
+    private Integer maxIdleConnections;
+    /** keep alive */
+    private Long keepAlive;
+    /** keep alive time unit */
+    private TimeUnit keepAliveTimeUnit;
 
     /** Get {@link #requesterClass}. */
     public Class<? extends Requester> getRequesterClass() {
@@ -112,6 +102,37 @@ public class RequesterProperties {
     /** Set {@link #keepAliveTimeUnit}. */
     public RequesterProperties setKeepAliveTimeUnit(TimeUnit keepAliveTimeUnit) {
         this.keepAliveTimeUnit = keepAliveTimeUnit;
+        return this;
+    }
+
+    // ----------------------- utils ----------------------------------------------
+
+    /**
+     * Fill the null properties with that.
+     *
+     * @param that that requestProperties
+     * @return self reference
+     */
+    public RequesterProperties fillNullPropertiesWithThat(RequesterProperties that) {
+        if (this.requesterClass == null) {
+            this.requesterClass = that.requesterClass;
+        }
+        if (this.connectTimeoutMilliseconds == null) {
+            this.connectTimeoutMilliseconds = that.connectTimeoutMilliseconds;
+        }
+        if (this.maxConcurrentRequests == null) {
+            this.maxConcurrentRequests = that.maxConcurrentRequests;
+        }
+        if (this.maxIdleConnections == null) {
+            this.maxIdleConnections = that.maxIdleConnections;
+        }
+        if (this.keepAliveTimeUnit == null
+            && (that.keepAliveTimeUnit != null && that.keepAlive != null)) {
+            this.keepAliveTimeUnit = that.keepAliveTimeUnit;
+        }
+        if (this.keepAlive == null) {
+            this.keepAlive = that.keepAlive;
+        }
         return this;
     }
 

@@ -17,7 +17,7 @@ package com.github.wautsns.okauth.springbootstarter.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import com.github.wautsns.okauth.core.manager.properties.OkAuthProperties;
+import com.github.wautsns.okauth.core.manager.OkAuthProperties;
 
 /**
  * Extends from {@link OkAuthProperties}, just add

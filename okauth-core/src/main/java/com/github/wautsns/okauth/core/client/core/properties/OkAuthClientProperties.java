@@ -54,7 +54,7 @@ public class OkAuthClientProperties {
     /** oauth application info */
     private OAuthAppInfo oauthAppInfo;
     /** okauth requester properties */
-    private RequesterProperties requester = new RequesterProperties();
+    private RequesterProperties requester;
 
     /** Get {@link #openPlatformExpr}. */
     public String getOpenPlatformExpr() {

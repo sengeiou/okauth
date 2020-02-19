@@ -50,9 +50,8 @@ public class OkAuthManager {
      * Get okauth client.
      *
      * @param openPlatform open platform, require nonnull
-     * @return client assosiated with the param `openPlatform`
-     * @throws UnsupportedOpenPlatformException if no client is assosiated with the param
-     *         `openPlatform`
+     * @return client assosiated with the openPlatform
+     * @throws UnsupportedOpenPlatformException if no client is assosiated with the openPlatform
      */
     public OkAuthClient getClient(OpenPlatform openPlatform)
             throws UnsupportedOpenPlatformException {
@@ -64,25 +63,24 @@ public class OkAuthManager {
     /**
      * Get okauth client.
      *
-     * @param caseInsensitiveIdentifier case insensitive identifier, require nonnull
-     * @return client assosiated with the param `caseInsensitiveIdentifier`
-     * @throws UnsupportedOpenPlatformException if no client is assosiated with the param
-     *         `caseInsensitiveIdentifier`
+     * @param identifier case insensitive identifier, require nonnull
+     * @return client assosiated with the identifier
+     * @throws UnsupportedOpenPlatformException if no client is assosiated with the identifier
      */
-    public OkAuthClient getClient(String caseInsensitiveIdentifier)
+    public OkAuthClient getClient(String identifier)
             throws UnsupportedOpenPlatformException {
-        OkAuthClient client = cache.get(caseInsensitiveIdentifier);
+        OkAuthClient client = cache.get(identifier);
         if (client != null) { return client; }
         for (Entry<OpenPlatform, OkAuthClient> entry : clients.entrySet()) {
-            if (entry.getKey().getIdentifier().equalsIgnoreCase(caseInsensitiveIdentifier)) {
+            if (entry.getKey().getIdentifier().equalsIgnoreCase(identifier)) {
                 client = entry.getValue();
                 synchronized (cache) {
-                    cache.put(caseInsensitiveIdentifier, client);
+                    cache.put(identifier, client);
                 }
                 return client;
             }
         }
-        throw new UnsupportedOpenPlatformException(caseInsensitiveIdentifier);
+        throw new UnsupportedOpenPlatformException(identifier);
     }
 
 }

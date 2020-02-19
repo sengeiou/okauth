@@ -22,11 +22,9 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 /**
  * MicroBlog user.
  *
- * @deprecated not tested
  * @since Feb 18, 2020
  * @author wautsns
  */
-@Deprecated
 public class MicroBlogUser extends OAuthUser {
 
     /**
