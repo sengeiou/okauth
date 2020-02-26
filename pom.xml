@@ -128,7 +128,8 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>${maven-javadoc.version}</version>
                         <configuration>
-                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <failOnError>false</failOnError>
+                            <doclint>none</doclint>
                         </configuration>
                         <executions>
                             <execution>
