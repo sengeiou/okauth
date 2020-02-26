@@ -49,12 +49,12 @@ public class RequesterProperties {
         return this;
     }
 
-    /** Get {@link #connectTimeoutMilliSeconds}. */
+    /** Get {@link #connectTimeoutMilliseconds}. */
     public Integer getConnectTimeoutMilliseconds() {
         return connectTimeoutMilliseconds;
     }
 
-    /** Set {@link #connectTimeoutMilliSeconds}. */
+    /** Set {@link #connectTimeoutMilliseconds}. */
     public RequesterProperties setConnectTimeoutMilliseconds(
             Integer connectTimeoutMilliseconds) {
         this.connectTimeoutMilliseconds = connectTimeoutMilliseconds;

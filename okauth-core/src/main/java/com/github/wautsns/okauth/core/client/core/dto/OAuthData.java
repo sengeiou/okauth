@@ -64,7 +64,7 @@ class OAuthData {
      * <li>If the value is {@code null}, {@code null} will be returned.</li>
      * <li>If the value is instance of {@code String} or {@code Number} or {@code Boolean},
      * {@code value.toString()} will be returned.</li>
-     * <li>Otherwise, the json string of the value will be returned.</>
+     * <li>Otherwise, the json string of the value will be returned.</li>
      * </ul>
      *
      * @param name value name, require nonnull
