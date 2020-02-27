@@ -1,5 +1,3 @@
-***okauth 目前仍处于开发阶段, 尚未经过大量测试.***
-
 # 1 概述
 
 okauth 是一个开放平台授权登录（即第三方登录）的工具类库, 它可以让开发者在实现第三方登录时，不再需要关注开放平台的 SDK, 仅需要通过简易的 API 即可获取令牌与用户信息.
@@ -10,14 +8,7 @@ okauth 是一个开放平台授权登录（即第三方登录）的工具类库,
 
 ## 2.1 引入依赖
 
-**目前仍处于非稳定版本, 尚未发布至中央仓库**
-
 ``` xml
-<!-- maven -->
-<properties>
-    <okauth.version>0.1.0</okauth.version>
-</properties>
-
 <dependencies>
     <!-- core -->
     <dependency>
