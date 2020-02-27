@@ -9,6 +9,10 @@ okauth 是一个开放平台授权登录（即第三方登录）的工具类库,
 ## 2.1 引入依赖
 
 ``` xml
+<properties>
+    <okauth.version>x.y.z</okauth.version>
+</properties>
+
 <dependencies>
     <!-- core -->
     <dependency>
@@ -96,7 +100,7 @@ public OkAuthManager initOkAuthManager() {
 	3. `String getOpenId()` : 获取用户在开放平台的唯一标识符
 	4. `String getNickname()` : 获取用户昵称
 	5. `String getAvatarUrl()` : 获取用户头像
-	6. 还有其他的一些方法与上述 `3. OAuthToken` 的 2, 3, 4, 5 相同, 这里不作赘述
+	6. 还有其他的一些方法与上述 3. OAuthToken 的 2, 3, 4, 5 相同, 这里不作赘述
 5. [`OkAuthClient`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/OkAuthClient.java "点击查看源码")  
 	所有开放平台客户端都需要继承该父类, 该类提供了以下几个方法:
 	1. `OpenPlatform getOpenPlatform()` : 获取该客户端对应的开放平台
@@ -132,7 +136,7 @@ public class OAuthController {
         // 如果有需要可以对 state 进行校验
         String state = query.getState();
         OkAuthClient client = okauthManager.getClient(openPlatform);
-        // oauthUser 不会为 null, 错误将以异常的形式抛出
+        // oauthUser 不会为 null, 若发生错误，则将以异常的形式抛出
         OAuthUser oauthUser = client.requestUser(query);
         String identifier = oauthUser.getOpenPlatformIdentifier();
         String openId = oauthUser.getOpenId();
