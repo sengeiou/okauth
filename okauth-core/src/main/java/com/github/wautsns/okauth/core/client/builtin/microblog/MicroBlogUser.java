@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package com.github.wautsns.okauth.core.client.builtin.microblog;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
 
 /**
  * MicroBlog user.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
 public class MicroBlogUser extends OAuthUser {
@@ -31,9 +31,9 @@ public class MicroBlogUser extends OAuthUser {
     /**
      * Construct a MicroBlog user.
      *
-     * @param response response, require nonnull
+     * @param response correct okauth response, require nonnull
      */
-    public MicroBlogUser(Response response) {
+    public MicroBlogUser(OkAuthResponse response) {
         super(response);
     }
 

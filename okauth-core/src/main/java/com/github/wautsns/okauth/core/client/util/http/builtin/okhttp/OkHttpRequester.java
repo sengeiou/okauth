@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ import java.io.IOException;
 
 import java.util.concurrent.TimeUnit;
 
-import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequest;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse.MapDateInputStreamReader;
 import com.github.wautsns.okauth.core.client.util.http.RequesterProperties;
-import com.github.wautsns.okauth.core.client.util.http.Response;
-import com.github.wautsns.okauth.core.client.util.http.Response.MapDateInputStreamReader;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 import okhttp3.ConnectionPool;
@@ -31,22 +31,24 @@ import okhttp3.Dispatcher;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Okhttp3 requester.
  *
  * <p>Based on okhttp3.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
-public class OkHttpRequester extends Requester {
+public class OkHttpRequester extends OkAuthRequester {
 
     /** okhttp3 client */
     private final OkHttpClient okhttpClient;
 
     /**
-     * Construct okhttp requester.
+     * Construct an okhttp requester.
      *
      * @param okhttpClient okhttp client, require nonnull
      */
@@ -55,9 +57,9 @@ public class OkHttpRequester extends Requester {
     }
 
     /**
-     * Construct okhttp requester.
+     * Construct an okhttp requester.
      *
-     * @param properties okauth http properties, require nonnull(and all properties require nonnull)
+     * @param properties okauth http properties, require nonnull and all properties require nonnull
      */
     public OkHttpRequester(RequesterProperties properties) {
         Builder builder = new OkHttpClient.Builder()
@@ -78,16 +80,16 @@ public class OkHttpRequester extends Requester {
     }
 
     @Override
-    protected Response doGet(Request request) throws OkAuthIOException {
-        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
+    protected OkAuthResponse doGet(OkAuthRequest request) throws OkAuthIOException {
+        Request.Builder builder = new Request.Builder();
         builder.get().url(request.getUrl());
         request.forEachHeader(builder::addHeader);
         return doExecute(builder.build(), request.getResponseInputStreamReader());
     }
 
     @Override
-    protected Response doPost(Request request) throws OkAuthIOException {
-        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
+    protected OkAuthResponse doPost(OkAuthRequest request) throws OkAuthIOException {
+        Request.Builder builder = new Request.Builder();
         request.forEachHeader(builder::addHeader);
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         request.forEachUrlEncodedFormItem(formBodyBuilder::addEncoded);
@@ -103,11 +105,11 @@ public class OkHttpRequester extends Requester {
      * @return response
      * @throws OkAuthIOException if an IO exception occurs
      */
-    private Response doExecute(okhttp3.Request request, MapDateInputStreamReader reader)
+    private OkAuthResponse doExecute(Request request, MapDateInputStreamReader reader)
             throws OkAuthIOException {
         try {
-            okhttp3.Response response = okhttpClient.newCall(request).execute();
-            return new Response(response.code(), reader.read(response.body().byteStream()));
+            Response response = okhttpClient.newCall(request).execute();
+            return new OkAuthResponse(response.code(), reader.read(response.body().byteStream()));
         } catch (IOException ioException) {
             throw new OkAuthIOException(ioException);
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * Requester properties.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
 public class RequesterProperties {
 
     /** requester class */
-    private Class<? extends Requester> requesterClass;
+    private Class<? extends OkAuthRequester> requesterClass;
     /** connect time out milliseconds */
     private Integer connectTimeoutMilliseconds;
     /** max concurrent requests */
@@ -38,68 +38,122 @@ public class RequesterProperties {
     /** keep alive time unit */
     private TimeUnit keepAliveTimeUnit;
 
-    /** Get {@link #requesterClass}. */
-    public Class<? extends Requester> getRequesterClass() {
+    /**
+     * Get requester class.
+     *
+     * @return requester class.
+     */
+    public Class<? extends OkAuthRequester> getRequesterClass() {
         return requesterClass;
     }
 
-    /** Set {@link #requesterClass}. */
-    public RequesterProperties setRequesterClass(Class<? extends Requester> requesterClass) {
+    /**
+     * Set requester class.
+     *
+     * @param requesterClass requester class
+     * @return self reference
+     */
+    public RequesterProperties setRequesterClass(Class<? extends OkAuthRequester> requesterClass) {
         this.requesterClass = requesterClass;
         return this;
     }
 
-    /** Get {@link #connectTimeoutMilliseconds}. */
+    /**
+     * Get connect timeout milliseconds.
+     *
+     * @return connect timeout milliseconds
+     */
     public Integer getConnectTimeoutMilliseconds() {
         return connectTimeoutMilliseconds;
     }
 
-    /** Set {@link #connectTimeoutMilliseconds}. */
+    /**
+     * Set connect timeout milliseconds.
+     *
+     * @param connectTimeoutMilliseconds connect timeout milliseconds
+     * @return self reference
+     */
     public RequesterProperties setConnectTimeoutMilliseconds(
             Integer connectTimeoutMilliseconds) {
         this.connectTimeoutMilliseconds = connectTimeoutMilliseconds;
         return this;
     }
 
-    /** Get {@link #maxConcurrentRequests}. */
+    /**
+     * Get max concurrent requests.
+     *
+     * @return max concurrent requests
+     */
     public Integer getMaxConcurrentRequests() {
         return maxConcurrentRequests;
     }
 
-    /** Set {@link #maxConcurrentRequests}. */
+    /**
+     * Set max concurrent requests.
+     *
+     * @param maxConcurrentRequests max concurrent requests
+     * @return self reference
+     */
     public RequesterProperties setMaxConcurrentRequests(Integer maxConcurrentRequests) {
         this.maxConcurrentRequests = maxConcurrentRequests;
         return this;
     }
 
-    /** Get {@link #maxIdleConnections}. */
+    /**
+     * Get max idle connections.
+     *
+     * @return max idle connections
+     */
     public Integer getMaxIdleConnections() {
         return maxIdleConnections;
     }
 
-    /** Set {@link #maxIdleConnections}. */
+    /**
+     * Set max idle connections.
+     *
+     * @param maxIdleConnections max idle connections
+     * @return max idle connections
+     */
     public RequesterProperties setMaxIdleConnections(Integer maxIdleConnections) {
         this.maxIdleConnections = maxIdleConnections;
         return this;
     }
 
-    /** Get {@link #keepAlive}. */
+    /**
+     * Get keep alive.
+     *
+     * @return keep alive
+     */
     public Long getKeepAlive() {
         return keepAlive;
     }
 
-    /** Set {@link #keepAlive}. */
+    /**
+     * Set keep alive.
+     *
+     * @param keepAlive keep alive
+     * @return self reference
+     */
     public RequesterProperties setKeepAlive(Long keepAlive) {
         this.keepAlive = keepAlive;
         return this;
     }
 
-    /** Get {@link #keepAliveTimeUnit}. */
+    /**
+     * Get keep alive time unit.
+     *
+     * @return keep alive time unit
+     */
     public TimeUnit getKeepAliveTimeUnit() {
         return keepAliveTimeUnit;
     }
 
-    /** Set {@link #keepAliveTimeUnit}. */
+    /**
+     * Set keep alive time unit.
+     *
+     * @param keepAliveTimeUnit keep alive time unit
+     * @return self reference
+     */
     public RequesterProperties setKeepAliveTimeUnit(TimeUnit keepAliveTimeUnit) {
         this.keepAliveTimeUnit = keepAliveTimeUnit;
         return this;

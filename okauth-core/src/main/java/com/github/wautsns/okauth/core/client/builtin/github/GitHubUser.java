@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
 
 /**
  * GitHub user.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
 @JsonNaming(SnakeCaseStrategy.class)
@@ -34,9 +34,9 @@ public class GitHubUser extends OAuthUser {
     /**
      * Construct a GitHub user.
      *
-     * @param response response, require nonnull
+     * @param response correct okauth response, require nonnull
      */
-    public GitHubUser(Response response) {
+    public GitHubUser(OkAuthResponse response) {
         super(response);
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,23 @@
 package com.github.wautsns.okauth.core.client.core;
 
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
 
 /**
- * Okauth client initializer interface.
+ * OkAuth client initializer.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
 public interface OkAuthClientInitializer extends OpenPlatform {
 
     /**
-     * Initialize an okauth client.
+     * Initialize an okauth client with oauth app info and requester.
      *
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      * @return okauth client
      */
-    OkAuthClient initOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester);
+    OkAuthClient initOkAuthClient(OAuthAppInfo oauthAppInfo, OkAuthRequester requester);
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,15 @@ import com.github.wautsns.okauth.core.client.core.OkAuthClientInitializer;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
 import com.github.wautsns.okauth.core.client.core.properties.OkAuthClientProperties;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
 import com.github.wautsns.okauth.core.client.util.http.RequesterProperties;
 import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequester;
 import com.github.wautsns.okauth.core.exception.OkAuthInitializeException;
 
 /**
- * {@linkplain OkAuthManager okauth manager}'s builder.
+ * Builder of {@linkplain OkAuthManager okauth manager}.
  *
+ * @since Feb 27, 2020
  * @author wautsns
  */
 public class OkAuthManagerBuilder {
@@ -79,7 +80,7 @@ public class OkAuthManagerBuilder {
      */
     public OkAuthManagerBuilder register(
             OkAuthClientInitializer okauthClientInitializer, OAuthAppInfo oauthAppInfo,
-            Requester requester) {
+            OkAuthRequester requester) {
         OkAuthClient old = clients.put(
             okauthClientInitializer,
             okauthClientInitializer.initOkAuthClient(oauthAppInfo, requester));
@@ -165,8 +166,8 @@ public class OkAuthManagerBuilder {
      * @return requester
      * @throws OkAuthInitializeException if the requester can not be initialized
      */
-    private Requester initRequester(RequesterProperties properties) {
-        Class<? extends Requester> requesterClass = properties.getRequesterClass();
+    private OkAuthRequester initRequester(RequesterProperties properties) {
+        Class<? extends OkAuthRequester> requesterClass = properties.getRequesterClass();
         try {
             return requesterClass
                 .getConstructor(RequesterProperties.class)

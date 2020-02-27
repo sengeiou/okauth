@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.StandardOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequest;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
 
 /**
  * GitHub okauth client.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  * @see <a
  *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
@@ -36,12 +36,12 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
 public class GitHubOkAuthClient extends StandardOkAuthClient {
 
     /**
-     * Construct a github okauth client.
+     * Construct a GitHub okauth client.
      *
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public GitHubOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public GitHubOkAuthClient(OAuthAppInfo oauthAppInfo, OkAuthRequester requester) {
         super(oauthAppInfo, requester);
         tokenRequestPrototype.addHeaderAcceptJson();
     }
@@ -57,17 +57,17 @@ public class GitHubOkAuthClient extends StandardOkAuthClient {
     }
 
     @Override
-    protected String getTokenUrl() {
+    protected String getTokenRequestUrl() {
         return "https://github.com/login/oauth/access_token";
     }
 
     @Override
-    protected Request initUserRequestPrototype() {
-        return Request.initGet("https://api.github.com/user");
+    protected OkAuthRequest initUserRequestPrototype() {
+        return OkAuthRequest.forGet("https://api.github.com/user");
     }
 
     @Override
-    protected OAuthUser initOAuthUser(Response response) {
+    protected OAuthUser newOAuthUser(OkAuthResponse response) {
         return new GitHubUser(response);
     }
 

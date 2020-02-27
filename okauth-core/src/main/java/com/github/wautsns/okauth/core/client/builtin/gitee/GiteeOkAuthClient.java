@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,26 +20,26 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.StandardOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequest;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
 
 /**
  * Gitee okauth client.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  * @see <a href="https://gitee.com/api/v5/oauth_doc">gitee oauth doc</a>
  */
 public class GiteeOkAuthClient extends StandardOkAuthClient {
 
     /**
-     * Construct a gitee okauth client.
+     * Construct a Gitee okauth client.
      *
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public GiteeOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public GiteeOkAuthClient(OAuthAppInfo oauthAppInfo, OkAuthRequester requester) {
         super(oauthAppInfo, requester);
     }
 
@@ -54,17 +54,17 @@ public class GiteeOkAuthClient extends StandardOkAuthClient {
     }
 
     @Override
-    protected String getTokenUrl() {
+    protected String getTokenRequestUrl() {
         return "https://gitee.com/oauth/token";
     }
 
     @Override
-    protected Request initUserRequestPrototype() {
-        return Request.initGet("https://gitee.com/api/v5/user");
+    protected OkAuthRequest initUserRequestPrototype() {
+        return OkAuthRequest.forGet("https://gitee.com/api/v5/user");
     }
 
     @Override
-    protected OAuthUser initOAuthUser(Response response) {
+    protected OAuthUser newOAuthUser(OkAuthResponse response) {
         return new GiteeUser(response);
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthRedirectUriQuery;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.RequestUrl;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequest;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthUrl;
 import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
@@ -33,7 +33,7 @@ import com.github.wautsns.okauth.core.exception.OkAuthIOException;
  * WeChat okauth client.
  *
  * @deprecated not tested
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  * @see <a
  *      href="https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html">WeChat
@@ -48,7 +48,7 @@ public class WeChatOkAuthClient extends OkAuthClient {
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public WeChatOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public WeChatOkAuthClient(OAuthAppInfo oauthAppInfo, OkAuthRequester requester) {
         super(oauthAppInfo, requester);
     }
 
@@ -58,8 +58,8 @@ public class WeChatOkAuthClient extends OkAuthClient {
     }
 
     @Override
-    protected RequestUrl initAuthorizeUrlPrototype() {
-        return new RequestUrl("https://open.weixin.qq.com/connect/qrconnect")
+    protected OkAuthUrl initAuthorizeUrlPrototype() {
+        return new OkAuthUrl("https://open.weixin.qq.com/connect/qrconnect")
             .addQueryParam("appid", oauthAppInfo.getClientId())
             .addQueryParam("redirect_uri", oauthAppInfo.getRedirectUri())
             .addQueryParam("response_type", "code")
@@ -67,45 +67,45 @@ public class WeChatOkAuthClient extends OkAuthClient {
     }
 
     @Override
-    protected Request initTokenRequestPrototype() {
-        return Request.initGet("https://api.weixin.qq.com/sns/oauth2/access_token")
+    protected OkAuthRequest initTokenRequestPrototype() {
+        return OkAuthRequest.forGet("https://api.weixin.qq.com/sns/oauth2/access_token")
             .addQueryParam("appid", oauthAppInfo.getClientId())
             .addQueryParam("secret", oauthAppInfo.getClientSecret())
             .addQueryParam("grant_type", "authorization_code");
     }
 
     @Override
-    protected Request mutateTokenRequest(OAuthRedirectUriQuery query) {
+    protected OkAuthRequest mutateTokenRequest(OAuthRedirectUriQuery query) {
         return tokenRequestPrototype.mutate()
             .addQueryParam("code", query.getCode());
     }
 
     @Override
-    public OAuthToken exchangeQueryForToken(OAuthRedirectUriQuery query)
+    public OAuthToken requestToken(OAuthRedirectUriQuery query)
             throws OkAuthErrorException, OkAuthIOException {
         if (query.getCode() == null) {
             throw new OkAuthErrorException(getOpenPlatform(),
                 "USER_REFUSES_AUTHORIZATION", "用户拒绝授权");
         }
-        return new OAuthToken(exchangeAndCheck(mutateTokenRequest(query)));
+        return new OAuthToken(requestAndCheck(mutateTokenRequest(query)));
     }
 
     @Override
-    protected Request initUserRequestPrototype() {
-        return Request.initGet("https://api.weixin.qq.com/sns/userinfo");
+    protected OkAuthRequest initUserRequestPrototype() {
+        return OkAuthRequest.forGet("https://api.weixin.qq.com/sns/userinfo");
     }
 
     @Override
-    protected Request mutateUserRequest(OAuthToken token) {
+    protected OkAuthRequest mutateUserRequest(OAuthToken token) {
         return userRequestPrototype.mutate()
             .addQueryParam("access_token", token.getAccessToken())
-            .addQueryParam("openid", token.get("openid"));
+            .addQueryParam("openid", token.getString("openid"));
     }
 
     @Override
-    public OAuthUser exchangeTokenForUser(OAuthToken token)
+    public OAuthUser requestUser(OAuthToken token)
             throws OkAuthErrorException, OkAuthIOException {
-        return new WeChatUser(exchangeAndCheck(mutateUserRequest(token)));
+        return new WeChatUser(requestAndCheck(mutateUserRequest(token)));
     }
 
     /**
@@ -115,7 +115,7 @@ public class WeChatOkAuthClient extends OkAuthClient {
      * @return response
      * @throws OkAuthErrorException if an oauth exception occurs
      */
-    private Response exchangeAndCheck(Request request)
+    private OkAuthResponse requestAndCheck(OkAuthRequest request)
             throws OkAuthErrorException, OkAuthIOException {
         return checkResponse(requester.exchange(request), "errcode", "errmsg");
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.github.wautsns.okauth.core.client.util.http.builtin.okhttp.OkHttpRequ
 /**
  * Okauth properties.
  *
+ * @since Feb 27, 2020
  * @author wautsns
  */
 public class OkAuthProperties {
@@ -50,23 +51,61 @@ public class OkAuthProperties {
     /** okauth clients */
     private List<OkAuthClientProperties> clients;
 
-    /** Get {@link #defaultRequester}. */
+    /**
+     * Get default requester.
+     *
+     * <p>The default values are as follows<br/>
+     * <ul>
+     * <li>requestClass: {@linkplain OkHttpRequester}.class</li>
+     * <li>connectTimeoutMilliseconds: 7_000</li>
+     * <li>maxConcurrentRequests: 64</li>
+     * <li>maxIdleConnections: 8</li>
+     * <li>keepAlive: 5 * 60_000</li>
+     * <li>keepAliveTimeUnit: {@linkplain TimeUnit#MILLISECONDS}</li>
+     * </ul>
+     *
+     * @return default requester
+     */
     public RequesterProperties getDefaultRequester() {
         return defaultRequester;
     }
 
-    /** Set {@link #defaultRequester}(The null value will be filled with default value). */
+    /**
+     * Set default requester(The null value will be filled with default value).
+     *
+     * <p>The default values are as follows<br/>
+     * <ul>
+     * <li>requestClass: {@linkplain OkHttpRequester}.class</li>
+     * <li>connectTimeoutMilliseconds: 7_000</li>
+     * <li>maxConcurrentRequests: 64</li>
+     * <li>maxIdleConnections: 8</li>
+     * <li>keepAlive: 5 * 60_000</li>
+     * <li>keepAliveTimeUnit: {@linkplain TimeUnit#MILLISECONDS}</li>
+     * </ul>
+     *
+     * @param defaultRequester
+     * @return self reference
+     */
     public OkAuthProperties setDefaultRequester(RequesterProperties defaultRequester) {
         this.defaultRequester = defaultRequester.fillNullPropertiesWithThat(this.defaultRequester);
         return this;
     }
 
-    /** Get {@link #clients}. */
+    /**
+     * Get client properties.
+     *
+     * @return client properties
+     */
     public List<OkAuthClientProperties> getClients() {
         return clients;
     }
 
-    /** Set {@link #clients}. */
+    /**
+     * Set client properties.
+     *
+     * @param clients client properties
+     * @return self reference
+     */
     public OkAuthProperties setClients(List<OkAuthClientProperties> clients) {
         this.clients = clients;
         return this;

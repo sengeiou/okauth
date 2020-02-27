@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,12 @@ import com.github.wautsns.okauth.core.client.builtin.wechat.WeChatOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OkAuthClientInitializer;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
 
 /**
  * Built-in open platform.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
 public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
@@ -49,7 +49,7 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
     /** identifier */
     private final String identifier;
     /** function to initialize an okauth client */
-    private final BiFunction<OAuthAppInfo, Requester, OkAuthClient> okauthClientInitializer;
+    private final BiFunction<OAuthAppInfo, OkAuthRequester, OkAuthClient> okauthClientInitializer;
 
     /**
      * Construct a built-in open platform.
@@ -59,7 +59,7 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
      */
     private BuiltInOpenPlatform(
             String identifier,
-            BiFunction<OAuthAppInfo, Requester, OkAuthClient> okauthClientInitializer) {
+            BiFunction<OAuthAppInfo, OkAuthRequester, OkAuthClient> okauthClientInitializer) {
         this.identifier = identifier;
         this.okauthClientInitializer = okauthClientInitializer;
     }
@@ -70,7 +70,7 @@ public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
     }
 
     @Override
-    public OkAuthClient initOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public OkAuthClient initOkAuthClient(OAuthAppInfo oauthAppInfo, OkAuthRequester requester) {
         return okauthClientInitializer.apply(oauthAppInfo, requester);
     }
 

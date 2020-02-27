@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,26 +20,26 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.StandardOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequest;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
 
 /**
  * Baidu okauth client.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth">baidu oauth doc</a>
  */
 public class BaiduOkAuthClient extends StandardOkAuthClient {
 
     /**
-     * Construct a baidu okauth client.
+     * Construct a Baidu okauth client.
      *
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public BaiduOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public BaiduOkAuthClient(OAuthAppInfo oauthAppInfo, OkAuthRequester requester) {
         super(oauthAppInfo, requester);
     }
 
@@ -54,17 +54,17 @@ public class BaiduOkAuthClient extends StandardOkAuthClient {
     }
 
     @Override
-    protected String getTokenUrl() {
+    protected String getTokenRequestUrl() {
         return "https://openapi.baidu.com/oauth/2.0/token";
     }
 
     @Override
-    protected Request initUserRequestPrototype() {
-        return Request.initGet("https://openapi.baidu.com/rest/2.0/passport/users/getInfo");
+    protected OkAuthRequest initUserRequestPrototype() {
+        return OkAuthRequest.forGet("https://openapi.baidu.com/rest/2.0/passport/users/getInfo");
     }
 
     @Override
-    protected OAuthUser initOAuthUser(Response response) {
+    protected OAuthUser newOAuthUser(OkAuthResponse response) {
         return new BaiduUser(response);
     }
 

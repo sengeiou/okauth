@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,12 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Universal response.
+ * OkAuth response.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
-public class Response {
+public class OkAuthResponse {
 
     /** response status code */
     private final int statusCode;
@@ -42,40 +42,58 @@ public class Response {
      * @param statusCode response status code
      * @param data response data map, require nonnull
      */
-    public Response(int statusCode, Map<String, Object> data) {
+    public OkAuthResponse(int statusCode, Map<String, Object> data) {
         this.statusCode = statusCode;
         this.data = data;
     }
 
-    /** Get {@link #statusCode}. */
+    /**
+     * Get status code.
+     *
+     * @return status code
+     */
     public int getStatusCode() {
         return statusCode;
     }
 
-    /** Get {@link #data}. */
+    /**
+     * Get data.
+     *
+     * @return data
+     */
     public Map<String, Object> getData() {
         return data;
     }
 
-    // --------------- map data input stream reader ------------------------------
+    // --------------- input stream reader ------------------------------
 
+    /** reader for json input stream */
     public static final MapDateInputStreamReader INPUT_STREAM_READER_JSON =
         new MapDateInputStreamReader() {
 
-            private final ObjectMapper objectMapper = new ObjectMapper();
-            private final JavaType mapType =
-                objectMapper.getTypeFactory().constructMapType(Map.class, String.class,
-                    Object.class);
+            /** json util */
+            private final ObjectMapper json = new ObjectMapper();
+            /** javaType of Map&lt;String, Object&gt; */
+            private final JavaType mapType = json.getTypeFactory()
+                .constructMapType(Map.class, String.class, Object.class);
 
             @Override
             public Map<String, Object> read(InputStream inputStream) throws IOException {
-                return objectMapper.readValue(inputStream, mapType);
+                return json.readValue(inputStream, mapType);
             }
 
         };
 
+    /** Map data input stream reader. */
     public interface MapDateInputStreamReader {
 
+        /**
+         * Read input stream as map.
+         *
+         * @param inputStream input stream, require nonnull
+         * @return data map
+         * @throws IOException if an IO exception occurs
+         */
         Map<String, Object> read(InputStream inputStream) throws IOException;
 
     }

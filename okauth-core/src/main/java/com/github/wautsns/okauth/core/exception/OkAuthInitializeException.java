@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 package com.github.wautsns.okauth.core.exception;
 
 /**
- * {@code OkauthInitializeException} is the superclass of those okauth initialization exceptions.
+ * OkauthInitializeException is the superclass of those okauth initialization exceptions.
  *
+ * @since Feb 27, 2020
  * @author wautsns
  */
 public class OkAuthInitializeException extends RuntimeException {
@@ -25,38 +26,14 @@ public class OkAuthInitializeException extends RuntimeException {
     /** serialVersionUID */
     private static final long serialVersionUID = -54863435286239355L;
 
-    /**
-     * Constructs an okauth initialize exception.
-     *
-     * @param message the detail message. The detail message is saved for
-     *        later retrieval by the {@link #getMessage()} method.
-     */
     public OkAuthInitializeException(String message) {
         super(message);
     }
 
-    /**
-     * Constructs an okauth initialize exception.
-     *
-     * @param cause the cause (which is saved for later retrieval by the
-     *        {@link #getCause()} method). (A <tt>null</tt> value is
-     *        permitted, and indicates that the cause is nonexistent or
-     *        unknown.)
-     */
     public OkAuthInitializeException(Throwable cause) {
         super(cause);
     }
 
-    /**
-     * Constructs an okauth initialize exception.
-     *
-     * @param message message the detail message (which is saved for later retrieval
-     *        by the {@link #getMessage()} method).
-     * @param cause the cause (which is saved for later retrieval by the
-     *        {@link #getCause()} method). (A <tt>null</tt> value is
-     *        permitted, and indicates that the cause is nonexistent or
-     *        unknown.)
-     */
     public OkAuthInitializeException(String message, Throwable cause) {
         super(message, cause);
     }

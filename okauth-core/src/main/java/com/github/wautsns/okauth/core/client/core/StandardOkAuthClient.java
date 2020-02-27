@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,17 @@ import com.github.wautsns.okauth.core.client.core.dto.OAuthRedirectUriQuery;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.RequestUrl;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequest;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthUrl;
 import com.github.wautsns.okauth.core.exception.OkAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
  * Standard OAuth2.0 client.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  * @see <a href="https://oauth.net/2/grant-types/authorization-code/">standard oauth2.0 doc</a>
  */
@@ -41,25 +41,28 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public StandardOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public StandardOkAuthClient(OAuthAppInfo oauthAppInfo, OkAuthRequester requester) {
         super(oauthAppInfo, requester);
     }
 
     // -------------------- authorize url ----------------------------------------
 
-    /** Get authorize url. */
+    /**
+     * Get authorize url.
+     *
+     * @return authorize url
+     */
     protected abstract String getAuthorizeUrl();
 
     /**
-     * Initialize oauth authorize url with query param `response_type`(=code), `client_id` and
+     * Initialize authorize url prototype with query param `response_type`(="code"), `client_id` and
      * `redirect_uri`.
      *
      * @return authorized url prototype
-     * @see #getAuthorizeUrl()
      */
     @Override
-    protected RequestUrl initAuthorizeUrlPrototype() {
-        return new RequestUrl(getAuthorizeUrl())
+    protected OkAuthUrl initAuthorizeUrlPrototype() {
+        return new OkAuthUrl(getAuthorizeUrl())
             .addQueryParam("response_type", "code")
             .addQueryParam("client_id", oauthAppInfo.getClientId())
             .addQueryParam("redirect_uri", oauthAppInfo.getRedirectUri());
@@ -67,18 +70,22 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
 
     // --------------------- oauth token ------------------------------------------
 
-    /** Get token url. */
-    protected abstract String getTokenUrl();
+    /**
+     * Get token request url.
+     *
+     * @return token request url
+     */
+    protected abstract String getTokenRequestUrl();
 
     /**
-     * Initialize token post prototype with form item `grant_type`(=authorization_code),
-     * `client_id`, `client_secret` and `redirect_uri`.
+     * Initialize token request prototype(method: POST) with form item
+     * `grant_type`(="authorization_code"), `client_id`, `client_secret` and `redirect_uri`.
      *
      * @return token request prototype
      */
     @Override
-    protected Request initTokenRequestPrototype() {
-        return Request.initPost(getTokenUrl())
+    protected OkAuthRequest initTokenRequestPrototype() {
+        return OkAuthRequest.forPost(getTokenRequestUrl())
             .addFormItem("grant_type", "authorization_code")
             .addFormItem("client_id", oauthAppInfo.getClientId())
             .addFormItem("client_secret", oauthAppInfo.getClientSecret())
@@ -86,73 +93,73 @@ public abstract class StandardOkAuthClient extends OkAuthClient {
     }
 
     /**
-     * Mutate a token request with form item `code`.
+     * Mutate the {@linkplain OkAuthClient#tokenRequestPrototype} with form item "code".
      *
      * @param query redirect uri query, require nonnull
-     * @return a new token request
+     * @return a token request mutated with oauth redirect uri query
      */
     @Override
-    protected Request mutateTokenRequest(OAuthRedirectUriQuery query) {
+    protected OkAuthRequest mutateTokenRequest(OAuthRedirectUriQuery query) {
         return tokenRequestPrototype.mutate()
             .addFormItem("code", query.getCode());
     }
 
     /**
-     * Initialize an oauth token.
+     * New oauth token with oauth response.
      *
-     * @param response response after checking
+     * @param response correct oauth response, require nonnull
      * @return oauth token
-     * @see StandardOAuthToken
      */
-    protected OAuthToken initOAuthToken(Response response) {
+    protected OAuthToken newOAuthToken(OkAuthResponse response) {
         return new OAuthToken(response);
     }
 
     @Override
-    public OAuthToken exchangeQueryForToken(OAuthRedirectUriQuery query)
+    public OAuthToken requestToken(OAuthRedirectUriQuery query)
             throws OkAuthErrorException, OkAuthIOException {
-        return initOAuthToken(exchangeAndCheck(mutateTokenRequest(query)));
+        return newOAuthToken(requestAndCheck(mutateTokenRequest(query)));
     }
 
     // --------------------- oauth user ------------------------------------------
 
     /**
-     * Mutate a user request with query param `access_token`.
+     * Mutate the {@linkplain OkAuthClient#userRequestPrototype} with query param "access_token".
      *
      * @param token oauth token, require nonnull
-     * @return a new user request
+     * @return a new user request mutated with oauth token
      */
     @Override
-    protected Request mutateUserRequest(OAuthToken token) {
+    protected OkAuthRequest mutateUserRequest(OAuthToken token) {
         return userRequestPrototype.mutate()
             .addQueryParam("access_token", token.getAccessToken());
     }
 
     /**
-     * Initialize an oauth user.
+     * New open platform user info.
      *
-     * @param response response after checking, require nonnull
-     * @return oauth user
+     * @param correct oauth response, require nonnull
+     * @return open platform user info
      */
-    protected abstract OAuthUser initOAuthUser(Response response);
+    protected abstract OAuthUser newOAuthUser(OkAuthResponse response);
 
     @Override
-    public OAuthUser exchangeTokenForUser(OAuthToken token)
+    public OAuthUser requestUser(OAuthToken token)
             throws OkAuthErrorException, OkAuthIOException {
-        return initOAuthUser(exchangeAndCheck(mutateUserRequest(token)));
+        return newOAuthUser(requestAndCheck(mutateUserRequest(token)));
     }
 
     // ----------------------- utils ----------------------------------------------
 
     /**
-     * Exchange and check.
+     * Request and check.
      *
      * @param request request, require nonnull
-     * @return response after checking
-     * @throws OkAuthErrorException if an oauth error occurs
+     * @return correct oauth response
+     * @throws OkAuthErrorException if an oauth error occurs(error name is "error" and error
+     *         description name is "error_description")
      * @throws OkAuthIOException if an IO exception occurs
      */
-    protected Response exchangeAndCheck(Request request)
+    protected OkAuthResponse requestAndCheck(OkAuthRequest request)
             throws OkAuthErrorException, OkAuthIOException {
         return checkResponse(requester.exchange(request), "error", "error_description");
     }

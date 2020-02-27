@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,25 @@ package com.github.wautsns.okauth.core.client.util.http;
 
 import java.util.function.BiConsumer;
 
-import com.github.wautsns.okauth.core.client.util.http.Request.Method;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequest.Method;
 import com.github.wautsns.okauth.core.exception.OkAuthIOException;
 
 /**
  * Abstract requester for exchanging.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
-public abstract class Requester {
+public abstract class OkAuthRequester {
 
     /**
-     * Exchange.
+     * Exchange request for response.
      *
      * @param request request, require nonnull
      * @return response
      * @throws OkAuthIOException
      */
-    public Response exchange(Request request)
-            throws OkAuthIOException {
+    public OkAuthResponse exchange(OkAuthRequest request) throws OkAuthIOException {
         Method method = request.getMethod();
         if (method == Method.GET) {
             return doGet(request);
@@ -52,9 +51,9 @@ public abstract class Requester {
      * @param request request, require nonnull
      * @return response
      * @throws OkAuthIOException if an IO exception occurs
-     * @see Request#forEachHeader(BiConsumer)
+     * @see OkAuthRequest#forEachHeader(BiConsumer)
      */
-    protected abstract Response doGet(Request request) throws OkAuthIOException;
+    protected abstract OkAuthResponse doGet(OkAuthRequest request) throws OkAuthIOException;
 
     /**
      * Do POST request.
@@ -63,9 +62,9 @@ public abstract class Requester {
      * @param reader response input stream reader, require nonnull
      * @return response
      * @throws OkAuthIOException if an IO exception occurs
-     * @see Request#forEachHeader(BiConsumer)
-     * @see Request#forEachUrlEncodedFormItem(BiConsumer)
+     * @see OkAuthRequest#forEachHeader(BiConsumer)
+     * @see OkAuthRequest#forEachUrlEncodedFormItem(BiConsumer)
      */
-    protected abstract Response doPost(Request request) throws OkAuthIOException;
+    protected abstract OkAuthResponse doPost(OkAuthRequest request) throws OkAuthIOException;
 
 }

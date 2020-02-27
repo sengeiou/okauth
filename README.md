@@ -101,9 +101,9 @@ public OkAuthManager initOkAuthManager() {
 	所有开放平台客户端都需要继承该父类, 该类提供了以下几个方法:
 	1. `OpenPlatform getOpenPlatform()` : 获取该客户端对应的开放平台
 	2. `String initAuthorizeUrl(String state)` : 初始化一个 authorize url(state 用于防止 CSRF 攻击)
-	3. `OAuthToken exchangeQueryForToken(OAuthRedirectUriQuery query)` : 用 `query` 交换令牌
-	4. `OAuthUser exchangeTokenForUser(OAuthToken token)` : 用令牌交换用户信息
-	5. `OAuthUser exchangeQueryForUser(OAuthRedirectUriQuery query)` : 用 `query` 直接交换用户信息
+	3. `OAuthToken requestToken(OAuthRedirectUriQuery query)` : 用 `query` 请求令牌
+	4. `OAuthUser requestUser(OAuthToken token)` : 用令牌请求用户信息
+	5. `OAuthUser requestUser(OAuthRedirectUriQuery query)` : 用 `query` 直接请求用户信息
 
 	**okauth 提供了 [`StandardOkAuthClient`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/core/StandardOkAuthClient.java "点击查看源码") 以便于对遵循了标准 OAuth2.0 的开放平台进行更容易的扩展.**
 
@@ -133,7 +133,7 @@ public class OAuthController {
         String state = query.getState();
         OkAuthClient client = okauthManager.getClient(openPlatform);
         // oauthUser 不会为 null, 错误将以异常的形式抛出
-        OAuthUser oauthUser = client.exchangeQueryForUser(query);
+        OAuthUser oauthUser = client.requestUser(query);
         String identifier = oauthUser.getOpenPlatformIdentifier();
         String openId = oauthUser.getOpenId();
         // 接下来可以通过 identifier 与 openId 获取 userId 完成业务逻辑

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,15 @@ package com.github.wautsns.okauth.core.client.util.http;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import java.util.Objects;
+
 /**
- * Request url.
+ * OkAuth url.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
-public class RequestUrl {
+public class OkAuthUrl {
 
     /** url */
     private String url;
@@ -36,19 +38,19 @@ public class RequestUrl {
      *
      * @param url url, require nonnull
      */
-    public RequestUrl(String url) {
-        this.url = url;
+    public OkAuthUrl(String url) {
+        this.url = Objects.requireNonNull(url);
         this.hasQuery = (url.lastIndexOf('?') >= 0);
     }
 
     /**
      * Construct a url.
      *
-     * @param url url prototype, require nonnull
+     * @param prototype url prototype, require nonnull
      */
-    private RequestUrl(RequestUrl url) {
-        this.url = url.url;
-        this.hasQuery = url.hasQuery;
+    private OkAuthUrl(OkAuthUrl prototype) {
+        this.url = prototype.url;
+        this.hasQuery = prototype.hasQuery;
     }
 
     /**
@@ -60,7 +62,7 @@ public class RequestUrl {
      * @param value query param value(will be url encoded if not null)
      * @return self reference
      */
-    public RequestUrl addQueryParam(String name, String value) {
+    public OkAuthUrl addQueryParam(String name, String value) {
         if (value == null) { return this; }
         try {
             return addUrlEncodedQueryParam(name, URLEncoder.encode(value, "UTF-8"));
@@ -78,7 +80,7 @@ public class RequestUrl {
      * @param value url encoded query param value
      * @return self reference
      */
-    public RequestUrl addUrlEncodedQueryParam(String name, String value) {
+    public OkAuthUrl addUrlEncodedQueryParam(String name, String value) {
         if (value == null) { return this; }
         if (hasQuery) {
             url += '&';
@@ -91,12 +93,12 @@ public class RequestUrl {
     }
 
     /**
-     * Mutate into a new identical url.
+     * Mutate into a new identical okauth url.
      *
-     * @return a new request url
+     * @return a new identical okauth url
      */
-    public RequestUrl mutate() {
-        return new RequestUrl(this);
+    public OkAuthUrl mutate() {
+        return new OkAuthUrl(this);
     }
 
     @Override

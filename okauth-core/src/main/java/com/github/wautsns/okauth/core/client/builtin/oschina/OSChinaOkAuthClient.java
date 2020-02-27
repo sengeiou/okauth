@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,26 +20,26 @@ import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.StandardOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequest;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
 
 /**
  * OSChina okauth client.
  *
- * @since Feb 19, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  * @see <a href="https://www.oschina.net/openapi/docs">OSChina oauth doc</a>
  */
 public class OSChinaOkAuthClient extends StandardOkAuthClient {
 
     /**
-     * Construct a OSChina okauth client.
+     * Construct an OSChina okauth client.
      *
      * @param oauthAppInfo oauth application info, require nonnull
      * @param requester requester, require nonnull
      */
-    public OSChinaOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    public OSChinaOkAuthClient(OAuthAppInfo oauthAppInfo, OkAuthRequester requester) {
         super(oauthAppInfo, requester);
         tokenRequestPrototype.addHeaderAcceptJson();
     }
@@ -55,17 +55,17 @@ public class OSChinaOkAuthClient extends StandardOkAuthClient {
     }
 
     @Override
-    protected String getTokenUrl() {
+    protected String getTokenRequestUrl() {
         return "https://www.oschina.net/action/openapi/token";
     }
 
     @Override
-    protected Request initUserRequestPrototype() {
-        return Request.initGet("https://www.oschina.net/action/openapi/user");
+    protected OkAuthRequest initUserRequestPrototype() {
+        return OkAuthRequest.forGet("https://www.oschina.net/action/openapi/user");
     }
 
     @Override
-    protected OAuthUser initOAuthUser(Response response) {
+    protected OAuthUser newOAuthUser(OkAuthResponse response) {
         return new OSChinaUser(response);
     }
 

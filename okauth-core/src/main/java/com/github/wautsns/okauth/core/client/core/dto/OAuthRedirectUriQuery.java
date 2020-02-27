@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * OAuth redirect uri query.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
 public class OAuthRedirectUriQuery implements Serializable {
@@ -33,28 +33,53 @@ public class OAuthRedirectUriQuery implements Serializable {
     /**
      * The application generates a random string and includes it in the request. It should then
      * check that the same value is returned after the user authorizes the app. This is used to
-     * prevent <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29">CSRF
-     * attacks</a>.
+     * prevent CSRF attacks.
      */
     private String state;
 
-    /** Get {@link #code}. */
+    /**
+     * Get authorization code.
+     *
+     * @return authorization code;
+     */
     public String getCode() {
         return code;
     }
 
-    /** Set {@link #code}. */
+    /**
+     * Set authorization code.
+     *
+     * @param code authorization code
+     * @return self reference
+     */
     public OAuthRedirectUriQuery setCode(String code) {
         this.code = code;
         return this;
     }
 
-    /** Get {@link #state}. */
+    /**
+     * Get state.
+     *
+     * <p><strong>state</strong>: The application generates a random string and includes it in the
+     * request. It should then check that the same value is returned after the user authorizes the
+     * app. This is used to prevent CSRF attacks.
+     *
+     * @return state
+     */
     public String getState() {
         return state;
     }
 
-    /** Set {@link #state}. */
+    /**
+     * Set state.
+     *
+     * <p><strong>state</strong>: The application generates a random string and includes it in the
+     * request. It should then check that the same value is returned after the user authorizes the
+     * app. This is used to prevent CSRF attacks.
+     *
+     * @param state
+     * @return
+     */
     public OAuthRedirectUriQuery setState(String state) {
         this.state = state;
         return this;

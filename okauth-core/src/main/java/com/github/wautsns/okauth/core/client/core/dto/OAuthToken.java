@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,32 @@
  */
 package com.github.wautsns.okauth.core.client.core.dto;
 
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
 
 /**
- * Abstract oauth token.
+ * OAuth token.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
-public class OAuthToken extends OAuthData {
+public class OAuthToken extends OAuthResponseDataMap {
 
     /**
      * Construct an oauth token.
      *
-     * @param response response, require nonnull
+     * @param response correct okauth response, require nonnull
      */
-    public OAuthToken(Response response) {
+    public OAuthToken(OkAuthResponse response) {
         super(response.getData());
     }
 
-    /** Get access token. */
+    /**
+     * Get value of the name "access_token".
+     *
+     * @return access token
+     */
     public String getAccessToken() {
-        return get("access_token");
+        return getString("access_token");
     }
 
 }

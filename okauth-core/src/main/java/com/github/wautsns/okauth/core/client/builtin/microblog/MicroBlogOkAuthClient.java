@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,20 @@
 package com.github.wautsns.okauth.core.client.builtin.microblog;
 
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.core.OkAuthClient;
 import com.github.wautsns.okauth.core.client.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.core.StandardOkAuthClient;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
 import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Request;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequest;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthRequester;
+import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
 
 /**
  * MicroBlog okauth client.
  *
- * @since Feb 18, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  * @see <a
  *      href="https://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6%E8%AF%B4%E6%98%8E">MicroBlog
@@ -36,7 +37,13 @@ import com.github.wautsns.okauth.core.client.util.http.Response;
  */
 public class MicroBlogOkAuthClient extends StandardOkAuthClient {
 
-    public MicroBlogOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
+    /**
+     * Construct a MicroBlog okauth client.
+     *
+     * @param oauthAppInfo oauth application info, require nonnull
+     * @param requester requester, require nonnull
+     */
+    public MicroBlogOkAuthClient(OAuthAppInfo oauthAppInfo, OkAuthRequester requester) {
         super(oauthAppInfo, requester);
     }
 
@@ -51,29 +58,30 @@ public class MicroBlogOkAuthClient extends StandardOkAuthClient {
     }
 
     @Override
-    protected String getTokenUrl() {
+    protected String getTokenRequestUrl() {
         return "https://api.weibo.com/oauth2/access_token";
     }
 
     @Override
-    protected Request initUserRequestPrototype() {
-        return Request.initGet("https://api.weibo.com/2/users/show.json");
+    protected OkAuthRequest initUserRequestPrototype() {
+        return OkAuthRequest.forGet("https://api.weibo.com/2/users/show.json");
     }
 
     /**
-     * Mutate a user request with query param `access_token` and `uid`.
+     * Mutate the {@linkplain OkAuthClient#userRequestPrototype} with query param "access_token" and
+     * "uid".
      *
      * @param token oauth token, require nonnull
-     * @return a new user request
+     * @return a new user request mutated with oauth token
      */
     @Override
-    protected Request mutateUserRequest(OAuthToken token) {
+    protected OkAuthRequest mutateUserRequest(OAuthToken token) {
         return super.mutateUserRequest(token)
             .addQueryParam("uid", token.getString("uid"));
     }
 
     @Override
-    protected OAuthUser initOAuthUser(Response response) {
+    protected OAuthUser newOAuthUser(OkAuthResponse response) {
         return new MicroBlogUser(response);
     }
 
