@@ -15,49 +15,80 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.baidu;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
-import com.github.wautsns.okauth.core.client.core.OpenPlatform;
-import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
-import com.github.wautsns.okauth.core.client.util.http.OkAuthResponse;
+import java.time.LocalDate;
+
+import com.github.wautsns.okauth.core.client.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
+import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
+import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 
 /**
  * Baidu user.
  *
- * @since Feb 27, 2020
+ * <p>Original data map:
+ *
+ * <pre>
+ * {
+ *     "userid": "33192xxxxx",
+ *     "portrait": "afc577617574736e7xxxxx",
+ *     "username": "w***s",
+ *     "is_bind_mobile": "1",
+ *     "is_realname": "1",
+ *     "birthday": "1998-02-05",
+ *     "sex": "1",
+ *     "openid": "oF6xVTPl83G5Q2tAeh5w5j1uNyxxxxx"
+ * }
+ * </pre>
+ *
+ * @since Feb 29, 2020
  * @author wautsns
  */
-@JsonNaming(SnakeCaseStrategy.class)
-public class BaiduUser extends OAuthUser {
+public class BaiduUser extends OpenPlatformUser {
+
+    /** serialVersionUID */
+    private static final long serialVersionUID = -5163425746517965960L;
 
     /**
-     * Construct a Baidu user.
+     * Construct a baidu user.
      *
-     * @param response correct okauth response, require nonnull
+     * @param response okauth response, require nonnull
      */
-    public BaiduUser(OkAuthResponse response) {
+    public BaiduUser(OAuthResponse response) {
         super(response);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatform.BAIDU;
+        return OpenPlatforms.BAIDU;
     }
 
     @Override
-    public String getOpenId() {
-        return getString("userid");
-    }
-
-    @Override
-    public String getNickname() {
-        return getString("username");
+    public String getOpenid() {
+        return getString("openid");
     }
 
     @Override
     public String getAvatarUrl() {
         return "http://tb.himg.baidu.com/sys/portrait/item/" + getString("portrait");
+    }
+
+    @Override
+    public Gender getGender() {
+        String gender = getString("sex");
+        if ("1".equals(gender)) {
+            return Gender.MALE;
+        } else if ("0".equals(gender)) {
+            return Gender.FEMALE;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public LocalDate getBirthday() {
+        String birthday = getString("birthday");
+        if (birthday == null) { return null; }
+        return LocalDate.parse(birthday);
     }
 
 }

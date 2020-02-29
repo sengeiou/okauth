@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.springbootstarter.properties;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import com.github.wautsns.okauth.core.manager.OAuthManagerProperties;
 
 /**
- * Unsupported open platform exception.
+ * Extends from {@link OAuthManagerProperties}, just add
+ * {@code @ConfigurationProperties(prefix = "okauth")}.
  *
- * @since Feb 29, 2020
+ * @since Feb 27, 2020
  * @author wautsns
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
-
-    /** serialVersionUID */
-    private static final long serialVersionUID = 2205026007276072378L;
-
-    public UnsupportedOpenPlatformException(String openPlatformName) {
-        super("unsupported open platform: " + openPlatformName);
-    }
-
-}
+@ConfigurationProperties(prefix = "okauth")
+public class SpringBootOAuthManagerProperties extends OAuthManagerProperties {}

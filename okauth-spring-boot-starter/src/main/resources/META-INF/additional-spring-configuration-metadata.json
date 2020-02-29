@@ -1,5 +1,14 @@
-{"properties": [{
-  "name": "okauth",
-  "type": "com.github.wautsns.okauth.core.manager.properties.OkAuthProperties",
-  "description": "properties for okauth"
+{"groups": [{
+    "name": "okauth",
+    "type": "com.github.wautsns.okauth.core.manager.OAuthManagerProperties",
+    "sourceType": "com.github.wautsns.okauth.core.manager.OAuthManagerProperties"
+},{
+    "name": "okauth.default-request-executor",
+    "type": "com.github.wautsns.okauth.core.client.kernel.http.model.properties.OAuthRequestExecutorProperties",
+    "sourceType": "com.github.wautsns.okauth.core.manager.OAuthManagerProperties",
+    "sourceMethod": "getDefaultRequestExecutor()"
+},{
+    "name": "okauth.clients",
+    "type": "java.util.List<com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthClientProperties>",
+    "sourceType": "com.github.wautsns.okauth.core.manager.OAuthManagerProperties"
 }]}

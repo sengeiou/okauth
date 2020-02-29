@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.gitee;
+package com.github.wautsns.okauth.core.client.builtin.github;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
@@ -21,64 +21,66 @@ import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 
 /**
- * Gitee user.
+ * GitHub user.
  *
  * <p>Original data map:
  *
  * <pre>
  * {
- *     "id": 19xxxxx,
  *     "login": "wautsns",
- *     "name": "独自漫步〃寂静の夜空下",
- *     "avatar_url": "https://portrait.gitee.com/uploads/avatars/user/645/19xxxxx_wautsns_1578962737.png",
- *     "url": "https://gitee.com/api/v5/users/wautsns",
- *     "html_url": "https://gitee.com/wautsns",
- *     "followers_url": "https://gitee.com/api/v5/users/wautsns/followers",
- *     "following_url": "https://gitee.com/api/v5/users/wautsns/following_url{/other_user}",
- *     "gists_url": "https://gitee.com/api/v5/users/wautsns/gists{/gist_id}",
- *     "starred_url": "https://gitee.com/api/v5/users/wautsns/starred{/owner}{/repo}",
- *     "subscriptions_url": "https://gitee.com/api/v5/users/wautsns/subscriptions",
- *     "organizations_url": "https://gitee.com/api/v5/users/wautsns/orgs",
- *     "repos_url": "https://gitee.com/api/v5/users/wautsns/repos",
- *     "events_url": "https://gitee.com/api/v5/users/wautsns/events{/privacy}",
- *     "received_events_url": "https://gitee.com/api/v5/users/wautsns/received_events",
+ *     "id": 393xxxxx,
+ *     "node_id": "MDQ6VXNlcjM5MzM2NjA0",
+ *     "avatar_url": "https://avatars2.githubusercontent.com/u/393xxxxx?v=4",
+ *     "gravatar_id": "",
+ *     "url": "https://api.github.com/users/wautsns",
+ *     "html_url": "https://github.com/wautsns",
+ *     "followers_url": "https://api.github.com/users/wautsns/followers",
+ *     "following_url": "https://api.github.com/users/wautsns/following{/other_user}",
+ *     "gists_url": "https://api.github.com/users/wautsns/gists{/gist_id}",
+ *     "starred_url": "https://api.github.com/users/wautsns/starred{/owner}{/repo}",
+ *     "subscriptions_url": "https://api.github.com/users/wautsns/subscriptions",
+ *     "organizations_url": "https://api.github.com/users/wautsns/orgs",
+ *     "repos_url": "https://api.github.com/users/wautsns/repos",
+ *     "events_url": "https://api.github.com/users/wautsns/events{/privacy}",
+ *     "received_events_url": "https://api.github.com/users/wautsns/received_events",
  *     "type": "User",
  *     "site_admin": false,
+ *     "name": "wautsns",
+ *     "company": null,
  *     "blog": "",
- *     "weibo": "",
- *     "bio": "",
- *     "public_repos": 0,
+ *     "location": null,
+ *     "email": null,
+ *     "hireable": null,
+ *     "bio": null,
+ *     "public_repos": 10,
  *     "public_gists": 0,
  *     "followers": 0,
  *     "following": 0,
- *     "stared": 0,
- *     "watched": 2,
- *     "created_at": "2018-05-15T21:27:41+08:00",
- *     "updated_at": "2020-03-01T00:58:49+08:00",
- *     "email": null
+ *     "created_at": "2018-05-16T12:17:46Z",
+ *     "updated_at": "2020-02-28T02:55:07Z"
  * }
  * </pre>
  *
  * @since Feb 29, 2020
  * @author wautsns
  */
-public class GiteeUser extends OpenPlatformUser {
+public class GithubUser extends OpenPlatformUser {
 
     /** serialVersionUID */
-    private static final long serialVersionUID = -6198419705522461920L;
+    private static final long serialVersionUID = 1325181221533596732L;
 
     /**
-     * Construct a gitee user.
+     * Construct a github user.
      *
      * @param response okauth response, require nonnull
      */
-    public GiteeUser(OAuthResponse response) {
+    public GithubUser(OAuthResponse response) {
         super(response);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.GITEE;
+        return OpenPlatforms.GITHUB;
     }
 
     @Override

@@ -13,21 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.core.exception.error;
+
+import com.github.wautsns.okauth.core.client.OpenPlatform;
 
 /**
- * Unsupported open platform exception.
+ * Expired access token exception.
  *
  * @since Feb 29, 2020
  * @author wautsns
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
+public class AccessTokenHasExpiredException extends OAuthErrorException {
 
     /** serialVersionUID */
-    private static final long serialVersionUID = 2205026007276072378L;
+    private static final long serialVersionUID = -1198327228165589279L;
 
-    public UnsupportedOpenPlatformException(String openPlatformName) {
-        super("unsupported open platform: " + openPlatformName);
+    public AccessTokenHasExpiredException(OpenPlatform openPlatform) {
+        super(openPlatform, "access_token_has_expired", "Access token has expired.");
     }
 
 }

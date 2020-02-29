@@ -19,10 +19,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.github.wautsns.okauth.core.manager.OkAuthManager;
-import com.github.wautsns.okauth.core.manager.OkAuthManagerBuilder;
-import com.github.wautsns.okauth.core.manager.OkAuthProperties;
-import com.github.wautsns.okauth.springbootstarter.properties.SpringBootOkAuthProperties;
+import com.github.wautsns.okauth.core.manager.OAuthManager;
+import com.github.wautsns.okauth.core.manager.OAuthManagerBuilder;
+import com.github.wautsns.okauth.core.manager.OAuthManagerProperties;
+import com.github.wautsns.okauth.springbootstarter.properties.SpringBootOAuthManagerProperties;
 
 /**
  * OkAuth auto configuration.
@@ -31,12 +31,14 @@ import com.github.wautsns.okauth.springbootstarter.properties.SpringBootOkAuthPr
  * @author wautsns
  */
 @Configuration
-@EnableConfigurationProperties(SpringBootOkAuthProperties.class)
+@EnableConfigurationProperties(SpringBootOAuthManagerProperties.class)
 public class OkAuthAutoConfiguration {
 
     @Bean
-    public OkAuthManager okauthManager(OkAuthProperties okauthProperties) {
-        return new OkAuthManagerBuilder().register(okauthProperties).build();
+    public OAuthManager okauthManager(OAuthManagerProperties oauthManagerProperties) {
+        return new OAuthManagerBuilder()
+            .register(oauthManagerProperties)
+            .build();
     }
 
 }

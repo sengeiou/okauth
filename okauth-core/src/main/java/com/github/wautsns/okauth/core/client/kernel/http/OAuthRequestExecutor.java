@@ -13,21 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.core.client.kernel.http;
+
+import java.io.IOException;
+
+import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
+import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
 
 /**
- * Unsupported open platform exception.
+ * OAuth request executor.
  *
- * @since Feb 29, 2020
+ * @since Feb 28, 2020
  * @author wautsns
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
+@FunctionalInterface
+public interface OAuthRequestExecutor {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 2205026007276072378L;
-
-    public UnsupportedOpenPlatformException(String openPlatformName) {
-        super("unsupported open platform: " + openPlatformName);
-    }
+    /**
+     * Execute request and return response.
+     *
+     * @param request oauth request, require nonnull
+     * @return response
+     * @throws IOException if an IO exception occurs
+     */
+    OAuthResponse execute(OAuthRequest request) throws IOException;
 
 }
