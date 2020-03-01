@@ -40,7 +40,7 @@ public class OAuthManagerBuilder {
     private Map<OpenPlatform, OAuthClient<?>> clients = new HashMap<>();
 
     /**
-     * Build an oauth manager based on current configuration.
+     * Build oauth manager based on current configuration.
      *
      * @return oauth manager
      */
@@ -49,7 +49,7 @@ public class OAuthManagerBuilder {
     }
 
     /**
-     * Register an oauth client.
+     * Register oauth client.
      *
      * @param properties oauth manager properties, require nonnull
      * @return self reference
@@ -74,7 +74,7 @@ public class OAuthManagerBuilder {
     }
 
     /**
-     * Register an oauth client.
+     * Register oauth client.
      *
      * @param initializer oauth client initializer, require nonnull
      * @param app oauth app properties, require nonnull
@@ -89,7 +89,7 @@ public class OAuthManagerBuilder {
     }
 
     /**
-     * Register an oauth client.
+     * Register oauth client.
      *
      * @param client oauth client, require nonnull
      * @return self reference
@@ -170,10 +170,10 @@ public class OAuthManagerBuilder {
     }
 
     /**
-     * New an oauth request executor.
+     * New oauth request executor.
      *
      * @param properties oauth request executor properties, require nonnull
-     * @return an oauth request executor
+     * @return oauth request executor
      */
     private static OAuthRequestExecutor newRequestExecutor(
             OAuthRequestExecutorProperties properties) {

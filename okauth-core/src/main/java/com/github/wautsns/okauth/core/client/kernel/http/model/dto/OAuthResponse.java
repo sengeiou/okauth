@@ -36,7 +36,7 @@ public class OAuthResponse {
     private final Map<String, Serializable> data;
 
     /**
-     * Construct an okauth response.
+     * Construct okauth response.
      *
      * @param request request of the response, require nonnull
      * @param status response status code

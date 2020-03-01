@@ -21,6 +21,8 @@ import java.io.Serializable;
 
 import java.util.Map;
 
+import com.github.wautsns.okauth.core.util.Reader;
+
 /**
  * OAuth response input stream reader.
  *
@@ -34,13 +36,13 @@ public interface OAuthResponseInputStreamReader extends Serializable {
      *
      * @param inputStream input stream, require nonnull
      * @return map
-     * @throws IOException if an IO exception occurs
+     * @throws IOException if IO exception occurs
      */
     Map<String, Serializable> readAsMap(InputStream inputStream) throws IOException;
 
     // -------------------- built-in readers ------------------------
 
     /** the reader for json input stream */
-    OAuthResponseInputStreamReader JSON = OAuthReaders::readeJsonAsMap;
+    OAuthResponseInputStreamReader JSON = Reader::readeJsonAsMap;
 
 }

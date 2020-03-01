@@ -23,7 +23,7 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 /**
  * GitHub user.
  *
- * <p>Original data map:
+ * <p>response data map:
  *
  * <pre>
  * {
@@ -64,17 +64,17 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * @since Feb 29, 2020
  * @author wautsns
  */
-public class GithubUser extends OpenPlatformUser {
+public class GitHubUser extends OpenPlatformUser {
 
     /** serialVersionUID */
     private static final long serialVersionUID = 1325181221533596732L;
 
     /**
-     * Construct a github user.
+     * Construct GitHub user.
      *
      * @param response okauth response, require nonnull
      */
-    public GithubUser(OAuthResponse response) {
+    public GitHubUser(OAuthResponse response) {
         super(response);
     }
 

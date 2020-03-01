@@ -49,7 +49,7 @@ public class OkHttpOAuthRequestExecutor implements OAuthRequestExecutor {
     private final OkHttpClient client;
 
     /**
-     * Construct an okhttp3 oauth request executor.
+     * Construct okhttp3 oauth request executor.
      *
      * @param okhttpClient okhttp client, require nonnull
      */
@@ -58,7 +58,7 @@ public class OkHttpOAuthRequestExecutor implements OAuthRequestExecutor {
     }
 
     /**
-     * Construct an okhttp3 oauth request executor.
+     * Construct okhttp3 oauth request executor.
      *
      * @param properties oauth request executor properties, require nonnull
      */
@@ -94,7 +94,7 @@ public class OkHttpOAuthRequestExecutor implements OAuthRequestExecutor {
      *
      * @param request oauth request, require nonnull
      * @return oauth response
-     * @throws OAuthIOException if an IO exception occurs
+     * @throws OAuthIOException if IO exception occurs
      */
     private OAuthResponse doExecuteGet(OAuthRequest request) throws IOException {
         Request.Builder builder = new Request.Builder();
@@ -109,7 +109,7 @@ public class OkHttpOAuthRequestExecutor implements OAuthRequestExecutor {
      *
      * @param request oauth request, require nonnull
      * @return oauth response
-     * @throws OAuthIOException if an IO exception occurs
+     * @throws OAuthIOException if IO exception occurs
      */
     private OAuthResponse doExecuteNonGet(OAuthRequest request) throws IOException {
         Request.Builder builder = new Request.Builder();
@@ -127,7 +127,7 @@ public class OkHttpOAuthRequestExecutor implements OAuthRequestExecutor {
      * @param oauthRequest oauth request, require nonnull
      * @param okhttp3Request okhttp3 request, require nonnull
      * @return oauth response
-     * @throws IOException if an IO exception occurs
+     * @throws IOException if IO exception occurs
      */
     private OAuthResponse doExecute(OAuthRequest oauthRequest, Request okhttp3Request)
             throws IOException {

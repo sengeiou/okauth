@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.weibo;
+package com.github.wautsns.okauth.core.client.builtin.tencentcloud;
 
-import java.io.Serializable;
+import java.util.Map;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
@@ -29,65 +29,71 @@ import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
 /**
- * Weibo oauth client.
+ * TencentCloud oauth client.
  *
- * @since Feb 29, 2020
+ * @since Mar 01, 2020
  * @author wautsns
- * @see <a
- *      href="https://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6%E8%AF%B4%E6%98%8E">weibo
- *      oauth doc</a>
+ * @see <a href="https://dev.tencent.com/help/doc/faq/b4e5b7aee786/oauth">TencentCloud oauth doc</a>
  */
-public class WeiboOAuthClient extends StandardTokenAvailableOAuthClient<WeiboUser> {
+public class TencentCloudOAuthClient extends StandardTokenAvailableOAuthClient<TencentCloudUser> {
 
     /**
-     * Construct a weibo oauth client.
+     * Construct TencentCloud oauth client.
      *
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
      */
-    public WeiboOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
+    public TencentCloudOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
         super(app, executor);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.WEIBO;
+        return OpenPlatforms.TENCENTCLOUD;
     }
 
     @Override
     protected String getAuthorizeUrl() {
-        return "https://api.weibo.com/oauth2/authorize";
+        return "https://dev.tencent.com/oauth_authorize.html";
     }
 
     @Override
     protected OAuthRequest initBasicTokenRequest() {
-        return OAuthRequest.forPost("https://api.weibo.com/oauth2/access_token");
+        return OAuthRequest.forGet("https://dev.tencent.com/api/oauth/access_token");
     }
 
     @Override
-    public WeiboUser requestForUser(OAuthToken token) throws OAuthErrorException, OAuthIOException {
-        String url = "https://api.weibo.com/2/users/show.json";
+    public TencentCloudUser requestForUser(OAuthToken token)
+            throws OAuthErrorException, OAuthIOException {
+        String url = "https://dev.tencent.com/api/current_user";
         OAuthRequest request = OAuthRequest.forGet(url);
         request.getQuery()
-            .add("uid", token.getString("uid"))
             .addAccessToken(token.getAccessToken());
-        return new WeiboUser(execute(request));
-    }
-
-    @Override
-    protected boolean doesTheErrorMeanThatAccessTokenHasExpired(String error) {
-        return "21315".equals(error) || "21327".equals(error);
+        return new TencentCloudUser(execute(request));
     }
 
     @Override
     protected String getErrorFromResponse(OAuthResponse response) {
-        Serializable error = response.getData().get("error_code");
-        return (error == null) ? null : error.toString();
+        Integer code = (Integer) response.getData().get("code");
+        if (code == 0) { return null; }
+        @SuppressWarnings("unchecked")
+        Map<String, String> msg = (Map<String, String>) response.getData().get("msg");
+        return msg.entrySet().iterator().next().getKey();
     }
 
     @Override
     protected String getErrorDescriptionFromResponse(OAuthResponse response) {
-        return (String) response.getData().get("error");
+        @SuppressWarnings("unchecked")
+        Map<String, String> msg = (Map<String, String>) response.getData().get("msg");
+        return msg.entrySet().iterator().next().getValue();
+    }
+
+    @Override
+    protected boolean doesTheErrorMeanThatAccessTokenHasExpired(String error) {
+        // FIXME refresh token
+        // TencentCloud token has refresh token, but the api for refreshing token was not found in
+        // the official doc.
+        return "oauth_auth_expired".equals(error);
     }
 
 }

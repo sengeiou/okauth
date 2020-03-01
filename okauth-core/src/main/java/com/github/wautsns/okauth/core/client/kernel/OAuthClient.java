@@ -18,11 +18,11 @@ package com.github.wautsns.okauth.core.client.kernel;
 import java.io.IOException;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
 import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
 import com.github.wautsns.okauth.core.client.kernel.http.model.basic.OAuthUrl;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthRedirectUriQuery;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
@@ -34,7 +34,8 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
  * @since Feb 28, 2020
  * @author wautsns
  */
-public abstract class OAuthClient<U extends OpenPlatformUser> {
+public abstract class OAuthClient<U extends OpenPlatformUser>
+        implements ExchangeRedirectUriQueryForUser<U> {
 
     /** oauth app properties */
     protected final OAuthAppProperties app;
@@ -42,7 +43,7 @@ public abstract class OAuthClient<U extends OpenPlatformUser> {
     private final OAuthRequestExecutor executor;
 
     /**
-     * Construct an oauth client.
+     * Construct oauth client.
      *
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
@@ -69,19 +70,6 @@ public abstract class OAuthClient<U extends OpenPlatformUser> {
      */
     public abstract OAuthUrl initAuthorizeUrl(String state);
 
-    // -------------------- oauth user ------------------------------
-
-    /**
-     * Exchange redirect uri query for user.
-     *
-     * @param redirectUriQuery oauth redirect uri query, require nonnull
-     * @return open platform user
-     * @throws OAuthErrorException if the oauth response is not correct
-     * @throws OAuthIOException if an IO exception occurs
-     */
-    public abstract U requestForUser(OAuthRedirectUriQuery redirectUriQuery)
-            throws OAuthErrorException, OAuthIOException;
-
     // -------------------- execute ---------------------------------
 
     /**
@@ -90,7 +78,7 @@ public abstract class OAuthClient<U extends OpenPlatformUser> {
      * @param request oauth request, require nonnull
      * @return correct response
      * @throws OAuthErrorException if the oauth response is not correct
-     * @throws OAuthIOException if an IO exception occurs
+     * @throws OAuthIOException if IO exception occurs
      */
     protected final OAuthResponse execute(OAuthRequest request)
             throws OAuthErrorException, OAuthIOException {
@@ -144,12 +132,12 @@ public abstract class OAuthClient<U extends OpenPlatformUser> {
     protected abstract String getErrorDescriptionFromResponse(OAuthResponse response);
 
     /**
-     * New an oauth error exception.
+     * New oauth error exception.
      *
      * @param openPlatform open platform, require nonnull
      * @param error error, require nonnull
      * @param errorDescription error description
-     * @return an oauth error exception
+     * @return oauth error exception
      */
     protected OAuthErrorException newOAuthErrorException(
             OpenPlatform openPlatform, String error, String errorDescription) {

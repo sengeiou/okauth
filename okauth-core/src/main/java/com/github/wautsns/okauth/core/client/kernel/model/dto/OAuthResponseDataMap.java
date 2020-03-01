@@ -42,7 +42,7 @@ public class OAuthResponseDataMap implements Serializable {
     private final Map<String, Serializable> originalDataMap;
 
     /**
-     * Construct an oauth response data map.
+     * Construct oauth response data map.
      *
      * @param originalDataMap original data map, require nonnull
      */
@@ -51,7 +51,7 @@ public class OAuthResponseDataMap implements Serializable {
     }
 
     /**
-     * Construct an oauth response data map.
+     * Construct oauth response data map.
      *
      * @param response okauth response, require nonnull
      */

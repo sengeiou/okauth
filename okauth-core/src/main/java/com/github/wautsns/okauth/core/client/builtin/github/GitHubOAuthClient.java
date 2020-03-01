@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.gitee;
+package com.github.wautsns.okauth.core.client.builtin.github;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
-import com.github.wautsns.okauth.core.client.builtin.StandardTokenRefreshableOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.StandardTokenAvailableOAuthClient;
 import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
@@ -26,61 +26,56 @@ import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
 /**
- * Gitee oauth client.
+ * GitHub client.
  *
  * @since Feb 29, 2020
  * @author wautsns
- * @see <a href="https://gitee.com/api/v5/oauth_doc">gitee oauth doc</a>
+ * @see <a
+ *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
+ *      oauth doc</a>
  */
-public class GiteeOAuthClient extends StandardTokenRefreshableOAuthClient<GiteeUser> {
+public class GitHubOAuthClient extends StandardTokenAvailableOAuthClient<GitHubUser> {
 
     /**
-     * Construct Gitee oauth client.
+     * Construct GitHub oauth client.
      *
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
      */
-    public GiteeOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
+    public GitHubOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
         super(app, executor);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.GITEE;
+        return OpenPlatforms.GITHUB;
     }
 
     @Override
     protected String getAuthorizeUrl() {
-        return "https://gitee.com/oauth/authorize";
+        return "https://github.com/login/oauth/authorize";
     }
 
     @Override
     protected OAuthRequest initBasicTokenRequest() {
-        return OAuthRequest.forPost("https://gitee.com/oauth/token");
-    }
-
-    @Override
-    protected OAuthRequest initBasicRefreshTokenRequest() {
-        return OAuthRequest.forPost("https://gitee.com/oauth/token");
-    }
-
-    @Override
-    public GiteeUser requestForUser(OAuthToken token) throws OAuthErrorException, OAuthIOException {
-        String url = "https://gitee.com/api/v5/user";
+        String url = "https://github.com/login/oauth/access_token";
         OAuthRequest request = OAuthRequest.forGet(url);
-        request.getQuery()
-            .addAccessToken(token.getAccessToken());
-        return new GiteeUser(execute(request));
+        request.getHeaders().addAcceptWithValueJson();
+        return request;
+    }
+
+    @Override
+    public GitHubUser requestForUser(OAuthToken token)
+            throws OAuthErrorException, OAuthIOException {
+        String url = "https://api.github.com/user";
+        OAuthRequest request = OAuthRequest.forGet(url);
+        request.getHeaders()
+            .addAuthorization("token", token.getAccessToken());
+        return new GitHubUser(execute(request));
     }
 
     @Override
     protected boolean doesTheErrorMeanThatAccessTokenHasExpired(String error) {
-        // FIXME not found in doc
-        return false;
-    }
-
-    @Override
-    protected boolean doesTheErrorMeanThatRefreshTokenHasExpired(String error) {
         // FIXME not found in doc
         return false;
     }

@@ -126,7 +126,7 @@ public class OAuthRequest implements Serializable {
     }
 
     /**
-     * Initialize an oauth request(GET) and the response input stream reader is
+     * Initialize oauth request(GET) and the response input stream reader is
      * {@linkplain OAuthResponseInputStreamReader#JSON}).
      *
      * @param url request url, require nonnull
@@ -137,7 +137,7 @@ public class OAuthRequest implements Serializable {
     }
 
     /**
-     * Initialize an oauth request(POST) and the response input stream reader is
+     * Initialize oauth request(POST) and the response input stream reader is
      * {@linkplain OAuthResponseInputStreamReader#JSON}).
      *
      * @param url request url, require nonnull
@@ -148,7 +148,7 @@ public class OAuthRequest implements Serializable {
     }
 
     /**
-     * Initialize an oauth request(the response input stream reader is
+     * Initialize oauth request(the response input stream reader is
      * {@linkplain OAuthResponseInputStreamReader#JSON}).
      *
      * @param method request method, require nonnull
@@ -160,7 +160,21 @@ public class OAuthRequest implements Serializable {
     }
 
     /**
-     * Initialize an oauth request.
+     * Initialize oauth request.
+     *
+     * @param method request method, require nonnull
+     * @param url request url, require nonnull
+     * @param responseInputStreamReader response input stream reader, require nonnull
+     * @return oauth request
+     */
+    public static final OAuthRequest init(
+            Method method, String url,
+            OAuthResponseInputStreamReader responseInputStreamReader) {
+        return new OAuthRequest(method, new OAuthUrl(url), responseInputStreamReader);
+    }
+
+    /**
+     * Initialize oauth request.
      *
      * @param method request method, require nonnull
      * @param url request url, require nonnull
@@ -174,7 +188,7 @@ public class OAuthRequest implements Serializable {
     }
 
     /**
-     * Construct an oauth request.
+     * Construct oauth request.
      *
      * @param method request method, require nonnull
      * @param url request url, require nonnull

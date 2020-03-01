@@ -18,8 +18,6 @@ package com.github.wautsns.okauth.core.client.kernel;
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
 import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
@@ -47,31 +45,77 @@ public abstract class TokenRefreshableOAuthClient<U extends OpenPlatformUser>
         super(app, executor);
     }
 
+    // -------------------- oauth user ------------------------------
+
+    /**
+     * Exchange token for openid.
+     *
+     * <p><strong>If the access token has expired</strong>,
+     * {@linkplain #refreshToken(OAuthToken)} will be called automatically, and exchange refreshed
+     * token for openid. Refresh callback will be called with refreshed token.
+     *
+     * @param token token, require nonnull
+     * @param refreshCallback refresh callback, require nonnull
+     * @return openid
+     * @throws OAuthErrorException if the oauth response is not correct
+     * @throws OAuthIOException if IO exception occurs
+     * @throws Exception if refreshCallback throws
+     * @see #requestForUser(OAuthToken)
+     * @see #request(OAuthToken, TokenRequiredApi, RefreshCallback)
+     */
+    public final String requestForOpenid(OAuthToken token, RefreshCallback refreshCallback)
+            throws OAuthErrorException, OAuthIOException, Exception {
+        return request(token, this::requestForOpenid, refreshCallback);
+    }
+
+    /**
+     * Exchange token for user.
+     *
+     * <p><strong>If the access token has expired</strong>,
+     * {@linkplain #refreshToken(OAuthToken)} will be called automatically, and exchange refreshed
+     * token for user. Refresh callback will be called with refreshed token.
+     *
+     * @param token token, require nonnull
+     * @param refreshCallback refresh callback, require nonnull
+     * @return open plarform user
+     * @throws OAuthErrorException if the oauth response is not correct
+     * @throws OAuthIOException if IO exception occurs
+     * @throws Exception if refreshCallback throws
+     * @see #requestForUser(OAuthToken)
+     * @see #request(OAuthToken, TokenRequiredApi, RefreshCallback)
+     */
+    public final U requestForUser(OAuthToken token, RefreshCallback refreshCallback)
+            throws OAuthErrorException, OAuthIOException, Exception {
+        return request(token, this::requestForUser, refreshCallback);
+    }
+
     // -------------------- execute ---------------------------------
 
     /**
-     * Execute token related request, check response and return correct response. <strong>If the
-     * access token has expired</strong>, {@linkplain #refreshToken(OAuthToken)} will be called
-     * automatically, and reexecute the request. Refresh callback will be called after reexecuting.
+     * Request token required api.
      *
-     * @param token token
-     * @param tokenToRequest token to request
-     * @param refreshCallback refresh callback
+     * <p><strong>If the access token has expired</strong>,
+     * {@linkplain #refreshToken(OAuthToken)} will be called automatically, and rerequest the api
+     * with refreshed token. Refresh callback will be called after rerequesting.
+     *
+     * @param token token, require nonnull
+     * @param tokenToRequest token to request, require nonnull
+     * @param refreshCallback refresh callback, require nonnull
      * @return
      * @throws OAuthErrorException if the oauth response is not correct
-     * @throws OAuthIOException if an IO exception occurs
-     * @throws Throwable if refreshCallback throws
+     * @throws OAuthIOException if IO exception occurs
+     * @throws Exception if refreshCallback throws
      */
-    protected final OAuthResponse execute(
-            OAuthToken token, TokenToRequest tokenToRequest, RefreshCallback refreshCallback)
-            throws OAuthErrorException, OAuthIOException, Throwable {
+    public final <T> T request(
+            OAuthToken token, TokenRequiredApi<T> api, RefreshCallback refreshCallback)
+            throws OAuthErrorException, OAuthIOException, Exception {
         try {
-            return execute(tokenToRequest.accept(token));
+            return api.request(token);
         } catch (AccessTokenHasExpiredException e) {
             token = refreshToken(token);
-            OAuthResponse response = execute(tokenToRequest.accept(token));
+            T rst = api.request(token);
             refreshCallback.accept(token);
-            return response;
+            return rst;
         }
     }
 
@@ -99,20 +143,24 @@ public abstract class TokenRefreshableOAuthClient<U extends OpenPlatformUser>
     // -------------------- utils -----------------------------------
 
     /**
-     * Produce token related oauth request.
+     * Token required api.
      *
+     * @param <T> return type of the api
      * @since Mar 01, 2020
      * @author wautsns
      */
-    protected interface TokenToRequest {
+    @FunctionalInterface
+    public interface TokenRequiredApi<T> {
 
         /**
-         * Produce token related oauth request.
+         * Exchange token for T.
          *
-         * @param token oauth token
-         * @return token relared oauth request
+         * @param token oauth token, require nonnull
+         * @return T
+         * @throws OAuthErrorException if the oauth response is not correct
+         * @throws OAuthIOException if IO exception occurs
          */
-        OAuthRequest accept(OAuthToken token);
+        T request(OAuthToken token) throws OAuthErrorException, OAuthIOException;
 
     }
 
@@ -122,15 +170,16 @@ public abstract class TokenRefreshableOAuthClient<U extends OpenPlatformUser>
      * @since Mar 01, 2020
      * @author wautsns
      */
+    @FunctionalInterface
     public interface RefreshCallback {
 
         /**
          * Refresh callback.
          *
-         * @param token refreshed oauth token
-         * @throws Throwable if any throwable occurs
+         * @param token refreshed oauth token, require nonnull
+         * @throws Exception if any exception occurs
          */
-        void accept(OAuthToken token) throws Throwable;
+        void accept(OAuthToken token) throws Exception;
 
     }
 

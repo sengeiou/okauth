@@ -28,7 +28,7 @@ import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppPro
 public interface OAuthClientInitializer {
 
     /**
-     * Initialize an okauth client.
+     * Initialize oauth client.
      *
      * @param app oauth application properties, require nonnull
      * @param executor oauth request executor, require nonnull

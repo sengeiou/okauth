@@ -34,7 +34,7 @@ public interface OAuthRequestExecutor {
      *
      * @param request oauth request, require nonnull
      * @return response
-     * @throws IOException if an IO exception occurs
+     * @throws IOException if IO exception occurs
      */
     OAuthResponse execute(OAuthRequest request) throws IOException;
 

@@ -35,7 +35,7 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 public class BaiduOAuthClient extends StandardTokenRefreshableOAuthClient<BaiduUser> {
 
     /**
-     * Construct a baidu oauth client.
+     * Construct Baidu oauth client.
      *
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
@@ -60,26 +60,33 @@ public class BaiduOAuthClient extends StandardTokenRefreshableOAuthClient<BaiduU
     }
 
     @Override
-    public BaiduUser requestForUser(OAuthToken token) throws OAuthErrorException, OAuthIOException {
-        String url = "https://openapi.baidu.com/rest/2.0/passport/users/getInfo";
-        OAuthRequest request = OAuthRequest.forGet(url);
-        request.getQuery().addAccessToken(token.getAccessToken());
-        return new BaiduUser(execute(request));
-    }
-
-    @Override
     protected OAuthRequest initBasicRefreshTokenRequest() {
         return OAuthRequest.forGet("https://openapi.baidu.com/oauth/2.0/token");
     }
 
     @Override
+    public BaiduUser requestForUser(OAuthToken token) throws OAuthErrorException, OAuthIOException {
+        String url = "https://openapi.baidu.com/rest/2.0/passport/users/getInfo";
+        OAuthRequest request = OAuthRequest.forGet(url);
+        request.getQuery()
+            .addAccessToken(token.getAccessToken());
+        return new BaiduUser(execute(request));
+    }
+
+    @Override
     protected boolean doesTheErrorMeanThatAccessTokenHasExpired(String error) {
-        return false;
+        // FIXME refresh token
+        // The access token expires for one month and the refresh token expires for ten years.
+        // However, in official doc, "expired_token" means that refresh token has expired(And no
+        // error identifies that the access token has expired). It is suspected to be a mistake.
+        return "expired_token".equals(error);
     }
 
     @Override
     protected boolean doesTheErrorMeanThatRefreshTokenHasExpired(String error) {
-        return "expired_token".equals(error);
+        // FIXME refresh token
+        // see doesTheErrorMeanThatAccessTokenHasExpired(String)
+        return false;
     }
 
 }

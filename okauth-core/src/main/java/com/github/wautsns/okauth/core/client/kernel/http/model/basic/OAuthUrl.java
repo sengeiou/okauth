@@ -34,7 +34,7 @@ public class OAuthUrl implements Serializable {
     private final OAuthParams query;
 
     /**
-     * Construct an oauth url.
+     * Construct oauth url.
      *
      * @param url url string, require nonnull
      */
@@ -87,7 +87,7 @@ public class OAuthUrl implements Serializable {
     }
 
     /**
-     * Construct an oauth url with prototype.
+     * Construct oauth url with prototype.
      *
      * <p>Used for {@linkplain #copy()}
      *

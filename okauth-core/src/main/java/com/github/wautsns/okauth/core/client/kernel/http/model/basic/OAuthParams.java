@@ -49,7 +49,7 @@ public class OAuthParams implements Serializable {
     /**
      * For each param.
      *
-     * @param action action for params
+     * @param action action for params, require nonnull
      */
     public void forEach(BiConsumer<String, String> action) {
         for (Iterator<String> i = data.iterator(); i.hasNext();) {

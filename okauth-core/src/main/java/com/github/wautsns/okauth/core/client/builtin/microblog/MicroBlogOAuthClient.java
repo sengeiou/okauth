@@ -13,70 +13,84 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.github;
+package com.github.wautsns.okauth.core.client.builtin.microblog;
+
+import java.io.Serializable;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.builtin.StandardTokenAvailableOAuthClient;
 import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
+import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
 /**
- * Github client.
+ * MicroBlog oauth client.
  *
  * @since Feb 29, 2020
  * @author wautsns
  * @see <a
- *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
+ *      href="https://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6%E8%AF%B4%E6%98%8E">weibo
  *      oauth doc</a>
  */
-public class GithubOAuthClient extends StandardTokenAvailableOAuthClient<GithubUser> {
+public class MicroBlogOAuthClient extends StandardTokenAvailableOAuthClient<MicroBlogUser> {
 
     /**
-     * Construct a github oauth client.
+     * Construct MicroBlog oauth client.
      *
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
      */
-    public GithubOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
+    public MicroBlogOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
         super(app, executor);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.GITHUB;
+        return OpenPlatforms.MICROBLOG;
     }
 
     @Override
     protected String getAuthorizeUrl() {
-        return "https://github.com/login/oauth/authorize";
+        return "https://api.weibo.com/oauth2/authorize";
     }
 
     @Override
     protected OAuthRequest initBasicTokenRequest() {
-        String url = "https://github.com/login/oauth/access_token";
-        OAuthRequest request = OAuthRequest.forGet(url);
-        request.getHeaders().addAcceptWithValueJson();
-        return request;
+        return OAuthRequest.forPost("https://api.weibo.com/oauth2/access_token");
     }
 
     @Override
-    public GithubUser requestForUser(OAuthToken token)
+    public MicroBlogUser requestForUser(OAuthToken token)
             throws OAuthErrorException, OAuthIOException {
-        String url = "https://api.github.com/user";
+        String url = "https://api.weibo.com/2/users/show.json";
         OAuthRequest request = OAuthRequest.forGet(url);
-        request.getHeaders().addAuthorization("token", token.getAccessToken());
-        return new GithubUser(execute(request));
+        request.getQuery()
+            .add("uid", token.getString("uid"))
+            .addAccessToken(token.getAccessToken());
+        return new MicroBlogUser(execute(request));
+    }
+
+    @Override
+    protected String getErrorFromResponse(OAuthResponse response) {
+        Serializable error = response.getData().get("error_code");
+        return (error == null) ? null : error.toString();
+    }
+
+    @Override
+    protected String getErrorDescriptionFromResponse(OAuthResponse response) {
+        return (String) response.getData().get("error");
     }
 
     @Override
     protected boolean doesTheErrorMeanThatAccessTokenHasExpired(String error) {
-        // FIXME access_token(20/2/29 22:37): ad36913d51594c06503f31d16d5dae985f8e997a
-        return false;
+        // FIXME need check
+        // In official doc, there are two codes mean that the access token has expired
+        return "21315".equals(error) || "21327".equals(error);
     }
 
 }

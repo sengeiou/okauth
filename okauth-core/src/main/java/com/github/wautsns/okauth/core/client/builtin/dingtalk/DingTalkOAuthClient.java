@@ -33,24 +33,43 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Dingtalk oauth client.
+ * DingTalk oauth client.
  *
  * @since Mar 01, 2020
  * @author wautsns
  * @see <a href="https://ding-doc.dingtalk.com/doc#/serverapi2/kymkv6">dingtalk oauth doc</a>
  */
-public class DingtalkOAuthClient extends OAuthClient<DingtalkUser> {
+public class DingTalkOAuthClient extends OAuthClient<DingTalkUser> {
 
+    /**
+     * basic authorize url
+     *
+     * <p>Query items added are as follows:
+     * <ul>
+     * <li>appid: {@code app.getClientId()}</li>
+     * <li>response_type: {@code "code"}</li>
+     * <li>scope: {@code "snsapi_login"}</li>
+     * <li>redirect_uri: {@code app.getRedirectUri()}</li>
+     * </ul>
+     */
     private final OAuthUrl basicAuthorizeUrl;
+    /**
+     * basic user request
+     *
+     * <p>Query items added are as follows:
+     * <ul>
+     * <li>accessKey: {@code app.getClientId()}</li>
+     * </ul>
+     */
     private final OAuthRequest basicUserRequest;
 
     /**
-     * Construct a dingtalk oauth client.
+     * Construct DingTalk oauth client.
      *
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
      */
-    public DingtalkOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
+    public DingTalkOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
         super(app, executor);
         // basic authorize url
         String authorizeUrl = "https://oapi.dingtalk.com/connect/qrconnect";
@@ -80,23 +99,22 @@ public class DingtalkOAuthClient extends OAuthClient<DingtalkUser> {
     }
 
     @Override
-    public DingtalkUser requestForUser(OAuthRedirectUriQuery redirectUriQuery)
+    public DingTalkUser requestForUser(OAuthRedirectUriQuery redirectUriQuery)
             throws OAuthErrorException, OAuthIOException {
-        OAuthRequest copy = basicUserRequest.copy();
+        OAuthRequest request = basicUserRequest.copy();
         String timestamp = Long.toString(System.currentTimeMillis());
-        copy.getQuery()
+        request.getQuery()
             .add("timestamp", timestamp)
             .add("signature", sign(timestamp));
-        copy.getForm()
+        request.getForm()
             .add("tmp_auth_code", redirectUriQuery.getCode());
-        return new DingtalkUser(execute(copy));
+        return new DingTalkUser(execute(request));
     }
 
     @Override
     protected String getErrorFromResponse(OAuthResponse response) {
         Integer errcode = (Integer) response.getData().get("errcode");
-        if (errcode == 0) { return null; }
-        return errcode.toString();
+        return (errcode == 0) ? null : errcode.toString();
     }
 
     @Override

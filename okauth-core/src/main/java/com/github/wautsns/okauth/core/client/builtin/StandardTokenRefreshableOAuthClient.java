@@ -39,12 +39,43 @@ import com.github.wautsns.okauth.core.exception.error.RefreshTokenHasExpiredExce
 public abstract class StandardTokenRefreshableOAuthClient<U extends OpenPlatformUser>
         extends TokenRefreshableOAuthClient<U> {
 
+    /**
+     * basic authorize url
+     *
+     * <p>Query items added are as follows:
+     * <ul>
+     * <li>response_type: {@code "code"}</li>
+     * <li>client_id: {@code app.getClientId()}</li>
+     * <li>redirect_uri: {@code app.getRedirectUri()}</li>
+     * </ul>
+     */
     private final OAuthUrl basicAuthorizeUrl;
+    /**
+     * basic token request
+     *
+     * <p>Query items(GET)/Form items(POST) added are as follows:
+     * <ul>
+     * <li>grant_type: {@code "authorization_code"}</li>
+     * <li>client_id: {@code app.getClientId()}</li>
+     * <li>client_secret: {@code app.getClientSecret()}</li>
+     * <li>redirect_uri: {@code app.getRedirectUri()}</li>
+     * </ul>
+     */
     private final OAuthRequest basicTokenRequest;
+    /**
+     * basic refresh token request
+     *
+     * <p>Query items(GET)/Form items(POST) added are as follows:
+     * <ul>
+     * <li>grant_type: {@code "refresh_token"}</li>
+     * <li>client_id: {@code app.getClientId()}</li>
+     * <li>client_secret: {@code app.getClientSecret()}</li>
+     * </ul>
+     */
     private final OAuthRequest basicRefreshTokenRequest;
 
     /**
-     * Construct a standard token refreshable oauth client.
+     * Construct standard token refreshable oauth client.
      *
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
@@ -76,16 +107,18 @@ public abstract class StandardTokenRefreshableOAuthClient<U extends OpenPlatform
     // -------------------- authorize url ---------------------------
 
     /**
-     * Initialize a basic authorize url. <strong>Just need</strong> url.
+     * Initialize basic authorize url.
      *
-     * @return a basic authorize url
+     * <p><strong>There is no need</strong> to set `response_type`, `client_id` and `redirect_uri`.
+     *
+     * @return basic authorize url
      */
     protected abstract String getAuthorizeUrl();
 
     /**
      * Initialize standard authorize url.
      *
-     * <p>Query items are as follows:
+     * <p>Query items added are as follows:
      * <ul>
      * <li>response_type: {@code "code"}</li>
      * <li>client_id: {@code app.getClientId()}</li>
@@ -98,19 +131,20 @@ public abstract class StandardTokenRefreshableOAuthClient<U extends OpenPlatform
      */
     @Override
     public final OAuthUrl initAuthorizeUrl(String state) {
-        OAuthUrl copy = basicAuthorizeUrl.copy();
-        copy.getQuery().addState(state);
-        return copy;
+        OAuthUrl request = basicAuthorizeUrl.copy();
+        request.getQuery().addState(state);
+        return request;
     }
 
     // -------------------- oauth token -----------------------------
 
     /**
-     * Initialize a basic token request.
+     * Initialize basic token request.
      *
-     * <p>No need to set `grant_type`, `client_id`, `client_secret` and `redirect_uri`.
+     * <p><strong>There is no need</strong> to set `grant_type`, `client_id`, `client_secret`,
+     * `redirect_uri` and `code`.
      *
-     * @return a basic token request
+     * @return basic token request
      * @see #requestForToken(OAuthRedirectUriQuery)
      */
     protected abstract OAuthRequest initBasicTokenRequest();
@@ -135,19 +169,20 @@ public abstract class StandardTokenRefreshableOAuthClient<U extends OpenPlatform
     @Override
     public final OAuthToken requestForToken(OAuthRedirectUriQuery redirectUriQuery)
             throws OAuthErrorException, OAuthIOException {
-        OAuthRequest copy = basicTokenRequest.copy();
-        copy.getParamsByMethod().addCode(redirectUriQuery.getCode());
-        return new OAuthToken(execute(copy));
+        OAuthRequest request = basicTokenRequest.copy();
+        request.getParamsByMethod().addCode(redirectUriQuery.getCode());
+        return new OAuthToken(execute(request));
     }
 
     // -------------------- refresh token ---------------------------
 
     /**
-     * Initialize a basic refresh token request.
+     * Initialize basic refresh token request.
      *
-     * <p>No need to set `grant_type`, `client_id`, `client_secret`.
+     * <p><strong>There is no need</strong> to set `grant_type`, `client_id`, `client_secret` and
+     * `refresh_token`.
      *
-     * @return a basic refresh token request
+     * @return basic refresh token request
      * @see #requestForToken(OAuthRedirectUriQuery)
      */
     protected abstract OAuthRequest initBasicRefreshTokenRequest();
@@ -171,9 +206,9 @@ public abstract class StandardTokenRefreshableOAuthClient<U extends OpenPlatform
     @Override
     public final OAuthToken refreshToken(OAuthToken token)
             throws OAuthErrorException, OAuthIOException {
-        OAuthRequest copy = basicRefreshTokenRequest.copy();
-        copy.getParamsByMethod().addRefreshToken(token.getRefreshToken());
-        return new OAuthToken(execute(copy));
+        OAuthRequest request = basicRefreshTokenRequest.copy();
+        request.getParamsByMethod().addRefreshToken(token.getRefreshToken());
+        return new OAuthToken(execute(request));
     }
 
     // -------------------- error -----------------------------------
@@ -181,7 +216,7 @@ public abstract class StandardTokenRefreshableOAuthClient<U extends OpenPlatform
     /**
      * {@inheritDoc}
      *
-     * <p>Standard oauth client read `error` from response data.
+     * <p>Read `error` from response data.
      *
      * @param response {@inheritDoc}
      * @return {@inheritDoc}
@@ -194,7 +229,7 @@ public abstract class StandardTokenRefreshableOAuthClient<U extends OpenPlatform
     /**
      * {@inheritDoc}
      *
-     * <p>Standard oauth client read `error_description` from response data.
+     * <p>Read `error_description` from response data.
      *
      * @param response {@inheritDoc}
      * @return {@inheritDoc}

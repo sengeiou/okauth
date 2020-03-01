@@ -21,7 +21,7 @@ import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
 /**
- * Exchange redirect uri query for user.
+ * Exchange redirect uri query for token.
  *
  * @since Feb 28, 2020
  * @author wautsns
@@ -35,7 +35,7 @@ public interface ExchangeRedirectUriQueryForToken {
      * @param redirectUriQuery oauth redirect uri query, require nonnull
      * @return oauth token
      * @throws OAuthErrorException if the oauth response is not correct
-     * @throws OAuthIOException if an IO exception occurs
+     * @throws OAuthIOException if IO exception occurs
      */
     OAuthToken requestForToken(OAuthRedirectUriQuery redirectUriQuery)
             throws OAuthErrorException, OAuthIOException;

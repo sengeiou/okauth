@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.dingtalk;
+package com.github.wautsns.okauth.core.client.builtin.qq;
 
-import java.io.Serializable;
-
-import java.util.Map;
+import java.util.Objects;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
@@ -25,58 +23,37 @@ import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 
 /**
- * Dingtalk user.
- *
- * <p>Original data map:
- *
- * <pre>
- * {
- *     "errcode": 0,
- *     "errmsg": "ok",
- *     "user_info": {
- *         "nick": "张三",
- *         "openid": "liSii8KCxxxxx",
- *         "unionid": "7Huu46kk"
- *     }
- * }
- * </pre>
+ * QQ user.
  *
  * @since Mar 01, 2020
  * @author wautsns
  */
-public class DingtalkUser extends OpenPlatformUser {
+public class QQUser extends OpenPlatformUser {
 
     /** serialVersionUID */
-    private static final long serialVersionUID = -3396777913969297784L;
+    private static final long serialVersionUID = 4607846376386651426L;
+
+    private final String openid;
 
     /**
-     * Construct a dingtalk user.
+     * Construct QQ user.
      *
+     * @param openid openid, require nonnull
      * @param originalDataMap original data map, require nonnull
      */
-    @SuppressWarnings("unchecked")
-    public DingtalkUser(OAuthResponse response) {
-        super((Map<String, Serializable>) response.getData().get("user_info"));
+    public QQUser(String openid, OAuthResponse response) {
+        super(response);
+        this.openid = Objects.requireNonNull(openid);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.DINGTALK;
+        return OpenPlatforms.QQ;
     }
 
     @Override
     public String getOpenid() {
-        return getString("openid");
-    }
-
-    @Override
-    public String getUnionid() {
-        return getString("unionid");
-    }
-
-    @Override
-    public String getNickname() {
-        return getString("nick");
+        return openid;
     }
 
 }

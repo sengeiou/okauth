@@ -16,7 +16,6 @@
 package com.github.wautsns.okauth.core.client.kernel.model.dto;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 import java.util.Map;
 
@@ -31,13 +30,13 @@ import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse
  */
 public abstract class OpenPlatformUser extends OAuthResponseDataMap {
 
-    public enum Gender { MALE, FEMALE, SECRET }
+    public enum Gender { MALE, FEMALE, SECRET, UNKNOWN }
 
     /** serialVersionUID */
     private static final long serialVersionUID = -9204638137197883064L;
 
     /**
-     * Construct an open platform user.
+     * Construct open platform user.
      *
      * @param originalDataMap original data map, require nonnull
      */
@@ -46,7 +45,7 @@ public abstract class OpenPlatformUser extends OAuthResponseDataMap {
     }
 
     /**
-     * Construct an open platform user.
+     * Construct open platform user.
      *
      * @param response okauth response, require nonnull
      */
@@ -64,7 +63,7 @@ public abstract class OpenPlatformUser extends OAuthResponseDataMap {
     /**
      * Get openid of the user.
      *
-     * @return openid of the user
+     * @return openid of the user(nonnull)
      */
     public abstract String getOpenid();
 
@@ -107,19 +106,10 @@ public abstract class OpenPlatformUser extends OAuthResponseDataMap {
     /**
      * Get gender of the user.
      *
-     * @return gender of the user({@code null} if not present)
+     * @return gender of the user(nonnull)
      */
     public Gender getGender() {
-        return null;
-    }
-
-    /**
-     * Get birthday of the user.
-     *
-     * @return birthday of the user({@code null} if not present)
-     */
-    public LocalDate getBirthday() {
-        return null;
+        return Gender.UNKNOWN;
     }
 
 }

@@ -49,6 +49,22 @@ public abstract class TokenAvailableOAuthClient<U extends OpenPlatformUser>
     // -------------------- oauth user ------------------------------
 
     /**
+     * Exchange redirect uri query for openid.
+     *
+     * <p>This implementation returns {@code requestForOpenid(requestForToken(redirectUriQuery))}.
+     *
+     * @param redirectUriQuery {@inheritDoc}
+     * @return {@inheritDoc}
+     * @throws OAuthErrorException {@inheritDoc}
+     * @throws OAuthIOException {@inheritDoc}
+     */
+    @Override
+    public final String requestForOpenid(OAuthRedirectUriQuery redirectUriQuery)
+            throws OAuthErrorException, OAuthIOException {
+        return requestForOpenid(requestForToken(redirectUriQuery));
+    }
+
+    /**
      * {@inheritDoc}
      *
      * <p>Request process is as follows:
@@ -63,7 +79,7 @@ public abstract class TokenAvailableOAuthClient<U extends OpenPlatformUser>
      * @throws OAuthIOException {@inheritDoc}
      */
     @Override
-    public U requestForUser(OAuthRedirectUriQuery redirectUriQuery)
+    public final U requestForUser(OAuthRedirectUriQuery redirectUriQuery)
             throws OAuthErrorException, OAuthIOException {
         return requestForUser(requestForToken(redirectUriQuery));
     }

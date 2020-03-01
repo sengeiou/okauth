@@ -16,45 +16,46 @@
 package com.github.wautsns.okauth.core.client.kernel.api;
 
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthRedirectUriQuery;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
 /**
- * Exchange token for user.
+ * Exchange redirect uri query for user.
  *
  * @since Feb 28, 2020
  * @author wautsns
  */
 @FunctionalInterface
-public interface ExchangeTokenForUser<U extends OpenPlatformUser> {
+public interface ExchangeRedirectUriQueryForUser<U extends OpenPlatformUser> {
 
     /**
-     * Exchange token for openid.
+     * Exchange redirect uri query for openid.
      *
-     * <p>This implementation returns {@code requestForUser(token).getOpenid()}.
+     * <p>Default implementation returns {@code requestForUser(redirectUriQuery).getOpenid()}.
      *
-     * @param token oauth token, require nonnull
+     * @param redirectUriQuery redirectUriQuery oauth redirect uri query, require nonnull
      * @return openid
      * @throws OAuthErrorException if the oauth response is not correct
      * @throws OAuthIOException if IO exception occurs
      * @see #requestForUser(OAuthRedirectUriQuery)
      */
-    default String requestForOpenid(OAuthToken token) throws OAuthErrorException, OAuthIOException {
-        return requestForUser(token).getOpenid();
+    default String requestForOpenid(OAuthRedirectUriQuery redirectUriQuery)
+            throws OAuthErrorException, OAuthIOException {
+        return requestForUser(redirectUriQuery).getOpenid();
     }
 
     /**
-     * Exchange token for user.
+     * Exchange redirect uri query for user.
      *
-     * <p>If you only need openid, you can call {@code requestForOpenid(token)}.
+     * <p>If you only need openid, you can call {@code requestForOpenid(redirectUriQuery)}.
      *
-     * @param token oauth token, require nonnull
+     * @param redirectUriQuery oauth redirect uri query, require nonnull
      * @return open platform user
      * @throws OAuthErrorException if the oauth response is not correct
      * @throws OAuthIOException if IO exception occurs
      */
-    U requestForUser(OAuthToken token) throws OAuthErrorException, OAuthIOException;
+    U requestForUser(OAuthRedirectUriQuery redirectUriQuery)
+            throws OAuthErrorException, OAuthIOException;
 
 }

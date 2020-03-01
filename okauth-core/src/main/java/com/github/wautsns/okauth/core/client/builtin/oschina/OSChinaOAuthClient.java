@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.gitee;
+package com.github.wautsns.okauth.core.client.builtin.oschina;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
@@ -26,61 +26,77 @@ import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
 /**
- * Gitee oauth client.
+ * OSChina oauth client.
  *
- * @since Feb 29, 2020
+ * @since Mar 01, 2020
  * @author wautsns
- * @see <a href="https://gitee.com/api/v5/oauth_doc">gitee oauth doc</a>
+ * @see <a href="https://www.oschina.net/openapi/docs">OSChina oauth doc</a>
  */
-public class GiteeOAuthClient extends StandardTokenRefreshableOAuthClient<GiteeUser> {
+public class OSChinaOAuthClient extends StandardTokenRefreshableOAuthClient<OSChinaUser> {
 
     /**
-     * Construct Gitee oauth client.
+     * Construct OSChina oauth client.
      *
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
      */
-    public GiteeOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
+    public OSChinaOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
         super(app, executor);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.GITEE;
+        return OpenPlatforms.OSCHINA;
     }
 
     @Override
     protected String getAuthorizeUrl() {
-        return "https://gitee.com/oauth/authorize";
+        return "https://www.oschina.net/action/oauth2/authorize";
     }
 
     @Override
     protected OAuthRequest initBasicTokenRequest() {
-        return OAuthRequest.forPost("https://gitee.com/oauth/token");
+        return OAuthRequest.forGet("https://www.oschina.net/action/openapi/token");
     }
 
     @Override
     protected OAuthRequest initBasicRefreshTokenRequest() {
-        return OAuthRequest.forPost("https://gitee.com/oauth/token");
+        return OAuthRequest.forGet("https://www.oschina.net/action/openapi/token");
+    }
+
+    /**
+     * Exchange token for openid.
+     *
+     * <p>This implementation returns {@code token.getString("uid")}.
+     *
+     * @param token {@inheritDoc}
+     * @return {@inheritDoc}
+     * @throws OAuthErrorException {@inheritDoc}
+     * @throws OAuthIOException {@inheritDoc}
+     */
+    @Override
+    public String requestForOpenid(OAuthToken token) throws OAuthErrorException, OAuthIOException {
+        return token.getString("uid");
     }
 
     @Override
-    public GiteeUser requestForUser(OAuthToken token) throws OAuthErrorException, OAuthIOException {
-        String url = "https://gitee.com/api/v5/user";
+    public OSChinaUser requestForUser(OAuthToken token)
+            throws OAuthErrorException, OAuthIOException {
+        String url = "https://www.oschina.net/action/openapi/user";
         OAuthRequest request = OAuthRequest.forGet(url);
         request.getQuery()
             .addAccessToken(token.getAccessToken());
-        return new GiteeUser(execute(request));
+        return new OSChinaUser(execute(request));
     }
 
     @Override
-    protected boolean doesTheErrorMeanThatAccessTokenHasExpired(String error) {
+    protected boolean doesTheErrorMeanThatRefreshTokenHasExpired(String error) {
         // FIXME not found in doc
         return false;
     }
 
     @Override
-    protected boolean doesTheErrorMeanThatRefreshTokenHasExpired(String error) {
+    protected boolean doesTheErrorMeanThatAccessTokenHasExpired(String error) {
         // FIXME not found in doc
         return false;
     }

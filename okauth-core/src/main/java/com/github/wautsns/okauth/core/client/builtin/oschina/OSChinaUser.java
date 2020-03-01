@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.baidu;
-
-import java.time.LocalDate;
+package com.github.wautsns.okauth.core.client.builtin.oschina;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
@@ -23,71 +21,69 @@ import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 
 /**
- * Baidu user.
+ * OSChina user.
  *
  * <p>response data map:
  *
  * <pre>
  * {
- *     "userid": "33192xxxxx",
- *     "portrait": "afc577617574736e7xxxxx",
- *     "username": "w***s",
- *     "is_bind_mobile": "1",
- *     "is_realname": "1",
- *     "birthday": "1998-02-05",
- *     "sex": "1",
- *     "openid": "oF6xVTPl83G5Q2tAeh5w5j1uNyxxxxx"
+ *     "gender": "male",
+ *     "name": "wautsns",
+ *     "location": "上海 普陀",
+ *     "id": 41xxxxx,
+ *     "avatar": "https://static.oschina.net/uploads/user/2076/41xxxxx_50.jpg?t=1561458936000",
+ *     "email": "wautsns@foxmail.com",
+ *     "url": "https://my.oschina.net/u/41xxxxx"
  * }
  * </pre>
  *
- * @since Feb 29, 2020
+ * @since Mar 01, 2020
  * @author wautsns
  */
-public class BaiduUser extends OpenPlatformUser {
+public class OSChinaUser extends OpenPlatformUser {
 
     /** serialVersionUID */
-    private static final long serialVersionUID = -5163425746517965960L;
+    private static final long serialVersionUID = -2692000764813082128L;
 
     /**
-     * Construct Baidu user.
+     * Construct OSChina user.
      *
-     * @param response okauth response, require nonnull
+     * @param originalDataMap original data map, require nonnull
      */
-    public BaiduUser(OAuthResponse response) {
+    public OSChinaUser(OAuthResponse response) {
         super(response);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.BAIDU;
+        return OpenPlatforms.OSCHINA;
     }
 
     @Override
     public String getOpenid() {
-        return getString("openid");
+        return getString("id");
+    }
+
+    @Override
+    public String getNickname() {
+        return getString("name");
     }
 
     @Override
     public String getAvatarUrl() {
-        return "http://tb.himg.baidu.com/sys/portrait/item/" + getString("portrait");
+        return getString("avatar");
     }
 
     @Override
     public Gender getGender() {
-        String gender = getString("sex");
-        if ("1".equals(gender)) {
+        String gender = getString("gender");
+        if (gender.equals("male")) {
             return Gender.MALE;
-        } else if ("0".equals(gender)) {
+        } else if (gender.equals("female")) {
             return Gender.FEMALE;
         } else {
             return Gender.UNKNOWN;
         }
-    }
-
-    public LocalDate getBirthday() {
-        String birthday = getString("birthday");
-        if (birthday == null) { return null; }
-        return LocalDate.parse(birthday);
     }
 
 }

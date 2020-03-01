@@ -76,7 +76,7 @@ public class OAuthManager {
     }
 
     /**
-     * Construct an oauth manager.
+     * Construct oauth manager.
      *
      * @param clients registered clients, require nonnull
      */

@@ -15,10 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest.Method;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
-import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
@@ -37,33 +34,8 @@ public interface RefreshToken {
      * @param token oauth token, require nonnull
      * @return oauth token after refreshing
      * @throws OAuthErrorException if the oauth response is not correct
-     * @throws OAuthIOException if an IO exception occurs
+     * @throws OAuthIOException if IO exception occurs
      */
     OAuthToken refreshToken(OAuthToken token) throws OAuthErrorException, OAuthIOException;
-
-    /**
-     * Initialize a basic standard request.
-     *
-     * <p>Query items(GET)/Form items(POST) added are as follows:
-     * <ul>
-     * <li>grant_type: {@code "refresh_token"}</li>
-     * <li>client_id: {@code app.getClientId()}</li>
-     * <li>client_secret: {@code app.getClientSecret()}</li>
-     * </ul>
-     *
-     * @param method request method, require nonnull
-     * @param url request url, require nonnull
-     * @param app oauth app properties, require nonnull
-     * @return a basic standard request for refreshing token
-     */
-    static OAuthRequest initBasicStandardRequest(
-            Method method, String url, OAuthAppProperties app) {
-        OAuthRequest basic = OAuthRequest.init(method, url);
-        basic.getParamsByMethod()
-            .addGrantTypeWithValueRefreshToken()
-            .addClientId(app.getClientId())
-            .addClientSecret(app.getClientSecret());
-        return basic;
-    }
 
 }

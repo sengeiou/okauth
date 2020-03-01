@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel.http.util;
+package com.github.wautsns.okauth.core.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -25,23 +26,33 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * OAuth readers.
+ * Reader.
  *
  * @since Feb 28, 2020
  * @author wautsns
  */
-public class OAuthReaders {
+public class Reader {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final JavaType MAP = OBJECT_MAPPER.getTypeFactory()
         .constructMapType(Map.class, String.class, Serializable.class);
+
+    public static String readAsString(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        return result.toString();
+    }
 
     /**
      * Read json input stream as map.
      *
      * @param inputStream json input stream, require nonnull
      * @return map
-     * @throws IOException if an IO exception occurs
+     * @throws IOException if IO exception occurs
      */
     public static Map<String, Serializable> readeJsonAsMap(InputStream inputStream)
             throws IOException {
@@ -53,7 +64,7 @@ public class OAuthReaders {
      *
      * @param string json string, require nonnull
      * @return map
-     * @throws IOException if an IO exception occurs
+     * @throws IOException if IO exception occurs
      */
     public static Map<String, Serializable> readeJsonAsMap(String string) throws IOException {
         return OBJECT_MAPPER.readValue(string, MAP);
@@ -61,6 +72,6 @@ public class OAuthReaders {
 
     // -------------------- ignored ---------------------------------
 
-    private OAuthReaders() {}
+    private Reader() {}
 
 }

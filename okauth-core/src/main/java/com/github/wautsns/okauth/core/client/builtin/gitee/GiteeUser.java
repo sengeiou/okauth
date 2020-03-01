@@ -23,7 +23,7 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 /**
  * Gitee user.
  *
- * <p>Original data map:
+ * <p>response data map:
  *
  * <pre>
  * {
@@ -68,7 +68,7 @@ public class GiteeUser extends OpenPlatformUser {
     private static final long serialVersionUID = -6198419705522461920L;
 
     /**
-     * Construct a gitee user.
+     * Construct Gitee user.
      *
      * @param response okauth response, require nonnull
      */

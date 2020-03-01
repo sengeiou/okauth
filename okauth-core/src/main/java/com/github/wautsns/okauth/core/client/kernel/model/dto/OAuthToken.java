@@ -33,7 +33,7 @@ public class OAuthToken extends OAuthResponseDataMap {
     private static final long serialVersionUID = -1515246267803686756L;
 
     /**
-     * Construct an oauth token.
+     * Construct oauth token.
      *
      * @param originalDataMap original data map, require nonnull
      */
@@ -42,7 +42,7 @@ public class OAuthToken extends OAuthResponseDataMap {
     }
 
     /**
-     * Construct an oauth token.
+     * Construct oauth token.
      *
      * @param response oauth response, require nonnull
      */

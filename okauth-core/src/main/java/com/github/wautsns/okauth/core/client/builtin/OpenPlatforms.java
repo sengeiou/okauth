@@ -18,10 +18,12 @@ package com.github.wautsns.okauth.core.client.builtin;
 import com.github.wautsns.okauth.core.client.OAuthClientInitializer;
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuthClient;
-import com.github.wautsns.okauth.core.client.builtin.dingtalk.DingtalkOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.dingtalk.DingTalkOAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuthClient;
-import com.github.wautsns.okauth.core.client.builtin.github.GithubOAuthClient;
-import com.github.wautsns.okauth.core.client.builtin.weibo.WeiboOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.microblog.MicroBlogOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.qq.QQOAuthClient;
 import com.github.wautsns.okauth.core.client.kernel.OAuthClient;
 import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
@@ -34,16 +36,27 @@ import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppPro
  */
 public enum OpenPlatforms implements OpenPlatform, OAuthClientInitializer {
 
+    /** Baidu(百度) */
     BAIDU(BaiduOAuthClient::new),
-    DINGTALK(DingtalkOAuthClient::new),
+    /** DingTalk(钉钉) */
+    DINGTALK(DingTalkOAuthClient::new),
+    /** Gitee(码云) */
     GITEE(GiteeOAuthClient::new),
-    GITHUB(GithubOAuthClient::new),
-    WEIBO(WeiboOAuthClient::new);
+    /** GitHub */
+    GITHUB(GitHubOAuthClient::new),
+    /** OSChina(开源中国) */
+    OSCHINA(OSChinaOAuthClient::new),
+    /** QQ(腾讯QQ) */
+    QQ(QQOAuthClient::new),
+    /** TencentCloud(腾讯云) */
+    TENCENTCLOUD(null),
+    /** MicroBlog(微博) */
+    MICROBLOG(MicroBlogOAuthClient::new);
 
     private final OAuthClientInitializer initializer;
 
     /**
-     * Construct an open platform.
+     * Construct open platform.
      *
      * @param initializer oauth client initializer, require nonnull
      */

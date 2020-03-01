@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.weibo;
+package com.github.wautsns.okauth.core.client.builtin.microblog;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 
 /**
- * Weibo user.
+ * MicroBlog user.
  *
- * <p>Original data map:
+ * <p>response data map:
  *
  * <pre>
  * {
@@ -92,23 +93,23 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * @since Feb 29, 2020
  * @author wautsns
  */
-public class WeiboUser extends OpenPlatformUser {
+public class MicroBlogUser extends OpenPlatformUser {
 
     /** serialVersionUID */
     private static final long serialVersionUID = 1466862966956847504L;
 
     /**
-     * Construct a weibo user.
+     * Construct MicroBlog user.
      *
      * @param originalDataMap original data map, require nonnull
      */
-    public WeiboUser(OAuthResponse response) {
+    public MicroBlogUser(OAuthResponse response) {
         super(response);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return null;
+        return OpenPlatforms.MICROBLOG;
     }
 
     @Override
@@ -134,7 +135,7 @@ public class WeiboUser extends OpenPlatformUser {
         } else if ("f".equals(gender)) {
             return Gender.FEMALE;
         } else {
-            return null;
+            return Gender.UNKNOWN;
         }
     }
 
