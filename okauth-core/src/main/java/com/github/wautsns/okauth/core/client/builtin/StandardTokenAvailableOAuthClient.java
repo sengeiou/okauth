@@ -28,7 +28,7 @@ import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
 /**
- * Standard oauth client.
+ * Standard token available oauth client.
  *
  * @since Feb 28, 2020
  * @author wautsns

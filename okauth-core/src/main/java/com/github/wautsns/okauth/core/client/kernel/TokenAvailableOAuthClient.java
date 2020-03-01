@@ -46,6 +46,8 @@ public abstract class TokenAvailableOAuthClient<U extends OpenPlatformUser>
         super(app, executor);
     }
 
+    // -------------------- oauth user ------------------------------
+
     /**
      * {@inheritDoc}
      *
@@ -65,6 +67,8 @@ public abstract class TokenAvailableOAuthClient<U extends OpenPlatformUser>
             throws OAuthErrorException, OAuthIOException {
         return requestForUser(requestForToken(redirectUriQuery));
     }
+
+    // -------------------- error -----------------------------------
 
     @Override
     protected OAuthErrorException newOAuthErrorException(
