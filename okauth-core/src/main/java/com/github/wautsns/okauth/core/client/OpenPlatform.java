@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,8 @@ import java.io.Serializable;
 /**
  * Open platform.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
 public interface OpenPlatform extends Serializable {
 

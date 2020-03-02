@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,17 +27,16 @@ import com.github.wautsns.okauth.core.exception.error.AccessTokenHasExpiredExcep
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
 /**
- * Token available oauth.
+ * Token available oauth client.
  *
- * @since Feb 29, 2020
  * @author wautsns
+ * @since Feb 29, 2020
  */
 public abstract class TokenAvailableOAuthClient<U extends OpenPlatformUser>
-        extends OAuthClient<U>
-        implements ExchangeRedirectUriQueryForToken, ExchangeTokenForUser<U> {
+    extends OAuthClient<U> implements ExchangeRedirectUriQueryForToken, ExchangeTokenForUser<U> {
 
     /**
-     * Construct a token available oauth client.
+     * Construct token available oauth client.
      *
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
@@ -60,15 +59,15 @@ public abstract class TokenAvailableOAuthClient<U extends OpenPlatformUser>
      */
     @Override
     public final String requestForOpenid(OAuthRedirectUriQuery redirectUriQuery)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         return requestForOpenid(requestForToken(redirectUriQuery));
     }
 
     /**
      * {@inheritDoc}
      *
-     * <p>Request process is as follows:
      * <ol>
+     * Request processes are as follows:
      * <li>redirectUriQuery -> token</li>
      * <li>token -> user</li>
      * </ol>
@@ -80,7 +79,7 @@ public abstract class TokenAvailableOAuthClient<U extends OpenPlatformUser>
      */
     @Override
     public final U requestForUser(OAuthRedirectUriQuery redirectUriQuery)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         return requestForUser(requestForToken(redirectUriQuery));
     }
 
@@ -88,7 +87,7 @@ public abstract class TokenAvailableOAuthClient<U extends OpenPlatformUser>
 
     @Override
     protected OAuthErrorException newOAuthErrorException(
-            OpenPlatform openPlatform, String error, String errorDescription) {
+        OpenPlatform openPlatform, String error, String errorDescription) {
         if (doesTheErrorMeanThatAccessTokenHasExpired(error)) {
             return new AccessTokenHasExpiredException(openPlatform);
         } else {

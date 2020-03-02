@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,20 +15,19 @@
  */
 package com.github.wautsns.okauth.springbootstarter;
 
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.github.wautsns.okauth.core.manager.OAuthManager;
 import com.github.wautsns.okauth.core.manager.OAuthManagerBuilder;
 import com.github.wautsns.okauth.core.manager.OAuthManagerProperties;
 import com.github.wautsns.okauth.springbootstarter.properties.SpringBootOAuthManagerProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * OkAuth auto configuration.
  *
- * @since Feb 27, 2020
  * @author wautsns
+ * @since Feb 27, 2020
  */
 @Configuration
 @EnableConfigurationProperties(SpringBootOAuthManagerProperties.class)
@@ -36,9 +35,7 @@ public class OkAuthAutoConfiguration {
 
     @Bean
     public OAuthManager okauthManager(OAuthManagerProperties oauthManagerProperties) {
-        return new OAuthManagerBuilder()
-            .register(oauthManagerProperties)
-            .build();
+        return new OAuthManagerBuilder().register(oauthManagerProperties).build();
     }
 
 }

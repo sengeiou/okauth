@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +28,9 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 /**
  * OSChina oauth client.
  *
- * @since Mar 01, 2020
  * @author wautsns
  * @see <a href="https://www.oschina.net/openapi/docs">OSChina oauth doc</a>
+ * @since Mar 01, 2020
  */
 public class OSChinaOAuthClient extends StandardTokenRefreshableOAuthClient<OSChinaUser> {
 
@@ -75,13 +75,13 @@ public class OSChinaOAuthClient extends StandardTokenRefreshableOAuthClient<OSCh
      * @throws OAuthIOException {@inheritDoc}
      */
     @Override
-    public String requestForOpenid(OAuthToken token) throws OAuthErrorException, OAuthIOException {
-        return token.getString("uid");
+    public String requestForOpenid(OAuthToken token) {
+        return token.getAsString("uid");
     }
 
     @Override
     public OSChinaUser requestForUser(OAuthToken token)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         String url = "https://www.oschina.net/action/openapi/user";
         OAuthRequest request = OAuthRequest.forGet(url);
         request.getQuery()

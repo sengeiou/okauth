@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,18 +37,17 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * }
  * </pre>
  *
- * @since Mar 01, 2020
  * @author wautsns
+ * @since Mar 01, 2020
  */
 public class OSChinaUser extends OpenPlatformUser {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -2692000764813082128L;
 
     /**
      * Construct OSChina user.
      *
-     * @param originalDataMap original data map, require nonnull
+     * @param response okauth response, require nonnull
      */
     public OSChinaUser(OAuthResponse response) {
         super(response);
@@ -61,22 +60,22 @@ public class OSChinaUser extends OpenPlatformUser {
 
     @Override
     public String getOpenid() {
-        return getString("id");
+        return getAsString("id");
     }
 
     @Override
     public String getNickname() {
-        return getString("name");
+        return getAsString("name");
     }
 
     @Override
     public String getAvatarUrl() {
-        return getString("avatar");
+        return getAsString("avatar");
     }
 
     @Override
     public Gender getGender() {
-        String gender = getString("gender");
+        String gender = getAsString("gender");
         if (gender.equals("male")) {
             return Gender.MALE;
         } else if (gender.equals("female")) {

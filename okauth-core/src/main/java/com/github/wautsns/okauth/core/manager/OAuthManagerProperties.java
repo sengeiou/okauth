@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,102 +15,55 @@
  */
 package com.github.wautsns.okauth.core.manager;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import com.github.wautsns.okauth.core.client.kernel.http.builtin.okhttp.OkHttpOAuthRequestExecutor;
 import com.github.wautsns.okauth.core.client.kernel.http.model.properties.OAuthRequestExecutorProperties;
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthClientProperties;
 import com.github.wautsns.okauth.core.util.CheckableProperties;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * OAuth client manager properties.
  *
- * @since Feb 29, 2020
  * @author wautsns
- * @see OAuthManagerProperties#check()
+ * @see #check()
+ * @since Feb 29, 2020
  */
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class OAuthManagerProperties extends CheckableProperties {
 
     /**
      * default request executor properties
      *
-     * <p>Default values are as follows:
      * <ul>
+     * Default properties are as follows:
      * <li>requestExecutorClass: {@linkplain OkHttpOAuthRequestExecutor}.class</li>
      * <li>connectTimeoutMilliseconds: 7_000</li>
      * <li>maxConcurrentRequests: 64</li>
      * <li>maxIdleConnections: 8</li>
      * <li>keepAlive: 5 * 60_000</li>
-     * <li>keepAliveTimeUnit: {@linkplain TimeUnit#MILLISECONDS}</li>
+     * <li>keepAliveTimeUnit: {@link TimeUnit#MILLISECONDS}</li>
      * </ul>
      */
-    private OAuthRequestExecutorProperties defaultRequestExecutor =
-        new OAuthRequestExecutorProperties()
-            .setRequestExecutorClass(OkHttpOAuthRequestExecutor.class)
-            .setConnectTimeoutMilliseconds(7_000)
-            .setMaxConcurrentRequests(64)
-            .setMaxIdleConnections(8)
-            .setKeepAlive(5L * 60_000)
-            .setKeepAliveTimeUnit(TimeUnit.MILLISECONDS);
+    private OAuthRequestExecutorProperties defaultRequestExecutor = new OAuthRequestExecutorProperties()
+        .setRequestExecutorClass(OkHttpOAuthRequestExecutor.class)
+        .setConnectTimeoutMilliseconds(7_000)
+        .setMaxConcurrentRequests(64)
+        .setMaxIdleConnections(8)
+        .setKeepAlive(5L * 60_000)
+        .setKeepAliveTimeUnit(TimeUnit.MILLISECONDS);
     /** oauth clients */
     private List<OAuthClientProperties> clients;
 
     /**
-     * Get default request executor.
-     *
-     * <p>Default values are as follows:
-     * <ul>
-     * <li>requestExecutorClass: {@linkplain OkHttpOAuthRequestExecutor}.class</li>
-     * <li>connectTimeoutMilliseconds: 7_000</li>
-     * <li>maxConcurrentRequests: 64</li>
-     * <li>maxIdleConnections: 8</li>
-     * <li>keepAlive: 5 * 60_000</li>
-     * <li>keepAliveTimeUnit: {@linkplain TimeUnit#MILLISECONDS}</li>
-     * </ul>
-     *
-     * @return default request executor
-     */
-    public OAuthRequestExecutorProperties getDefaultRequestExecutor() {
-        return defaultRequestExecutor;
-    }
-
-    /**
-     * Set default request executor.
-     *
-     * @param defaultRequestExecutor default request executor
-     * @return self reference
-     */
-    public OAuthManagerProperties setDefaultRequestExecutor(
-            OAuthRequestExecutorProperties defaultRequestExecutor) {
-        this.defaultRequestExecutor = defaultRequestExecutor;
-        return this;
-    }
-
-    /**
-     * Get clients.
-     *
-     * @return clients
-     */
-    public List<OAuthClientProperties> getClients() {
-        return clients;
-    }
-
-    /**
-     * Set clients.
-     *
-     * @param clients clients
-     * @return self reference
-     */
-    public OAuthManagerProperties setClients(List<OAuthClientProperties> clients) {
-        this.clients = clients;
-        return this;
-    }
-
-    /**
      * {@inheritDoc}
      *
-     * <p>Just check if the clients(include keys and values) is {@code null}.
+     * <p>Just check if the clients contain {@code null}.</p>
      *
      * @throws IllegalArgumentException {@inheritDoc}
      */

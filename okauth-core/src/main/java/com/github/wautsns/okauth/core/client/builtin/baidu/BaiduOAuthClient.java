@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +28,9 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 /**
  * Baidu oauth client.
  *
- * @since Feb 29, 2020
  * @author wautsns
  * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth">baidu oauth doc</a>
+ * @since Feb 29, 2020
  */
 public class BaiduOAuthClient extends StandardTokenRefreshableOAuthClient<BaiduUser> {
 

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,53 +15,56 @@
  */
 package com.github.wautsns.okauth.core.manager;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.kernel.OAuthClient;
 import com.github.wautsns.okauth.core.exception.UnsupportedOpenPlatformException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * OAuth manager.
  *
- * @since Feb 29, 2020
  * @author wautsns
  * @see OAuthManagerBuilder
+ * @since Feb 29, 2020
  */
 public class OAuthManager {
 
-    /** registered clients */
-    private Map<OpenPlatform, OAuthClient<?>> clients;
-    /** named clients */
-    private Map<String, OAuthClient<?>> namedClients;
+    /** open platform -> registered clients map */
+    private final Map<OpenPlatform, OAuthClient<?>> clients;
+    /**
+     * open platform name -> registered clients map
+     *
+     * <p>An open platform may have multiple names. eg. Github, GITHUB...</p>
+     */
+    private final Map<String, OAuthClient<?>> namedClients;
 
     /**
      * Get oauth client.
      *
      * @param openPlatform open platform, require nonnull
-     * @return client assosiated with the openPlatform
-     * @throws UnsupportedOpenPlatformException if no client is assosiated with the openPlatform
+     * @return client associated with the open platform
+     * @throws UnsupportedOpenPlatformException if no client is associated with the open platform
      */
-    public <T extends OAuthClient<?>> T getClient(OpenPlatform openPlatform)
-            throws UnsupportedOpenPlatformException {
-        @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
+    public <T extends OAuthClient<?>> T getClient(OpenPlatform openPlatform) throws UnsupportedOpenPlatformException {
         T client = (T) clients.get(openPlatform);
-        if (client != null) { return client; }
-        throw new UnsupportedOpenPlatformException(openPlatform.name());
+        if (client != null) {
+            return client;
+        } else {
+            throw new UnsupportedOpenPlatformException(openPlatform);
+        }
     }
 
     /**
      * Get oauth client.
      *
      * @param name open platform name(case insensitive), require nonnull
-     * @return client assosiated with the open platform name
-     * @throws UnsupportedOpenPlatformException if no client is assosiated with the openPlatform
+     * @return client associated with the open platform name
+     * @throws UnsupportedOpenPlatformException if no client is associated with the openPlatform
      */
     @SuppressWarnings("unchecked")
-    public <T extends OAuthClient<?>> T getClient(String name)
-            throws UnsupportedOpenPlatformException {
+    public <T extends OAuthClient<?>> T getClient(String name) throws UnsupportedOpenPlatformException {
         T client = (T) namedClients.get(name);
         if (client != null) { return client; }
         client = (T) namedClients.get(name.toUpperCase());
@@ -82,11 +85,9 @@ public class OAuthManager {
      */
     OAuthManager(Map<OpenPlatform, OAuthClient<?>> clients) {
         this.clients = new HashMap<>(clients);
-        // GITHUB, GitHub, github....
         this.namedClients = new HashMap<>(clients.size() << 1);
-        for (Entry<OpenPlatform, OAuthClient<?>> entry : clients.entrySet()) {
-            namedClients.put(entry.getKey().name(), entry.getValue());
-        }
+        clients.forEach((openPlatform, oauthClient) ->
+            namedClients.put(openPlatform.name(), oauthClient));
     }
 
 }

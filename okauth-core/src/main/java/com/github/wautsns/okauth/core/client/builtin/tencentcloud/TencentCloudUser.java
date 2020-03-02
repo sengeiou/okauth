@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +15,12 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.tencentcloud;
 
-import java.io.Serializable;
-
-import java.util.Map;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * TencentCloud user.
@@ -97,18 +95,17 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * }
  * </pre>
  *
- * @since Mar 01, 2020
  * @author wautsns
+ * @since Mar 01, 2020
  */
 public class TencentCloudUser extends OpenPlatformUser {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = 1654577901626169343L;
 
     /**
      * Construct TencentCloud user.
      *
-     * @param originalDataMap original data map, require nonnull
+     * @param response okauth response, require nonnull
      */
     @SuppressWarnings("unchecked")
     public TencentCloudUser(OAuthResponse response) {
@@ -122,22 +119,22 @@ public class TencentCloudUser extends OpenPlatformUser {
 
     @Override
     public String getOpenid() {
-        return getString("id");
+        return getAsString("id");
     }
 
     @Override
     public String getNickname() {
-        return getString("name");
+        return getAsString("name");
     }
 
     @Override
     public String getAvatarUrl() {
-        return getString("avatar");
+        return getAsString("avatar");
     }
 
     @Override
     public Gender getGender() {
-        String gender = getString("sex");
+        String gender = getAsString("sex");
         if ("1".equals(gender)) {
             return Gender.MALE;
         } else if ("0".equals(gender)) {

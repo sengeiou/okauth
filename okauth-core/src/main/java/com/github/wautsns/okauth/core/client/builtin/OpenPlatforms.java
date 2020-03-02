@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,16 +24,20 @@ import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.microblog.MicroBlogOAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuthClient;
 import com.github.wautsns.okauth.core.client.builtin.qq.QQOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.tencentcloud.TencentCloudOAuthClient;
 import com.github.wautsns.okauth.core.client.kernel.OAuthClient;
 import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Built-in open platforms.
  *
- * @since Feb 29, 2020
  * @author wautsns
+ * @since Feb 29, 2020
  */
+@RequiredArgsConstructor
 public enum OpenPlatforms implements OpenPlatform, OAuthClientInitializer {
 
     /** Baidu(百度) */
@@ -49,24 +53,15 @@ public enum OpenPlatforms implements OpenPlatform, OAuthClientInitializer {
     /** QQ(腾讯QQ) */
     QQ(QQOAuthClient::new),
     /** TencentCloud(腾讯云) */
-    TENCENTCLOUD(null),
+    TENCENTCLOUD(TencentCloudOAuthClient::new),
     /** MicroBlog(微博) */
     MICROBLOG(MicroBlogOAuthClient::new);
 
-    private final OAuthClientInitializer initializer;
-
-    /**
-     * Construct open platform.
-     *
-     * @param initializer oauth client initializer, require nonnull
-     */
-    private OpenPlatforms(OAuthClientInitializer initializer) {
-        this.initializer = initializer;
-    }
+    private final @NonNull OAuthClientInitializer oauthClientInitializer;
 
     @Override
     public OAuthClient<?> initOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
-        return initializer.initOAuthClient(app, executor);
+        return oauthClientInitializer.initOAuthClient(app, executor);
     }
 
 }

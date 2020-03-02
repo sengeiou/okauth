@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +15,6 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.http.builtin.okhttp;
 
-import java.io.IOException;
-import java.io.Serializable;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
 import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest.Method;
@@ -29,33 +22,31 @@ import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse
 import com.github.wautsns.okauth.core.client.kernel.http.model.properties.OAuthRequestExecutorProperties;
 import com.github.wautsns.okauth.core.client.kernel.http.util.OAuthResponseInputStreamReader;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
-
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import okhttp3.ConnectionPool;
 import okhttp3.Dispatcher;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * OkHttp3 oauth request executor.
  *
- * @since Feb 29, 2020
  * @author wautsns
+ * @since Feb 29, 2020
  */
+@RequiredArgsConstructor
 public class OkHttpOAuthRequestExecutor implements OAuthRequestExecutor {
 
     /** okhttp3 client */
-    private final OkHttpClient client;
-
-    /**
-     * Construct okhttp3 oauth request executor.
-     *
-     * @param okhttpClient okhttp client, require nonnull
-     */
-    public OkHttpOAuthRequestExecutor(OkHttpClient okhttpClient) {
-        this.client = Objects.requireNonNull(okhttpClient);
-    }
+    private final @NonNull OkHttpClient client;
 
     /**
      * Construct okhttp3 oauth request executor.
@@ -71,13 +62,12 @@ public class OkHttpOAuthRequestExecutor implements OAuthRequestExecutor {
                 properties.getMaxIdleConnections(),
                 properties.getKeepAlive(),
                 properties.getKeepAliveTimeUnit()));
-        OkHttpClient client = builder.build();
+        client = builder.build();
         Dispatcher dispatcher = client.dispatcher();
         dispatcher.setMaxRequests(properties.getMaxConcurrentRequests());
         // a requester is recommended to be used for only one open platform,
         // so max requests equals to max requests per host
         dispatcher.setMaxRequestsPerHost(properties.getMaxConcurrentRequests());
-        this.client = client;
     }
 
     @Override
@@ -130,11 +120,13 @@ public class OkHttpOAuthRequestExecutor implements OAuthRequestExecutor {
      * @throws IOException if IO exception occurs
      */
     private OAuthResponse doExecute(OAuthRequest oauthRequest, Request okhttp3Request)
-            throws IOException {
+        throws IOException {
         Response okHttp3Response = client.newCall(okhttp3Request).execute();
         int status = okHttp3Response.code();
         OAuthResponseInputStreamReader reader = oauthRequest.getResponseInputStreamReader();
-        Map<String, Serializable> data = reader.readAsMap(okHttp3Response.body().byteStream());
+        ResponseBody body = okHttp3Response.body();
+        if (body == null) { throw new IllegalStateException(); }
+        Map<String, Serializable> data = reader.readAsMap(body.byteStream());
         return new OAuthResponse(oauthRequest, status, data);
     }
 

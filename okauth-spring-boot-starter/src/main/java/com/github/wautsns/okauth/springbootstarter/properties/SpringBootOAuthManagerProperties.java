@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,16 +15,14 @@
  */
 package com.github.wautsns.okauth.springbootstarter.properties;
 
+import com.github.wautsns.okauth.core.manager.OAuthManagerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import com.github.wautsns.okauth.core.manager.OAuthManagerProperties;
-
 /**
- * Extends from {@link OAuthManagerProperties}, just add
- * {@code @ConfigurationProperties(prefix = "okauth")}.
+ * Extends from {@link OAuthManagerProperties}, just add {@code @ConfigurationProperties(prefix = "okauth")}.
  *
- * @since Feb 27, 2020
  * @author wautsns
+ * @since Feb 27, 2020
  */
 @ConfigurationProperties(prefix = "okauth")
 public class SpringBootOAuthManagerProperties extends OAuthManagerProperties {}

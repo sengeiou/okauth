@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,21 +15,18 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.model.dto;
 
-import java.io.Serializable;
-
-import java.util.Map;
-
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * OAuth token.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
 public class OAuthToken extends OAuthResponseDataMap {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -1515246267803686756L;
 
     /**
@@ -56,7 +53,7 @@ public class OAuthToken extends OAuthResponseDataMap {
      * @return access token
      */
     public String getAccessToken() {
-        return getString("access_token");
+        return getAsString("access_token");
     }
 
     /**
@@ -65,7 +62,7 @@ public class OAuthToken extends OAuthResponseDataMap {
      * @return refresh token({@code null} if not present)
      */
     public String getRefreshToken() {
-        return getString("refresh_token");
+        return getAsString("refresh_token");
     }
 
     /**

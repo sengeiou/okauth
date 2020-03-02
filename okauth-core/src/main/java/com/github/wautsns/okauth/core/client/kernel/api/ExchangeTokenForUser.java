@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,6 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthRedirectUriQuery;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
@@ -24,8 +23,8 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 /**
  * Exchange token for user.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
 @FunctionalInterface
 public interface ExchangeTokenForUser<U extends OpenPlatformUser> {
@@ -39,7 +38,7 @@ public interface ExchangeTokenForUser<U extends OpenPlatformUser> {
      * @return openid
      * @throws OAuthErrorException if the oauth response is not correct
      * @throws OAuthIOException if IO exception occurs
-     * @see #requestForUser(OAuthRedirectUriQuery)
+     * @see #requestForUser(OAuthToken)
      */
     default String requestForOpenid(OAuthToken token) throws OAuthErrorException, OAuthIOException {
         return requestForUser(token).getOpenid();

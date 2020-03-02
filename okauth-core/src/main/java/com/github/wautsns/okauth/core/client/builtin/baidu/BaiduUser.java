@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,11 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.baidu;
 
-import java.time.LocalDate;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
+import java.time.LocalDate;
 
 /**
  * Baidu user.
@@ -40,12 +39,11 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * }
  * </pre>
  *
- * @since Feb 29, 2020
  * @author wautsns
+ * @since Feb 29, 2020
  */
 public class BaiduUser extends OpenPlatformUser {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -5163425746517965960L;
 
     /**
@@ -64,17 +62,17 @@ public class BaiduUser extends OpenPlatformUser {
 
     @Override
     public String getOpenid() {
-        return getString("openid");
+        return getAsString("openid");
     }
 
     @Override
     public String getAvatarUrl() {
-        return "http://tb.himg.baidu.com/sys/portrait/item/" + getString("portrait");
+        return "http://tb.himg.baidu.com/sys/portrait/item/" + getAsString("portrait");
     }
 
     @Override
     public Gender getGender() {
-        String gender = getString("sex");
+        String gender = getAsString("sex");
         if ("1".equals(gender)) {
             return Gender.MALE;
         } else if ("0".equals(gender)) {
@@ -85,8 +83,10 @@ public class BaiduUser extends OpenPlatformUser {
     }
 
     public LocalDate getBirthday() {
-        String birthday = getString("birthday");
-        if (birthday == null) { return null; }
+        String birthday = getAsString("birthday");
+        if (birthday == null) {
+            return null;
+        }
         return LocalDate.parse(birthday);
     }
 

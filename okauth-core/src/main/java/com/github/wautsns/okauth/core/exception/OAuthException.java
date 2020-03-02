@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,12 +18,13 @@ package com.github.wautsns.okauth.core.exception;
 /**
  * OAuth exception.
  *
- * @since Feb 28, 2020
+ * <p>The exception is parent of all others oauth exception.
+ *
  * @author wautsns
+ * @since Feb 28, 2020
  */
 public class OAuthException extends Exception {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = 775296624639159639L;
 
     public OAuthException(Throwable cause, String message) {

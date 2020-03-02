@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,88 +16,33 @@
 package com.github.wautsns.okauth.core.client.kernel.model.properties;
 
 import com.github.wautsns.okauth.core.util.CheckableProperties;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * OAuth app properties.
  *
- * @since Feb 28, 2020
  * @author wautsns
- * @see OAuthAppProperties#check()
+ * @see #check()
+ * @since Feb 28, 2020
  */
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class OAuthAppProperties extends CheckableProperties {
 
     /** client id */
     private String clientId;
-    /** client secrect */
+    /** client secret */
     private String clientSecret;
     /** redirect uri */
     private String redirectUri;
 
     /**
-     * Get client id.
-     *
-     * @return client id
-     */
-    public String getClientId() {
-        return clientId;
-    }
-
-    /**
-     * Set client id.
-     *
-     * @param clientId client id
-     * @return self reference
-     */
-    public OAuthAppProperties setClientId(String clientId) {
-        this.clientId = clientId;
-        return this;
-    }
-
-    /**
-     * Get client secret.
-     *
-     * @return client secret
-     */
-    public String getClientSecret() {
-        return clientSecret;
-    }
-
-    /**
-     * Set client secret.
-     *
-     * @param clientSecret client secret
-     * @return self reference
-     */
-    public OAuthAppProperties setClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
-        return this;
-    }
-
-    /**
-     * Get redirect uri.
-     *
-     * @return redirect uri
-     */
-    public String getRedirectUri() {
-        return redirectUri;
-    }
-
-    /**
-     * Set redirect uri
-     *
-     * @param redirectUri redirect uri
-     * @return self reference
-     */
-    public OAuthAppProperties setRedirectUri(String redirectUri) {
-        this.redirectUri = redirectUri;
-        return this;
-    }
-
-    /**
      * {@inheritDoc}
      *
-     * <p>ClientId, clientSecret and redirectUri must not be null or blank.({@code String#trim()}
-     * will be called)
+     * <p>ClientId, clientSecret and redirectUri must not be null or blank.({@code String#trim()} will be called)
      *
      * @throws IllegalArgumentException {@inheritDoc}
      */

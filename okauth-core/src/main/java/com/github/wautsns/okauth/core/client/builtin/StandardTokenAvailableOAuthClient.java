@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,18 +30,18 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 /**
  * Standard token available oauth client.
  *
- * @since Feb 28, 2020
  * @author wautsns
  * @see <a href="https://oauth.net/2/grant-types/authorization-code/">standard oauth2.0 doc</a>
+ * @since Feb 28, 2020
  */
 public abstract class StandardTokenAvailableOAuthClient<U extends OpenPlatformUser>
-        extends TokenAvailableOAuthClient<U> {
+    extends TokenAvailableOAuthClient<U> {
 
     /**
      * basic authorize url
      *
-     * <p>Query items added are as follows:
      * <ul>
+     * Query items added are as follows:
      * <li>response_type: {@code "code"}</li>
      * <li>client_id: {@code app.getClientId()}</li>
      * <li>redirect_uri: {@code app.getRedirectUri()}</li>
@@ -51,8 +51,8 @@ public abstract class StandardTokenAvailableOAuthClient<U extends OpenPlatformUs
     /**
      * basic token request
      *
-     * <p>Query items(GET)/Form items(POST) added are as follows:
      * <ul>
+     * Query items(GET)/Form items(POST) added are as follows:
      * <li>grant_type: {@code "authorization_code"}</li>
      * <li>client_id: {@code app.getClientId()}</li>
      * <li>client_secret: {@code app.getClientSecret()}</li>
@@ -67,8 +67,7 @@ public abstract class StandardTokenAvailableOAuthClient<U extends OpenPlatformUs
      * @param app oauth app properties, require nonnull
      * @param executor oauth request executor, require nonnull
      */
-    public StandardTokenAvailableOAuthClient(
-            OAuthAppProperties app, OAuthRequestExecutor executor) {
+    public StandardTokenAvailableOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
         super(app, executor);
         // basic authorize url
         basicAuthorizeUrl = new OAuthUrl(getAuthorizeUrl());
@@ -99,8 +98,8 @@ public abstract class StandardTokenAvailableOAuthClient<U extends OpenPlatformUs
     /**
      * Initialize standard authorize url.
      *
-     * <p>Query items added are as follows:
      * <ul>
+     * Query items added are as follows:
      * <li>response_type: {@code "code"}</li>
      * <li>client_id: {@code app.getClientId()}</li>
      * <li>redirect_uri: {@code app.getRedirectUri()}</li>
@@ -122,8 +121,8 @@ public abstract class StandardTokenAvailableOAuthClient<U extends OpenPlatformUs
     /**
      * Initialize basic token request.
      *
-     * <p><strong>There is no need</strong> to set `grant_type`, `client_id`, `client_secret`,
-     * `redirect_uri` and `code`.
+     * <p><strong>There is no need</strong> to set `grant_type`, `client_id`, `client_secret`, `redirect_uri` and
+     * `code`.
      *
      * @return basic token request
      * @see #requestForToken(OAuthRedirectUriQuery)
@@ -133,8 +132,8 @@ public abstract class StandardTokenAvailableOAuthClient<U extends OpenPlatformUs
     /**
      * {@inheritDoc}
      *
-     * <p>Query items(GET)/Form items(POST) added are as follows:
      * <ul>
+     * Query items(GET)/Form items(POST) added are as follows:
      * <li>grant_type: {@code "authorization_code"}</li>
      * <li>client_id: {@code app.getClientId()}</li>
      * <li>client_secret: {@code app.getClientSecret()}</li>
@@ -149,7 +148,7 @@ public abstract class StandardTokenAvailableOAuthClient<U extends OpenPlatformUs
      */
     @Override
     public final OAuthToken requestForToken(OAuthRedirectUriQuery redirectUriQuery)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         OAuthRequest request = basicTokenRequest.copy();
         request.getParamsByMethod().addCode(redirectUriQuery.getCode());
         return new OAuthToken(execute(request));

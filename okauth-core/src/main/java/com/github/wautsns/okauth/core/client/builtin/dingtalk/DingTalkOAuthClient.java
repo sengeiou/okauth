@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.dingtalk;
 
-import java.util.Base64;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.OAuthClient;
@@ -28,16 +26,16 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthRedirectUriQu
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
-
+import java.util.Base64;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
  * DingTalk oauth client.
  *
- * @since Mar 01, 2020
  * @author wautsns
  * @see <a href="https://ding-doc.dingtalk.com/doc#/serverapi2/kymkv6">dingtalk oauth doc</a>
+ * @since Mar 01, 2020
  */
 public class DingTalkOAuthClient extends OAuthClient<DingTalkUser> {
 
@@ -100,7 +98,7 @@ public class DingTalkOAuthClient extends OAuthClient<DingTalkUser> {
 
     @Override
     public DingTalkUser requestForUser(OAuthRedirectUriQuery redirectUriQuery)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         OAuthRequest request = basicUserRequest.copy();
         String timestamp = Long.toString(System.currentTimeMillis());
         request.getQuery()

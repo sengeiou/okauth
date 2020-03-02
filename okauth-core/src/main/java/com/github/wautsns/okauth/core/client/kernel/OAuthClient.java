@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@
  */
 package com.github.wautsns.okauth.core.client.kernel;
 
-import java.io.IOException;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
 import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
@@ -27,15 +25,15 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
+import java.io.IOException;
 
 /**
  * OAuth client.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
-public abstract class OAuthClient<U extends OpenPlatformUser>
-        implements ExchangeRedirectUriQueryForUser<U> {
+public abstract class OAuthClient<U extends OpenPlatformUser> implements ExchangeRedirectUriQueryForUser<U> {
 
     /** oauth app properties */
     protected final OAuthAppProperties app;
@@ -65,6 +63,8 @@ public abstract class OAuthClient<U extends OpenPlatformUser>
     /**
      * Initialize authorize url.
      *
+     * <p>If `state` is {@code null}, it will not be added to query.
+     *
      * @param state state
      * @return authorize url
      */
@@ -73,7 +73,7 @@ public abstract class OAuthClient<U extends OpenPlatformUser>
     // -------------------- execute ---------------------------------
 
     /**
-     * Execute request, check response and return correct response.
+     * Execute the request, check the response data and return the correct response.
      *
      * @param request oauth request, require nonnull
      * @return correct response
@@ -81,7 +81,7 @@ public abstract class OAuthClient<U extends OpenPlatformUser>
      * @throws OAuthIOException if IO exception occurs
      */
     protected final OAuthResponse execute(OAuthRequest request)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         try {
             return checkResponse(executor.execute(request));
         } catch (IOException e) {
@@ -101,7 +101,7 @@ public abstract class OAuthClient<U extends OpenPlatformUser>
      * @see #getErrorDescriptionFromResponse(OAuthResponse)
      * @see #newOAuthErrorException(OpenPlatform, String, String)
      */
-    private final OAuthResponse checkResponse(OAuthResponse response) throws OAuthErrorException {
+    private OAuthResponse checkResponse(OAuthResponse response) throws OAuthErrorException {
         String error = getErrorFromResponse(response);
         if (error == null) {
             int status = response.getStatus();
@@ -119,7 +119,7 @@ public abstract class OAuthClient<U extends OpenPlatformUser>
      * Get error from response.
      *
      * @param response response, require nonnull
-     * @return error({@code null} if the response is correct)
+     * @return error({ @ code null } if the response is correct)
      */
     protected abstract String getErrorFromResponse(OAuthResponse response);
 
@@ -140,7 +140,7 @@ public abstract class OAuthClient<U extends OpenPlatformUser>
      * @return oauth error exception
      */
     protected OAuthErrorException newOAuthErrorException(
-            OpenPlatform openPlatform, String error, String errorDescription) {
+        OpenPlatform openPlatform, String error, String errorDescription) {
         return new OAuthErrorException(openPlatform, error, errorDescription);
     }
 

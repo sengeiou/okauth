@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,11 +28,10 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 /**
  * GitHub client.
  *
- * @since Feb 29, 2020
  * @author wautsns
- * @see <a
- *      href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
- *      oauth doc</a>
+ * @see <a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">github
+ * oauth doc</a>
+ * @since Feb 29, 2020
  */
 public class GitHubOAuthClient extends StandardTokenAvailableOAuthClient<GitHubUser> {
 
@@ -66,7 +65,7 @@ public class GitHubOAuthClient extends StandardTokenAvailableOAuthClient<GitHubU
 
     @Override
     public GitHubUser requestForUser(OAuthToken token)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         String url = "https://api.github.com/user";
         OAuthRequest request = OAuthRequest.forGet(url);
         request.getHeaders()

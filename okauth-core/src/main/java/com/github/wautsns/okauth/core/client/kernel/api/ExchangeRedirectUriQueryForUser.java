@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,8 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 /**
  * Exchange redirect uri query for user.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
 @FunctionalInterface
 public interface ExchangeRedirectUriQueryForUser<U extends OpenPlatformUser> {
@@ -41,7 +41,7 @@ public interface ExchangeRedirectUriQueryForUser<U extends OpenPlatformUser> {
      * @see #requestForUser(OAuthRedirectUriQuery)
      */
     default String requestForOpenid(OAuthRedirectUriQuery redirectUriQuery)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         return requestForUser(redirectUriQuery).getOpenid();
     }
 
@@ -55,7 +55,6 @@ public interface ExchangeRedirectUriQueryForUser<U extends OpenPlatformUser> {
      * @throws OAuthErrorException if the oauth response is not correct
      * @throws OAuthIOException if IO exception occurs
      */
-    U requestForUser(OAuthRedirectUriQuery redirectUriQuery)
-            throws OAuthErrorException, OAuthIOException;
+    U requestForUser(OAuthRedirectUriQuery redirectUriQuery) throws OAuthErrorException, OAuthIOException;
 
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,28 +15,47 @@
  */
 package com.github.wautsns.okauth.core.util;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-
 import java.util.Map;
-
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.experimental.UtilityClass;
 
 /**
  * Reader.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
-public class Reader {
+@UtilityClass
+public final class Reader {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private static final JavaType MAP = OBJECT_MAPPER.getTypeFactory()
+    private static final JavaType JAVA_TYPE_MAP = OBJECT_MAPPER
+        .getTypeFactory()
         .constructMapType(Map.class, String.class, Serializable.class);
 
+    /**
+     * Read any nonnull object as json string.
+     *
+     * @param object any nonnull object
+     * @return json string
+     * @throws IOException if IO exception occurs
+     */
+    public static String readAsJson(Object object) throws IOException {
+        return OBJECT_MAPPER.writeValueAsString(object);
+    }
+
+    /**
+     * Read the input stream as a string.
+     *
+     * @param inputStream input stream
+     * @return string
+     * @throws IOException if IO exception occurs
+     */
     public static String readAsString(InputStream inputStream) throws IOException {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -48,30 +67,26 @@ public class Reader {
     }
 
     /**
-     * Read json input stream as map.
+     * Read the json input stream as map.
      *
      * @param inputStream json input stream, require nonnull
      * @return map
      * @throws IOException if IO exception occurs
      */
-    public static Map<String, Serializable> readeJsonAsMap(InputStream inputStream)
-            throws IOException {
-        return OBJECT_MAPPER.readValue(inputStream, MAP);
+    public static Map<String, Serializable> readJsonAsMap(InputStream inputStream)
+        throws IOException {
+        return OBJECT_MAPPER.readValue(inputStream, JAVA_TYPE_MAP);
     }
 
     /**
-     * Read json string as map.
+     * Read the json string as map.
      *
      * @param string json string, require nonnull
      * @return map
      * @throws IOException if IO exception occurs
      */
-    public static Map<String, Serializable> readeJsonAsMap(String string) throws IOException {
-        return OBJECT_MAPPER.readValue(string, MAP);
+    public static Map<String, Serializable> readJsonAsMap(String string) throws IOException {
+        return OBJECT_MAPPER.readValue(string, JAVA_TYPE_MAP);
     }
-
-    // -------------------- ignored ---------------------------------
-
-    private Reader() {}
 
 }

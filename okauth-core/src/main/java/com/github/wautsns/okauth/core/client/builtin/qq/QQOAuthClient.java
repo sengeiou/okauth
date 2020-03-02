@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 package com.github.wautsns.okauth.core.client.builtin.qq;
-
-import java.io.ByteArrayInputStream;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
@@ -34,13 +32,15 @@ import com.github.wautsns.okauth.core.util.Reader;
 /**
  * QQ oauth client.
  *
- * @since Mar 01, 2020
  * @author wautsns
  * @see <a href="https://wiki.connect.qq.com/">QQ oauth doc</a>
+ * @since Mar 01, 2020
  */
 public class QQOAuthClient extends StandardTokenRefreshableOAuthClient<QQUser> {
 
-    /** basic openid request */
+    /**
+     * basic openid request
+     */
     private final OAuthRequest basicOpenidRequest;
     /**
      * basic user request.
@@ -68,8 +68,7 @@ public class QQOAuthClient extends StandardTokenRefreshableOAuthClient<QQUser> {
             int left = tmp.indexOf('{');
             int right = tmp.lastIndexOf('}');
             tmp = tmp.substring(left, right + 1);
-            inputStream = new ByteArrayInputStream(tmp.getBytes());
-            return Reader.readeJsonAsMap(tmp);
+            return Reader.readJsonAsMap(tmp);
         };
         basicOpenidRequest = OAuthRequest.init(Method.GET, openidRequestUrl, openidReader);
         // basic user request

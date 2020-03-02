@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,24 +15,21 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.model.dto;
 
-import java.io.Serializable;
-
-import java.util.Map;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Open platform user.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
 public abstract class OpenPlatformUser extends OAuthResponseDataMap {
 
-    public enum Gender { MALE, FEMALE, SECRET, UNKNOWN }
+    public enum Gender {MALE, FEMALE, SECRET, UNKNOWN}
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -9204638137197883064L;
 
     /**

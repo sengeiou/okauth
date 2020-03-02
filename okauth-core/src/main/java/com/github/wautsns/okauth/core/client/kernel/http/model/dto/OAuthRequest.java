@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,56 +15,39 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.http.model.dto;
 
-import java.io.Serializable;
-
-import java.util.Objects;
-
 import com.github.wautsns.okauth.core.client.kernel.http.model.basic.OAuthHeaders;
 import com.github.wautsns.okauth.core.client.kernel.http.model.basic.OAuthParams;
 import com.github.wautsns.okauth.core.client.kernel.http.model.basic.OAuthUrl;
 import com.github.wautsns.okauth.core.client.kernel.http.util.OAuthResponseInputStreamReader;
+import java.io.Serializable;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * OAuth request.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
+@Getter
+@RequiredArgsConstructor
 public class OAuthRequest implements Serializable {
 
-    /** serialVersionUID */
+    public enum Method {GET, POST, PUT}
+
     private static final long serialVersionUID = 311353763232467771L;
 
-    public enum Method { GET, POST, PUT }
-
     /** method of the request */
-    private final Method method;
+    private final @NonNull Method method;
     /** url of the request */
-    private final OAuthUrl url;
+    private final @NonNull OAuthUrl url;
+    /** response input stream reader */
+    private final @NonNull OAuthResponseInputStreamReader responseInputStreamReader;
     /** headers of the request */
     private OAuthHeaders headers;
     /** form of the request */
     private OAuthParams form;
-    /** response input stream reader */
-    private final OAuthResponseInputStreamReader responseInputStreamReader;
-
-    /**
-     * Get method of the request.
-     *
-     * @return method of the request
-     */
-    public Method getMethod() {
-        return method;
-    }
-
-    /**
-     * Get url of the request.
-     *
-     * @return url of the request
-     */
-    public OAuthUrl getUrl() {
-        return url;
-    }
 
     /**
      * Get url query of the request.
@@ -81,7 +64,8 @@ public class OAuthRequest implements Serializable {
      * @return headers of the request
      */
     public OAuthHeaders getHeaders() {
-        return (headers != null) ? headers : (headers = new OAuthHeaders());
+        if (headers == null) { headers = new OAuthHeaders(); }
+        return headers;
     }
 
     /**
@@ -90,25 +74,17 @@ public class OAuthRequest implements Serializable {
      * @return form of the request
      */
     public OAuthParams getForm() {
-        return (form != null) ? form : (form = new OAuthParams());
+        if (form == null) { form = new OAuthParams(); }
+        return form;
     }
 
     /**
-     * Get params by method.
+     * Return query if the method is GET, otherwise form.
      *
-     * @return query if method is GET, otherwise form.
+     * @return query(GET) or form(POST).
      */
     public OAuthParams getParamsByMethod() {
         return (method == Method.GET) ? getQuery() : getForm();
-    }
-
-    /**
-     * Get response input stream reader.
-     *
-     * @return response input stream reader
-     */
-    public OAuthResponseInputStreamReader getResponseInputStreamReader() {
-        return responseInputStreamReader;
     }
 
     // -------------------- initialization --------------------------
@@ -126,36 +102,35 @@ public class OAuthRequest implements Serializable {
     }
 
     /**
-     * Initialize oauth request(GET) and the response input stream reader is
-     * {@linkplain OAuthResponseInputStreamReader#JSON}).
+     * Initialize oauth request(GET) and the response input stream reader is {@link
+     * OAuthResponseInputStreamReader#JSON}).
      *
      * @param url request url, require nonnull
      * @return request
      */
-    public static final OAuthRequest forGet(String url) {
+    public static OAuthRequest forGet(String url) {
         return init(Method.GET, url);
     }
 
     /**
-     * Initialize oauth request(POST) and the response input stream reader is
-     * {@linkplain OAuthResponseInputStreamReader#JSON}).
+     * Initialize oauth request(POST) and the response input stream reader is {@link
+     * OAuthResponseInputStreamReader#JSON}).
      *
      * @param url request url, require nonnull
      * @return request
      */
-    public static final OAuthRequest forPost(String url) {
+    public static OAuthRequest forPost(String url) {
         return init(Method.POST, url);
     }
 
     /**
-     * Initialize oauth request(the response input stream reader is
-     * {@linkplain OAuthResponseInputStreamReader#JSON}).
+     * Initialize oauth request(the response input stream reader is {@link OAuthResponseInputStreamReader#JSON}).
      *
      * @param method request method, require nonnull
      * @param url request url, require nonnull
      * @return oauth request
      */
-    public static final OAuthRequest init(Method method, String url) {
+    public static OAuthRequest init(Method method, String url) {
         return new OAuthRequest(method, new OAuthUrl(url), OAuthResponseInputStreamReader.JSON);
     }
 
@@ -167,9 +142,8 @@ public class OAuthRequest implements Serializable {
      * @param responseInputStreamReader response input stream reader, require nonnull
      * @return oauth request
      */
-    public static final OAuthRequest init(
-            Method method, String url,
-            OAuthResponseInputStreamReader responseInputStreamReader) {
+    public static OAuthRequest init(
+        Method method, String url, OAuthResponseInputStreamReader responseInputStreamReader) {
         return new OAuthRequest(method, new OAuthUrl(url), responseInputStreamReader);
     }
 
@@ -181,25 +155,9 @@ public class OAuthRequest implements Serializable {
      * @param responseInputStreamReader response input stream reader, require nonnull
      * @return oauth request
      */
-    public static final OAuthRequest init(
-            Method method, OAuthUrl url,
-            OAuthResponseInputStreamReader responseInputStreamReader) {
+    public static OAuthRequest init(
+        Method method, OAuthUrl url, OAuthResponseInputStreamReader responseInputStreamReader) {
         return new OAuthRequest(method, url, responseInputStreamReader);
-    }
-
-    /**
-     * Construct oauth request.
-     *
-     * @param method request method, require nonnull
-     * @param url request url, require nonnull
-     * @param responseInputStreamReader response input stream reader, require nonnull
-     */
-    private OAuthRequest(
-            Method method, OAuthUrl url,
-            OAuthResponseInputStreamReader responseInputStreamReader) {
-        this.method = Objects.requireNonNull(method);
-        this.url = Objects.requireNonNull(url);
-        this.responseInputStreamReader = Objects.requireNonNull(responseInputStreamReader);
     }
 
 }

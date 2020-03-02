@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +15,22 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.qq;
 
-import java.util.Objects;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
+import java.util.Objects;
+import lombok.EqualsAndHashCode;
 
 /**
  * QQ user.
  *
- * @since Mar 01, 2020
  * @author wautsns
+ * @since Mar 01, 2020
  */
+@EqualsAndHashCode(callSuper = true)
 public class QQUser extends OpenPlatformUser {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = 4607846376386651426L;
 
     private final String openid;
@@ -39,7 +39,7 @@ public class QQUser extends OpenPlatformUser {
      * Construct QQ user.
      *
      * @param openid openid, require nonnull
-     * @param originalDataMap original data map, require nonnull
+     * @param response okauth response, require nonnull
      */
     public QQUser(String openid, OAuthResponse response) {
         super(response);

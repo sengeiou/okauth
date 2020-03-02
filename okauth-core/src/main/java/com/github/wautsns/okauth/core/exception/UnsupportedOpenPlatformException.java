@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,24 @@
  */
 package com.github.wautsns.okauth.core.exception;
 
+import com.github.wautsns.okauth.core.client.OpenPlatform;
+
 /**
  * Unsupported open platform exception.
  *
- * @since Feb 29, 2020
  * @author wautsns
+ * @since Feb 29, 2020
  */
 public class UnsupportedOpenPlatformException extends OAuthException {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = 2205026007276072378L;
 
+    public UnsupportedOpenPlatformException(OpenPlatform openPlatform) {
+        this(openPlatform.name());
+    }
+
     public UnsupportedOpenPlatformException(String openPlatformName) {
-        super("unsupported open platform: " + openPlatformName);
+        super("Unsupported open platform: " + openPlatformName);
     }
 
 }

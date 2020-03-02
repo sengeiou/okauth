@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,18 +90,17 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * }
  * </pre>
  *
- * @since Feb 29, 2020
  * @author wautsns
+ * @since Feb 29, 2020
  */
 public class MicroBlogUser extends OpenPlatformUser {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = 1466862966956847504L;
 
     /**
      * Construct MicroBlog user.
      *
-     * @param originalDataMap original data map, require nonnull
+     * @param response okauth response, require nonnull
      */
     public MicroBlogUser(OAuthResponse response) {
         super(response);
@@ -114,22 +113,22 @@ public class MicroBlogUser extends OpenPlatformUser {
 
     @Override
     public String getOpenid() {
-        return getString("idstr");
+        return getAsString("idstr");
     }
 
     @Override
     public String getNickname() {
-        return getString("screen_name");
+        return getAsString("screen_name");
     }
 
     @Override
     public String getAvatarUrl() {
-        return getString("avatar_large");
+        return getAsString("avatar_large");
     }
 
     @Override
     public Gender getGender() {
-        String gender = getString("gender");
+        String gender = getAsString("gender");
         if ("m".equals(gender)) {
             return Gender.MALE;
         } else if ("f".equals(gender)) {

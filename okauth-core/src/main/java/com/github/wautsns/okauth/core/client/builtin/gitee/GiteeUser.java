@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,12 +59,11 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * }
  * </pre>
  *
- * @since Feb 29, 2020
  * @author wautsns
+ * @since Feb 29, 2020
  */
 public class GiteeUser extends OpenPlatformUser {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -6198419705522461920L;
 
     /**
@@ -83,22 +82,22 @@ public class GiteeUser extends OpenPlatformUser {
 
     @Override
     public String getOpenid() {
-        return getString("id");
+        return getAsString("id");
     }
 
     @Override
     public String getUsername() {
-        return getString("login");
+        return getAsString("login");
     }
 
     @Override
     public String getNickname() {
-        return getString("name");
+        return getAsString("name");
     }
 
     @Override
     public String getAvatarUrl() {
-        return getString("avatar_url");
+        return getAsString("avatar_url");
     }
 
 }

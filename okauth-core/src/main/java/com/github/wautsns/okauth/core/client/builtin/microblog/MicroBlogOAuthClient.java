@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.microblog;
 
-import java.io.Serializable;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.builtin.StandardTokenAvailableOAuthClient;
@@ -27,15 +25,15 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
+import java.io.Serializable;
 
 /**
  * MicroBlog oauth client.
  *
- * @since Feb 29, 2020
  * @author wautsns
- * @see <a
- *      href="https://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6%E8%AF%B4%E6%98%8E">weibo
- *      oauth doc</a>
+ * @see <a href="https://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6%E8%AF%B4%E6%98%8E">weibo
+ * oauth doc</a>
+ * @since Feb 29, 2020
  */
 public class MicroBlogOAuthClient extends StandardTokenAvailableOAuthClient<MicroBlogUser> {
 
@@ -66,11 +64,11 @@ public class MicroBlogOAuthClient extends StandardTokenAvailableOAuthClient<Micr
 
     @Override
     public MicroBlogUser requestForUser(OAuthToken token)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         String url = "https://api.weibo.com/2/users/show.json";
         OAuthRequest request = OAuthRequest.forGet(url);
         request.getQuery()
-            .add("uid", token.getString("uid"))
+            .add("uid", token.getAsString("uid"))
             .addAccessToken(token.getAccessToken());
         return new MicroBlogUser(execute(request));
     }

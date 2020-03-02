@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 package com.github.wautsns.okauth.core.client.kernel.http.model.basic;
 
 import java.io.Serializable;
-
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -25,12 +24,11 @@ import java.util.function.BiConsumer;
 /**
  * OAuth headers.
  *
- * @since Feb 29, 2020
  * @author wautsns
+ * @since Feb 29, 2020
  */
 public class OAuthHeaders implements Serializable {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = 1366613194926296553L;
 
     /** oauth headers data */
@@ -51,7 +49,7 @@ public class OAuthHeaders implements Serializable {
      * @param action action for headers, require nonnull
      */
     public void forEach(BiConsumer<String, String> action) {
-        for (Iterator<String> i = data.iterator(); i.hasNext();) {
+        for (Iterator<String> i = data.iterator(); i.hasNext(); ) {
             action.accept(i.next(), i.next());
         }
     }

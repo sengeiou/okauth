@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +28,9 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 /**
  * Gitee oauth client.
  *
- * @since Feb 29, 2020
  * @author wautsns
  * @see <a href="https://gitee.com/api/v5/oauth_doc">gitee oauth doc</a>
+ * @since Feb 29, 2020
  */
 public class GiteeOAuthClient extends StandardTokenRefreshableOAuthClient<GiteeUser> {
 

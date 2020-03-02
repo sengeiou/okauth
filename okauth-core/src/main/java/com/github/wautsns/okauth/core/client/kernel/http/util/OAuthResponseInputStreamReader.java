@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,17 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.http.util;
 
+import com.github.wautsns.okauth.core.util.Reader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-
 import java.util.Map;
-
-import com.github.wautsns.okauth.core.util.Reader;
 
 /**
  * OAuth response input stream reader.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
 public interface OAuthResponseInputStreamReader extends Serializable {
 
@@ -43,6 +41,6 @@ public interface OAuthResponseInputStreamReader extends Serializable {
     // -------------------- built-in readers ------------------------
 
     /** the reader for json input stream */
-    OAuthResponseInputStreamReader JSON = Reader::readeJsonAsMap;
+    OAuthResponseInputStreamReader JSON = Reader::readJsonAsMap;
 
 }

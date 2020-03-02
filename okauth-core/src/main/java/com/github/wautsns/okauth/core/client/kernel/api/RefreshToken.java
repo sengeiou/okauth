@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,8 +22,8 @@ import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 /**
  * Refresh token.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
 @FunctionalInterface
 public interface RefreshToken {

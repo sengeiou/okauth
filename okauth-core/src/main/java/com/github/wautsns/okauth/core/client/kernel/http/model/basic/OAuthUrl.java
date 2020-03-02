@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,21 +16,22 @@
 package com.github.wautsns.okauth.core.client.kernel.http.model.basic;
 
 import java.io.Serializable;
+import lombok.Getter;
 
 /**
  * OAuth url.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
 public class OAuthUrl implements Serializable {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = 2900878644645922887L;
 
     /** url string */
     private final String url;
     /** query */
+    @Getter
     private final OAuthParams query;
 
     /**
@@ -57,27 +58,6 @@ public class OAuthUrl implements Serializable {
     }
 
     /**
-     * Get query of the url.
-     *
-     * @return query of the url
-     */
-    public OAuthParams getQuery() {
-        return query;
-    }
-
-    @Override
-    public String toString() {
-        if (query.isEmpty()) {
-            return url;
-        } else {
-            StringBuilder bder = new StringBuilder(url).append('?');
-            query.forEach((name, value) -> bder.append(name).append('=').append(value).append('&'));
-            bder.deleteCharAt(bder.length() - 1);
-            return bder.toString();
-        }
-    }
-
-    /**
      * Create and return a copy of the oauth url.
      *
      * @return a copy of the oauth url
@@ -89,13 +69,25 @@ public class OAuthUrl implements Serializable {
     /**
      * Construct oauth url with prototype.
      *
-     * <p>Used for {@linkplain #copy()}
+     * <p>Used for {@link #copy()}
      *
      * @param prototype prototype, require nonnull
      */
     private OAuthUrl(OAuthUrl prototype) {
         this.url = prototype.url;
         this.query = prototype.query.copy();
+    }
+
+    @Override
+    public String toString() {
+        if (query.isEmpty()) {
+            return url;
+        } else {
+            StringBuilder builder = new StringBuilder(url).append('?');
+            query.forEach((name, value) -> builder.append(name).append('=').append(value).append('&'));
+            builder.deleteCharAt(builder.length() - 1);
+            return builder.toString();
+        }
     }
 
 }

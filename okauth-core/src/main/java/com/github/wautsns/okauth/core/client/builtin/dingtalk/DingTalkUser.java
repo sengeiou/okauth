@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +15,12 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.dingtalk;
 
-import java.io.Serializable;
-
-import java.util.Map;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
 import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * DingTalk user.
@@ -41,18 +39,17 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * }
  * </pre>
  *
- * @since Mar 01, 2020
  * @author wautsns
+ * @since Mar 01, 2020
  */
 public class DingTalkUser extends OpenPlatformUser {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -3396777913969297784L;
 
     /**
      * Construct DingTalk user.
      *
-     * @param originalDataMap original data map, require nonnull
+     * @param response original data map, require nonnull
      */
     @SuppressWarnings("unchecked")
     public DingTalkUser(OAuthResponse response) {
@@ -66,17 +63,17 @@ public class DingTalkUser extends OpenPlatformUser {
 
     @Override
     public String getOpenid() {
-        return getString("openid");
+        return getAsString("openid");
     }
 
     @Override
     public String getUnionid() {
-        return getString("unionid");
+        return getAsString("unionid");
     }
 
     @Override
     public String getNickname() {
-        return getString("nick");
+        return getAsString("nick");
     }
 
 }

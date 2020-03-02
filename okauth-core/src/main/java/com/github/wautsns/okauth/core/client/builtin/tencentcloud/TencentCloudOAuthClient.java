@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.tencentcloud;
 
-import java.util.Map;
-
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.builtin.StandardTokenAvailableOAuthClient;
@@ -27,13 +25,14 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
 import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
 import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
+import java.util.Map;
 
 /**
  * TencentCloud oauth client.
  *
- * @since Mar 01, 2020
  * @author wautsns
  * @see <a href="https://dev.tencent.com/help/doc/faq/b4e5b7aee786/oauth">TencentCloud oauth doc</a>
+ * @since Mar 01, 2020
  */
 public class TencentCloudOAuthClient extends StandardTokenAvailableOAuthClient<TencentCloudUser> {
 
@@ -64,7 +63,7 @@ public class TencentCloudOAuthClient extends StandardTokenAvailableOAuthClient<T
 
     @Override
     public TencentCloudUser requestForUser(OAuthToken token)
-            throws OAuthErrorException, OAuthIOException {
+        throws OAuthErrorException, OAuthIOException {
         String url = "https://dev.tencent.com/api/current_user";
         OAuthRequest request = OAuthRequest.forGet(url);
         request.getQuery()
@@ -75,7 +74,9 @@ public class TencentCloudOAuthClient extends StandardTokenAvailableOAuthClient<T
     @Override
     protected String getErrorFromResponse(OAuthResponse response) {
         Integer code = (Integer) response.getData().get("code");
-        if (code == 0) { return null; }
+        if (code == 0) {
+            return null;
+        }
         @SuppressWarnings("unchecked")
         Map<String, String> msg = (Map<String, String>) response.getData().get("msg");
         return msg.entrySet().iterator().next().getKey();

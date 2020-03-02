@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,40 +15,29 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.model.dto;
 
-import java.io.Serializable;
-
-import java.util.Map;
-import java.util.Objects;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
+import com.github.wautsns.okauth.core.util.Reader;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Map;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.experimental.Accessors;
 
 /**
  * OAuth response data map.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
+@Data
+@Accessors(chain = true)
 public class OAuthResponseDataMap implements Serializable {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -5429452841745088452L;
 
-    /** json util */
-    private static final ObjectMapper JSON = new ObjectMapper();
-
     /** original data map */
-    private final Map<String, Serializable> originalDataMap;
-
-    /**
-     * Construct oauth response data map.
-     *
-     * @param originalDataMap original data map, require nonnull
-     */
-    public OAuthResponseDataMap(Map<String, Serializable> originalDataMap) {
-        this.originalDataMap = Objects.requireNonNull(originalDataMap);
-    }
+    private final @NonNull Map<String, Serializable> originalDataMap;
 
     /**
      * Construct oauth response data map.
@@ -56,33 +45,31 @@ public class OAuthResponseDataMap implements Serializable {
      * @param response okauth response, require nonnull
      */
     public OAuthResponseDataMap(OAuthResponse response) {
-        this.originalDataMap = response.getData();
+        this(response.getData());
     }
 
     /**
-     * Get string value of the specific name.
+     * Get value of the specific name as string.
      *
      * <ul>
      * <li>If the value is {@code null}, {@code null} will be returned.</li>
      * <li>If the value is instance of String, the value will be returned.</li>
-     * <li>If the value is instance of Number or Boolean, {@code value.toString()} will be
-     * returned.</li>
+     * <li>If the value is instance of Number or Boolean, {@code value.toString()} will be returned.</li>
      * <li>Otherwise, the json string of the value will be returned.</li>
      * </ul>
      *
      * @param name the specific name, require nonnull
-     * @return value string assosiated with the name, or {@code null} if no value assosiated with
-     *         the name
+     * @return value string associated with the name, or {@code null} if no value associated with the name
      */
-    public String getString(String name) {
+    public String getAsString(String name) {
         Serializable value = originalDataMap.get(name);
         if (value instanceof String) { return (String) value; }
         if (value == null) { return null; }
         if (value instanceof Number
             || value instanceof Boolean) { return value.toString(); }
         try {
-            return JSON.writeValueAsString(value);
-        } catch (JsonProcessingException e) {
+            return Reader.readAsJson(value);
+        } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
     }
@@ -91,8 +78,8 @@ public class OAuthResponseDataMap implements Serializable {
      * Get map value of the specific name.
      *
      * @param name the specific name, require nonnull
-     * @return value assosiated with the name, or {@code null} if no value assosiated with the name
-     *         or the value is not instance of Map
+     * @return value associated with the name, or {@code null} if no value associated with the name or the value is not
+     * instance of Map
      */
     @SuppressWarnings("unchecked")
     public Map<String, Serializable> getMap(String name) {
@@ -104,19 +91,10 @@ public class OAuthResponseDataMap implements Serializable {
      * Get value of the specific name.
      *
      * @param name the specific name, require nonnull
-     * @return value assosiated with the name, or {@code null} if no value assosiated with the name
+     * @return value associated with the name, or {@code null} if no value associated with the name
      */
     public Object get(String name) {
         return originalDataMap.get(name);
-    }
-
-    /**
-     * Get the original data map.
-     *
-     * @return the original data map
-     */
-    public Map<String, Serializable> getOriginalDataMap() {
-        return originalDataMap;
     }
 
 }

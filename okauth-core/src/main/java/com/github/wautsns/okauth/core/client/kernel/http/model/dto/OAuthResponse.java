@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,65 +16,26 @@
 package com.github.wautsns.okauth.core.client.kernel.http.model.dto;
 
 import java.io.Serializable;
-
 import java.util.Map;
-import java.util.Objects;
+import lombok.Data;
+import lombok.NonNull;
 
 /**
  * OkAuth response.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
-public class OAuthResponse {
+@Data
+public class OAuthResponse implements Serializable {
+
+    private static final long serialVersionUID = -5038582625365510640L;
 
     /** request of the response */
-    private final OAuthRequest request;
+    private final @NonNull OAuthRequest request;
     /** response status code */
     private final int status;
     /** response data */
-    private final Map<String, Serializable> data;
-
-    /**
-     * Construct okauth response.
-     *
-     * @param request request of the response, require nonnull
-     * @param status response status code
-     * @param data response data, require nonnull
-     */
-    public OAuthResponse(
-            OAuthRequest request,
-            int status, Map<String, Serializable> data) {
-        this.request = request;
-        this.status = status;
-        this.data = Objects.requireNonNull(data);
-    }
-
-    /**
-     * Get oauth request of the response.
-     *
-     * @return oauth request of the response.
-     */
-    public OAuthRequest getRequest() {
-        return request;
-    }
-
-    /**
-     * Get response status code.
-     *
-     * @return response status code
-     */
-    public int getStatus() {
-        return status;
-    }
-
-    /**
-     * Get response data.
-     *
-     * @return response data
-     */
-    public Map<String, Serializable> getData() {
-        return data;
-    }
+    private final @NonNull Map<String, Serializable> data;
 
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,36 +20,40 @@ import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.http.model.properties.OAuthRequestExecutorProperties;
 import com.github.wautsns.okauth.core.util.CheckableProperties;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * OAuth client properties.
  *
- * @since Feb 29, 2020
  * @author wautsns
- * @see OAuthClientProperties#check()
+ * @see #check()
+ * @since Feb 29, 2020
  */
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class OAuthClientProperties extends CheckableProperties {
 
     /**
      * open platform expr.
      *
-     * <p>There are two types of open platform expr:
      * <ul>
+     * There are two types of open platform expr:
      * <li>
      * built-in open platform<br/>
-     * For built-in open platform clients, use the short name (case insensitive, but to match the
-     * identifier of the specified client), the specific configurable identifier can be found in
-     * {@link OpenPlatforms}
+     * For built-in open platform clients, use the short name (case insensitive, but to match the identifier of the
+     * specified client), the specific configurable identifier can be found in {@link OpenPlatforms}
      * </li>
      * <li>
      * extended open platform<br>
-     * Need to implement the interface {@link OpenPlatform} and {@link OAuthClientInitializer}, the
+     * Must be an enum and need to implement the interface {@link OpenPlatform} and {@link OAuthClientInitializer}, the
      * specific implementation can refer to {@link OpenPlatforms}.<br/>
-     * Assume that there is an enumeration `a.b.c.ExtendedOpenPlatform` that meets the requirements
-     * and that the enumeration class has an enumeration value of `XYZ`, and the expression is
-     * `a.b.c.ExtendedOpenPlatform:xyz` , `xyz` after `:` is case insensitive. <strong>Special, when
-     * the enumeration class contains only one enumeration value, it can be
-     * omitted.</strong>
+     * Assume that there is an enumeration `a.b.c.ExtendedOpenPlatform` that meets the requirements and that the
+     * enumeration class has an enumeration value of `XYZ`, and the expression is `a.b.c.ExtendedOpenPlatform:xyz`,
+     * `xyz` after `:` is case insensitive. <strong>Special, when the enumeration class contains only one enumeration
+     * value, it can be omitted.</strong>
      * </li>
      * </ul>
      */
@@ -58,88 +62,6 @@ public class OAuthClientProperties extends CheckableProperties {
     private OAuthAppProperties app;
     /** request executor properties */
     private OAuthRequestExecutorProperties requestExecutor;
-
-    /**
-     * Get open platform expr.
-     *
-     * @return open platform expr
-     * @see #setOpenPlatformExpr(String)
-     */
-    public String getOpenPlatformExpr() {
-        return openPlatformExpr;
-    }
-
-    /**
-     * Set open platform expr.
-     *
-     * <p>There are two types of open platform expr:
-     * <ul>
-     * <li>
-     * built-in open platform<br/>
-     * For built-in open platform clients, use the short name (case insensitive, but to match the
-     * identifier of the specified client), the specific configurable identifier can be found in
-     * {@link OpenPlatforms}
-     * </li>
-     * <li>
-     * extended open platform<br>
-     * Need to implement the interface {@link OpenPlatform} and {@link OAuthClientInitializer}, the
-     * specific implementation can refer to {@link OpenPlatforms}.<br/>
-     * Assume that there is an enumeration `a.b.c.ExtendedOpenPlatform` that meets the requirements
-     * and that the enumeration class has an enumeration value of `XYZ`, and the expression is
-     * `a.b.c.ExtendedOpenPlatform:xyz` , `xyz` after `:` is case insensitive. <strong>Special, when
-     * the enumeration class contains only one enumeration value, it can be
-     * omitted.</strong>
-     * </li>
-     * </ul>
-     *
-     * @param openPlatformExpr
-     * @return self reference
-     */
-    public OAuthClientProperties setOpenPlatformExpr(String openPlatformExpr) {
-        this.openPlatformExpr = openPlatformExpr;
-        return this;
-    }
-
-    /**
-     * Get oauth app properties.
-     *
-     * @return oauth app properties
-     */
-    public OAuthAppProperties getApp() {
-        return app;
-    }
-
-    /**
-     * Set oauth app properties
-     *
-     * @param app oauth app properties
-     * @return oauth app properties
-     */
-    public OAuthClientProperties setApp(OAuthAppProperties app) {
-        this.app = app;
-        return this;
-    }
-
-    /**
-     * Get oauth request executor properties.
-     *
-     * @return oauth request executor properties
-     */
-    public OAuthRequestExecutorProperties getRequestExecutor() {
-        return requestExecutor;
-    }
-
-    /**
-     * Set oauth request executor properties.
-     *
-     * @param requestExecutor oauth request executor properties
-     * @return oauth request executor properties
-     */
-    public OAuthClientProperties setRequestExecutor(
-            OAuthRequestExecutorProperties requestExecutor) {
-        this.requestExecutor = requestExecutor;
-        return this;
-    }
 
     /**
      * {@inheritDoc}

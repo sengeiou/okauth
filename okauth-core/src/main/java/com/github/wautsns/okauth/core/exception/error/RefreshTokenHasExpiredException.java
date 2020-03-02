@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,12 +20,11 @@ import com.github.wautsns.okauth.core.client.OpenPlatform;
 /**
  * Expired access token exception.
  *
- * @since Feb 29, 2020
  * @author wautsns
+ * @since Feb 29, 2020
  */
 public class RefreshTokenHasExpiredException extends OAuthErrorException {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -1198327228165589279L;
 
     public RefreshTokenHasExpiredException(OpenPlatform openPlatform) {

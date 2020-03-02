@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,6 @@ package com.github.wautsns.okauth.core.client.kernel.http.model.basic;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
@@ -26,12 +25,11 @@ import java.util.function.BiConsumer;
 /**
  * OAuth params.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
 public class OAuthParams implements Serializable {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -1266336327459515005L;
 
     /** oauth params data */
@@ -52,7 +50,7 @@ public class OAuthParams implements Serializable {
      * @param action action for params, require nonnull
      */
     public void forEach(BiConsumer<String, String> action) {
-        for (Iterator<String> i = data.iterator(); i.hasNext();) {
+        for (Iterator<String> i = data.iterator(); i.hasNext(); ) {
             action.accept(i.next(), i.next());
         }
     }
@@ -204,7 +202,9 @@ public class OAuthParams implements Serializable {
      * @return self reference
      */
     public OAuthParams add(String name, String value) {
-        if (value == null) { return null; }
+        if (value == null) {
+            return null;
+        }
         try {
             value = URLEncoder.encode(value, "UTF-8");
             data.add(name);

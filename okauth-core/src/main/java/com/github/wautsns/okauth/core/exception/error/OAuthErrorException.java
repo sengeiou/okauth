@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,16 +17,17 @@ package com.github.wautsns.okauth.core.exception.error;
 
 import com.github.wautsns.okauth.core.client.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OAuthException;
+import lombok.Getter;
 
 /**
  * OAuth error exception.
  *
- * @since Feb 28, 2020
  * @author wautsns
+ * @since Feb 28, 2020
  */
+@Getter
 public class OAuthErrorException extends OAuthException {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = 775296624639159639L;
 
     private final OpenPlatform openPlatform;
@@ -38,18 +39,6 @@ public class OAuthErrorException extends OAuthException {
         this.openPlatform = openPlatform;
         this.error = error;
         this.errorDescription = errorDescription;
-    }
-
-    public OpenPlatform getOpenPlatform() {
-        return openPlatform;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public String getErrorDescription() {
-        return errorDescription;
     }
 
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 /**
  * Checkable properties.
  *
- * @since Feb 29, 2020
  * @author wautsns
  * @see CheckableProperties#check()
+ * @since Feb 29, 2020
  */
 public abstract class CheckableProperties {
 
@@ -34,6 +34,14 @@ public abstract class CheckableProperties {
      */
     public abstract void check();
 
+    /**
+     * Assert that the value is not empty after {@linkplain String#trim() trim}.
+     *
+     * @param property property name, require nonnull
+     * @param value value
+     * @return value after {n String#trim() trim}
+     * @throws IllegalArgumentException if assertion is wrong
+     */
     protected String trimAndNotEmpty(String property, String value) {
         notNull(property, value);
         value = value.trim();
@@ -44,29 +52,56 @@ public abstract class CheckableProperties {
         }
     }
 
+    /**
+     * Assert that the value is not null.
+     *
+     * @param property property name, require nonnull
+     * @param value property value
+     * @param <T> value type
+     * @return nonnull value
+     * @throws IllegalArgumentException if assertion is wrong
+     */
     protected <T> T notNull(String property, T value) {
         if (value != null) {
             return value;
         } else {
-            throw illegal(property, value, "nonnull");
+            throw illegal(property, null, "nonnull");
         }
     }
 
-    protected <T> Class<T> requireConstructor(
-            String property, Class<T> value, Class<?>... parameterTypes) {
+    /**
+     * Assert that the class has constructor with the specific parameter types.
+     *
+     * @param property property name, require nonnull
+     * @param clazz target clazz, require nonnull
+     * @param parameterTypes constructor parameter types
+     * @throws IllegalArgumentException if assertion is wrong
+     */
+    protected void requireConstructor(
+        String property, Class<?> clazz, Class<?>... parameterTypes) {
         try {
-            value.getDeclaredConstructor(parameterTypes);
-            return value;
+            clazz.getDeclaredConstructor(parameterTypes);
         } catch (NoSuchMethodException e) {
-            throw illegal(property, value, String.format(
-                "class with construct <init>(%s)",
+            throw illegal(property, clazz, String.format(
+                "class with constructor <init>(%s)",
                 Arrays.stream(parameterTypes)
                     .map(Class::getSimpleName)
                     .collect(Collectors.joining(", "))));
         }
     }
 
-    protected IllegalArgumentException illegal(String property, Object actual, Object expected) {
+    /**
+     * New {@link IllegalArgumentException}.
+     *
+     * <p>Message is like "Property[%s](%s) in %s is illegal(expect %s)."</p>
+     *
+     * @param property property name, require nonnull
+     * @param actual actual value
+     * @param expected expected value
+     * @return {@link IllegalArgumentException}
+     */
+    protected IllegalArgumentException illegal(
+        String property, Object actual, Object expected) {
         return new IllegalArgumentException(String.format(
             "Property[%s](%s) in %s is illegal(expect %s).",
             property, actual, getClass().getSimpleName(), expected));
