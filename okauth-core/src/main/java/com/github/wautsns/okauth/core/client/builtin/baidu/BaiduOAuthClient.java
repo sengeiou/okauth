@@ -15,78 +15,126 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.baidu;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
-import com.github.wautsns.okauth.core.client.builtin.StandardTokenRefreshableOAuthClient;
-import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
-import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
-import com.github.wautsns.okauth.core.exception.OAuthIOException;
-import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.OAuthAppProperties;
+import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuthClient;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForToken;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForUser;
+import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
+import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthToken;
+import com.github.wautsns.okauth.core.exception.ExpiredAccessTokenException;
+import com.github.wautsns.okauth.core.exception.OAuthErrorException;
+import com.github.wautsns.okauth.core.http.HttpClient;
+import com.github.wautsns.okauth.core.http.model.OAuthRequest;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
+import com.github.wautsns.okauth.core.http.model.basic.OAuthUrl;
+import com.github.wautsns.okauth.core.http.util.DataMap;
 
 /**
  * Baidu oauth client.
  *
  * @author wautsns
- * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth">baidu oauth doc</a>
- * @since Feb 29, 2020
+ * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth">Baidu OAuth doc</a>
+ * @since Mar 04, 2020
  */
-public class BaiduOAuthClient extends StandardTokenRefreshableOAuthClient<BaiduUser> {
+public class BaiduOAuthClient extends TokenRefreshableOAuthClient<BaiduUser> {
 
     /**
      * Construct Baidu oauth client.
      *
      * @param app oauth app properties, require nonnull
-     * @param executor oauth request executor, require nonnull
+     * @param httpClient http client, require nonnull
      */
-    public BaiduOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
-        super(app, executor);
+    public BaiduOAuthClient(OAuthAppProperties app, HttpClient httpClient) {
+        super(app, httpClient);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.BAIDU;
+        return BuiltInOpenPlatform.BAIDU;
     }
 
     @Override
-    protected String getAuthorizeUrl() {
-        return "http://openapi.baidu.com/oauth/2.0/authorize";
+    protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
+        OAuthUrl basic = new OAuthUrl("http://openapi.baidu.com/oauth/2.0/authorize");
+        basic.getQuery()
+            .addResponseTypeWithValueCode()
+            .addClientId(app.getClientId())
+            .addRedirectUri(app.getRedirectUri());
+        return state -> {
+            OAuthUrl url = basic.copy();
+            url.getQuery().addState(state);
+            return url;
+        };
     }
 
     @Override
-    protected OAuthRequest initBasicTokenRequest() {
-        return OAuthRequest.forGet("https://openapi.baidu.com/oauth/2.0/token");
+    protected ExchangeRedirectUriQueryForToken initApiExchangeRedirectUriQueryForToken() {
+        String url = "https://openapi.baidu.com/oauth/2.0/token";
+        OAuthRequest basic = OAuthRequest.forGet(url);
+        basic.getUrlQuery()
+            .addGrantTypeWithValueAuthorizationCode()
+            .addClientId(app.getClientId())
+            .addClientSecret(app.getClientSecret())
+            .addRedirectUri(app.getRedirectUri());
+        return redirectUriQuery -> {
+            OAuthRequest request = basic.copy();
+            request.getUrlQuery().addCode(redirectUriQuery.getCode());
+            return new OAuthToken(check(execute(request)));
+        };
     }
 
     @Override
-    protected OAuthRequest initBasicRefreshTokenRequest() {
-        return OAuthRequest.forGet("https://openapi.baidu.com/oauth/2.0/token");
+    protected RefreshToken initApiRefreshToken() {
+        String url = "https://openapi.baidu.com/oauth/2.0/token";
+        OAuthRequest basic = OAuthRequest.forGet(url);
+        basic.getUrlQuery()
+            .addGrantTypeWithValueRefreshToken()
+            .addClientId(app.getClientId())
+            .addClientSecret(app.getClientSecret());
+        return token -> {
+            OAuthRequest request = basic.copy();
+            request.getUrlQuery().addRefreshToken(token.getRefreshToken());
+            return new OAuthToken(check(execute(request)));
+        };
     }
 
     @Override
-    public BaiduUser requestForUser(OAuthToken token) throws OAuthErrorException, OAuthIOException {
-        String url = "https://openapi.baidu.com/rest/2.0/passport/users/getInfo";
-        OAuthRequest request = OAuthRequest.forGet(url);
-        request.getQuery()
-            .addAccessToken(token.getAccessToken());
-        return new BaiduUser(execute(request));
+    protected ExchangeTokenForOpenid initApiExchangeTokenForOpenid() {
+        return token -> exchangeForUser(token).getOpenid();
     }
 
     @Override
-    protected boolean doesTheErrorMeanThatAccessTokenHasExpired(String error) {
-        // FIXME refresh token
-        // The access token expires for one month and the refresh token expires for ten years.
-        // However, in official doc, "expired_token" means that refresh token has expired(And no
-        // error identifies that the access token has expired). It is suspected to be a mistake.
-        return "expired_token".equals(error);
+    protected ExchangeTokenForUser<BaiduUser> initApiExchangeTokenForUser() {
+        return token -> {
+            String url = "https://openapi.baidu.com/rest/2.0/passport/users/getInfo";
+            OAuthRequest request = OAuthRequest.forGet(url);
+            request.getUrlQuery().addAccessToken(token.getAccessToken());
+            return new BaiduUser(check(execute(request)));
+        };
     }
 
-    @Override
-    protected boolean doesTheErrorMeanThatRefreshTokenHasExpired(String error) {
-        // FIXME refresh token
-        // see doesTheErrorMeanThatAccessTokenHasExpired(String)
-        return false;
+    /**
+     * Check response.
+     *
+     * @param response response, require nonnull
+     * @return correct response
+     * @throws OAuthErrorException if the response is incorrect
+     */
+    private static OAuthResponse check(OAuthResponse response) throws OAuthErrorException {
+        DataMap dataMap = response.getDataMap();
+        String error = dataMap.getAsString("error");
+        if (error == null) { return response; }
+        String description = dataMap.getAsString("error_description");
+        if ("expired_token".equals(error)) {
+            throw new ExpiredAccessTokenException(error, description);
+        } else {
+            // Baidu refresh token expires in 10 years. Ignore expired refresh token
+            throw new OAuthErrorException(error, description);
+        }
     }
 
 }

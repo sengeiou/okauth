@@ -15,15 +15,13 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.oschina;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
 
 /**
  * OSChina user.
- *
- * <p>response data map:
  *
  * <pre>
  * {
@@ -38,16 +36,17 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * </pre>
  *
  * @author wautsns
- * @since Mar 01, 2020
+ * @since Mar 04, 2020
  */
-public class OSChinaUser extends OpenPlatformUser {
+public class OSChinaUser extends OAuthUser {
 
+    /** serialVersionUID */
     private static final long serialVersionUID = -2692000764813082128L;
 
     /**
      * Construct OSChina user.
      *
-     * @param response okauth response, require nonnull
+     * @param response correct response, require nonnull
      */
     public OSChinaUser(OAuthResponse response) {
         super(response);
@@ -55,27 +54,46 @@ public class OSChinaUser extends OpenPlatformUser {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.OSCHINA;
+        return BuiltInOpenPlatform.OSCHINA;
     }
 
     @Override
     public String getOpenid() {
-        return getAsString("id");
+        return getOriginalDataMap().getInteger("id").toString();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return nickname
+     */
     @Override
     public String getNickname() {
-        return getAsString("name");
+        return getOriginalDataMap().getAsString("name");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return avatar url
+     */
     @Override
     public String getAvatarUrl() {
-        return getAsString("avatar");
+        return getOriginalDataMap().getAsString("avatar");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Possible values: {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#MALE MALE},
+     * {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#FEMALE FEMALE}, {@linkplain
+     * com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#UNKNOWN UNKNOWN}.
+     *
+     * @return gender
+     */
     @Override
     public Gender getGender() {
-        String gender = getAsString("gender");
+        String gender = getOriginalDataMap().getAsString("gender");
         if (gender.equals("male")) {
             return Gender.MALE;
         } else if (gender.equals("female")) {

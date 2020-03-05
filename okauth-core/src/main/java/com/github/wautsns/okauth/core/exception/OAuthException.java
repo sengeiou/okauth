@@ -16,25 +16,39 @@
 package com.github.wautsns.okauth.core.exception;
 
 /**
- * OAuth exception.
- *
- * <p>The exception is parent of all others oauth exception.
+ * OAuth related exception.
  *
  * @author wautsns
- * @since Feb 28, 2020
+ * @since Mar 04, 2020
  */
 public class OAuthException extends Exception {
 
     private static final long serialVersionUID = 775296624639159639L;
 
-    public OAuthException(Throwable cause, String message) {
-        super(message, cause);
-    }
-
+    /**
+     * Construct oauth exception.
+     *
+     * @param message message, require nonnull
+     */
     public OAuthException(String message) {
         super(message);
     }
 
+    /**
+     * Construct oauth exception.
+     *
+     * @param cause cause, require nonnull
+     * @param message message, require nonnull
+     */
+    public OAuthException(Throwable cause, String message) {
+        super(message, cause);
+    }
+
+    /**
+     * Construct oauth exception.
+     *
+     * @param cause cause, require nonnull
+     */
     public OAuthException(Throwable cause) {
         super(cause);
     }

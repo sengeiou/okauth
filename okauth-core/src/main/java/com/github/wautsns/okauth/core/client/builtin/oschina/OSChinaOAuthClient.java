@@ -15,90 +15,118 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.oschina;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
-import com.github.wautsns.okauth.core.client.builtin.StandardTokenRefreshableOAuthClient;
-import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
-import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
-import com.github.wautsns.okauth.core.exception.OAuthIOException;
-import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.OAuthAppProperties;
+import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuthClient;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForToken;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForUser;
+import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
+import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthToken;
+import com.github.wautsns.okauth.core.exception.OAuthErrorException;
+import com.github.wautsns.okauth.core.http.HttpClient;
+import com.github.wautsns.okauth.core.http.model.OAuthRequest;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
+import com.github.wautsns.okauth.core.http.model.basic.OAuthUrl;
+import com.github.wautsns.okauth.core.http.util.DataMap;
 
 /**
  * OSChina oauth client.
  *
  * @author wautsns
- * @see <a href="https://www.oschina.net/openapi/docs">OSChina oauth doc</a>
- * @since Mar 01, 2020
+ * @see <a href="https://www.oschina.net/openapi/docs">OSChina OAuth doc</a>
+ * @since Mar 04, 2020
  */
-public class OSChinaOAuthClient extends StandardTokenRefreshableOAuthClient<OSChinaUser> {
+public class OSChinaOAuthClient extends TokenRefreshableOAuthClient<OSChinaUser> {
 
     /**
-     * Construct OSChina oauth client.
+     * Construct OSChina oauth oauth client.
      *
      * @param app oauth app properties, require nonnull
-     * @param executor oauth request executor, require nonnull
+     * @param httpClient http client, require nonnull
      */
-    public OSChinaOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
-        super(app, executor);
+    public OSChinaOAuthClient(OAuthAppProperties app, HttpClient httpClient) {
+        super(app, httpClient);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.OSCHINA;
+        return BuiltInOpenPlatform.OSCHINA;
     }
 
     @Override
-    protected String getAuthorizeUrl() {
-        return "https://www.oschina.net/action/oauth2/authorize";
+    protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
+        OAuthUrl basic = new OAuthUrl("https://www.oschina.net/action/oauth2/authorize");
+        basic.getQuery()
+            .addClientId(app.getClientId())
+            .addResponseTypeWithValueCode()
+            .addRedirectUri(app.getRedirectUri());
+        return state -> {
+            OAuthUrl url = basic.copy();
+            url.getQuery().addState(state);
+            return url;
+        };
     }
 
     @Override
-    protected OAuthRequest initBasicTokenRequest() {
-        return OAuthRequest.forGet("https://www.oschina.net/action/openapi/token");
+    protected ExchangeRedirectUriQueryForToken initApiExchangeRedirectUriQueryForToken() {
+        String url = "https://www.oschina.net/action/openapi/token";
+        OAuthRequest basic = OAuthRequest.forGet(url);
+        basic.getUrlQuery()
+            .addClientId(app.getClientId())
+            .addClientSecret(app.getClientSecret())
+            .addGrantTypeWithValueAuthorizationCode()
+            .addRedirectUri(app.getRedirectUri());
+        return redirectUriQuery -> {
+            OAuthRequest request = basic.copy();
+            request.getUrlQuery().addCode(redirectUriQuery.getCode());
+            return new OAuthToken(check(execute(request)));
+        };
     }
 
     @Override
-    protected OAuthRequest initBasicRefreshTokenRequest() {
-        return OAuthRequest.forGet("https://www.oschina.net/action/openapi/token");
+    protected RefreshToken initApiRefreshToken() {
+        String url = "https://www.oschina.net/action/openapi/token";
+        OAuthRequest basic = OAuthRequest.forGet(url);
+        basic.getUrlQuery().addGrantTypeWithValueRefreshToken();
+        return token -> {
+            OAuthRequest request = basic.copy();
+            request.getUrlQuery().addCode(token.getRefreshToken());
+            return new OAuthToken(check(execute(request)));
+        };
+    }
+
+    @Override
+    protected ExchangeTokenForOpenid initApiExchangeTokenForOpenid() {
+        return token -> token.getOriginalDataMap().getAsString("uid");
+    }
+
+    @Override
+    protected ExchangeTokenForUser<OSChinaUser> initApiExchangeTokenForUser() {
+        return token -> {
+            String url = "https://www.oschina.net/action/openapi/user";
+            OAuthRequest request = OAuthRequest.forGet(url);
+            request.getUrlQuery().addAccessToken(token.getAccessToken());
+            return new OSChinaUser(check(execute(request)));
+        };
     }
 
     /**
-     * Exchange token for openid.
+     * Check response.
      *
-     * <p>This implementation returns {@code token.getString("uid")}.
-     *
-     * @param token {@inheritDoc}
-     * @return {@inheritDoc}
-     * @throws OAuthErrorException {@inheritDoc}
-     * @throws OAuthIOException {@inheritDoc}
+     * @param response response, require nonnull
+     * @return correct response
+     * @throws OAuthErrorException if the response is incorrect
      */
-    @Override
-    public String requestForOpenid(OAuthToken token) {
-        return token.getAsString("uid");
-    }
-
-    @Override
-    public OSChinaUser requestForUser(OAuthToken token)
-        throws OAuthErrorException, OAuthIOException {
-        String url = "https://www.oschina.net/action/openapi/user";
-        OAuthRequest request = OAuthRequest.forGet(url);
-        request.getQuery()
-            .addAccessToken(token.getAccessToken());
-        return new OSChinaUser(execute(request));
-    }
-
-    @Override
-    protected boolean doesTheErrorMeanThatRefreshTokenHasExpired(String error) {
-        // FIXME not found in doc
-        return false;
-    }
-
-    @Override
-    protected boolean doesTheErrorMeanThatAccessTokenHasExpired(String error) {
-        // FIXME not found in doc
-        return false;
+    private static OAuthResponse check(OAuthResponse response) throws OAuthErrorException {
+        DataMap dataMap = response.getDataMap();
+        String error = dataMap.getAsString("error");
+        if (error == null) { return response; }
+        String errorDescription = dataMap.getAsString("error_description");
+        // FIXME expired access_token/refresh_token
+        throw new OAuthErrorException(error, errorDescription);
     }
 
 }

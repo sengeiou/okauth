@@ -15,92 +15,118 @@
  */
 package com.github.wautsns.okauth.core.client.kernel;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForToken;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForUser;
-import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthRedirectUriQuery;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
-import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthRedirectUriQuery;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthToken;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.exception.OAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
-import com.github.wautsns.okauth.core.exception.error.AccessTokenHasExpiredException;
-import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
+import com.github.wautsns.okauth.core.http.HttpClient;
+import com.github.wautsns.okauth.core.http.model.OAuthRequest;
 
 /**
  * Token available oauth client.
  *
  * @author wautsns
- * @since Feb 29, 2020
+ * @since Mar 04, 2020
  */
-public abstract class TokenAvailableOAuthClient<U extends OpenPlatformUser>
-    extends OAuthClient<U> implements ExchangeRedirectUriQueryForToken, ExchangeTokenForUser<U> {
+public abstract class TokenAvailableOAuthClient<U extends OAuthUser> extends OAuthClient<U> {
+
+    private final ExchangeRedirectUriQueryForToken exchangeRedirectUriQueryForToken;
+    private final ExchangeTokenForOpenid exchangeTokenForOpenid;
+    private final ExchangeTokenForUser<U> exchangeTokenForUser;
 
     /**
      * Construct token available oauth client.
      *
      * @param app oauth app properties, require nonnull
-     * @param executor oauth request executor, require nonnull
+     * @param httpClient http client, require nonnull
      */
-    public TokenAvailableOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
-        super(app, executor);
+    public TokenAvailableOAuthClient(OAuthAppProperties app, HttpClient httpClient) {
+        super(app, httpClient);
+        this.exchangeRedirectUriQueryForToken = initApiExchangeRedirectUriQueryForToken();
+        this.exchangeTokenForOpenid = initApiExchangeTokenForOpenid();
+        this.exchangeTokenForUser = initApiExchangeTokenForUser();
     }
 
-    // -------------------- oauth user ------------------------------
-
     /**
-     * Exchange redirect uri query for openid.
+     * Exchange redirect uri query for token.
      *
-     * <p>This implementation returns {@code requestForOpenid(requestForToken(redirectUriQuery))}.
-     *
-     * @param redirectUriQuery {@inheritDoc}
-     * @return {@inheritDoc}
-     * @throws OAuthErrorException {@inheritDoc}
-     * @throws OAuthIOException {@inheritDoc}
+     * @param redirectUriQuery redirect uri query, require nonnull
+     * @return oauth token
+     * @throws OAuthErrorException if open platform gives error message
+     * @throws OAuthIOException if IO exception occurs
      */
-    @Override
-    public final String requestForOpenid(OAuthRedirectUriQuery redirectUriQuery)
+    public final OAuthToken exchangeForToken(OAuthRedirectUriQuery redirectUriQuery)
         throws OAuthErrorException, OAuthIOException {
-        return requestForOpenid(requestForToken(redirectUriQuery));
+        return exchangeRedirectUriQueryForToken.apply(redirectUriQuery);
     }
 
     /**
-     * {@inheritDoc}
+     * Exchange token for openid.
      *
-     * <ol>
-     * Request processes are as follows:
-     * <li>redirectUriQuery -> token</li>
-     * <li>token -> user</li>
-     * </ol>
-     *
-     * @param redirectUriQuery {@inheritDoc}
-     * @return {@inheritDoc}
-     * @throws OAuthErrorException {@inheritDoc}
-     * @throws OAuthIOException {@inheritDoc}
+     * @param token oauth token, require nonnull
+     * @return openid
+     * @throws OAuthErrorException if open platform gives error message
+     * @throws OAuthIOException if IO exception occurs
      */
-    @Override
-    public final U requestForUser(OAuthRedirectUriQuery redirectUriQuery)
-        throws OAuthErrorException, OAuthIOException {
-        return requestForUser(requestForToken(redirectUriQuery));
-    }
-
-    // -------------------- error -----------------------------------
-
-    @Override
-    protected OAuthErrorException newOAuthErrorException(
-        OpenPlatform openPlatform, String error, String errorDescription) {
-        if (doesTheErrorMeanThatAccessTokenHasExpired(error)) {
-            return new AccessTokenHasExpiredException(openPlatform);
-        } else {
-            return super.newOAuthErrorException(openPlatform, error, errorDescription);
-        }
+    public final String exchangeForOpenid(OAuthToken token) throws OAuthErrorException, OAuthIOException {
+        return exchangeTokenForOpenid.apply(token);
     }
 
     /**
-     * Does the error mean that access token has expired.
+     * Exchange token for user.
      *
-     * @param error error, require nonnull
-     * @return {@code true} if the error mean that access token has expired, otherwise {@code false}
+     * @param token oauth token, require nonnull
+     * @return user
+     * @throws OAuthErrorException if open platform gives error message
+     * @throws OAuthIOException if IO exception occurs
      */
-    protected abstract boolean doesTheErrorMeanThatAccessTokenHasExpired(String error);
+    public final U exchangeForUser(OAuthToken token) throws OAuthErrorException, OAuthIOException {
+        return exchangeTokenForUser.apply(token);
+    }
+
+    // -------------------- internal --------------------------------
+
+    /**
+     * Initialize api: exchange redirect uri query for token
+     *
+     * @return api: exchange redirect uri query for token
+     * @see #app
+     * @see #execute(OAuthRequest)
+     */
+    protected abstract ExchangeRedirectUriQueryForToken initApiExchangeRedirectUriQueryForToken();
+
+    /**
+     * Initialize api: exchange token for openid
+     *
+     * @return api: exchange token for openid
+     * @see #app
+     * @see #execute(OAuthRequest)
+     */
+    protected abstract ExchangeTokenForOpenid initApiExchangeTokenForOpenid();
+
+    /**
+     * Initialize api: exchange token for user
+     *
+     * @return api: exchange token for user
+     * @see #app
+     * @see #execute(OAuthRequest)
+     */
+    protected abstract ExchangeTokenForUser<U> initApiExchangeTokenForUser();
+
+    @Override
+    protected final ExchangeRedirectUriQueryForOpenid initExchangeRedirectUriQueryForOpenid() {
+        return redirectUriQuery -> exchangeForOpenid(exchangeForToken(redirectUriQuery));
+    }
+
+    @Override
+    protected final ExchangeRedirectUriQueryForUser<U> initExchangeRedirectUriQueryForUser() {
+        return redirectUriQuery -> exchangeForUser(exchangeForToken(redirectUriQuery));
+    }
 
 }

@@ -15,17 +15,13 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.dingtalk;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
-import java.io.Serializable;
-import java.util.Map;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
 
 /**
  * DingTalk user.
- *
- * <p>response data map:
  *
  * <pre>
  * {
@@ -40,40 +36,49 @@ import java.util.Map;
  * </pre>
  *
  * @author wautsns
- * @since Mar 01, 2020
+ * @since Mar 04, 2020
  */
-public class DingTalkUser extends OpenPlatformUser {
+public class DingTalkUser extends OAuthUser {
 
-    private static final long serialVersionUID = -3396777913969297784L;
+    private static final long serialVersionUID = -2179997396663957887L;
 
     /**
      * Construct DingTalk user.
      *
-     * @param response original data map, require nonnull
+     * @param response correct response, require nonnull
      */
-    @SuppressWarnings("unchecked")
     public DingTalkUser(OAuthResponse response) {
-        super((Map<String, Serializable>) response.getData().get("user_info"));
+        super(response);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.DINGTALK;
+        return BuiltInOpenPlatform.DINGTALK;
     }
 
     @Override
     public String getOpenid() {
-        return getAsString("openid");
+        return getOriginalDataMap().getAsString("openid");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return unionid
+     */
     @Override
     public String getUnionid() {
-        return getAsString("unionid");
+        return getOriginalDataMap().getAsString("unionid");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return nickname
+     */
     @Override
     public String getNickname() {
-        return getAsString("nick");
+        return getOriginalDataMap().getAsString("nick");
     }
 
 }

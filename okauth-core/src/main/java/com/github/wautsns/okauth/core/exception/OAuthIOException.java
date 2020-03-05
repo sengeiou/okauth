@@ -15,31 +15,25 @@
  */
 package com.github.wautsns.okauth.core.exception;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
 import java.io.IOException;
-import lombok.Getter;
 
 /**
  * OAuth IO exception.
  *
  * @author wautsns
- * @since Feb 28, 2020
+ * @since Mar 04, 2020
  */
-@Getter
 public class OAuthIOException extends OAuthException {
 
-    private static final long serialVersionUID = 775296624639159639L;
+    private static final long serialVersionUID = 4092905520240221126L;
 
-    /** open platform */
-    private final OpenPlatform openPlatform;
-    /** oauth request */
-    private final OAuthRequest request;
-
-    public OAuthIOException(OpenPlatform openPlatform, OAuthRequest request, IOException cause) {
-        super(cause);
-        this.openPlatform = openPlatform;
-        this.request = request;
+    /**
+     * Construct oauth io exception
+     *
+     * @param e IO exception, require nonnull
+     */
+    public OAuthIOException(IOException e) {
+        super(e);
     }
 
 }

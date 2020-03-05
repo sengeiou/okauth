@@ -13,32 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.core.client.builtin;
+
+import com.github.wautsns.okauth.core.OpenPlatform;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Unsupported open platform exception.
+ * Built-in open platform.
  *
  * @author wautsns
  * @since Mar 04, 2020
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
+@Getter
+@RequiredArgsConstructor
+public enum BuiltInOpenPlatform implements OpenPlatform {
 
-    private static final long serialVersionUID = 4510043726113809910L;
-
-    private final String name;
-
-    public UnsupportedOpenPlatformException(String name) {
-        super("unsupported open platform exception");
-        this.name = name;
-    }
-
-    /**
-     * Get the open platform name unsupported.
-     *
-     * @return the open platform name unsupported
-     */
-    public String getName() {
-        return name;
-    }
+    /** Baidu(百度) */
+    BAIDU,
+    /** @deprecated DingTalk(钉钉) oauth client is not tested. */
+    @Deprecated
+    DINGTALK,
+    /** Gitee(码云) */
+    GITEE,
+    /** GitHub */
+    GITHUB,
+    /** MicroBlog(微博) */
+    MICROBLOG,
+    /** OSChina(开源中国) */
+    OSCHINA
 
 }

@@ -15,15 +15,13 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.github;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
 
 /**
  * GitHub user.
- *
- * <p>response data map:
  *
  * <pre>
  * {
@@ -62,10 +60,11 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * </pre>
  *
  * @author wautsns
- * @since Feb 29, 2020
+ * @since Mar 04, 2020
  */
-public class GitHubUser extends OpenPlatformUser {
+public class GitHubUser extends OAuthUser {
 
+    /** serialVersionUID */
     private static final long serialVersionUID = 1325181221533596732L;
 
     /**
@@ -79,27 +78,42 @@ public class GitHubUser extends OpenPlatformUser {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.GITHUB;
+        return BuiltInOpenPlatform.GITHUB;
     }
 
     @Override
     public String getOpenid() {
-        return getAsString("id");
+        return getOriginalDataMap().getAsString("id");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return username
+     */
     @Override
     public String getUsername() {
-        return getAsString("login");
+        return getOriginalDataMap().getAsString("login");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return nickname
+     */
     @Override
     public String getNickname() {
-        return getAsString("name");
+        return getOriginalDataMap().getAsString("name");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return avatar url
+     */
     @Override
     public String getAvatarUrl() {
-        return getAsString("avatar_url");
+        return getOriginalDataMap().getAsString("avatar_url");
     }
 
 }

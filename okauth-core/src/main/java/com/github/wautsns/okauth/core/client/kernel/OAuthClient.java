@@ -15,133 +15,147 @@
  */
 package com.github.wautsns.okauth.core.client.kernel;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
-import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
-import com.github.wautsns.okauth.core.client.kernel.http.model.basic.OAuthUrl;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
-import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
+import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthRedirectUriQuery;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.exception.OAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
-import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
+import com.github.wautsns.okauth.core.http.HttpClient;
+import com.github.wautsns.okauth.core.http.model.OAuthRequest;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
+import com.github.wautsns.okauth.core.http.model.basic.OAuthUrl;
+
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * OAuth client.
  *
  * @author wautsns
- * @since Feb 28, 2020
+ * @since Mar 04, 2020
  */
-public abstract class OAuthClient<U extends OpenPlatformUser> implements ExchangeRedirectUriQueryForUser<U> {
+public abstract class OAuthClient<U extends OAuthUser> {
 
     /** oauth app properties */
     protected final OAuthAppProperties app;
-    /** oauth request executor */
-    private final OAuthRequestExecutor executor;
+    /** http client */
+    private final HttpClient httpClient;
+    /** api: initialize authorize url */
+    private final InitializeAuthorizeUrl initializeAuthorizeUrl;
+    /** api: exchange redirect uri query for openid */
+    private final ExchangeRedirectUriQueryForOpenid exchangeRedirectUriQueryForOpenid;
+    /** api: exchange redirect uri query for user */
+    private final ExchangeRedirectUriQueryForUser<U> exchangeRedirectUriQueryForUser;
 
     /**
      * Construct oauth client.
      *
      * @param app oauth app properties, require nonnull
-     * @param executor oauth request executor, require nonnull
+     * @param httpClient http client, require nonnull
      */
-    public OAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
-        this.app = app;
-        this.executor = executor;
+    public OAuthClient(OAuthAppProperties app, HttpClient httpClient) {
+        this.app = Objects.requireNonNull(app);
+        this.httpClient = Objects.requireNonNull(httpClient);
+        // BEGIN check app
+        Objects.requireNonNull(app.getClientId());
+        Objects.requireNonNull(app.getClientSecret());
+        Objects.requireNonNull(app.getRedirectUri());
+        // _END_ check app
+        this.initializeAuthorizeUrl = initApiInitializeAuthorizeUrl();
+        this.exchangeRedirectUriQueryForOpenid = initExchangeRedirectUriQueryForOpenid();
+        this.exchangeRedirectUriQueryForUser = initExchangeRedirectUriQueryForUser();
     }
 
     /**
-     * Get open platform of the client.
+     * Get open platform.
      *
-     * @return open platform of the client
+     * @return open platform
      */
     public abstract OpenPlatform getOpenPlatform();
-
-    // -------------------- authorize url ---------------------------
 
     /**
      * Initialize authorize url.
      *
-     * <p>If `state` is {@code null}, it will not be added to query.
+     * <p>If the state is {@code null}, the `state` will not be added to query.
      *
      * @param state state
      * @return authorize url
      */
-    public abstract OAuthUrl initAuthorizeUrl(String state);
-
-    // -------------------- execute ---------------------------------
+    public final OAuthUrl initAuthorizeUrl(String state) {
+        return initializeAuthorizeUrl.apply(state);
+    }
 
     /**
-     * Execute the request, check the response data and return the correct response.
+     * Exchange redirect uri query for openid.
      *
-     * @param request oauth request, require nonnull
-     * @return correct response
-     * @throws OAuthErrorException if the oauth response is not correct
+     * @param redirectUriQuery redirect uri query, require nonnull
+     * @return openid
+     * @throws OAuthErrorException if open platform gives error message
      * @throws OAuthIOException if IO exception occurs
      */
-    protected final OAuthResponse execute(OAuthRequest request)
+    public final String exchangeForOpenid(OAuthRedirectUriQuery redirectUriQuery)
         throws OAuthErrorException, OAuthIOException {
+        return exchangeRedirectUriQueryForOpenid.apply(redirectUriQuery);
+    }
+
+    /**
+     * Exchange redirect uri query for user.
+     *
+     * @param redirectUriQuery redirect uri query, require nonnull
+     * @return user
+     * @throws OAuthErrorException if open platform gives error message
+     * @throws OAuthIOException if IO exception occurs
+     */
+    public final U exchangeForUser(OAuthRedirectUriQuery redirectUriQuery)
+        throws OAuthErrorException, OAuthIOException {
+        return exchangeRedirectUriQueryForUser.apply(redirectUriQuery);
+    }
+
+    // -------------------- internal --------------------------------
+
+    /**
+     * Initialize api: initialize authorize url.
+     *
+     * @return api: initialize authorize url
+     * @see #app
+     * @see #execute(OAuthRequest)
+     */
+    protected abstract InitializeAuthorizeUrl initApiInitializeAuthorizeUrl();
+
+    /**
+     * Initialize api: exchange redirect uri query for openid
+     *
+     * @return api: exchange redirect uri query for openid
+     * @see #app
+     * @see #execute(OAuthRequest)
+     */
+    protected abstract ExchangeRedirectUriQueryForOpenid initExchangeRedirectUriQueryForOpenid();
+
+    /**
+     * Initialize api: exchange redirect uri query for user
+     *
+     * @return api: exchange redirect uri query for user
+     * @see #app
+     * @see #execute(OAuthRequest)
+     */
+    protected abstract ExchangeRedirectUriQueryForUser<U> initExchangeRedirectUriQueryForUser();
+
+    /**
+     * Execute request and return response.
+     *
+     * @param request oauth request, require nonnull
+     * @return response
+     * @throws OAuthIOException if IO exception occurs
+     */
+    protected final OAuthResponse execute(OAuthRequest request) throws OAuthIOException {
         try {
-            return checkResponse(executor.execute(request));
+            return httpClient.execute(request);
         } catch (IOException e) {
-            throw new OAuthIOException(getOpenPlatform(), request, e);
+            throw new OAuthIOException(e);
         }
-    }
-
-    // -------------------- error -----------------------------------
-
-    /**
-     * Check response.
-     *
-     * @param response okauth response, require nonnull
-     * @return correct response
-     * @throws OAuthErrorException if the oauth response is not correct
-     * @see #getErrorFromResponse(OAuthResponse)
-     * @see #getErrorDescriptionFromResponse(OAuthResponse)
-     * @see #newOAuthErrorException(OpenPlatform, String, String)
-     */
-    private OAuthResponse checkResponse(OAuthResponse response) throws OAuthErrorException {
-        String error = getErrorFromResponse(response);
-        if (error == null) {
-            int status = response.getStatus();
-            if (status >= 400) {
-                error = Integer.toString(status);
-            } else {
-                return response;
-            }
-        }
-        String errorDescription = getErrorDescriptionFromResponse(response);
-        throw newOAuthErrorException(getOpenPlatform(), error, errorDescription);
-    }
-
-    /**
-     * Get error from response.
-     *
-     * @param response response, require nonnull
-     * @return error({ @ code null } if the response is correct)
-     */
-    protected abstract String getErrorFromResponse(OAuthResponse response);
-
-    /**
-     * Get error description from response.
-     *
-     * @param response incorrect response, require nonnull
-     * @return error description
-     */
-    protected abstract String getErrorDescriptionFromResponse(OAuthResponse response);
-
-    /**
-     * New oauth error exception.
-     *
-     * @param openPlatform open platform, require nonnull
-     * @param error error, require nonnull
-     * @param errorDescription error description
-     * @return oauth error exception
-     */
-    protected OAuthErrorException newOAuthErrorException(
-        OpenPlatform openPlatform, String error, String errorDescription) {
-        return new OAuthErrorException(openPlatform, error, errorDescription);
     }
 
 }

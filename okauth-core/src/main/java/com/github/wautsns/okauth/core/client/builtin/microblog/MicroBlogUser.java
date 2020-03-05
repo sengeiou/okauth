@@ -15,15 +15,13 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.microblog;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
 
 /**
  * MicroBlog user.
- *
- * <p>response data map:
  *
  * <pre>
  * {
@@ -91,16 +89,16 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * </pre>
  *
  * @author wautsns
- * @since Feb 29, 2020
+ * @since Mar 04, 2020
  */
-public class MicroBlogUser extends OpenPlatformUser {
+public class MicroBlogUser extends OAuthUser {
 
-    private static final long serialVersionUID = 1466862966956847504L;
+    private static final long serialVersionUID = 902553786678247428L;
 
     /**
      * Construct MicroBlog user.
      *
-     * @param response okauth response, require nonnull
+     * @param response correct response, require nonnull
      */
     public MicroBlogUser(OAuthResponse response) {
         super(response);
@@ -108,27 +106,46 @@ public class MicroBlogUser extends OpenPlatformUser {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.MICROBLOG;
+        return BuiltInOpenPlatform.MICROBLOG;
     }
 
     @Override
     public String getOpenid() {
-        return getAsString("idstr");
+        return getOriginalDataMap().getAsString("idstr");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return nickname
+     */
     @Override
     public String getNickname() {
-        return getAsString("screen_name");
+        return getOriginalDataMap().getAsString("screen_name");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return avatar url
+     */
     @Override
     public String getAvatarUrl() {
-        return getAsString("avatar_large");
+        return getOriginalDataMap().getAsString("avatar_large");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Possible values: {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#MALE MALE},
+     * {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#FEMALE FEMALE}, {@linkplain
+     * com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#UNKNOWN UNKNOWN}.
+     *
+     * @return gender
+     */
     @Override
     public Gender getGender() {
-        String gender = getAsString("gender");
+        String gender = getOriginalDataMap().getAsString("gender");
         if ("m".equals(gender)) {
             return Gender.MALE;
         } else if ("f".equals(gender)) {

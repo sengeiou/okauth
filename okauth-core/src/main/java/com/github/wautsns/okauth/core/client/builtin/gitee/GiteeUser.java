@@ -15,15 +15,13 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.gitee;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
 
 /**
  * Gitee user.
- *
- * <p>response data map:
  *
  * <pre>
  * {
@@ -60,11 +58,11 @@ import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
  * </pre>
  *
  * @author wautsns
- * @since Feb 29, 2020
+ * @since Mar 04, 2020
  */
-public class GiteeUser extends OpenPlatformUser {
+public class GiteeUser extends OAuthUser {
 
-    private static final long serialVersionUID = -6198419705522461920L;
+    private static final long serialVersionUID = 5416843212952622820L;
 
     /**
      * Construct Gitee user.
@@ -77,27 +75,42 @@ public class GiteeUser extends OpenPlatformUser {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.GITEE;
+        return BuiltInOpenPlatform.GITEE;
     }
 
     @Override
     public String getOpenid() {
-        return getAsString("id");
+        return getOriginalDataMap().getAsString("id");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return username
+     */
     @Override
     public String getUsername() {
-        return getAsString("login");
+        return getOriginalDataMap().getAsString("login");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return nickname
+     */
     @Override
     public String getNickname() {
-        return getAsString("name");
+        return getOriginalDataMap().getAsString("name");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return avatar url
+     */
     @Override
     public String getAvatarUrl() {
-        return getAsString("avatar_url");
+        return getOriginalDataMap().getAsString("avatar_url");
     }
 
 }

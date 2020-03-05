@@ -15,121 +15,112 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.dingtalk;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.OAuthAppProperties;
 import com.github.wautsns.okauth.core.client.kernel.OAuthClient;
-import com.github.wautsns.okauth.core.client.kernel.http.OAuthRequestExecutor;
-import com.github.wautsns.okauth.core.client.kernel.http.model.basic.OAuthUrl;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthRequest;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthRedirectUriQuery;
-import com.github.wautsns.okauth.core.client.kernel.model.properties.OAuthAppProperties;
-import com.github.wautsns.okauth.core.exception.OAuthIOException;
-import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
-import java.util.Base64;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForOpenid;
+import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
+import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
+import com.github.wautsns.okauth.core.exception.OAuthErrorException;
+import com.github.wautsns.okauth.core.http.HttpClient;
+import com.github.wautsns.okauth.core.http.model.OAuthRequest;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
+import com.github.wautsns.okauth.core.http.model.basic.OAuthUrl;
+import com.github.wautsns.okauth.core.http.util.DataMap;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 
 /**
  * DingTalk oauth client.
  *
  * @author wautsns
- * @see <a href="https://ding-doc.dingtalk.com/doc#/serverapi2/kymkv6">dingtalk oauth doc</a>
- * @since Mar 01, 2020
+ * @see <a href="https://ding-doc.dingtalk.com/doc#/serverapi2/kymkv6">DingTalk OAuth doc</a>
+ * @since Mar 04, 2020
  */
 public class DingTalkOAuthClient extends OAuthClient<DingTalkUser> {
-
-    /**
-     * basic authorize url
-     *
-     * <p>Query items added are as follows:
-     * <ul>
-     * <li>appid: {@code app.getClientId()}</li>
-     * <li>response_type: {@code "code"}</li>
-     * <li>scope: {@code "snsapi_login"}</li>
-     * <li>redirect_uri: {@code app.getRedirectUri()}</li>
-     * </ul>
-     */
-    private final OAuthUrl basicAuthorizeUrl;
-    /**
-     * basic user request
-     *
-     * <p>Query items added are as follows:
-     * <ul>
-     * <li>accessKey: {@code app.getClientId()}</li>
-     * </ul>
-     */
-    private final OAuthRequest basicUserRequest;
 
     /**
      * Construct DingTalk oauth client.
      *
      * @param app oauth app properties, require nonnull
-     * @param executor oauth request executor, require nonnull
+     * @param httpClient http client, require nonnull
      */
-    public DingTalkOAuthClient(OAuthAppProperties app, OAuthRequestExecutor executor) {
-        super(app, executor);
-        // basic authorize url
-        String authorizeUrl = "https://oapi.dingtalk.com/connect/qrconnect";
-        basicAuthorizeUrl = new OAuthUrl(authorizeUrl);
-        basicAuthorizeUrl.getQuery()
-            .add("appid", app.getClientId())
-            .add("response_type", "code")
-            .add("scope", "snsapi_login")
-            .add("redirect_uri", app.getRedirectUri());
-        // basic user request
-        String userRequestUrl = "https://oapi.dingtalk.com/sns/getuserinfo_bycode";
-        basicUserRequest = OAuthRequest.forPost(userRequestUrl);
-        basicUserRequest.getQuery()
-            .add("accessKey", app.getClientId());
+    public DingTalkOAuthClient(OAuthAppProperties app, HttpClient httpClient) {
+        super(app, httpClient);
     }
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.DINGTALK;
+        return BuiltInOpenPlatform.DINGTALK;
     }
 
     @Override
-    public OAuthUrl initAuthorizeUrl(String state) {
-        OAuthUrl url = basicAuthorizeUrl.copy();
-        url.getQuery().addState(state);
-        return url;
+    protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
+        OAuthUrl basic = new OAuthUrl("https://oapi.dingtalk.com/connect/qrconnect");
+        basic.getQuery()
+            .addAppid(app.getClientId())
+            .addResponseTypeWithValueCode()
+            .addScope("snsapi_login")
+            .addRedirectUri(app.getRedirectUri());
+        return state -> {
+            OAuthUrl url = basic.copy();
+            url.getQuery().addState(state);
+            return url;
+        };
     }
 
     @Override
-    public DingTalkUser requestForUser(OAuthRedirectUriQuery redirectUriQuery)
-        throws OAuthErrorException, OAuthIOException {
-        OAuthRequest request = basicUserRequest.copy();
-        String timestamp = Long.toString(System.currentTimeMillis());
-        request.getQuery()
-            .add("timestamp", timestamp)
-            .add("signature", sign(timestamp));
-        request.getForm()
-            .add("tmp_auth_code", redirectUriQuery.getCode());
-        return new DingTalkUser(execute(request));
+    protected ExchangeRedirectUriQueryForOpenid initExchangeRedirectUriQueryForOpenid() {
+        return redirectUriQuery -> exchangeForUser(redirectUriQuery).getOpenid();
     }
 
     @Override
-    protected String getErrorFromResponse(OAuthResponse response) {
-        Integer errcode = (Integer) response.getData().get("errcode");
-        return (errcode == 0) ? null : errcode.toString();
+    protected ExchangeRedirectUriQueryForUser<DingTalkUser> initExchangeRedirectUriQueryForUser() {
+        String url = "https://oapi.dingtalk.com/sns/getuserinfo_bycode";
+        OAuthRequest basic = OAuthRequest.forPost(url);
+        basic.getUrlQuery().add("accessKey", app.getClientId());
+        byte[] secretBytes = app.getClientSecret().getBytes();
+        return redirectUriQuery -> {
+            OAuthRequest request = basic.copy();
+            String timestamp = Long.toString(System.currentTimeMillis());
+            request.getUrlQuery()
+                .add("timestamp", timestamp)
+                .add("signature", sign(secretBytes, timestamp));
+            request.getForm()
+                .add("tmp_auth_code", redirectUriQuery.getCode());
+            return new DingTalkUser(check(execute(request)));
+        };
     }
 
-    @Override
-    protected String getErrorDescriptionFromResponse(OAuthResponse response) {
-        return (String) response.getData().get("errmsg");
+    /**
+     * Check response.
+     *
+     * @param response response, require nonnull
+     * @return correct response
+     * @throws OAuthErrorException if the response is incorrect
+     */
+    private static OAuthResponse check(OAuthResponse response) throws OAuthErrorException {
+        DataMap dataMap = response.getDataMap();
+        Integer errcode = dataMap.getInteger("errcode");
+        if (errcode == 0) { return response; }
+        String errmsg = dataMap.getAsString("errmsg");
+        throw new OAuthErrorException(errcode.toString(), errmsg);
     }
 
     /**
      * Sign string.
      *
+     * @param secretBytes secret bytes, require nonnull
      * @param string string to sign, require nonnull
      * @return signature
      */
-    private String sign(String string) {
+    private static String sign(byte[] secretBytes, String string) {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
-            mac.init(new SecretKeySpec(app.getClientSecret().getBytes(), "HmacSHA256"));
+            mac.init(new SecretKeySpec(secretBytes, "HmacSHA256"));
             byte[] signatureBytes = mac.doFinal(string.getBytes());
             return Base64.getEncoder().encodeToString(signatureBytes);
         } catch (Exception e) {

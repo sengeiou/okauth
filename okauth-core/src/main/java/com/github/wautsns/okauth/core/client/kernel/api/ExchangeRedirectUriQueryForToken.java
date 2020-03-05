@@ -15,28 +15,28 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthRedirectUriQuery;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OAuthToken;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthRedirectUriQuery;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthToken;
+import com.github.wautsns.okauth.core.exception.OAuthErrorException;
 import com.github.wautsns.okauth.core.exception.OAuthIOException;
-import com.github.wautsns.okauth.core.exception.error.OAuthErrorException;
 
 /**
  * Exchange redirect uri query for token.
  *
  * @author wautsns
- * @since Feb 28, 2020
+ * @since Mar 04, 2020
  */
 @FunctionalInterface
 public interface ExchangeRedirectUriQueryForToken {
 
     /**
-     * Exchange redirect uri query for token.
+     * Exchange redirect uri query for token
      *
-     * @param redirectUriQuery oauth redirect uri query, require nonnull
-     * @return oauth token
-     * @throws OAuthErrorException if the oauth response is not correct
+     * @param redirectUriQuery redirect uri query, require nonnull
+     * @return token
+     * @throws OAuthErrorException if open platform gives error message
      * @throws OAuthIOException if IO exception occurs
      */
-    OAuthToken requestForToken(OAuthRedirectUriQuery redirectUriQuery) throws OAuthErrorException, OAuthIOException;
+    OAuthToken apply(OAuthRedirectUriQuery redirectUriQuery) throws OAuthErrorException, OAuthIOException;
 
 }

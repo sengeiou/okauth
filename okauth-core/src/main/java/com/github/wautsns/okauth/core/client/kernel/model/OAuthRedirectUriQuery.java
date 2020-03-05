@@ -13,32 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.core.client.kernel.model;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
- * Unsupported open platform exception.
+ * OAuth redirect uri query.
  *
  * @author wautsns
  * @since Mar 04, 2020
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
+@Data
+@Accessors(chain = true)
+public class OAuthRedirectUriQuery implements Serializable {
 
-    private static final long serialVersionUID = 4510043726113809910L;
+    private static final long serialVersionUID = -1461949917732766274L;
 
-    private final String name;
-
-    public UnsupportedOpenPlatformException(String name) {
-        super("unsupported open platform exception");
-        this.name = name;
-    }
-
+    /** authorization code */
+    private String code;
     /**
-     * Get the open platform name unsupported.
-     *
-     * @return the open platform name unsupported
+     * The application generates a random string and includes it in the request. It should then check that the same
+     * value is returned after the user authorizes the app. This is used to prevent CSRF attacks.
      */
-    public String getName() {
-        return name;
-    }
+    private String state;
 
 }

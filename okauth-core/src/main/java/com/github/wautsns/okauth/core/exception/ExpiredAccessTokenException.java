@@ -16,29 +16,17 @@
 package com.github.wautsns.okauth.core.exception;
 
 /**
- * Unsupported open platform exception.
+ * Expired access token exception.
  *
  * @author wautsns
  * @since Mar 04, 2020
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
+public class ExpiredAccessTokenException extends OAuthErrorException {
 
-    private static final long serialVersionUID = 4510043726113809910L;
+    private static final long serialVersionUID = -1539348247553344950L;
 
-    private final String name;
-
-    public UnsupportedOpenPlatformException(String name) {
-        super("unsupported open platform exception");
-        this.name = name;
-    }
-
-    /**
-     * Get the open platform name unsupported.
-     *
-     * @return the open platform name unsupported
-     */
-    public String getName() {
-        return name;
+    public ExpiredAccessTokenException(String errorCode, String message) {
+        super(errorCode, message);
     }
 
 }

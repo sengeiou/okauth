@@ -15,16 +15,15 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.baidu;
 
-import com.github.wautsns.okauth.core.client.OpenPlatform;
-import com.github.wautsns.okauth.core.client.builtin.OpenPlatforms;
-import com.github.wautsns.okauth.core.client.kernel.http.model.dto.OAuthResponse;
-import com.github.wautsns.okauth.core.client.kernel.model.dto.OpenPlatformUser;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
+
 import java.time.LocalDate;
 
 /**
  * Baidu user.
- *
- * <p>response data map:
  *
  * <pre>
  * {
@@ -40,16 +39,16 @@ import java.time.LocalDate;
  * </pre>
  *
  * @author wautsns
- * @since Feb 29, 2020
+ * @since Mar 04, 2020
  */
-public class BaiduUser extends OpenPlatformUser {
+public class BaiduUser extends OAuthUser {
 
-    private static final long serialVersionUID = -5163425746517965960L;
+    private static final long serialVersionUID = -6258757118243380879L;
 
     /**
      * Construct Baidu user.
      *
-     * @param response okauth response, require nonnull
+     * @param response correct response, require nonnull
      */
     public BaiduUser(OAuthResponse response) {
         super(response);
@@ -57,22 +56,37 @@ public class BaiduUser extends OpenPlatformUser {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return OpenPlatforms.BAIDU;
+        return BuiltInOpenPlatform.BAIDU;
     }
 
     @Override
     public String getOpenid() {
-        return getAsString("openid");
+        return getOriginalDataMap().getAsString("openid");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return avatar url
+     */
     @Override
     public String getAvatarUrl() {
-        return "http://tb.himg.baidu.com/sys/portrait/item/" + getAsString("portrait");
+        return "http://tb.himg.baidu.com/sys/portrait/item/"
+            + getOriginalDataMap().getAsString("portrait");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Possible values: {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#MALE MALE},
+     * {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#FEMALE FEMALE}, {@linkplain
+     * com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#UNKNOWN UNKNOWN}.
+     *
+     * @return gender
+     */
     @Override
     public Gender getGender() {
-        String gender = getAsString("sex");
+        String gender = getOriginalDataMap().getAsString("sex");
         if ("1".equals(gender)) {
             return Gender.MALE;
         } else if ("0".equals(gender)) {
@@ -82,12 +96,14 @@ public class BaiduUser extends OpenPlatformUser {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return birthday
+     */
+    @Override
     public LocalDate getBirthday() {
-        String birthday = getAsString("birthday");
-        if (birthday == null) {
-            return null;
-        }
-        return LocalDate.parse(birthday);
+        return LocalDate.parse(getOriginalDataMap().getAsString("birthday"));
     }
 
 }

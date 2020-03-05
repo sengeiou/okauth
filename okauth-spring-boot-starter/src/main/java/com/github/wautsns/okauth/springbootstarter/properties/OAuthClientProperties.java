@@ -13,32 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.springbootstarter.properties;
+
+import com.github.wautsns.okauth.core.client.kernel.OAuthAppProperties;
+import lombok.Data;
+import lombok.experimental.Accessors;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
- * Unsupported open platform exception.
+ * OAuth client properties.
  *
  * @author wautsns
- * @since Mar 04, 2020
+ * @since Mar 05, 2020
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
+@Data
+@Accessors(chain = true)
+public class OAuthClientProperties {
 
-    private static final long serialVersionUID = 4510043726113809910L;
-
-    private final String name;
-
-    public UnsupportedOpenPlatformException(String name) {
-        super("unsupported open platform exception");
-        this.name = name;
-    }
-
-    /**
-     * Get the open platform name unsupported.
-     *
-     * @return the open platform name unsupported
-     */
-    public String getName() {
-        return name;
-    }
+    private Boolean enabled = true;
+    @NestedConfigurationProperty
+    private OAuthAppProperties oauthApp;
+    @NestedConfigurationProperty
+    private HttpClientImplementationProperties httpClient;
 
 }
