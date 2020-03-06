@@ -16,29 +16,41 @@
 package com.github.wautsns.okauth.core.exception;
 
 /**
- * Unsupported open platform exception.
+ * OAuth related exception.
  *
  * @author wautsns
  * @since Mar 04, 2020
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
+public class OAuthException extends Exception {
 
-    private static final long serialVersionUID = 4510043726113809910L;
+    private static final long serialVersionUID = 775296624639159639L;
 
-    private final String name;
-
-    public UnsupportedOpenPlatformException(String name) {
-        super("unsupported open platform exception");
-        this.name = name;
+    /**
+     * Construct oauth exception.
+     *
+     * @param message message, require nonnull
+     */
+    public OAuthException(String message) {
+        super(message);
     }
 
     /**
-     * Get the open platform name unsupported.
+     * Construct oauth exception.
      *
-     * @return the open platform name unsupported
+     * @param cause cause, require nonnull
+     * @param message message, require nonnull
      */
-    public String getName() {
-        return name;
+    public OAuthException(Throwable cause, String message) {
+        super(message, cause);
+    }
+
+    /**
+     * Construct oauth exception.
+     *
+     * @param cause cause, require nonnull
+     */
+    public OAuthException(Throwable cause) {
+        super(cause);
     }
 
 }

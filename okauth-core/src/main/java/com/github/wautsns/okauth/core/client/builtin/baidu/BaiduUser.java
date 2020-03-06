@@ -1,5 +1,5 @@
-/**
- * Copyright 2019 the original author or authors.
+/*
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,42 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.baidu;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.github.wautsns.okauth.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
-import com.github.wautsns.okauth.core.client.core.OpenPlatform;
-import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
+
+import java.time.LocalDate;
 
 /**
  * Baidu user.
  *
- * @since Feb 18, 2020
+ * <pre>
+ * {
+ *     "userid": "33192xxxxx",
+ *     "portrait": "afc577617574736e7xxxxx",
+ *     "username": "w***s",
+ *     "is_bind_mobile": "1",
+ *     "is_realname": "1",
+ *     "birthday": "1998-02-05",
+ *     "sex": "1",
+ *     "openid": "oF6xVTPl83G5Q2tAeh5w5j1uNyxxxxx"
+ * }
+ * </pre>
+ *
  * @author wautsns
+ * @since Mar 04, 2020
  */
-@JsonNaming(SnakeCaseStrategy.class)
 public class BaiduUser extends OAuthUser {
 
+    private static final long serialVersionUID = -6258757118243380879L;
+
     /**
-     * Construct a Baidu user.
+     * Construct Baidu user.
      *
-     * @param response response, require nonnull
+     * @param response correct response, require nonnull
      */
-    public BaiduUser(Response response) {
+    public BaiduUser(OAuthResponse response) {
         super(response);
     }
 
@@ -46,18 +60,50 @@ public class BaiduUser extends OAuthUser {
     }
 
     @Override
-    public String getOpenId() {
-        return getString("userid");
+    public String getOpenid() {
+        return getOriginalDataMap().getAsString("openid");
     }
 
-    @Override
-    public String getNickname() {
-        return getString("username");
-    }
-
+    /**
+     * {@inheritDoc}
+     *
+     * @return avatar url
+     */
     @Override
     public String getAvatarUrl() {
-        return "http://tb.himg.baidu.com/sys/portrait/item/" + getString("portrait");
+        return "http://tb.himg.baidu.com/sys/portrait/item/"
+                + getOriginalDataMap().getAsString("portrait");
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Possible values: {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#MALE MALE},
+     * {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#FEMALE FEMALE}, {@linkplain
+     * com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#UNKNOWN UNKNOWN}.
+     *
+     * @return gender
+     */
+    @Override
+    public Gender getGender() {
+        String gender = getOriginalDataMap().getAsString("sex");
+        if ("1".equals(gender)) {
+            return Gender.MALE;
+        } else if ("0".equals(gender)) {
+            return Gender.FEMALE;
+        } else {
+            return Gender.UNKNOWN;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return birthday
+     */
+    @Override
+    public LocalDate getBirthday() {
+        return LocalDate.parse(getOriginalDataMap().getAsString("birthday"));
     }
 
 }

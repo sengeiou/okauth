@@ -13,32 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.core.http.model;
+
+import com.github.wautsns.okauth.core.http.util.DataMap;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.io.Serializable;
 
 /**
- * Unsupported open platform exception.
+ * OAuth response.
  *
  * @author wautsns
- * @since Mar 04, 2020
+ * @since Mar 03, 2020
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
+@Getter
+@RequiredArgsConstructor
+public class OAuthResponse implements Serializable {
 
-    private static final long serialVersionUID = 4510043726113809910L;
+    private static final long serialVersionUID = -1909597806170273639L;
 
-    private final String name;
-
-    public UnsupportedOpenPlatformException(String name) {
-        super("unsupported open platform exception");
-        this.name = name;
-    }
-
-    /**
-     * Get the open platform name unsupported.
-     *
-     * @return the open platform name unsupported
-     */
-    public String getName() {
-        return name;
-    }
+    /** oauth response status */
+    private final int status;
+    /** oauth response data map */
+    private final DataMap dataMap;
 
 }

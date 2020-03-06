@@ -1,5 +1,5 @@
-/**
- * Copyright 2019 the original author or authors.
+/*
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,63 +15,78 @@
  */
 package com.github.wautsns.okauth.core.client.builtin;
 
-import java.util.function.BiFunction;
+import com.github.wautsns.okauth.core.OpenPlatform;
+import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.dingtalk.DingTalkOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.microblog.MicroBlogOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuthClient;
+import com.github.wautsns.okauth.core.client.kernel.OAuthAppProperties;
+import com.github.wautsns.okauth.core.client.kernel.OAuthClient;
+import com.github.wautsns.okauth.core.http.HttpClient;
+import com.github.wautsns.okauth.core.http.HttpClientProperties;
+import com.github.wautsns.okauth.core.http.builtin.okhttp.OkHttp3HttpClient;
+import lombok.RequiredArgsConstructor;
 
-import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOkAuthClient;
-import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOkAuthClient;
-import com.github.wautsns.okauth.core.client.builtin.github.GitHubOkAuthClient;
-import com.github.wautsns.okauth.core.client.builtin.microblog.MicroBlogOkAuthClient;
-import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOkAuthClient;
-import com.github.wautsns.okauth.core.client.builtin.wechat.WeChatOkAuthClient;
-import com.github.wautsns.okauth.core.client.core.OkAuthClient;
-import com.github.wautsns.okauth.core.client.core.OkAuthClientInitializer;
-import com.github.wautsns.okauth.core.client.core.properties.OAuthAppInfo;
-import com.github.wautsns.okauth.core.client.util.http.Requester;
+import java.util.function.BiFunction;
 
 /**
  * Built-in open platform.
  *
- * @since Feb 18, 2020
  * @author wautsns
+ * @since Mar 04, 2020
  */
-public enum BuiltInOpenPlatform implements OkAuthClientInitializer {
+@RequiredArgsConstructor
+public enum BuiltInOpenPlatform implements OpenPlatform {
 
-    BAIDU("Baidu", BaiduOkAuthClient::new),
-    GITEE("Gitee", GiteeOkAuthClient::new),
-    GITHUB("GitHub", GitHubOkAuthClient::new),
-    MICROBLOG("MicroBlog", MicroBlogOkAuthClient::new),
-    OSCHINA("OSChina", OSChinaOkAuthClient::new),
-    /** @deprecated not tested */
-    @Deprecated
-    WECHAT("WeChat", WeChatOkAuthClient::new),
-    ;
+    /** Baidu(百度) */
+    BAIDU(BaiduOAuthClient::new),
+    /** Gitee(码云) */
+    GITEE(GiteeOAuthClient::new),
+    /** GitHub */
+    GITHUB(GitHubOAuthClient::new),
+    /** MicroBlog(微博) */
+    MICROBLOG(MicroBlogOAuthClient::new),
+    /** OSChina(开源中国) */
+    OSCHINA(OSChinaOAuthClient::new),
 
-    /** identifier */
-    private final String identifier;
-    /** function to initialize an okauth client */
-    private final BiFunction<OAuthAppInfo, Requester, OkAuthClient> okauthClientInitializer;
+    // -------------------- Not tested ------------------------------
 
     /**
-     * Construct a built-in open platform.
+     * DingTalk(钉钉)
      *
-     * @param identifier open platform identifier
-     * @param okauthClientInitializer okauth client initializer
+     * FIXME DingTalk is not tested.
+     *
+     * @deprecated Not tested.
      */
-    private BuiltInOpenPlatform(
-            String identifier,
-            BiFunction<OAuthAppInfo, Requester, OkAuthClient> okauthClientInitializer) {
-        this.identifier = identifier;
-        this.okauthClientInitializer = okauthClientInitializer;
+    @Deprecated
+    DINGTALK(DingTalkOAuthClient::new),
+
+    ;
+
+    private final BiFunction<OAuthAppProperties, HttpClient, OAuthClient<?>> oauthClientConstructor;
+
+    /**
+     * Initialize oauth client with default http client.
+     *
+     * @param oauthAppProperties oauth app properties
+     * @return oauth client
+     */
+    public OAuthClient<?> initOAuthClient(OAuthAppProperties oauthAppProperties) {
+        HttpClient httpClient = new OkHttp3HttpClient(HttpClientProperties.initDefault());
+        return initOAuthClient(oauthAppProperties, httpClient);
     }
 
-    @Override
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    @Override
-    public OkAuthClient initOkAuthClient(OAuthAppInfo oauthAppInfo, Requester requester) {
-        return okauthClientInitializer.apply(oauthAppInfo, requester);
+    /**
+     * Initialize oauth client.
+     *
+     * @param oauthAppProperties oauth app properties
+     * @param httpClient http client
+     * @return oauth client
+     */
+    public OAuthClient<?> initOAuthClient(OAuthAppProperties oauthAppProperties, HttpClient httpClient) {
+        return oauthClientConstructor.apply(oauthAppProperties, httpClient);
     }
 
 }

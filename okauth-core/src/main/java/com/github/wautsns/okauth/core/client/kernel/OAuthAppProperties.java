@@ -13,32 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.core.client.kernel;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
- * Unsupported open platform exception.
+ * OAuth app properties.
  *
  * @author wautsns
  * @since Mar 04, 2020
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
+@Data
+@Accessors(chain = true)
+public class OAuthAppProperties {
 
-    private static final long serialVersionUID = 4510043726113809910L;
-
-    private final String name;
-
-    public UnsupportedOpenPlatformException(String name) {
-        super("unsupported open platform exception");
-        this.name = name;
-    }
-
-    /**
-     * Get the open platform name unsupported.
-     *
-     * @return the open platform name unsupported
-     */
-    public String getName() {
-        return name;
-    }
+    /** client id(alias: appid) */
+    private String clientId;
+    /** client secret(alias: secret) */
+    private String clientSecret;
+    /** redirect uri */
+    private String redirectUri;
 
 }

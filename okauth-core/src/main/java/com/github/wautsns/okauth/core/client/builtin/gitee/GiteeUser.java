@@ -1,5 +1,5 @@
-/**
- * Copyright 2019 the original author or authors.
+/*
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,61 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.gitee;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.github.wautsns.okauth.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
-import com.github.wautsns.okauth.core.client.core.OpenPlatform;
-import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
 
 /**
  * Gitee user.
  *
- * @since Feb 18, 2020
+ * <pre>
+ * {
+ *     "id": 19xxxxx,
+ *     "login": "wautsns",
+ *     "name": "独自漫步〃寂静の夜空下",
+ *     "avatar_url": "https://portrait.gitee.com/uploads/avatars/user/645/19xxxxx_wautsns_1578962737.png",
+ *     "url": "https://gitee.com/api/v5/users/wautsns",
+ *     "html_url": "https://gitee.com/wautsns",
+ *     "followers_url": "https://gitee.com/api/v5/users/wautsns/followers",
+ *     "following_url": "https://gitee.com/api/v5/users/wautsns/following_url{/other_user}",
+ *     "gists_url": "https://gitee.com/api/v5/users/wautsns/gists{/gist_id}",
+ *     "starred_url": "https://gitee.com/api/v5/users/wautsns/starred{/owner}{/repo}",
+ *     "subscriptions_url": "https://gitee.com/api/v5/users/wautsns/subscriptions",
+ *     "organizations_url": "https://gitee.com/api/v5/users/wautsns/orgs",
+ *     "repos_url": "https://gitee.com/api/v5/users/wautsns/repos",
+ *     "events_url": "https://gitee.com/api/v5/users/wautsns/events{/privacy}",
+ *     "received_events_url": "https://gitee.com/api/v5/users/wautsns/received_events",
+ *     "type": "User",
+ *     "site_admin": false,
+ *     "blog": "",
+ *     "weibo": "",
+ *     "bio": "",
+ *     "public_repos": 0,
+ *     "public_gists": 0,
+ *     "followers": 0,
+ *     "following": 0,
+ *     "stared": 0,
+ *     "watched": 2,
+ *     "created_at": "2018-05-15T21:27:41+08:00",
+ *     "updated_at": "2020-03-01T00:58:49+08:00",
+ *     "email": null
+ * }
+ * </pre>
+ *
  * @author wautsns
+ * @since Mar 04, 2020
  */
-@JsonNaming(SnakeCaseStrategy.class)
 public class GiteeUser extends OAuthUser {
 
+    private static final long serialVersionUID = 5416843212952622820L;
+
     /**
-     * Construct a Gitee user.
+     * Construct Gitee user.
      *
-     * @param response response, require nonnull
+     * @param response okauth response, require nonnull
      */
-    public GiteeUser(Response response) {
+    public GiteeUser(OAuthResponse response) {
         super(response);
     }
 
@@ -46,18 +79,38 @@ public class GiteeUser extends OAuthUser {
     }
 
     @Override
-    public String getOpenId() {
-        return getString("id");
+    public String getOpenid() {
+        return getOriginalDataMap().getAsString("id");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return username
+     */
+    @Override
+    public String getUsername() {
+        return getOriginalDataMap().getAsString("login");
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return nickname
+     */
     @Override
     public String getNickname() {
-        return getString("name");
+        return getOriginalDataMap().getAsString("name");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return avatar url
+     */
     @Override
     public String getAvatarUrl() {
-        return getString("avatar_url");
+        return getOriginalDataMap().getAsString("avatar_url");
     }
 
 }

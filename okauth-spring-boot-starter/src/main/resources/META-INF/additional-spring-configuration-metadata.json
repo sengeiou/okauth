@@ -1,5 +1,37 @@
-{"properties": [{
-  "name": "okauth",
-  "type": "com.github.wautsns.okauth.core.manager.properties.OkAuthProperties",
-  "description": "properties for okauth"
-}]}
+{
+  "groups": [
+    {
+      "name": "okauth.default-http-client",
+      "type": "com.github.wautsns.okauth.core.http.HttpClientProperties",
+      "sourceType": "com.github.wautsns.okauth.springbootstarter.properties.OAuthClientsProperties",
+      "sourceMethod": "getDefaultHttpClient()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "okauth.default-http-client.implementation",
+      "type": "java.lang.Class<com.github.wautsns.okauth.core.http.HttpClient>",
+      "defaultValue": "com.github.wautsns.okauth.core.http.builtin.okhttp.OkHttp3HttpClient"
+    },
+    {
+      "name": "okauth.default-http-client.connect-timeout-milliseconds",
+      "type": "java.lang.Integer",
+      "defaultValue": "7000"
+    },
+    {
+      "name": "okauth.default-http-client.max-concurrent-requests",
+      "type": "java.lang.Integer",
+      "defaultValue": "64"
+    },
+    {
+      "name": "okauth.default-http-client.max-idle-connections",
+      "type": "java.lang.Integer",
+      "defaultValue": "8"
+    },
+    {
+      "name": "okauth.default-http-client.keep-alive",
+      "type": "java.time.Duration",
+      "defaultValue": "5m"
+    }
+  ]
+}

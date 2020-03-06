@@ -13,32 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
+package com.github.wautsns.okauth.core;
 
 /**
- * Unsupported open platform exception.
+ * Open platform.
  *
  * @author wautsns
  * @since Mar 04, 2020
  */
-public class UnsupportedOpenPlatformException extends OAuthException {
-
-    private static final long serialVersionUID = 4510043726113809910L;
-
-    private final String name;
-
-    public UnsupportedOpenPlatformException(String name) {
-        super("unsupported open platform exception");
-        this.name = name;
-    }
+public interface OpenPlatform {
 
     /**
-     * Get the open platform name unsupported.
+     * Get name of the open platform.
      *
-     * @return the open platform name unsupported
+     * @return name of the open platform
      */
-    public String getName() {
-        return name;
-    }
+    String name();
 
 }

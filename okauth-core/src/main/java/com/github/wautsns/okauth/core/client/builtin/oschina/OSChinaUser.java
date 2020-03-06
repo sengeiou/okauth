@@ -1,5 +1,5 @@
-/**
- * Copyright 2019 the original author or authors.
+/*
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,40 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.oschina;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.github.wautsns.okauth.core.OpenPlatform;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatform;
-import com.github.wautsns.okauth.core.client.core.OpenPlatform;
-import com.github.wautsns.okauth.core.client.core.dto.OAuthUser;
-import com.github.wautsns.okauth.core.client.util.http.Response;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
+import com.github.wautsns.okauth.core.http.model.OAuthResponse;
 
 /**
  * OSChina user.
  *
- * @since Feb 18, 2020
+ * <pre>
+ * {
+ *     "gender": "male",
+ *     "name": "wautsns",
+ *     "location": "上海 普陀",
+ *     "id": 41xxxxx,
+ *     "avatar": "https://static.oschina.net/uploads/user/2076/41xxxxx_50.jpg?t=1561458936000",
+ *     "email": "wautsns@foxmail.com",
+ *     "url": "https://my.oschina.net/u/41xxxxx"
+ * }
+ * </pre>
+ *
  * @author wautsns
+ * @since Mar 04, 2020
  */
-@JsonNaming(SnakeCaseStrategy.class)
 public class OSChinaUser extends OAuthUser {
 
+    /** serialVersionUID */
+    private static final long serialVersionUID = -2692000764813082128L;
+
     /**
-     * Construct a OSChina user.
+     * Construct OSChina user.
      *
-     * @param response response, require nonnull
+     * @param response correct response, require nonnull
      */
-    public OSChinaUser(Response response) {
+    public OSChinaUser(OAuthResponse response) {
         super(response);
     }
 
@@ -46,18 +58,49 @@ public class OSChinaUser extends OAuthUser {
     }
 
     @Override
-    public String getOpenId() {
-        return getString("id");
+    public String getOpenid() {
+        return getOriginalDataMap().getInteger("id").toString();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return nickname
+     */
     @Override
     public String getNickname() {
-        return getString("name");
+        return getOriginalDataMap().getAsString("name");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return avatar url
+     */
     @Override
     public String getAvatarUrl() {
-        return getString("avatar");
+        return getOriginalDataMap().getAsString("avatar");
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Possible values: {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#MALE MALE},
+     * {@linkplain com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#FEMALE FEMALE}, {@linkplain
+     * com.github.wautsns.okauth.core.client.kernel.model.OAuthUser.Gender#UNKNOWN UNKNOWN}.
+     *
+     * @return gender
+     */
+    @Override
+    public Gender getGender() {
+        String gender = getOriginalDataMap().getAsString("gender");
+        if (gender.equals("male")) {
+            return Gender.MALE;
+        } else if (gender.equals("female")) {
+            return Gender.FEMALE;
+        } else {
+            return Gender.UNKNOWN;
+        }
     }
 
 }
