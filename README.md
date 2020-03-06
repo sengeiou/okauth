@@ -47,6 +47,20 @@ okauth:
       redirect-uri: yourGitHubRedirectUri
 ```
 
+### 2.2.2 非 Spring Boot 环境
+
+在非 Spring Boot 环境下, 可通过如下方式配置
+
+``` java
+OAuthClients oauthClients = new OAuthClientsBuilder()
+    .register(BuiltInOpenPlatform.GITEE.initOAuthClient(
+        new OAuthAppProperties()
+            .setClientId("yourGitHubClientId")
+            .setClientSecret("yourGitHubClientSecret")
+            .setRedirectUri("yourGitHubRedirectUri")))
+    .build();
+```
+
 ## 2.3 使用
 
 在使用之前, 有几个类需要先了解一下, 以便于后面更好的理解与使用.
@@ -121,6 +135,20 @@ okauth:
       # default http client properties 
       keep-alive: 15m
 
+```
+
+### 2.4.2 非 Spring Boot 环境
+
+``` java
+OAuthClients oauthClients = new OAuthClientsBuilder()
+    .register(BuiltInOpenPlatform.GITEE.initOAuthClient(
+        new OAuthAppProperties()
+            .setClientId("yourGitHubClientId")
+            .setClientSecret("yourGitHubClientSecret")
+            .setRedirectUri("yourGitHubRedirectUri"),
+        new OkHttp3HttpClient(HttpClientProperties.initDefault()
+            .setKeepAlive(Duration.ofMinutes(3)))))
+    .build();
 ```
 
 # 3 进阶
