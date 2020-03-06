@@ -39,4 +39,25 @@ public class HttpClientProperties {
     /** keep alive */
     private Duration keepAlive;
 
+    /**
+     * Initialize default http client properties.
+     *
+     * <ul>
+     * default properties are as followers:
+     * <li>connectTimeoutMilliseconds: {@code 7_000}</li>
+     * <li>maxConcurrentRequests: {@code 64}</li>
+     * <li>maxIdleConnections: {@code 8}</li>
+     * <li>keepAlive: {@code Duration.ofMinutes(5)}</li>
+     * </ul>
+     *
+     * @return http client properties with default properties
+     */
+    public static HttpClientProperties initDefault() {
+        return new HttpClientProperties()
+                .setConnectTimeoutMilliseconds(7_000)
+                .setMaxConcurrentRequests(64)
+                .setMaxIdleConnections(8)
+                .setKeepAlive(Duration.ofMinutes(5));
+    }
+
 }

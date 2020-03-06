@@ -16,8 +16,20 @@
 package com.github.wautsns.okauth.core.client.builtin;
 
 import com.github.wautsns.okauth.core.OpenPlatform;
-import lombok.Getter;
+import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.dingtalk.DingTalkOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.microblog.MicroBlogOAuthClient;
+import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuthClient;
+import com.github.wautsns.okauth.core.client.kernel.OAuthAppProperties;
+import com.github.wautsns.okauth.core.client.kernel.OAuthClient;
+import com.github.wautsns.okauth.core.http.HttpClient;
+import com.github.wautsns.okauth.core.http.HttpClientProperties;
+import com.github.wautsns.okauth.core.http.builtin.okhttp.OkHttp3HttpClient;
 import lombok.RequiredArgsConstructor;
+
+import java.util.function.BiFunction;
 
 /**
  * Built-in open platform.
@@ -25,22 +37,56 @@ import lombok.RequiredArgsConstructor;
  * @author wautsns
  * @since Mar 04, 2020
  */
-@Getter
 @RequiredArgsConstructor
 public enum BuiltInOpenPlatform implements OpenPlatform {
 
     /** Baidu(百度) */
-    BAIDU,
-    /** @deprecated DingTalk(钉钉) oauth client is not tested. */
-    @Deprecated
-    DINGTALK,
+    BAIDU(BaiduOAuthClient::new),
     /** Gitee(码云) */
-    GITEE,
+    GITEE(GiteeOAuthClient::new),
     /** GitHub */
-    GITHUB,
+    GITHUB(GitHubOAuthClient::new),
     /** MicroBlog(微博) */
-    MICROBLOG,
+    MICROBLOG(MicroBlogOAuthClient::new),
     /** OSChina(开源中国) */
-    OSCHINA
+    OSCHINA(OSChinaOAuthClient::new),
+
+    // -------------------- Not tested ------------------------------
+
+    /**
+     * DingTalk(钉钉)
+     *
+     * FIXME DingTalk is not tested.
+     *
+     * @deprecated Not tested.
+     */
+    @Deprecated
+    DINGTALK(DingTalkOAuthClient::new),
+
+    ;
+
+    private final BiFunction<OAuthAppProperties, HttpClient, OAuthClient<?>> oauthClientConstructor;
+
+    /**
+     * Initialize oauth client with default http client.
+     *
+     * @param oauthAppProperties oauth app properties
+     * @return oauth client
+     */
+    public OAuthClient<?> initOAuthClient(OAuthAppProperties oauthAppProperties) {
+        HttpClient httpClient = new OkHttp3HttpClient(HttpClientProperties.initDefault());
+        return initOAuthClient(oauthAppProperties, httpClient);
+    }
+
+    /**
+     * Initialize oauth client.
+     *
+     * @param oauthAppProperties oauth app properties
+     * @param httpClient http client
+     * @return oauth client
+     */
+    public OAuthClient<?> initOAuthClient(OAuthAppProperties oauthAppProperties, HttpClient httpClient) {
+        return oauthClientConstructor.apply(oauthAppProperties, httpClient);
+    }
 
 }

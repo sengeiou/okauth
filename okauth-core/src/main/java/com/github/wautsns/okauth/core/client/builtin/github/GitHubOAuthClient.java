@@ -60,8 +60,8 @@ public class GitHubOAuthClient extends TokenAvailableOAuthClient<GitHubUser> {
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         OAuthUrl basic = new OAuthUrl("https://github.com/login/oauth/authorize");
         basic.getQuery()
-            .addClientId(app.getClientId())
-            .addRedirectUri(app.getRedirectUri());
+                .addClientId(app.getClientId())
+                .addRedirectUri(app.getRedirectUri());
         return state -> {
             OAuthUrl url = basic.copy();
             url.getQuery().addState(state);
@@ -75,9 +75,9 @@ public class GitHubOAuthClient extends TokenAvailableOAuthClient<GitHubUser> {
         OAuthRequest basic = OAuthRequest.forPost(url);
         basic.getHeaders().addAcceptWithValueJson();
         basic.getUrlQuery()
-            .addClientId(app.getClientId())
-            .addClientSecret(app.getClientSecret())
-            .addRedirectUri(app.getRedirectUri());
+                .addClientId(app.getClientId())
+                .addClientSecret(app.getClientSecret())
+                .addRedirectUri(app.getRedirectUri());
         return redirectUriQuery -> {
             OAuthRequest request = basic.copy();
             request.getUrlQuery().addCode(redirectUriQuery.getCode());

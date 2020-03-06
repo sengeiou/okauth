@@ -62,7 +62,7 @@ public abstract class TokenAvailableOAuthClient<U extends OAuthUser> extends OAu
      * @throws OAuthIOException if IO exception occurs
      */
     public final OAuthToken exchangeForToken(OAuthRedirectUriQuery redirectUriQuery)
-        throws OAuthErrorException, OAuthIOException {
+            throws OAuthErrorException, OAuthIOException {
         return exchangeRedirectUriQueryForToken.apply(redirectUriQuery);
     }
 

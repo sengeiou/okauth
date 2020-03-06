@@ -60,9 +60,9 @@ public class OSChinaOAuthClient extends TokenRefreshableOAuthClient<OSChinaUser>
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         OAuthUrl basic = new OAuthUrl("https://www.oschina.net/action/oauth2/authorize");
         basic.getQuery()
-            .addClientId(app.getClientId())
-            .addResponseTypeWithValueCode()
-            .addRedirectUri(app.getRedirectUri());
+                .addClientId(app.getClientId())
+                .addResponseTypeWithValueCode()
+                .addRedirectUri(app.getRedirectUri());
         return state -> {
             OAuthUrl url = basic.copy();
             url.getQuery().addState(state);
@@ -75,10 +75,10 @@ public class OSChinaOAuthClient extends TokenRefreshableOAuthClient<OSChinaUser>
         String url = "https://www.oschina.net/action/openapi/token";
         OAuthRequest basic = OAuthRequest.forGet(url);
         basic.getUrlQuery()
-            .addClientId(app.getClientId())
-            .addClientSecret(app.getClientSecret())
-            .addGrantTypeWithValueAuthorizationCode()
-            .addRedirectUri(app.getRedirectUri());
+                .addClientId(app.getClientId())
+                .addClientSecret(app.getClientSecret())
+                .addGrantTypeWithValueAuthorizationCode()
+                .addRedirectUri(app.getRedirectUri());
         return redirectUriQuery -> {
             OAuthRequest request = basic.copy();
             request.getUrlQuery().addCode(redirectUriQuery.getCode());

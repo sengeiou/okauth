@@ -61,10 +61,10 @@ public class DingTalkOAuthClient extends OAuthClient<DingTalkUser> {
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         OAuthUrl basic = new OAuthUrl("https://oapi.dingtalk.com/connect/qrconnect");
         basic.getQuery()
-            .addAppid(app.getClientId())
-            .addResponseTypeWithValueCode()
-            .addScope("snsapi_login")
-            .addRedirectUri(app.getRedirectUri());
+                .addAppid(app.getClientId())
+                .addResponseTypeWithValueCode()
+                .addScope("snsapi_login")
+                .addRedirectUri(app.getRedirectUri());
         return state -> {
             OAuthUrl url = basic.copy();
             url.getQuery().addState(state);
@@ -87,10 +87,10 @@ public class DingTalkOAuthClient extends OAuthClient<DingTalkUser> {
             OAuthRequest request = basic.copy();
             String timestamp = Long.toString(System.currentTimeMillis());
             request.getUrlQuery()
-                .add("timestamp", timestamp)
-                .add("signature", sign(secretBytes, timestamp));
+                    .add("timestamp", timestamp)
+                    .add("signature", sign(secretBytes, timestamp));
             request.getForm()
-                .add("tmp_auth_code", redirectUriQuery.getCode());
+                    .add("tmp_auth_code", redirectUriQuery.getCode());
             return new DingTalkUser(check(execute(request)));
         };
     }

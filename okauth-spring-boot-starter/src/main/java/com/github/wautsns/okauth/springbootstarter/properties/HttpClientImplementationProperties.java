@@ -17,9 +17,11 @@ package com.github.wautsns.okauth.springbootstarter.properties;
 
 import com.github.wautsns.okauth.core.http.HttpClient;
 import com.github.wautsns.okauth.core.http.HttpClientProperties;
+import com.github.wautsns.okauth.core.http.builtin.okhttp.OkHttp3HttpClient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.beans.BeanUtils;
 
 import java.time.Duration;
 
@@ -58,6 +60,24 @@ public class HttpClientImplementationProperties extends HttpClientProperties {
     public HttpClientImplementationProperties setKeepAlive(Duration keepAlive) {
         super.setKeepAlive(keepAlive);
         return this;
+    }
+
+    /**
+     * Initialize default http client implementation properties.
+     *
+     * <ul>
+     * default properties are as followers:
+     * <li>implementation: {@code OkHttp3HttpClient.class}</li>
+     * <li>other properties please see {@link HttpClientProperties#initDefault()}</li>
+     * </ul>
+     *
+     * @return default http client implementation properties
+     */
+    public static HttpClientImplementationProperties initDefault() {
+        HttpClientImplementationProperties properties = new HttpClientImplementationProperties();
+        BeanUtils.copyProperties(HttpClientProperties.initDefault(), properties);
+        properties.setImplementation(OkHttp3HttpClient.class);
+        return properties;
     }
 
 }

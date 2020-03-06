@@ -34,7 +34,7 @@ public class Readers {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     /** data map java type */
     private static final JavaType JAVA_TYPE_DATA_MAP = OBJECT_MAPPER
-        .getTypeFactory().constructType(DataMap.class);
+            .getTypeFactory().constructType(DataMap.class);
 
     /**
      * Read input stream as string.

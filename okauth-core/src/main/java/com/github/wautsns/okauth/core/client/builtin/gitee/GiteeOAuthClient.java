@@ -62,9 +62,9 @@ public class GiteeOAuthClient extends TokenRefreshableOAuthClient<GiteeUser> {
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         OAuthUrl basic = new OAuthUrl("https://gitee.com/oauth/authorize");
         basic.getQuery()
-            .addResponseTypeWithValueCode()
-            .addClientId(app.getClientId())
-            .addRedirectUri(app.getRedirectUri());
+                .addResponseTypeWithValueCode()
+                .addClientId(app.getClientId())
+                .addRedirectUri(app.getRedirectUri());
         return state -> {
             OAuthUrl url = basic.copy();
             url.getQuery().addState(state);
@@ -77,10 +77,10 @@ public class GiteeOAuthClient extends TokenRefreshableOAuthClient<GiteeUser> {
         String url = "https://gitee.com/oauth/token";
         OAuthRequest basic = OAuthRequest.forPost(url);
         basic.getUrlQuery()
-            .addGrantTypeWithValueAuthorizationCode()
-            .addClientId(app.getClientId())
-            .addClientSecret(app.getClientSecret())
-            .addRedirectUri(app.getRedirectUri());
+                .addGrantTypeWithValueAuthorizationCode()
+                .addClientId(app.getClientId())
+                .addClientSecret(app.getClientSecret())
+                .addRedirectUri(app.getRedirectUri());
         return redirectUriQuery -> {
             OAuthRequest request = basic.copy();
             request.getUrlQuery().addCode(redirectUriQuery.getCode());

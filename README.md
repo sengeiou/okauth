@@ -61,7 +61,7 @@ OAuth2.0 token 信息, 可以获取如下属性(若不支持, 则为 `null` ): `
 4. [`OAuthUser`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/kernel/model/OAuthUser.java "点击查看源码")  
 抽象出的 OAuth2.0 用户信息, 各个开放平台具有各自的实现类, 可以获取如下属性(若不支持, 则为 `null`): `openPlatform` (不会为 null) , `openid` (不会为 null), `unionid` , `username` , `nickname` , `avatarUrl` , `gender` , `birthday` . 若需要其他属性可通过 `originalDataMap` 获取.
 5. [`OAuthClient`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/kernel/OAuthClient.java "点击查看源码")  
-所有开放平台客户端的父类. 该客户端提供了通过 `OAuthRedirectUriQuery` 获取 `openid` 与 `OAuthUser` 的 API.
+抽象的 OAuth2.0 客户端. 该客户端提供了通过 `OAuthRedirectUriQuery` 获取 `openid` 与 `OAuthUser` 的 API.
 6. [`TokenAvailableOAuthClient`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/kernel/TokenAvailableOAuthClient.java "点击查看源码")  
 该类继承自 `OAuthClient` , 若开放平台支持获取 token, 则对应的客户端应是该类的子类. 该客户端额外提供了通过 `OAuthRedirectUriQuery` 获取 `OAuthToken` , 通过 `OAuthToken` 获取 `openid` 与 `OAuthUser` 的 API.
 7. [`TokenRefreshableOAuthClient`](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/kernel/TokenRefreshableOAuthClient.java "点击查看源码")  

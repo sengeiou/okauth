@@ -30,7 +30,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Accessors(chain = true)
 public class OAuthClientProperties {
 
-    private Boolean enabled = true;
+    private Boolean enabled = Boolean.TRUE;
     @NestedConfigurationProperty
     private OAuthAppProperties oauthApp;
     @NestedConfigurationProperty

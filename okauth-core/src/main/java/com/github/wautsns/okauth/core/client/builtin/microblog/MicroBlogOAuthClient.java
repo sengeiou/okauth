@@ -60,8 +60,8 @@ public class MicroBlogOAuthClient extends TokenAvailableOAuthClient<MicroBlogUse
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         OAuthUrl basic = new OAuthUrl("https://api.weibo.com/oauth2/authorize");
         basic.getQuery()
-            .addClientId(app.getClientId())
-            .addRedirectUri(app.getRedirectUri());
+                .addClientId(app.getClientId())
+                .addRedirectUri(app.getRedirectUri());
         return state -> {
             OAuthUrl url = basic.copy();
             url.getQuery().addState(state);
@@ -74,10 +74,10 @@ public class MicroBlogOAuthClient extends TokenAvailableOAuthClient<MicroBlogUse
         String url = "https://api.weibo.com/oauth2/access_token";
         OAuthRequest basic = OAuthRequest.forPost(url);
         basic.getUrlQuery()
-            .addClientId(app.getClientId())
-            .addClientSecret(app.getClientSecret())
-            .addRedirectUri(app.getRedirectUri())
-            .addGrantTypeWithValueAuthorizationCode();
+                .addClientId(app.getClientId())
+                .addClientSecret(app.getClientSecret())
+                .addRedirectUri(app.getRedirectUri())
+                .addGrantTypeWithValueAuthorizationCode();
         return redirectUriQuery -> {
             OAuthRequest request = basic.copy();
             request.getUrlQuery().addCode(redirectUriQuery.getCode());
@@ -96,8 +96,8 @@ public class MicroBlogOAuthClient extends TokenAvailableOAuthClient<MicroBlogUse
             String url = "https://api.weibo.com/2/users/show.json";
             OAuthRequest request = OAuthRequest.forGet(url);
             request.getUrlQuery()
-                .addAccessToken(token.getAccessToken())
-                .add("uid", token.getOriginalDataMap().getAsString("uid"));
+                    .addAccessToken(token.getAccessToken())
+                    .add("uid", token.getOriginalDataMap().getAsString("uid"));
             return new MicroBlogUser(check(execute(request)));
         };
     }

@@ -16,13 +16,11 @@
 package com.github.wautsns.okauth.springbootstarter.properties;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuthClient;
-import com.github.wautsns.okauth.core.http.builtin.okhttp.OkHttp3HttpClient;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,12 +36,8 @@ import java.util.Map;
 public class OAuthClientsProperties {
 
     @NestedConfigurationProperty
-    private final HttpClientImplementationProperties defaultHttpClient = new HttpClientImplementationProperties()
-        .setImplementation(OkHttp3HttpClient.class)
-        .setConnectTimeoutMilliseconds(7_000)
-        .setMaxConcurrentRequests(64)
-        .setMaxIdleConnections(8)
-        .setKeepAlive(Duration.ofMinutes(5));
+    private final HttpClientImplementationProperties defaultHttpClient
+            = HttpClientImplementationProperties.initDefault();
 
     @NestedConfigurationProperty
     private OAuthClientProperties baidu;

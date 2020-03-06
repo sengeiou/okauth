@@ -97,7 +97,7 @@ public abstract class OAuthClient<U extends OAuthUser> {
      * @throws OAuthIOException if IO exception occurs
      */
     public final String exchangeForOpenid(OAuthRedirectUriQuery redirectUriQuery)
-        throws OAuthErrorException, OAuthIOException {
+            throws OAuthErrorException, OAuthIOException {
         return exchangeRedirectUriQueryForOpenid.apply(redirectUriQuery);
     }
 
@@ -110,7 +110,7 @@ public abstract class OAuthClient<U extends OAuthUser> {
      * @throws OAuthIOException if IO exception occurs
      */
     public final U exchangeForUser(OAuthRedirectUriQuery redirectUriQuery)
-        throws OAuthErrorException, OAuthIOException {
+            throws OAuthErrorException, OAuthIOException {
         return exchangeRedirectUriQueryForUser.apply(redirectUriQuery);
     }
 

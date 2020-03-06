@@ -72,7 +72,7 @@ public class BaiduUser extends OAuthUser {
     @Override
     public String getAvatarUrl() {
         return "http://tb.himg.baidu.com/sys/portrait/item/"
-            + getOriginalDataMap().getAsString("portrait");
+                + getOriginalDataMap().getAsString("portrait");
     }
 
     /**

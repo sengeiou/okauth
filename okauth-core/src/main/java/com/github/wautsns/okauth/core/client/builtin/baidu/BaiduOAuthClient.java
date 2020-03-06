@@ -61,9 +61,9 @@ public class BaiduOAuthClient extends TokenRefreshableOAuthClient<BaiduUser> {
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         OAuthUrl basic = new OAuthUrl("http://openapi.baidu.com/oauth/2.0/authorize");
         basic.getQuery()
-            .addResponseTypeWithValueCode()
-            .addClientId(app.getClientId())
-            .addRedirectUri(app.getRedirectUri());
+                .addResponseTypeWithValueCode()
+                .addClientId(app.getClientId())
+                .addRedirectUri(app.getRedirectUri());
         return state -> {
             OAuthUrl url = basic.copy();
             url.getQuery().addState(state);
@@ -76,10 +76,10 @@ public class BaiduOAuthClient extends TokenRefreshableOAuthClient<BaiduUser> {
         String url = "https://openapi.baidu.com/oauth/2.0/token";
         OAuthRequest basic = OAuthRequest.forGet(url);
         basic.getUrlQuery()
-            .addGrantTypeWithValueAuthorizationCode()
-            .addClientId(app.getClientId())
-            .addClientSecret(app.getClientSecret())
-            .addRedirectUri(app.getRedirectUri());
+                .addGrantTypeWithValueAuthorizationCode()
+                .addClientId(app.getClientId())
+                .addClientSecret(app.getClientSecret())
+                .addRedirectUri(app.getRedirectUri());
         return redirectUriQuery -> {
             OAuthRequest request = basic.copy();
             request.getUrlQuery().addCode(redirectUriQuery.getCode());
@@ -92,9 +92,9 @@ public class BaiduOAuthClient extends TokenRefreshableOAuthClient<BaiduUser> {
         String url = "https://openapi.baidu.com/oauth/2.0/token";
         OAuthRequest basic = OAuthRequest.forGet(url);
         basic.getUrlQuery()
-            .addGrantTypeWithValueRefreshToken()
-            .addClientId(app.getClientId())
-            .addClientSecret(app.getClientSecret());
+                .addGrantTypeWithValueRefreshToken()
+                .addClientId(app.getClientId())
+                .addClientSecret(app.getClientSecret());
         return token -> {
             OAuthRequest request = basic.copy();
             request.getUrlQuery().addRefreshToken(token.getRefreshToken());

@@ -59,13 +59,12 @@ public class OkHttp3HttpClient implements HttpClient {
      */
     public OkHttp3HttpClient(HttpClientProperties properties) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-            .connectTimeout(properties.getConnectTimeoutMilliseconds(), TimeUnit.MILLISECONDS)
-            .readTimeout(3, TimeUnit.SECONDS)
-            .writeTimeout(3, TimeUnit.SECONDS)
-            .connectionPool(new ConnectionPool(
-                properties.getMaxIdleConnections(),
-                properties.getKeepAlive().getSeconds(),
-                TimeUnit.SECONDS));
+                .connectTimeout(properties.getConnectTimeoutMilliseconds(), TimeUnit.MILLISECONDS)
+                .readTimeout(3, TimeUnit.SECONDS)
+                .writeTimeout(3, TimeUnit.SECONDS)
+                .connectionPool(new ConnectionPool(
+                        properties.getMaxIdleConnections(),
+                        properties.getKeepAlive().getSeconds(), TimeUnit.SECONDS));
         client = builder.build();
         Dispatcher dispatcher = client.dispatcher();
         dispatcher.setMaxRequests(properties.getMaxConcurrentRequests());
