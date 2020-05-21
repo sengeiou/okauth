@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.github;
 
+import com.github.wautsns.okauth.core.assist.http.builtin.okhttp3.OkHttp3OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
@@ -49,6 +50,15 @@ public class GitHubOAuth2Client
      * Construct GitHub oauth2 client.
      *
      * @param appInfo oauth2 app info
+     */
+    public GitHubOAuth2Client(GitHubOAuth2AppInfo appInfo) {
+        super(appInfo, OkHttp3OAuth2HttpClient.DEFAULT);
+    }
+
+    /**
+     * Construct GitHub oauth2 client.
+     *
+     * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
      */
     public GitHubOAuth2Client(GitHubOAuth2AppInfo appInfo, OAuth2HttpClient httpClient) {
@@ -57,7 +67,7 @@ public class GitHubOAuth2Client
 
     @Override
     public String getOpenPlatform() {
-        return BuiltInOpenPlatformNames.GIT_HUB;
+        return BuiltInOpenPlatformNames.GITHUB;
     }
 
     @Override
@@ -97,8 +107,8 @@ public class GitHubOAuth2Client
                 // not required: .addState(redirectUriQuery.getState());
                 return new GitHubOAuth2Token(executeGetOrRefreshTokenAndCheck(request));
             } else {
-                String error = redirectUriQuery.getAsString("error");
-                String description = redirectUriQuery.getAsString("error_description");
+                String error = redirectUriQuery.getError();
+                String description = redirectUriQuery.getErrorDescription();
                 if ("access_denied".equals(error)) {
                     throw new UserRefusedAuthorizationException(getOpenPlatform());
                 } else {

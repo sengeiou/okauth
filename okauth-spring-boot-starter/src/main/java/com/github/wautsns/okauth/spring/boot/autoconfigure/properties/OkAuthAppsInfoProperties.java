@@ -32,12 +32,15 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Accessors(chain = true)
 public class OkAuthAppsInfoProperties {
 
+    /** Baidu app info properties */
     @NestedConfigurationProperty
     private final OkAuthAppInfoProperties<BaiduOAuth2AppInfo> baidu
             = new OkAuthAppInfoProperties<>(new BaiduOAuth2AppInfo());
+    /** Gitee app info properties */
     @NestedConfigurationProperty
     private final OkAuthAppInfoProperties<GiteeOAuth2AppInfo> gitee
             = new OkAuthAppInfoProperties<>(new GiteeOAuth2AppInfo());
+    /** GitHub app info properties */
     @NestedConfigurationProperty
     private final OkAuthAppInfoProperties<GitHubOAuth2AppInfo> github
             = new OkAuthAppInfoProperties<>(new GitHubOAuth2AppInfo());

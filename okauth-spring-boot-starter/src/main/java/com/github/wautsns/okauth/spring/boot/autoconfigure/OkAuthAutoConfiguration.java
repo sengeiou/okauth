@@ -26,13 +26,15 @@ import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2Client;
 import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
-import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthHttpClientProperties;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppInfoProperties;
+import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthHttpClientProperties;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Constructor;
@@ -46,8 +48,9 @@ import java.util.List;
  * @author wautsns
  * @since Feb 27, 2020
  */
+@ComponentScan
 @Configuration
-@ConditionalOnProperty(name = "okauth.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty("okauth.enabled")
 @EnableConfigurationProperties(OkAuthProperties.class)
 public class OkAuthAutoConfiguration {
 
@@ -61,6 +64,7 @@ public class OkAuthAutoConfiguration {
     // #################### common component ############################################
 
     @Bean
+    @ConditionalOnBean(TokenRefreshableOAuth2Client.class)
     @ConditionalOnMissingBean
     public TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback() {
         return TokenRefreshableOAuth2Client.TokenRefreshCallback.DEFAULT;
@@ -83,7 +87,7 @@ public class OkAuthAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnBean(BaiduOAuth2Client.class)
     public BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier displaySupplier() {
         return BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier.DEFAULT;
     }

@@ -41,7 +41,7 @@
     },
     {
       "name": "okauth.apps-info.baidu.app-info.scope",
-      "type": "java.util.Set<com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo.Scope>"
+      "type": "java.util.List<com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo.Scope>"
     },
     {
       "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query.display",
@@ -73,7 +73,7 @@
     },
     {
       "name": "okauth.apps-info.gitee.app-info.scope",
-      "type": "java.util.Set<com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo.Scope>"
+      "type": "java.util.List<com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo.Scope>"
     },
     {
       "name": "okauth.apps-info.github.app-info.client-id",
@@ -89,7 +89,7 @@
     },
     {
       "name": "okauth.apps-info.github.app-info.scope",
-      "type": "java.util.Set<com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo.Scope>"
+      "type": "java.util.List<com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo.Scope>"
     },
     {
       "name": "okauth.apps-info.github.app-info.extra-authorize-url-query.login",

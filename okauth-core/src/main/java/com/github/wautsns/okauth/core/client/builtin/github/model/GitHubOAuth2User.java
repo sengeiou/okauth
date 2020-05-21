@@ -74,7 +74,7 @@ public class GitHubOAuth2User implements OAuth2User {
 
     @Override
     public String getOpenPlatform() {
-        return BuiltInOpenPlatformNames.GIT_HUB;
+        return BuiltInOpenPlatformNames.GITHUB;
     }
 
     public String getLogin() {

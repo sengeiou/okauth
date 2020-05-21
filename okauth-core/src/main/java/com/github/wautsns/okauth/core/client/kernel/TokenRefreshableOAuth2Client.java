@@ -21,6 +21,8 @@ import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
+import java.util.Objects;
+
 /**
  * Token refreshable oauth2 client.
  *
@@ -43,13 +45,21 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
      * @param httpClient oauth2 http client
      * @param tokenRefreshCallback token refresh call back
      */
-    protected TokenRefreshableOAuth2Client(
-            A appInfo, OAuth2HttpClient httpClient, TokenRefreshCallback tokenRefreshCallback) {
+    public TokenRefreshableOAuth2Client(
+            A appInfo, OAuth2HttpClient httpClient,
+            TokenRefreshCallback tokenRefreshCallback) {
         super(appInfo, httpClient);
-        this.apiRefreshToken = initApiRefreshToken();
-        this.tokenRefreshCallback = coalesce(tokenRefreshCallback, TokenRefreshCallback.DEFAULT);
+        this.apiRefreshToken = Objects.requireNonNull(initApiRefreshToken());
+        this.tokenRefreshCallback = Objects.requireNonNull(tokenRefreshCallback);
     }
 
+    /**
+     * Refresh token.
+     *
+     * @param token token
+     * @return token
+     * @throws OAuth2Exception if oauth2 failed
+     */
     public final T refreshToken(T token) throws OAuth2Exception {
         tokenRefreshCallback.beforeRefreshing(getOpenPlatform(), token);
         T newToken = apiRefreshToken.execute(token);

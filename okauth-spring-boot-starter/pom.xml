@@ -22,7 +22,7 @@
     </developers>
 
     <properties>
-        <spring-boot.version>2.1.8.RELEASE</spring-boot.version>
+        <spring-boot.version>2.2.7.RELEASE</spring-boot.version>
         <lombok.version>1.18.12</lombok.version>
     </properties>
 

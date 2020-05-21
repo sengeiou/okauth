@@ -20,7 +20,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -37,7 +37,7 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
     private String clientSecret;
     private String redirectUri;
     /** See {@link Scope} for details. */
-    private Set<Scope> scope;
+    private List<Scope> scope;
     private final ExtraAuthorizeUrlQuery extraAuthorizeUrlQuery = new ExtraAuthorizeUrlQuery();
 
     // #################### enum ########################################################
@@ -170,7 +170,7 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
          * @param scope scope set
          * @return space-separated list of scopes
          */
-        public static String join(Set<Scope> scope) {
+        public static String join(List<Scope> scope) {
             if (scope == null || scope.isEmpty()) { return null; }
             return scope.stream()
                     .map(s -> s.value)

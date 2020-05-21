@@ -35,7 +35,7 @@ public class GitHubOAuth2Token implements OAuth2Token {
 
     @Override
     public String getOpenPlatform() {
-        return BuiltInOpenPlatformNames.GIT_HUB;
+        return BuiltInOpenPlatformNames.GITHUB;
     }
 
     @Override

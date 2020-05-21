@@ -15,7 +15,10 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.model;
 
-import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * OAuth2 redirect uri query.
@@ -23,29 +26,37 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
  * @author wautsns
  * @since May 17, 2020
  */
-public class OAuth2RedirectUriQuery extends DataMap {
+@Data
+@Accessors(chain = true)
+public class OAuth2RedirectUriQuery implements Serializable {
 
     private static final long serialVersionUID = -1461949917732766274L;
 
+    /** Authorize code. */
+    private String code;
     /**
-     * Get code.
-     *
-     * @return code
+     * The application generates a random string and includes it in the request. It should then check that the same
+     * value is returned after the user authorizes the app. This is used to prevent CSRF attacks.
      */
-    public String getCode() {
-        return getAsString("code");
-    }
+    private String state;
+
+    /** Error. */
+    private String error;
+    /** Error description. */
+    private String errorDescription;
+
+    // #################### special setters #############################################
 
     /**
-     * Get state.
+     * Set error_description.
      *
-     * <p>The application generates a random string and includes it in the request. It should then check that the same
-     * value is returned after the user authorizes the app. This is used to prevent CSRF attacks.
+     * <p>Apply to: GitHub.
      *
-     * @return state
+     * @param errorDescription error description
+     * @return self reference
      */
-    public String getState() {
-        return getAsString("state");
+    public OAuth2RedirectUriQuery setError_description(String errorDescription) {
+        return setErrorDescription(errorDescription);
     }
 
 }

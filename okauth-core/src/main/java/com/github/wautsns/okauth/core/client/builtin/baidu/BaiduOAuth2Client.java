@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.baidu;
 
+import com.github.wautsns.okauth.core.assist.http.builtin.okhttp3.OkHttp3OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
@@ -33,6 +34,8 @@ import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessTokenException;
 
+import java.util.Objects;
+
 /**
  * Baidu oauth2 client.
  *
@@ -50,10 +53,12 @@ public class BaiduOAuth2Client
      * Construct Baidu oauth2 client.
      *
      * @param appInfo oauth2 app info
-     * @param httpClient oauth2 http client
      */
-    public BaiduOAuth2Client(BaiduOAuth2AppInfo appInfo, OAuth2HttpClient httpClient) {
-        this(appInfo, httpClient, null, null);
+    public BaiduOAuth2Client(BaiduOAuth2AppInfo appInfo) {
+        this(
+                appInfo, OkHttp3OAuth2HttpClient.DEFAULT,
+                TokenRefreshCallback.DEFAULT,
+                BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier.DEFAULT);
     }
 
     /**
@@ -69,8 +74,7 @@ public class BaiduOAuth2Client
             TokenRefreshCallback tokenRefreshCallback,
             BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier displaySupplier) {
         super(appInfo, httpClient, tokenRefreshCallback);
-        this.displaySupplier = coalesce(
-                displaySupplier, BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier.DEFAULT);
+        this.displaySupplier = Objects.requireNonNull(displaySupplier);
     }
 
     @Override

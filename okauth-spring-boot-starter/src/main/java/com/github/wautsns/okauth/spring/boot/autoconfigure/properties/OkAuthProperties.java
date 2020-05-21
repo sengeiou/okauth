@@ -33,11 +33,14 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("okauth")
 public class OkAuthProperties {
 
-    private Boolean enabled = Boolean.TRUE;
+    /** Whether to enable the okauth. */
+    private Boolean enabled;
+    /** Default http client properties. */
     @NestedConfigurationProperty
     private final OkAuthHttpClientProperties defaultHttpClient = new OkAuthHttpClientProperties()
             .setImplementation(OkHttp3OAuth2HttpClient.class)
             .setProperties(OAuth2HttpClientProperties.initDefault());
+    /** Apps info properties. */
     @NestedConfigurationProperty
     private final OkAuthAppsInfoProperties appsInfo = new OkAuthAppsInfoProperties();
 

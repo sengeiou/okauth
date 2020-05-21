@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.gitee;
 
+import com.github.wautsns.okauth.core.assist.http.builtin.okhttp3.OkHttp3OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
@@ -48,10 +49,11 @@ public class GiteeOAuth2Client
      * Construct Gitee oauth2 client.
      *
      * @param appInfo oauth2 app info
-     * @param httpClient oauth2 http client
      */
-    public GiteeOAuth2Client(GiteeOAuth2AppInfo appInfo, OAuth2HttpClient httpClient) {
-        super(appInfo, httpClient, null);
+    public GiteeOAuth2Client(GiteeOAuth2AppInfo appInfo) {
+        super(
+                appInfo, OkHttp3OAuth2HttpClient.DEFAULT,
+                TokenRefreshCallback.DEFAULT);
     }
 
     /**

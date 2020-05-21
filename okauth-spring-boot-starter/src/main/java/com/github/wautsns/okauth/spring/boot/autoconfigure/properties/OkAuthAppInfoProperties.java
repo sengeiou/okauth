@@ -30,8 +30,8 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Accessors(chain = true)
 public class OkAuthAppInfoProperties<I extends OAuth2AppInfo> {
 
-    /** whether to enable the open platform, default is {@code true} */
-    private Boolean enabled = Boolean.TRUE;
+    /** Whether to enable the open platform. */
+    private Boolean enabled;
     /** oauth app info */
     @NestedConfigurationProperty
     private final I appInfo;

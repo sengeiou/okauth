@@ -26,6 +26,8 @@ import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
+import java.util.Objects;
+
 /**
  * Token available oauth2 client.
  *
@@ -48,21 +50,42 @@ public abstract class TokenAvailableOAuth2Client<A extends OAuth2AppInfo, T exte
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
      */
-    protected TokenAvailableOAuth2Client(A appInfo, OAuth2HttpClient httpClient) {
+    public TokenAvailableOAuth2Client(A appInfo, OAuth2HttpClient httpClient) {
         super(appInfo, httpClient);
-        this.apiExchangeRedirectUriQueryForToken = initApiExchangeRedirectUriQueryForToken();
-        this.apiExchangeTokenForOpenid = initApiExchangeTokenForOpenid();
-        this.apiExchangeTokenForUser = initApiExchangeTokenForUser();
+        this.apiExchangeRedirectUriQueryForToken = Objects.requireNonNull(initApiExchangeRedirectUriQueryForToken());
+        this.apiExchangeTokenForOpenid = Objects.requireNonNull(initApiExchangeTokenForOpenid());
+        this.apiExchangeTokenForUser = Objects.requireNonNull(initApiExchangeTokenForUser());
     }
 
+    /**
+     * Exchange redirect uri query for token.
+     *
+     * @param redirectUriQuery redirect uri query
+     * @return token
+     * @throws OAuth2Exception if oauth2 failed
+     */
     public final T exchangeForToken(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception {
         return apiExchangeRedirectUriQueryForToken.execute(redirectUriQuery);
     }
 
+    /**
+     * Exchange token query for openid.
+     *
+     * @param token token
+     * @return openid
+     * @throws OAuth2Exception if oauth2 failed
+     */
     public final String exchangeForOpenid(T token) throws OAuth2Exception {
         return apiExchangeTokenForOpenid.execute(token);
     }
 
+    /**
+     * Exchange token query for user.
+     *
+     * @param token token
+     * @return user
+     * @throws OAuth2Exception if oauth2 failed
+     */
     public final U exchangeForUser(T token) throws OAuth2Exception {
         return apiExchangeTokenForUser.execute(token);
     }

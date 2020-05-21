@@ -31,9 +31,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Accessors(chain = true)
 public class OkAuthHttpClientProperties {
 
-    /**
-     * Implementation of {@code OAuth2HttpClient}.
-     */
+    /** Implementation of {@code OAuth2HttpClient}. */
     private Class<? extends OAuth2HttpClient> implementation;
     /** Http client properties. */
     @NestedConfigurationProperty

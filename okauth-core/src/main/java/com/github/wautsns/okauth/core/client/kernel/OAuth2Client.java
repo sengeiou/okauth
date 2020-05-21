@@ -53,22 +53,42 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
      */
-    protected OAuth2Client(A appInfo, OAuth2HttpClient httpClient) {
-        this.appInfo = appInfo;
-        this.httpClient = httpClient;
-        this.apiInitializeAuthorizeUrl = initApiInitializeAuthorizeUrl();
-        this.apiExchangeRedirectUriQueryForUser = initApiExchangeRedirectUriQueryForUser();
-        this.apiExchangeRedirectUriQueryForOpenid = initApiExchangeRedirectUriQueryForOpenid();
+    public OAuth2Client(A appInfo, OAuth2HttpClient httpClient) {
+        this.appInfo = Objects.requireNonNull(appInfo);
+        this.httpClient = Objects.requireNonNull(httpClient);
+        this.apiInitializeAuthorizeUrl = Objects.requireNonNull(initApiInitializeAuthorizeUrl());
+        this.apiExchangeRedirectUriQueryForUser = Objects.requireNonNull(initApiExchangeRedirectUriQueryForUser());
+        this.apiExchangeRedirectUriQueryForOpenid = Objects.requireNonNull(initApiExchangeRedirectUriQueryForOpenid());
     }
 
+    /**
+     * Initialize authorize url.
+     *
+     * @param state state
+     * @return authorize url
+     */
     public final OAuth2Url initAuthorizeUrl(String state) {
         return apiInitializeAuthorizeUrl.execute(state);
     }
 
+    /**
+     * Exchange redirect uri query for openid.
+     *
+     * @param redirectUriQuery redirect uri query
+     * @return openid
+     * @throws OAuth2Exception if oauth2 failed
+     */
     public final String exchangeForOpenid(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception {
         return apiExchangeRedirectUriQueryForOpenid.execute(redirectUriQuery);
     }
 
+    /**
+     * Exchange redirect uri query for user.
+     *
+     * @param redirectUriQuery redirect uri query
+     * @return user
+     * @throws OAuth2Exception if oauth2 failed
+     */
     public final U exchangeForUser(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception {
         return apiExchangeRedirectUriQueryForUser.execute(redirectUriQuery);
     }
@@ -98,19 +118,5 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
      * @see #appInfo
      */
     protected abstract ExchangeRedirectUriQueryForUser<U> initApiExchangeRedirectUriQueryForUser();
-
-    // #################### initialize api ##############################################
-
-    /**
-     * Get value or default value if the value is {@code null}.
-     *
-     * @param value value
-     * @param defaultValue default value
-     * @param <T> type of value
-     * @return value or default value if the value is {@code null}
-     */
-    protected static <T> T coalesce(T value, T defaultValue) {
-        return (value != null) ? value : Objects.requireNonNull(defaultValue);
-    }
 
 }

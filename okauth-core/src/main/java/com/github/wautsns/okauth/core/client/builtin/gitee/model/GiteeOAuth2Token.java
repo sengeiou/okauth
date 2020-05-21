@@ -35,7 +35,7 @@ public class GiteeOAuth2Token implements OAuth2Token {
 
     @Override
     public String getOpenPlatform() {
-        return BuiltInOpenPlatformNames.GIT_HUB;
+        return BuiltInOpenPlatformNames.GITEE;
     }
 
     @Override
