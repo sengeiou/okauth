@@ -28,6 +28,41 @@
   ],
   "properties": [
     {
+      "name": "okauth.default-http-client.implementation",
+      "type": "java.lang.Class<com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient>",
+      "defaultValue": "com.github.wautsns.okauth.core.assist.http.builtin.okhttp3.OkHttp3OAuth2HttpClient"
+    },
+    {
+      "name": "okauth.default-http-client.properties.connect-timeout",
+      "type": "java.time.Duration",
+      "defaultValue": "3S"
+    },
+    {
+      "name": "okauth.default-http-client.properties.read-timeout",
+      "type": "java.time.Duration",
+      "defaultValue": "7S"
+    },
+    {
+      "name": "okauth.default-http-client.properties.max-concurrent-requests",
+      "type": "java.lang.Integer",
+      "defaultValue": 64
+    },
+    {
+      "name": "okauth.default-http-client.properties.max-idle-connections",
+      "type": "java.lang.Integer",
+      "defaultValue": 16
+    },
+    {
+      "name": "okauth.default-http-client.properties.max-idle-time",
+      "type": "java.time.Duration",
+      "defaultValue": "3M"
+    },
+    {
+      "name": "okauth.default-http-client.properties.keep-alive-timeout",
+      "type": "java.time.Duration",
+      "defaultValue": "3M"
+    },
+    {
       "name": "okauth.apps-info.baidu.app-info.api-key",
       "type": "java.lang.String"
     },

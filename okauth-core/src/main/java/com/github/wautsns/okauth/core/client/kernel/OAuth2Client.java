@@ -41,11 +41,11 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
     protected final OAuth2HttpClient httpClient;
 
     /** API: initialize authorize url */
-    private final InitializeAuthorizeUrl apiInitializeAuthorizeUrl;
+    protected final InitializeAuthorizeUrl apiInitializeAuthorizeUrl;
     /** API: exchange redirect uri query for open id */
-    private final ExchangeRedirectUriQueryForOpenid apiExchangeRedirectUriQueryForOpenid;
+    protected final ExchangeRedirectUriQueryForOpenid apiExchangeRedirectUriQueryForOpenid;
     /** API: exchange redirect uri query for user */
-    private final ExchangeRedirectUriQueryForUser<U> apiExchangeRedirectUriQueryForUser;
+    protected final ExchangeRedirectUriQueryForUser<U> apiExchangeRedirectUriQueryForUser;
 
     /**
      * Construct oauth2 client.
@@ -67,7 +67,7 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
      * @param state state
      * @return authorize url
      */
-    public final OAuth2Url initAuthorizeUrl(String state) {
+    public OAuth2Url initAuthorizeUrl(String state) {
         return apiInitializeAuthorizeUrl.execute(state);
     }
 
@@ -78,7 +78,7 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
      * @return openid
      * @throws OAuth2Exception if oauth2 failed
      */
-    public final String exchangeForOpenid(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception {
+    public String exchangeForOpenid(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception {
         return apiExchangeRedirectUriQueryForOpenid.execute(redirectUriQuery);
     }
 
@@ -89,7 +89,7 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
      * @return user
      * @throws OAuth2Exception if oauth2 failed
      */
-    public final U exchangeForUser(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception {
+    public U exchangeForUser(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception {
         return apiExchangeRedirectUriQueryForUser.execute(redirectUriQuery);
     }
 

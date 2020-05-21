@@ -152,11 +152,7 @@ public class BaiduOAuth2Client
         return token -> {
             OAuth2HttpRequest request = basic.copy();
             request.getUrl().getQuery().addAccessToken(token.getAccessToken());
-            try {
-                return new BaiduOAuth2User(executeNotGetOrRefreshTokenAndCheck(request));
-            } catch (ExpiredAccessTokenException e) {
-                return exchangeForUser(refreshToken(token));
-            }
+            return new BaiduOAuth2User(executeNotGetOrRefreshTokenAndCheck(request));
         };
     }
 

@@ -38,11 +38,11 @@ public abstract class TokenAvailableOAuth2Client<A extends OAuth2AppInfo, T exte
         extends OAuth2Client<A, U> {
 
     /** API: exchange redirect uri query for token */
-    private final ExchangeRedirectUriQueryForToken<T> apiExchangeRedirectUriQueryForToken;
+    protected final ExchangeRedirectUriQueryForToken<T> apiExchangeRedirectUriQueryForToken;
     /** API: exchange token for open id */
-    private final ExchangeTokenForOpenid<T> apiExchangeTokenForOpenid;
+    protected final ExchangeTokenForOpenid<T> apiExchangeTokenForOpenid;
     /** API: exchange token for user */
-    private final ExchangeTokenForUser<T, U> apiExchangeTokenForUser;
+    protected final ExchangeTokenForUser<T, U> apiExchangeTokenForUser;
 
     /**
      * Construct token available oauth2 client.
@@ -64,7 +64,7 @@ public abstract class TokenAvailableOAuth2Client<A extends OAuth2AppInfo, T exte
      * @return token
      * @throws OAuth2Exception if oauth2 failed
      */
-    public final T exchangeForToken(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception {
+    public T exchangeForToken(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception {
         return apiExchangeRedirectUriQueryForToken.execute(redirectUriQuery);
     }
 
@@ -75,7 +75,7 @@ public abstract class TokenAvailableOAuth2Client<A extends OAuth2AppInfo, T exte
      * @return openid
      * @throws OAuth2Exception if oauth2 failed
      */
-    public final String exchangeForOpenid(T token) throws OAuth2Exception {
+    public String exchangeForOpenid(T token) throws OAuth2Exception {
         return apiExchangeTokenForOpenid.execute(token);
     }
 
@@ -86,7 +86,7 @@ public abstract class TokenAvailableOAuth2Client<A extends OAuth2AppInfo, T exte
      * @return user
      * @throws OAuth2Exception if oauth2 failed
      */
-    public final U exchangeForUser(T token) throws OAuth2Exception {
+    public U exchangeForUser(T token) throws OAuth2Exception {
         return apiExchangeTokenForUser.execute(token);
     }
 

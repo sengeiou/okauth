@@ -17,9 +17,11 @@ package com.github.wautsns.okauth.core.client.kernel;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
+import com.github.wautsns.okauth.core.client.kernel.api.basic.TokenRelatedApi;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
+import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessTokenException;
 
 import java.util.Objects;
 
@@ -33,10 +35,10 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
         extends TokenAvailableOAuth2Client<A, T, U> {
 
     /** API: refresh token */
-    private final RefreshToken<T> apiRefreshToken;
+    protected final RefreshToken<T> apiRefreshToken;
 
     /** extra: token refresh callback */
-    private final TokenRefreshCallback tokenRefreshCallback;
+    protected final TokenRefreshCallback tokenRefreshCallback;
 
     /**
      * Construct token refreshable oauth2 client.
@@ -53,6 +55,16 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
         this.tokenRefreshCallback = Objects.requireNonNull(tokenRefreshCallback);
     }
 
+    @Override
+    public String exchangeForOpenid(T token) throws OAuth2Exception {
+        return refreshIfAccessTokenExpired(apiExchangeTokenForOpenid, token);
+    }
+
+    @Override
+    public U exchangeForUser(T token) throws OAuth2Exception {
+        return refreshIfAccessTokenExpired(apiExchangeTokenForUser, token);
+    }
+
     /**
      * Refresh token.
      *
@@ -65,6 +77,23 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
         T newToken = apiRefreshToken.execute(token);
         tokenRefreshCallback.afterRefreshing(getOpenPlatform(), token, newToken);
         return newToken;
+    }
+
+    /**
+     * Auto-refresh access token if the api throws {@code ExpiredAccessTokenException}.
+     *
+     * @param tokenRelatedApi token related api
+     * @param token token
+     * @param <R> type of result
+     * @return result of the api
+     * @throws OAuth2Exception if oauth2 failed
+     */
+    protected <R> R refreshIfAccessTokenExpired(TokenRelatedApi<T, R> tokenRelatedApi, T token) throws OAuth2Exception {
+        try {
+            return tokenRelatedApi.execute(token);
+        } catch (ExpiredAccessTokenException e) {
+            return tokenRelatedApi.execute(refreshToken(token));
+        }
     }
 
     // #################### initialize api ##############################################

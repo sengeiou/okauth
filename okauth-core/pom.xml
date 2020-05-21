@@ -14,22 +14,24 @@
     <description>OkAuth Core</description>
 
     <properties>
-        <okhttp.version>3.14.8</okhttp.version>
         <jackson.version>2.10.4</jackson.version>
+
+        <okhttp.version>3.14.8</okhttp.version>
 
         <lombok.version>1.18.12</lombok.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>${okhttp.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
         </dependency>
 
         <dependency>
