@@ -15,27 +15,25 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
-import com.github.wautsns.okauth.core.client.kernel.model.OAuthRedirectUriQuery;
-import com.github.wautsns.okauth.core.exception.OAuthErrorException;
-import com.github.wautsns.okauth.core.exception.OAuthIOException;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RedirectUriQuery;
+import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
 /**
- * Exchange redirect uri query for openid.
+ * API: Exchange redirect uri query for openid.
  *
  * @author wautsns
- * @since Mar 04, 2020
+ * @since May 17, 2020
  */
 @FunctionalInterface
 public interface ExchangeRedirectUriQueryForOpenid {
 
     /**
-     * Exchange redirect uri query for openid
+     * Exchange redirect uri query for openid.
      *
-     * @param redirectUriQuery redirect uri query, require nonnull
+     * @param redirectUriQuery redirect uri query
      * @return openid
-     * @throws OAuthErrorException if open platform gives error message
-     * @throws OAuthIOException if IO exception occurs
+     * @throws OAuth2Exception if oauth is failed
      */
-    String apply(OAuthRedirectUriQuery redirectUriQuery) throws OAuthErrorException, OAuthIOException;
+    String execute(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception;
 
 }

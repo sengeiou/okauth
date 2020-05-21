@@ -13,25 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel.api;
+package com.github.wautsns.okauth.core.client.builtin;
 
-import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
+import lombok.experimental.UtilityClass;
 
 /**
- * API: Initialize authorize url.
+ * Built-in open platform names.
  *
  * @author wautsns
  * @since May 17, 2020
  */
-@FunctionalInterface
-public interface InitializeAuthorizeUrl {
+@UtilityClass
+public class BuiltInOpenPlatformNames {
 
-    /**
-     * Initialize authorize url.
-     *
-     * @param state state
-     * @return authorize url
-     */
-    OAuth2Url execute(String state);
+    public static final String BAIDU = "Baidu";
+    public static final String GIT_HUB = "GitHub";
+    public static final String GITEE = "Gitee";
 
 }

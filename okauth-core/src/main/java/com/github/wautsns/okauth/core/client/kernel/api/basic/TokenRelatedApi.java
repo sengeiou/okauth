@@ -13,28 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel.api;
+package com.github.wautsns.okauth.core.client.kernel.api.basic;
 
-import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RedirectUriQuery;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
 /**
- * API: Exchange redirect uri query for token.
+ * Token related api.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since May 19, 2020
  */
-@FunctionalInterface
-public interface ExchangeRedirectUriQueryForToken<T extends OAuth2Token> {
+public interface TokenRelatedApi<T extends OAuth2Token, R> {
 
     /**
-     * Exchange redirect uri query for token.
+     * Execute the api.
      *
-     * @param redirectUriQuery redirect uri query
-     * @return token
+     * @param token token
+     * @return result
      * @throws OAuth2Exception if oauth is failed
      */
-    T execute(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception;
+    R execute(T token) throws OAuth2Exception;
 
 }

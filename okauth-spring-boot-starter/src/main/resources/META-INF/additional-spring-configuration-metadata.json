@@ -1,37 +1,182 @@
 {
   "groups": [
     {
-      "name": "okauth.default-http-client",
-      "type": "com.github.wautsns.okauth.core.http.HttpClientProperties",
-      "sourceType": "com.github.wautsns.okauth.springbootstarter.properties.OAuthClientsProperties",
-      "sourceMethod": "getDefaultHttpClient()"
+      "name": "okauth.apps-info.baidu.app-info",
+      "type": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo",
+      "sourceType": "com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppsInfoProperties"
+    },
+    {
+      "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query",
+      "type": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$ExtraAuthorizeUrlQuery",
+      "sourceType": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo"
+    },
+    {
+      "name": "okauth.apps-info.gitee.app-info",
+      "type": "com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo",
+      "sourceType": "com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppsInfoProperties"
+    },
+    {
+      "name": "okauth.apps-info.github.app-info",
+      "type": "com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo",
+      "sourceType": "com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppsInfoProperties"
+    },
+    {
+      "name": "okauth.apps-info.github.app-info.extra-authorize-url-query",
+      "type": "com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo$ExtraAuthorizeUrlQuery",
+      "sourceType": "com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo"
     }
   ],
   "properties": [
     {
-      "name": "okauth.default-http-client.implementation",
-      "type": "java.lang.Class<com.github.wautsns.okauth.core.http.HttpClient>",
-      "defaultValue": "com.github.wautsns.okauth.core.http.builtin.okhttp.OkHttp3HttpClient"
+      "name": "okauth.apps-info.baidu.app-info.api-key",
+      "type": "java.lang.String"
     },
     {
-      "name": "okauth.default-http-client.connect-timeout-milliseconds",
-      "type": "java.lang.Integer",
-      "defaultValue": "7000"
+      "name": "okauth.apps-info.baidu.app-info.secret-key",
+      "type": "java.lang.String"
     },
     {
-      "name": "okauth.default-http-client.max-concurrent-requests",
-      "type": "java.lang.Integer",
-      "defaultValue": "64"
+      "name": "okauth.apps-info.baidu.app-info.redirect-uri",
+      "type": "java.lang.String"
     },
     {
-      "name": "okauth.default-http-client.max-idle-connections",
-      "type": "java.lang.Integer",
-      "defaultValue": "8"
+      "name": "okauth.apps-info.baidu.app-info.scope",
+      "type": "java.util.Set<com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo.Scope>"
     },
     {
-      "name": "okauth.default-http-client.keep-alive",
-      "type": "java.time.Duration",
-      "defaultValue": "5m"
+      "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query.display",
+      "type": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$ExtraAuthorizeUrlQuery$Display"
+    },
+    {
+      "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query.force-login",
+      "type": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$ExtraAuthorizeUrlQuery$ForceLogin"
+    },
+    {
+      "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query.confirm-login",
+      "type": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$ExtraAuthorizeUrlQuery$ConfirmLogin"
+    },
+    {
+      "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query.login-type",
+      "type": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$ExtraAuthorizeUrlQuery$LoginType"
+    },
+    {
+      "name": "okauth.apps-info.gitee.app-info.client-id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.gitee.app-info.client-secret",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.gitee.app-info.redirect-uri",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.gitee.app-info.scope",
+      "type": "java.util.Set<com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo.Scope>"
+    },
+    {
+      "name": "okauth.apps-info.github.app-info.client-id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.github.app-info.client-secret",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.github.app-info.redirect-uri",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.github.app-info.scope",
+      "type": "java.util.Set<com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo.Scope>"
+    },
+    {
+      "name": "okauth.apps-info.github.app-info.extra-authorize-url-query.login",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.github.app-info.extra-authorize-url-query.allow-signup",
+      "type": "com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo$ExtraAuthorizeUrlQuery$AllowSignup"
+    }
+  ],
+  "hints": [
+    {
+      "name": "okauth.apps-info.baidu.app-info.scope",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$Scope"
+          }
+        }
+      ]
+    },
+    {
+      "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query.display",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$ExtraAuthorizeUrlQuery$Display"
+          }
+        }
+      ]
+    },
+    {
+      "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query.force-login",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$ExtraAuthorizeUrlQuery$ForceLogin"
+          }
+        }
+      ]
+    },
+    {
+      "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query.confirm-login",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$ExtraAuthorizeUrlQuery$ConfirmLogin"
+          }
+        }
+      ]
+    },
+    {
+      "name": "okauth.apps-info.baidu.app-info.extra-authorize-url-query.login-type",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo$ExtraAuthorizeUrlQuery$LoginType"
+          }
+        }
+      ]
+    },
+    {
+      "name": "okauth.apps-info.gitee.app-info.scope",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo$Scope"
+          }
+        }
+      ]
+    },
+    {
+      "name": "okauth.apps-info.github.app-info.scope",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo$Scope"
+          }
+        }
+      ]
     }
   ]
 }

@@ -13,28 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel.api;
+package com.github.wautsns.okauth.core.exception.specific.openplatform;
 
-import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RedirectUriQuery;
-import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
 /**
- * API: Exchange redirect uri query for token.
+ * Expired access token exception.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since May 16, 2020
  */
-@FunctionalInterface
-public interface ExchangeRedirectUriQueryForToken<T extends OAuth2Token> {
+public class UnsupportedOpenPlatformException extends OAuth2Exception {
 
-    /**
-     * Exchange redirect uri query for token.
-     *
-     * @param redirectUriQuery redirect uri query
-     * @return token
-     * @throws OAuth2Exception if oauth is failed
-     */
-    T execute(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception;
+    private static final long serialVersionUID = -1539348247553344950L;
+
+    public UnsupportedOpenPlatformException(String openPlatform) {
+        super(openPlatform);
+    }
 
 }

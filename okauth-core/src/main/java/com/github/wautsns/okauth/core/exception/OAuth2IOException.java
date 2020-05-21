@@ -13,25 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel.api;
+package com.github.wautsns.okauth.core.exception;
 
-import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
+import java.io.IOException;
 
 /**
- * API: Initialize authorize url.
+ * OAuth2 IO exception.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since May 16, 2020
  */
-@FunctionalInterface
-public interface InitializeAuthorizeUrl {
+public class OAuth2IOException extends OAuth2Exception {
 
-    /**
-     * Initialize authorize url.
-     *
-     * @param state state
-     * @return authorize url
-     */
-    OAuth2Url execute(String state);
+    private static final long serialVersionUID = 4092905520240221126L;
+
+    public OAuth2IOException(IOException e) {
+        super(e);
+    }
 
 }

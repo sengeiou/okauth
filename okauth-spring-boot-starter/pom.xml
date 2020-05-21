@@ -10,7 +10,8 @@
     </parent>
 
     <artifactId>okauth-spring-boot-starter</artifactId>
-    <name>${project.groupId}:${project.artifactId}</name>
+    <name>okauth-spring-boot-starter</name>
+    <description>OkAuth Spring Boot Starter</description>
 
     <developers>
         <developer>
@@ -35,6 +36,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
         <dependency>

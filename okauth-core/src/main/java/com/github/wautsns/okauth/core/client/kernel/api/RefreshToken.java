@@ -15,27 +15,14 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
-import com.github.wautsns.okauth.core.client.kernel.model.OAuthToken;
-import com.github.wautsns.okauth.core.exception.OAuthErrorException;
-import com.github.wautsns.okauth.core.exception.OAuthIOException;
+import com.github.wautsns.okauth.core.client.kernel.api.basic.TokenRelatedApi;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 
 /**
- * Refresh token.
+ * API: Refresh token.
  *
  * @author wautsns
- * @since Mar 04, 2020
+ * @since May 17, 2020
  */
 @FunctionalInterface
-public interface RefreshToken {
-
-    /**
-     * Refresh token.
-     *
-     * @param token token, require nonnull
-     * @return refreshed token
-     * @throws OAuthErrorException if open platform gives error message
-     * @throws OAuthIOException if IO exception occurs
-     */
-    OAuthToken apply(OAuthToken token) throws OAuthErrorException, OAuthIOException;
-
-}
+public interface RefreshToken<T extends OAuth2Token> extends TokenRelatedApi<T, T> {}

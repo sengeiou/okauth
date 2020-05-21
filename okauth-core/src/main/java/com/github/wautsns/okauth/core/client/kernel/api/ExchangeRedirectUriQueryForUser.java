@@ -15,28 +15,26 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
-import com.github.wautsns.okauth.core.client.kernel.model.OAuthRedirectUriQuery;
-import com.github.wautsns.okauth.core.client.kernel.model.OAuthUser;
-import com.github.wautsns.okauth.core.exception.OAuthErrorException;
-import com.github.wautsns.okauth.core.exception.OAuthIOException;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RedirectUriQuery;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
+import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
 /**
- * Exchange redirect uri query for user.
+ * API: Exchange redirect uri query for user.
  *
  * @author wautsns
- * @since Mar 04, 2020
+ * @since May 17, 2020
  */
 @FunctionalInterface
-public interface ExchangeRedirectUriQueryForUser<U extends OAuthUser> {
+public interface ExchangeRedirectUriQueryForUser<U extends OAuth2User> {
 
     /**
-     * Exchange redirect uri query for user
+     * Exchange redirect uri query for user.
      *
-     * @param redirectUriQuery redirect uri query, require nonnull
+     * @param redirectUriQuery redirect uri query
      * @return user
-     * @throws OAuthErrorException if open platform gives error message
-     * @throws OAuthIOException if IO exception occurs
+     * @throws OAuth2Exception if oauth is failed
      */
-    U apply(OAuthRedirectUriQuery redirectUriQuery) throws OAuthErrorException, OAuthIOException;
+    U execute(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception;
 
 }

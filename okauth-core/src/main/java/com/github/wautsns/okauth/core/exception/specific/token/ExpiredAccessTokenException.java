@@ -13,25 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel.api;
+package com.github.wautsns.okauth.core.exception.specific.token;
 
-import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
+import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 
 /**
- * API: Initialize authorize url.
+ * Expired access token exception.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since May 16, 2020
  */
-@FunctionalInterface
-public interface InitializeAuthorizeUrl {
+public class ExpiredAccessTokenException extends OAuth2ErrorException {
 
-    /**
-     * Initialize authorize url.
-     *
-     * @param state state
-     * @return authorize url
-     */
-    OAuth2Url execute(String state);
+    private static final long serialVersionUID = -1539348247553344950L;
+
+    public ExpiredAccessTokenException(String openPlatform, String errorCode, String message) {
+        super(openPlatform, errorCode, message);
+    }
 
 }
