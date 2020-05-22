@@ -15,7 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.baidu;
 
-import com.github.wautsns.okauth.core.assist.http.builtin.okhttp3.OkHttp3OAuth2HttpClient;
+import com.github.wautsns.okauth.core.assist.http.builtin.httpclient4.HttpClient4OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
@@ -56,7 +56,7 @@ public class BaiduOAuth2Client
      */
     public BaiduOAuth2Client(BaiduOAuth2AppInfo appInfo) {
         this(
-                appInfo, OkHttp3OAuth2HttpClient.DEFAULT,
+                appInfo, HttpClient4OAuth2HttpClient.DEFAULT,
                 TokenRefreshCallback.DEFAULT,
                 BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier.DEFAULT);
     }

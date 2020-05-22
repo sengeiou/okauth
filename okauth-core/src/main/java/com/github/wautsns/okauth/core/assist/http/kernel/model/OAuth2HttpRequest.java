@@ -37,8 +37,11 @@ public class OAuth2HttpRequest implements Serializable {
 
     private static final long serialVersionUID = -5239420641606727328L;
 
+    /** Request method. */
+    public enum Method {GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD, TRACE}
+
     /** request method */
-    private final String method;
+    private final Method method;
     /** request url */
     private final OAuth2Url url;
     /** request headers */
@@ -97,7 +100,7 @@ public class OAuth2HttpRequest implements Serializable {
      * @return request
      */
     public static OAuth2HttpRequest initGet(String url) {
-        return init("GET", url);
+        return init(Method.GET, url);
     }
 
     /**
@@ -107,7 +110,7 @@ public class OAuth2HttpRequest implements Serializable {
      * @return request
      */
     public static OAuth2HttpRequest initPost(String url) {
-        return init("POST", url);
+        return init(Method.POST, url);
     }
 
     /**
@@ -117,7 +120,7 @@ public class OAuth2HttpRequest implements Serializable {
      * @param url url
      * @return request
      */
-    public static OAuth2HttpRequest init(String method, String url) {
+    public static OAuth2HttpRequest init(Method method, String url) {
         return new OAuth2HttpRequest(method, new OAuth2Url(url));
     }
 

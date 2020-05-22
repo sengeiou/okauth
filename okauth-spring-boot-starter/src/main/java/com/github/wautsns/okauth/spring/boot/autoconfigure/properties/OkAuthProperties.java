@@ -15,7 +15,7 @@
  */
 package com.github.wautsns.okauth.spring.boot.autoconfigure.properties;
 
-import com.github.wautsns.okauth.core.assist.http.builtin.okhttp3.OkHttp3OAuth2HttpClient;
+import com.github.wautsns.okauth.core.assist.http.builtin.httpclient4.HttpClient4OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.properties.OAuth2HttpClientProperties;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -38,7 +38,7 @@ public class OkAuthProperties {
     /** Default http client properties. */
     @NestedConfigurationProperty
     private final OkAuthHttpClientProperties defaultHttpClient = new OkAuthHttpClientProperties()
-            .setImplementation(OkHttp3OAuth2HttpClient.class)
+            .setImplementation(HttpClient4OAuth2HttpClient.class)
             .setProperties(OAuth2HttpClientProperties.initDefault());
     /** Apps info properties. */
     @NestedConfigurationProperty

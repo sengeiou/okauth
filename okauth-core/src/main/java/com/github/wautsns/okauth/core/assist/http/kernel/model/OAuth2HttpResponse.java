@@ -29,7 +29,7 @@ import java.util.List;
  * @author wautsns
  * @since May 16, 2020
  */
-public interface OAuth2HttpResponse {
+public abstract class OAuth2HttpResponse {
 
     // #################### response line ###############################################
 
@@ -38,7 +38,7 @@ public interface OAuth2HttpResponse {
      *
      * @return http status
      */
-    int getStatus();
+    public abstract int getStatus();
 
     // #################### response header #############################################
 
@@ -48,7 +48,7 @@ public interface OAuth2HttpResponse {
      * @param name header name
      * @return value of specified header
      */
-    String getHeader(String name);
+    public abstract String getHeader(String name);
 
     /**
      * Get values of specified header.
@@ -56,7 +56,7 @@ public interface OAuth2HttpResponse {
      * @param name header name
      * @return values of specified header
      */
-    List<String> getHeaders(String name);
+    public abstract List<String> getHeaders(String name);
 
     // #################### response entity #############################################
 
@@ -65,17 +65,17 @@ public interface OAuth2HttpResponse {
      *
      * @return http entity
      */
-    Entity getEntity();
+    public abstract Entity getEntity();
 
     /** Http entity. */
-    interface Entity {
+    public abstract class Entity {
 
         /**
          * Get http response input stream.
          *
          * @return http response input stream
          */
-        InputStream getInputStream();
+        public abstract InputStream getInputStream() throws IOException;
 
         /**
          * Read http response input stream as {@code String}.
@@ -83,11 +83,13 @@ public interface OAuth2HttpResponse {
          * @return {@code String} value
          * @throws OAuth2IOException if IO exception occurs
          */
-        default String readInputStreamAsString() throws OAuth2IOException {
+        public final String readInputStreamAsString() throws OAuth2IOException {
             try {
                 return ReadUtils.readInputStreamAsString(getInputStream());
             } catch (IOException e) {
                 throw new OAuth2IOException(e);
+            } finally {
+                OAuth2HttpResponse.this.close();
             }
         }
 
@@ -97,11 +99,13 @@ public interface OAuth2HttpResponse {
          * @return {@code DataMap} value
          * @throws OAuth2IOException if IO exception occurs
          */
-        default DataMap readJsonAsDataMap() throws OAuth2IOException {
+        public final DataMap readJsonAsDataMap() throws OAuth2IOException {
             try {
                 return ReadUtils.readJsonAsDataMap(getInputStream());
             } catch (IOException e) {
                 throw new OAuth2IOException(e);
+            } finally {
+                OAuth2HttpResponse.this.close();
             }
         }
 
@@ -111,14 +115,25 @@ public interface OAuth2HttpResponse {
          * @return {@code DataMap} value
          * @throws OAuth2IOException if IO exception occurs
          */
-        default DataMap readQueryLikeTextAsDataMap() throws OAuth2IOException {
+        public final DataMap readQueryLikeTextAsDataMap() throws OAuth2IOException {
             try {
                 return ReadUtils.readQueryLikeTextAsDataMap(getInputStream());
             } catch (IOException e) {
                 throw new OAuth2IOException(e);
+            } finally {
+                OAuth2HttpResponse.this.close();
             }
         }
 
     }
+
+    // #################### close #######################################################
+
+    /**
+     * Close the response.
+     *
+     * @throws OAuth2IOException if IO exception occurs
+     */
+    public abstract void close() throws OAuth2IOException;
 
 }

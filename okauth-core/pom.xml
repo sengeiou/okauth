@@ -16,9 +16,10 @@
     <properties>
         <jackson.version>2.10.4</jackson.version>
 
-        <okhttp.version>3.14.8</okhttp.version>
+        <httpclient.version>4.5.12</httpclient.version>
 
         <lombok.version>1.18.12</lombok.version>
+        <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
     <dependencies>
@@ -29,9 +30,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>${okhttp.version}</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
         </dependency>
 
         <dependency>
@@ -39,6 +40,11 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 

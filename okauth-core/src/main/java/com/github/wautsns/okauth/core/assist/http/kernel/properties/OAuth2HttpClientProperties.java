@@ -36,12 +36,12 @@ public class OAuth2HttpClientProperties {
     private Duration readTimeout;
     /** max concurrent requests */
     private Integer maxConcurrentRequests;
-    /** max idle connection */
-    private Integer maxIdleConnections;
     /** max idle time of connection */
     private Duration maxIdleTime;
     /** keep alive timeout of connection */
     private Duration keepAliveTimeout;
+    /** retry times */
+    private Integer retryTimes;
 
     // #################### utils #######################################################
 
@@ -53,7 +53,6 @@ public class OAuth2HttpClientProperties {
      * <li>connectTimeout: {@code 3s}</li>
      * <li>readTimeout: {@code 7s}</li>
      * <li>maxConcurrentRequests: {@code 64}</li>
-     * <li>maxIdleConnections: {@code 16}</li>
      * <li>maxIdleTime: {@code 5m}</li>
      * <li>keepAliveTimeout: {@code 3m}</li>
      * </ul>
@@ -65,9 +64,9 @@ public class OAuth2HttpClientProperties {
                 .setConnectTimeout(Duration.parse("PT3S"))
                 .setReadTimeout(Duration.parse("PT7S"))
                 .setMaxConcurrentRequests(64)
-                .setMaxIdleConnections(16)
                 .setMaxIdleTime(Duration.parse("PT5M"))
-                .setKeepAliveTimeout(Duration.parse("PT3M"));
+                .setKeepAliveTimeout(Duration.parse("PT3M"))
+                .setRetryTimes(3);
     }
 
 }

@@ -30,7 +30,7 @@
     {
       "name": "okauth.default-http-client.implementation",
       "type": "java.lang.Class<com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient>",
-      "defaultValue": "com.github.wautsns.okauth.core.assist.http.builtin.okhttp3.OkHttp3OAuth2HttpClient"
+      "defaultValue": "com.github.wautsns.okauth.core.assist.http.builtin.httpclient4.HttpClient4OAuth2HttpClient"
     },
     {
       "name": "okauth.default-http-client.properties.connect-timeout",
