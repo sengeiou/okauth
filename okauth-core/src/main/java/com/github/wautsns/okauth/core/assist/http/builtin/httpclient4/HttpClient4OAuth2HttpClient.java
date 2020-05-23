@@ -21,7 +21,6 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRespons
 import com.github.wautsns.okauth.core.assist.http.kernel.properties.OAuth2HttpClientProperties;
 import com.github.wautsns.okauth.core.exception.OAuth2IOException;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
@@ -40,9 +39,11 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicHeader;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,7 +56,6 @@ import java.util.function.Function;
  * @author wautsns
  * @since May 21, 2020
  */
-@Slf4j
 @Getter
 public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
 
@@ -109,6 +109,10 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
                 builder.setRetryHandler(new OAuth2HttpRequestRetryHandler(retryTimes));
             }
         }
+        // #################### default headers #############################################
+        builder.setDefaultHeaders(Collections.singleton(
+                // Disguised as a browser.
+                new BasicHeader("User-Agent", "Chrome/83.0.4103.61")));
         // #################### http client #################################################
         this.origin = builder.build();
     }

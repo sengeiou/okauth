@@ -36,10 +36,10 @@ import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessToke
 import com.github.wautsns.okauth.core.exception.specific.token.ExpiredRefreshTokenException;
 
 /**
- * GitHub oauth2 client.
+ * Gitee oauth2 client.
  *
  * @author wautsns
- * @see <a href="https://gitee.com/api/v5/oauth_doc">Gitee OAuth doc</a>
+ * @see <a href="https://gitee.com/api/v5/oauth_doc">Gitee OAuth2 doc</a>
  * @since May 17, 2020
  */
 public class GiteeOAuth2Client
@@ -145,7 +145,7 @@ public class GiteeOAuth2Client
      */
     private DataMap executeGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
-        DataMap dataMap = response.getEntity().readJsonAsDataMap();
+        DataMap dataMap = response.readJsonAsDataMap();
         String error = dataMap.getAsString("error");
         if (error == null) { return dataMap; }
         String description = dataMap.getAsString("error_description");
@@ -165,7 +165,7 @@ public class GiteeOAuth2Client
      */
     private DataMap executeNotGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
-        DataMap dataMap = response.getEntity().readJsonAsDataMap();
+        DataMap dataMap = response.readJsonAsDataMap();
         if (response.getStatus() < 400) { return dataMap; }
         String message = dataMap.getAsString("message");
         if ("401 Unauthorized: Access token is expired".equals(message)) {

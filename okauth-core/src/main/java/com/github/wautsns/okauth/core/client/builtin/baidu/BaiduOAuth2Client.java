@@ -40,7 +40,7 @@ import java.util.Objects;
  * Baidu oauth2 client.
  *
  * @author wautsns
- * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth">Baidu OAuth doc</a>
+ * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth">Baidu OAuth2 doc</a>
  * @since May 17, 2020
  */
 public class BaiduOAuth2Client
@@ -167,7 +167,7 @@ public class BaiduOAuth2Client
      */
     private DataMap executeGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
-        DataMap dataMap = response.getEntity().readJsonAsDataMap();
+        DataMap dataMap = response.readJsonAsDataMap();
         String error = dataMap.getAsString("error");
         if (error == null) { return dataMap; }
         String errorDescription = dataMap.getAsString("error_description");
@@ -183,7 +183,7 @@ public class BaiduOAuth2Client
      */
     private DataMap executeNotGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
-        DataMap dataMap = response.getEntity().readJsonAsDataMap();
+        DataMap dataMap = response.readJsonAsDataMap();
         String errorCode = dataMap.getAsString("error_code");
         if (errorCode == null) { return dataMap; }
         String errorMsg = dataMap.getAsString("error_msg");

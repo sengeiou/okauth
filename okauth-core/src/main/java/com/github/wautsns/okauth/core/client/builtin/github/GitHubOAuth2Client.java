@@ -40,7 +40,7 @@ import com.github.wautsns.okauth.core.exception.specific.user.UserRefusedAuthori
  * GitHub oauth2 client.
  *
  * @author wautsns
- * @see <a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">GitHub OAuth doc</a>
+ * @see <a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/">GitHub OAuth2 doc</a>
  * @since May 17, 2020
  */
 public class GitHubOAuth2Client
@@ -155,7 +155,7 @@ public class GitHubOAuth2Client
      */
     private DataMap executeGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
-        DataMap dataMap = response.getEntity().readJsonAsDataMap();
+        DataMap dataMap = response.readJsonAsDataMap();
         String errorCode = dataMap.getAsString("error");
         if (errorCode == null) { return dataMap; }
         String errorMsg = dataMap.getAsString("error_description");
@@ -171,7 +171,7 @@ public class GitHubOAuth2Client
      */
     private DataMap executeNotGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
-        DataMap dataMap = response.getEntity().readJsonAsDataMap();
+        DataMap dataMap = response.readJsonAsDataMap();
         if (response.getStatus() < 400) { return dataMap; }
         String errorCode = Integer.toString(response.getStatus());
         String message = dataMap.getAsString("message");

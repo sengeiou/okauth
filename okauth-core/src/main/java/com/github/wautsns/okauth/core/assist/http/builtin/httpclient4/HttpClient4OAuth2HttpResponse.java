@@ -18,7 +18,6 @@ package com.github.wautsns.okauth.core.assist.http.builtin.httpclient4;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
 import com.github.wautsns.okauth.core.exception.OAuth2IOException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 
@@ -36,9 +35,8 @@ import java.util.stream.Collectors;
  * @author wautsns
  * @since May 22, 2020
  */
-@Slf4j
 @RequiredArgsConstructor
-public class HttpClient4OAuth2HttpResponse extends OAuth2HttpResponse {
+public class HttpClient4OAuth2HttpResponse implements OAuth2HttpResponse {
 
     /** Original http response. */
     private final HttpResponse origin;
@@ -61,13 +59,8 @@ public class HttpClient4OAuth2HttpResponse extends OAuth2HttpResponse {
     }
 
     @Override
-    public Entity getEntity() {
-        return new Entity() {
-            @Override
-            public InputStream getInputStream() throws IOException {
-                return origin.getEntity().getContent();
-            }
-        };
+    public InputStream getInputStream() throws IOException {
+        return origin.getEntity().getContent();
     }
 
     @Override

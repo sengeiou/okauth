@@ -29,7 +29,7 @@ import java.util.List;
  * @author wautsns
  * @since May 16, 2020
  */
-public abstract class OAuth2HttpResponse {
+public interface OAuth2HttpResponse {
 
     // #################### response line ###############################################
 
@@ -38,7 +38,7 @@ public abstract class OAuth2HttpResponse {
      *
      * @return http status
      */
-    public abstract int getStatus();
+    int getStatus();
 
     // #################### response header #############################################
 
@@ -48,7 +48,7 @@ public abstract class OAuth2HttpResponse {
      * @param name header name
      * @return value of specified header
      */
-    public abstract String getHeader(String name);
+    String getHeader(String name);
 
     /**
      * Get values of specified header.
@@ -56,75 +56,63 @@ public abstract class OAuth2HttpResponse {
      * @param name header name
      * @return values of specified header
      */
-    public abstract List<String> getHeaders(String name);
+    List<String> getHeaders(String name);
 
     // #################### response entity #############################################
 
     /**
-     * Get http entity.
+     * Get http response input stream.
      *
-     * @return http entity
+     * @return http response input stream
      */
-    public abstract Entity getEntity();
+    InputStream getInputStream() throws IOException;
 
-    /** Http entity. */
-    public abstract class Entity {
-
-        /**
-         * Get http response input stream.
-         *
-         * @return http response input stream
-         */
-        public abstract InputStream getInputStream() throws IOException;
-
-        /**
-         * Read http response input stream as {@code String}.
-         *
-         * @return {@code String} value
-         * @throws OAuth2IOException if IO exception occurs
-         */
-        public final String readInputStreamAsString() throws OAuth2IOException {
-            try {
-                return ReadUtils.readInputStreamAsString(getInputStream());
-            } catch (IOException e) {
-                throw new OAuth2IOException(e);
-            } finally {
-                OAuth2HttpResponse.this.close();
-            }
+    /**
+     * Read http response input stream as {@code String}.
+     *
+     * @return {@code String} value
+     * @throws OAuth2IOException if IO exception occurs
+     */
+    default String readInputStreamAsString() throws OAuth2IOException {
+        try {
+            return ReadUtils.readInputStreamAsString(getInputStream());
+        } catch (IOException e) {
+            throw new OAuth2IOException(e);
+        } finally {
+            close();
         }
+    }
 
-        /**
-         * Read http response input stream(json) as {@code DataMap}.
-         *
-         * @return {@code DataMap} value
-         * @throws OAuth2IOException if IO exception occurs
-         */
-        public final DataMap readJsonAsDataMap() throws OAuth2IOException {
-            try {
-                return ReadUtils.readJsonAsDataMap(getInputStream());
-            } catch (IOException e) {
-                throw new OAuth2IOException(e);
-            } finally {
-                OAuth2HttpResponse.this.close();
-            }
+    /**
+     * Read http response input stream(json) as {@code DataMap}.
+     *
+     * @return {@code DataMap} value
+     * @throws OAuth2IOException if IO exception occurs
+     */
+    default DataMap readJsonAsDataMap() throws OAuth2IOException {
+        try {
+            return ReadUtils.readJsonAsDataMap(getInputStream());
+        } catch (IOException e) {
+            throw new OAuth2IOException(e);
+        } finally {
+            close();
         }
+    }
 
-        /**
-         * Read http response input stream(query-like text) as {@code DataMap}.
-         *
-         * @return {@code DataMap} value
-         * @throws OAuth2IOException if IO exception occurs
-         */
-        public final DataMap readQueryLikeTextAsDataMap() throws OAuth2IOException {
-            try {
-                return ReadUtils.readQueryLikeTextAsDataMap(getInputStream());
-            } catch (IOException e) {
-                throw new OAuth2IOException(e);
-            } finally {
-                OAuth2HttpResponse.this.close();
-            }
+    /**
+     * Read http response input stream(query-like text) as {@code DataMap}.
+     *
+     * @return {@code DataMap} value
+     * @throws OAuth2IOException if IO exception occurs
+     */
+    default DataMap readQueryLikeTextAsDataMap() throws OAuth2IOException {
+        try {
+            return ReadUtils.readQueryLikeTextAsDataMap(getInputStream());
+        } catch (IOException e) {
+            throw new OAuth2IOException(e);
+        } finally {
+            OAuth2HttpResponse.this.close();
         }
-
     }
 
     // #################### close #######################################################
@@ -134,6 +122,6 @@ public abstract class OAuth2HttpResponse {
      *
      * @throws OAuth2IOException if IO exception occurs
      */
-    public abstract void close() throws OAuth2IOException;
+    void close() throws OAuth2IOException;
 
 }
