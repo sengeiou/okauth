@@ -24,6 +24,11 @@
       "name": "okauth.apps-info.github.app-info.extra-authorize-url-query",
       "type": "com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo$ExtraAuthorizeUrlQuery",
       "sourceType": "com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo"
+    },
+    {
+      "name": "okauth.apps-info.oschina.app-info",
+      "type": "com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2AppInfo",
+      "sourceType": "com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppsInfoProperties"
     }
   ],
   "properties": [
@@ -133,6 +138,18 @@
     {
       "name": "okauth.apps-info.github.app-info.extra-authorize-url-query.allow-signup",
       "type": "com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo$ExtraAuthorizeUrlQuery$AllowSignup"
+    },
+    {
+      "name": "okauth.apps-info.oschina.app-info.client-id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.oschina.app-info.client-secret",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.oschina.app-info.redirect-uri",
+      "type": "java.lang.String"
     }
   ],
   "hints": [

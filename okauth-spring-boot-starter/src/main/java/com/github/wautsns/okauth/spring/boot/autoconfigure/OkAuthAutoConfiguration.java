@@ -24,6 +24,8 @@ import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2Client;
+import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2Client;
 import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppInfoProperties;
@@ -72,7 +74,7 @@ public class OkAuthAutoConfiguration {
 
     // #################### builtInOAuth2Client #########################################
 
-    // ==================== baidu =======================================================
+    // ==================== Baidu =======================================================
 
     @Bean
     @ConditionalOnProperty("okauth.apps-info.baidu.enabled")
@@ -92,7 +94,7 @@ public class OkAuthAutoConfiguration {
         return BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier.DEFAULT;
     }
 
-    // ==================== gitee =======================================================
+    // ==================== Gitee =======================================================
 
     @Bean
     @ConditionalOnProperty("okauth.apps-info.gitee.enabled")
@@ -105,7 +107,7 @@ public class OkAuthAutoConfiguration {
         return new GiteeOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
     }
 
-    // ==================== github ======================================================
+    // ==================== GitHub ======================================================
 
     @Bean
     @ConditionalOnProperty("okauth.apps-info.github.enabled")
@@ -114,6 +116,19 @@ public class OkAuthAutoConfiguration {
         GitHubOAuth2AppInfo appInfo = github.getAppInfo();
         OAuth2HttpClient httpClient = initOAuth2HttpClient(okauthProps, github);
         return new GitHubOAuth2Client(appInfo, httpClient);
+    }
+
+    // ==================== OSChina =====================================================
+
+    @Bean
+    @ConditionalOnProperty("okauth.apps-info.oschina.enabled")
+    public OSChinaOAuth2Client oschinaOAuth2Client(
+            OkAuthProperties okauthProps,
+            TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback) {
+        OkAuthAppInfoProperties<OSChinaOAuth2AppInfo> oschina = okauthProps.getAppsInfo().getOschina();
+        OSChinaOAuth2AppInfo appInfo = oschina.getAppInfo();
+        OAuth2HttpClient httpClient = initOAuth2HttpClient(okauthProps, oschina);
+        return new OSChinaOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
     }
 
     // #################### utils #######################################################

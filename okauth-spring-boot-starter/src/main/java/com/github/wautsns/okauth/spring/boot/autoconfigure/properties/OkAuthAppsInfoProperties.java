@@ -18,6 +18,7 @@ package com.github.wautsns.okauth.spring.boot.autoconfigure.properties;
 import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2AppInfo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -32,17 +33,21 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Accessors(chain = true)
 public class OkAuthAppsInfoProperties {
 
-    /** Baidu app info properties */
+    /** Baidu app info properties. */
     @NestedConfigurationProperty
     private final OkAuthAppInfoProperties<BaiduOAuth2AppInfo> baidu
             = new OkAuthAppInfoProperties<>(new BaiduOAuth2AppInfo());
-    /** Gitee app info properties */
+    /** Gitee app info properties. */
     @NestedConfigurationProperty
     private final OkAuthAppInfoProperties<GiteeOAuth2AppInfo> gitee
             = new OkAuthAppInfoProperties<>(new GiteeOAuth2AppInfo());
-    /** GitHub app info properties */
+    /** GitHub app info properties. */
     @NestedConfigurationProperty
     private final OkAuthAppInfoProperties<GitHubOAuth2AppInfo> github
             = new OkAuthAppInfoProperties<>(new GitHubOAuth2AppInfo());
+    /** OSChina app info properties. */
+    @NestedConfigurationProperty
+    private final OkAuthAppInfoProperties<OSChinaOAuth2AppInfo> oschina
+            = new OkAuthAppInfoProperties<>(new OSChinaOAuth2AppInfo());
 
 }

@@ -32,10 +32,10 @@ public class OkAuthAppInfoProperties<I extends OAuth2AppInfo> {
 
     /** Whether to enable the open platform. */
     private Boolean enabled;
-    /** oauth app info */
+    /** OAuth2 app info. */
     @NestedConfigurationProperty
     private final I appInfo;
-    /** oauth http client properties */
+    /** OAuth2 http client properties. */
     @NestedConfigurationProperty
     private final OkAuthHttpClientProperties httpClient = new OkAuthHttpClientProperties();
 
