@@ -30,17 +30,17 @@ import java.time.Duration;
 @Accessors(chain = true)
 public class OAuth2HttpClientProperties {
 
-    /** connect timeout */
+    /** Connect timeout. */
     private Duration connectTimeout;
-    /** read timeout */
+    /** Read timeout. */
     private Duration readTimeout;
-    /** max concurrent requests */
+    /** Max concurrent requests. */
     private Integer maxConcurrentRequests;
-    /** max idle time of connection */
+    /** Max idle time of connection. */
     private Duration maxIdleTime;
-    /** keep alive timeout of connection */
+    /** Keep alive timeout of connection. */
     private Duration keepAliveTimeout;
-    /** retry times */
+    /** Retry times. */
     private Integer retryTimes;
 
     // #################### utils #######################################################
@@ -55,6 +55,7 @@ public class OAuth2HttpClientProperties {
      * <li>maxConcurrentRequests: {@code 64}</li>
      * <li>maxIdleTime: {@code 5m}</li>
      * <li>keepAliveTimeout: {@code 3m}</li>
+     * <li>retryTimes: {@code 2}</li>
      * </ul>
      *
      * @return http client properties with default properties
@@ -66,7 +67,7 @@ public class OAuth2HttpClientProperties {
                 .setMaxConcurrentRequests(64)
                 .setMaxIdleTime(Duration.parse("PT5M"))
                 .setKeepAliveTimeout(Duration.parse("PT3M"))
-                .setRetryTimes(3);
+                .setRetryTimes(2);
     }
 
 }

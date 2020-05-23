@@ -33,16 +33,16 @@ import java.io.InputStream;
 @UtilityClass
 public class ReadUtils {
 
-    /** jackson object map */
+    /** Jackson object map. */
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    /** data map java type */
+    /** Java type: {@code DataMap}. */
     private static final JavaType JAVA_TYPE_DATA_MAP = OBJECT_MAPPER.getTypeFactory().constructType(DataMap.class);
 
     /**
      * Read input stream as string.
      *
      * @param inputStream input stream
-     * @return string
+     * @return {@code String} value
      * @throws IOException if IO exception occurs
      */
     public static String readInputStreamAsString(InputStream inputStream) throws IOException {
@@ -60,17 +60,17 @@ public class ReadUtils {
      * Read query like input stream(eg. a=3&b=4) as data map.
      *
      * @param inputStream query like input stream
-     * @return data map
+     * @return {@code DataMap} value
      */
     public static DataMap readQueryLikeTextAsDataMap(InputStream inputStream) throws IOException {
         return readQueryLikeTextAsDataMap(readInputStreamAsString(inputStream));
     }
 
     /**
-     * Read query like string(eg. a=3&b=4) as data map.
+     * Read query like text(eg. a=3&b=4) as data map.
      *
      * @param string query like string
-     * @return data map
+     * @return {@code DataMap} value
      */
     public static DataMap readQueryLikeTextAsDataMap(String string) {
         DataMap dataMap = new DataMap();
@@ -85,7 +85,7 @@ public class ReadUtils {
      * Read json string as data map.
      *
      * @param string json string
-     * @return data map
+     * @return {@code DataMap} value
      * @throws IOException if IO exception occurs
      */
     public static DataMap readJsonAsDataMap(String string) throws IOException {

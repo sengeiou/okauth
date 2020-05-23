@@ -17,21 +17,33 @@ package com.github.wautsns.okauth.core.client.builtin.gitee.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
-import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import lombok.Data;
 
 /**
- * GitHub oauth2 token.
+ * Gitee oauth2 token.
+ *
+ * <pre>
+ * {
+ * 	"access_token": "ACCESS_TOKEN(length:32)",
+ * 	"token_type": "bearer",
+ * 	"expires_in": 86400,
+ * 	"refresh_token": "REFRESH_TOKEN(length:64)",
+ * 	"scope": "SCOPE(delimiter:space)",
+ * 	"created_at": 1590230103
+ * }
+ * </pre>
  *
  * @author wautsns
  * @since May 17, 2020
  */
 @Data
-public class GiteeOAuth2Token implements OAuth2Token {
+public class GiteeOAuth2Token implements OAuth2RefreshableToken {
 
     private static final long serialVersionUID = 7155633421437700449L;
 
-    private final DataMap origin;
+    /** Original data map. */
+    private final DataMap originalDataMap;
 
     @Override
     public String getOpenPlatform() {
@@ -40,17 +52,43 @@ public class GiteeOAuth2Token implements OAuth2Token {
 
     @Override
     public String getAccessToken() {
-        return origin.getAsString("access_token");
-    }
-
-    @Override
-    public String getRefreshToken() {
-        return origin.getAsString("refresh_token");
+        return originalDataMap.getAsString("access_token");
     }
 
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return origin.getAsInteger("expires_in");
+        return originalDataMap.getAsInteger("expires_in");
+    }
+
+    @Override
+    public String getRefreshToken() {
+        return originalDataMap.getAsString("refresh_token");
+    }
+
+    /** FIXME Gitee oauth2 refresh token expires in ??(Assume 7 days). */
+    private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 7 * 24 * 3600;
+
+    @Override
+    public Integer getRefreshTokenExpirationSeconds() {
+        return REFRESH_TOKEN_EXPIRATION_SECONDS;
+    }
+
+    /**
+     * Get scope(delimiter: space).
+     *
+     * @return scope
+     */
+    public String getScope() {
+        return originalDataMap.getAsString("scope");
+    }
+
+    /**
+     * Get created at(seconds timestamp).
+     *
+     * @return created at(seconds timestamp)
+     */
+    public Long getCreatedAt() {
+        return originalDataMap.getAsLong("created_at");
     }
 
 }

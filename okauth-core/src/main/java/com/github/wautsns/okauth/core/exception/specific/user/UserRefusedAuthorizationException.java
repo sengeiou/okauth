@@ -29,9 +29,14 @@ public class UserRefusedAuthorizationException extends OAuth2Exception {
 
     private static final long serialVersionUID = 3286545599334883829L;
 
-    /** open platform name */
+    /** Open platform name. */
     private final String openPlatform;
 
+    /**
+     * Construct a {@code UserRefusedAuthorizationException}.
+     *
+     * @param openPlatform open platform
+     */
     public UserRefusedAuthorizationException(String openPlatform) {
         super("user refused authorization");
         this.openPlatform = openPlatform;

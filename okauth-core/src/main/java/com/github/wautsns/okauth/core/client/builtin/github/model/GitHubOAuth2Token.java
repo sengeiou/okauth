@@ -23,6 +23,14 @@ import lombok.Data;
 /**
  * GitHub oauth2 token.
  *
+ * <pre>
+ * {
+ * 	"access_token": "ACCESS_TOKEN(length:40)",
+ * 	"token_type": "bearer",
+ * 	"scope": "SCOPE(delimiter:comma)"
+ * }
+ * </pre>
+ *
  * @author wautsns
  * @since May 17, 2020
  */
@@ -31,7 +39,8 @@ public class GitHubOAuth2Token implements OAuth2Token {
 
     private static final long serialVersionUID = 7155633421437700449L;
 
-    private final DataMap origin;
+    /** Original data map. */
+    private final DataMap originalDataMap;
 
     @Override
     public String getOpenPlatform() {
@@ -40,29 +49,28 @@ public class GitHubOAuth2Token implements OAuth2Token {
 
     @Override
     public String getAccessToken() {
-        return origin.getAsString("access_token");
+        return originalDataMap.getAsString("access_token");
     }
 
-    /**
-     * FIXME GitHub access token expires in
-     *
-     * <p>There is no access token expiration time in the response, nor is it mentioned in the official doc. Assume the
-     * expiration time is 1 day.
-     */
-    private static final Integer ACCESS_TOKEN_EXPIRES_IN = 24 * 3600;
+    /** FIXME GitHub oauth2 access token expires in ??(Assume 1 day). */
+    private static final Integer ACCESS_TOKEN_EXPIRATION_SECONDS = 24 * 3600;
 
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return ACCESS_TOKEN_EXPIRES_IN;
+        return ACCESS_TOKEN_EXPIRATION_SECONDS;
     }
 
-    @Override
+    /**
+     * Get scope(delimiter: comma).
+     *
+     * @return scope
+     */
     public String getScope() {
-        return origin.getAsString("scope");
+        return originalDataMap.getAsString("scope");
     }
 
     public String getTokenType() {
-        return origin.getAsString("token_type");
+        return originalDataMap.getAsString("token_type");
     }
 
 }

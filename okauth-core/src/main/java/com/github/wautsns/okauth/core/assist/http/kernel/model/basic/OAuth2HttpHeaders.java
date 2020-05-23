@@ -60,7 +60,7 @@ public class OAuth2HttpHeaders extends NameValuePairs {
     }
 
     /**
-     * Add `Authorization`(Bearer Auth).
+     * Add header `Authorization`(Bearer Auth).
      *
      * @param token access token
      * @return self reference
@@ -70,7 +70,7 @@ public class OAuth2HttpHeaders extends NameValuePairs {
     }
 
     /**
-     * Add `Authorization`.
+     * Add header `Authorization`.
      *
      * @param type auth type(eg. Basic, Bearer...)
      * @param content content
@@ -93,8 +93,8 @@ public class OAuth2HttpHeaders extends NameValuePairs {
     }
 
     @Override
-    public OAuth2HttpHeaders addAll(Map<String, String> nameValueMap) {
-        return (OAuth2HttpHeaders) super.addAll(nameValueMap);
+    public OAuth2HttpHeaders addAll(Map<String, String> nameValuePairs) {
+        return (OAuth2HttpHeaders) super.addAll(nameValuePairs);
     }
 
     @Override

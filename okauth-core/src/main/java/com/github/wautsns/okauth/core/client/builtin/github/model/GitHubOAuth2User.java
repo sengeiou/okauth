@@ -21,44 +21,43 @@ import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * GitHub oauth2 token.
  *
  * <pre>
  * {
- *     "login": "wautsns",
- *     "id": 393xxxxx,
- *     "node_id": "MDQ6VXNlcjM5MzM2NjA0",
- *     "avatar_url": "https://avatars2.githubusercontent.com/u/393xxxxx?v=4",
- *     "gravatar_id": "",
- *     "url": "https://api.github.com/users/wautsns",
- *     "html_url": "https://github.com/wautsns",
- *     "followers_url": "https://api.github.com/users/wautsns/followers",
- *     "followin`g_url": "https://api.github.com/users/wautsns/following{/other_user}",
- *     "gists_url": "https://api.github.com/users/wautsns/gists{/gist_id}",
- *     "starred_url": "https://api.github.com/users/wautsns/starred{/owner}{/repo}",
- *     "subscriptions_url": "https://api.github.com/users/wautsns/subscriptions",
- *     "organizations_url": "https://api.github.com/users/wautsns/orgs",
- *     "repos_url": "https://api.github.com/users/wautsns/repos",
- *     "events_url": "https://api.github.com/users/wautsns/events{/privacy}",
- *     "received_events_url": "https://api.github.com/users/wautsns/received_events",
- *     "type": "User",
- *     "site_admin": false,
- *     "name": "wautsns",
- *     "company": null,
- *     "blog": "",
- *     "location": null,
- *     "email": null,
- *     "hireable": null,
- *     "bio": null,
- *     "public_repos": 10,
- *     "public_gists": 0,
- *     "followers": 0,
- *     "following": 0,
- *     "created_at": "2018-05-16T12:17:46Z",
- *     "updated_at": "2020-02-28T02:55:07Z"
+ * 	"login": "wautsns",
+ * 	"id": 39336604,
+ * 	"node_id": "MDQ6VXNlcjM5MzM2NjA0",
+ * 	"avatar_url": "https://avatars2.githubusercontent.com/u/39336604?v=4",
+ * 	"gravatar_id": "",
+ * 	"url": "https://api.github.com/users/wautsns",
+ * 	"html_url": "https://github.com/wautsns",
+ * 	"followers_url": "https://api.github.com/users/wautsns/followers",
+ * 	"following_url": "https://api.github.com/users/wautsns/following{/other_user}",
+ * 	"gists_url": "https://api.github.com/users/wautsns/gists{/gist_id}",
+ * 	"starred_url": "https://api.github.com/users/wautsns/starred{/owner}{/repo}",
+ * 	"subscriptions_url": "https://api.github.com/users/wautsns/subscriptions",
+ * 	"organizations_url": "https://api.github.com/users/wautsns/orgs",
+ * 	"repos_url": "https://api.github.com/users/wautsns/repos",
+ * 	"events_url": "https://api.github.com/users/wautsns/events{/privacy}",
+ * 	"received_events_url": "https://api.github.com/users/wautsns/received_events",
+ * 	"type": "User",
+ * 	"site_admin": false,
+ * 	"name": "wautsns",
+ * 	"company": null,
+ * 	"blog": "",
+ * 	"location": null,
+ * 	"email": null,
+ * 	"hireable": null,
+ * 	"bio": null,
+ * 	"public_repos": 8,
+ * 	"public_gists": 0,
+ * 	"followers": 0,
+ * 	"following": 0,
+ * 	"created_at": "2018-05-16T12:17:46Z",
+ * 	"updated_at": "2020-05-22T10:44:23Z"
  * }
  * </pre>
  *
@@ -70,7 +69,8 @@ public class GitHubOAuth2User implements OAuth2User {
 
     private static final long serialVersionUID = 7155633421437700449L;
 
-    private final DataMap origin;
+    /** Original data map. */
+    private final DataMap originalDataMap;
 
     @Override
     public String getOpenPlatform() {
@@ -78,129 +78,129 @@ public class GitHubOAuth2User implements OAuth2User {
     }
 
     public String getLogin() {
-        return origin.getAsString("login");
+        return originalDataMap.getAsString("login");
     }
 
-    public Long getId() {
-        return origin.getAsLong("id");
+    public String getId() {
+        return originalDataMap.getAsString("id");
     }
 
     public String getNodeId() {
-        return origin.getAsString("node_id");
+        return originalDataMap.getAsString("node_id");
     }
 
     @Override
     public String getAvatarUrl() {
-        return origin.getAsString("avatar_url");
+        return originalDataMap.getAsString("avatar_url");
     }
 
     public String getGravatarId() {
-        return origin.getAsString("gravatar_id");
+        return originalDataMap.getAsString("gravatar_id");
     }
 
     public String getUrl() {
-        return origin.getAsString("url");
+        return originalDataMap.getAsString("url");
     }
 
     public String getHtmlUrl() {
-        return origin.getAsString("html_url");
+        return originalDataMap.getAsString("html_url");
     }
 
     public String getFollowersUrl() {
-        return origin.getAsString("followers_url");
+        return originalDataMap.getAsString("followers_url");
     }
 
     public String getFollowingUrl() {
-        return origin.getAsString("following_url");
+        return originalDataMap.getAsString("following_url");
     }
 
     public String getGistsUrl() {
-        return origin.getAsString("gists_url");
+        return originalDataMap.getAsString("gists_url");
     }
 
     public String getStarredUrl() {
-        return origin.getAsString("starredUrl");
+        return originalDataMap.getAsString("starredUrl");
     }
 
     public String getSubscriptionsUrl() {
-        return origin.getAsString("subscriptions_url");
+        return originalDataMap.getAsString("subscriptions_url");
     }
 
     public String getOrganizationsUrl() {
-        return origin.getAsString("organizations_url");
+        return originalDataMap.getAsString("organizations_url");
     }
 
     public String getReposUrl() {
-        return origin.getAsString("repos_url");
+        return originalDataMap.getAsString("repos_url");
     }
 
     public String getEventsUrl() {
-        return origin.getAsString("events_url");
+        return originalDataMap.getAsString("events_url");
     }
 
     public String getReceivedEventsUrl() {
-        return origin.getAsString("received_events_url");
+        return originalDataMap.getAsString("received_events_url");
     }
 
     public String getType() {
-        return origin.getAsString("type");
+        return originalDataMap.getAsString("type");
     }
 
     public Boolean getSiteAdmin() {
-        return origin.getAsBoolean("site_admin");
+        return originalDataMap.getAsBoolean("site_admin");
     }
 
     public String getName() {
-        return origin.getAsString("name");
+        return originalDataMap.getAsString("name");
     }
 
     public String getCompany() {
-        return origin.getAsString("company");
+        return originalDataMap.getAsString("company");
     }
 
     public String getBlog() {
-        return origin.getAsString("blog");
+        return originalDataMap.getAsString("blog");
     }
 
     public String getLocation() {
-        return origin.getAsString("location");
+        return originalDataMap.getAsString("location");
     }
 
     @Override
     public String getEmail() {
-        return origin.getAsString("email");
+        return originalDataMap.getAsString("email");
     }
 
     public Boolean getHireable() {
-        return origin.getAsBoolean("hireable");
+        return originalDataMap.getAsBoolean("hireable");
     }
 
     public String getBio() {
-        return origin.getAsString("bio");
+        return originalDataMap.getAsString("bio");
     }
 
     public Integer getPublicRepos() {
-        return origin.getAsInteger("public_repos");
+        return originalDataMap.getAsInteger("public_repos");
     }
 
     public Integer getPublicGists() {
-        return origin.getAsInteger("public_gists");
+        return originalDataMap.getAsInteger("public_gists");
     }
 
     public Integer getFollowers() {
-        return origin.getAsInteger("followers");
+        return originalDataMap.getAsInteger("followers");
     }
 
     public Integer getFollowings() {
-        return origin.getAsInteger("followings");
+        return originalDataMap.getAsInteger("followings");
     }
 
     public LocalDateTime getCreatedAt() {
-        return LocalDateTime.parse(origin.getAsString("created_at"));
+        return originalDataMap.getAsLocalDateTime("created_at");
     }
 
     public LocalDateTime getUpdatedAt() {
-        return LocalDateTime.parse(origin.getAsString("updated_at"));
+        return originalDataMap.getAsLocalDateTime("updated_at");
     }
 
     // #################### - ###########################################################
@@ -212,7 +212,7 @@ public class GitHubOAuth2User implements OAuth2User {
 
     @Override
     public String getUid() {
-        return Objects.toString(getId(), null);
+        return getId();
     }
 
     @Override

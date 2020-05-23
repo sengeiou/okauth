@@ -23,6 +23,11 @@ package com.github.wautsns.okauth.core.client.kernel.model;
  */
 public interface OpenPlatformSupplier {
 
+    /**
+     * Get open platform.
+     *
+     * @return open platform
+     */
     String getOpenPlatform();
 
 }

@@ -37,15 +37,15 @@ import java.util.Objects;
 public abstract class TokenAvailableOAuth2Client<A extends OAuth2AppInfo, T extends OAuth2Token, U extends OAuth2User>
         extends OAuth2Client<A, U> {
 
-    /** API: exchange redirect uri query for token */
+    /** API: exchange redirect uri query for token. */
     protected final ExchangeRedirectUriQueryForToken<T> apiExchangeRedirectUriQueryForToken;
-    /** API: exchange token for open id */
+    /** API: exchange token for open id. */
     protected final ExchangeTokenForOpenid<T> apiExchangeTokenForOpenid;
-    /** API: exchange token for user */
+    /** API: exchange token for user. */
     protected final ExchangeTokenForUser<T, U> apiExchangeTokenForUser;
 
     /**
-     * Construct token available oauth2 client.
+     * Construct a token available oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client

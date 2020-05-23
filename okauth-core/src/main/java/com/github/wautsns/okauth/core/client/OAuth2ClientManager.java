@@ -31,7 +31,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class OAuth2ClientManager {
 
-    private final Map<String, OAuth2Client> clients = new ConcurrentHashMap<>();
+    /** Registered clients. */
+    private final Map<String, OAuth2Client<?, ?>> clients = new ConcurrentHashMap<>();
 
     /**
      * Get oauth2 client.
@@ -43,7 +44,7 @@ public class OAuth2ClientManager {
      */
     @SuppressWarnings("unchecked")
     public <C extends OAuth2Client<?, ?>> C get(String name) throws UnsupportedOpenPlatformException {
-        OAuth2Client client = clients.get(name);
+        OAuth2Client<?, ?> client = clients.get(name);
         if (client != null) {
             return (C) client;
         } else {

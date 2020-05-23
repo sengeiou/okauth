@@ -17,7 +17,7 @@ package com.github.wautsns.okauth.core.client.builtin.baidu.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
-import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import lombok.Data;
 
 /**
@@ -26,11 +26,11 @@ import lombok.Data;
  * <pre>
  * {
  * 	"expires_in": 2592000,
- * 	"refresh_token": "REFRESH_TOKEN",
- * 	"access_token": "ACCESS_TOKEN",
+ * 	"refresh_token": "REFRESH_TOKEN(length:83)",
+ * 	"access_token": "ACCESS_TOKEN(length:83)",
  * 	"session_secret": "",
  * 	"session_key": "",
- * 	"scope": "basic"
+ * 	"scope": "SCOPE(delimiter:space)"
  * }
  * </pre>
  *
@@ -38,12 +38,12 @@ import lombok.Data;
  * @since May 17, 2020
  */
 @Data
-public class BaiduOAuth2Token implements OAuth2Token {
+public class BaiduOAuth2Token implements OAuth2RefreshableToken {
 
     private static final long serialVersionUID = 626454809091111659L;
 
-    /** original data */
-    private final DataMap origin;
+    /** Original data map. */
+    private final DataMap originalDataMap;
 
     @Override
     public String getOpenPlatform() {
@@ -52,12 +52,12 @@ public class BaiduOAuth2Token implements OAuth2Token {
 
     @Override
     public String getAccessToken() {
-        return origin.getAsString("access_token");
+        return originalDataMap.getAsString("access_token");
     }
 
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return origin.getAsInteger("expire_in");
+        return originalDataMap.getAsInteger("expire_in");
     }
 
     /**
@@ -69,21 +69,21 @@ public class BaiduOAuth2Token implements OAuth2Token {
      * @return {@inheritDoc}
      * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth/list">optioanl scopes</a>
      */
-    @Override
     public String getScope() {
-        return origin.getAsString("scope");
+        return originalDataMap.getAsString("scope");
     }
 
     @Override
     public String getRefreshToken() {
-        return origin.getAsString("refresh_token");
+        return originalDataMap.getAsString("refresh_token");
     }
 
-    private static final Integer REFRESH_TOKEN_EXPIRES_IN = 10 * 365 * 24 * 3600;
+    /** Baidu oauth2 refresh token expires in ten years. */
+    private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 10 * 365 * 24 * 3600;
 
     @Override
     public Integer getRefreshTokenExpirationSeconds() {
-        return REFRESH_TOKEN_EXPIRES_IN;
+        return REFRESH_TOKEN_EXPIRATION_SECONDS;
     }
 
 }

@@ -33,11 +33,15 @@ import java.util.stream.Collectors;
 @Accessors(chain = true)
 public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
 
+    /** Client id. */
     private String clientId;
+    /** Client secret. */
     private String clientSecret;
+    /** Redirect uri. */
     private String redirectUri;
     /** See {@link Scope} for details. */
     private List<Scope> scope;
+    /** Extra authorize url query. */
     private final ExtraAuthorizeUrlQuery extraAuthorizeUrlQuery = new ExtraAuthorizeUrlQuery();
 
     // #################### enum ########################################################

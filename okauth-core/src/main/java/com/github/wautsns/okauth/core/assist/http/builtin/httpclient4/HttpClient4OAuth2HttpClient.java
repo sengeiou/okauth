@@ -59,17 +59,17 @@ import java.util.function.Function;
 @Getter
 public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
 
-    /** Default httpClient4 oauth2 http client. */
+    /** Default HttpClient4 oauth2 http client. */
     public static final HttpClient4OAuth2HttpClient DEFAULT
             = new HttpClient4OAuth2HttpClient(OAuth2HttpClientProperties.initDefault());
 
     /** Original http client. */
     private final HttpClient origin;
-    /** Connection manager. */
+    /** Http client connection manager. */
     private final PoolingHttpClientConnectionManager connectionManager;
 
     /**
-     * Construct httpClient4 oauth2 http client.
+     * Construct a HttpClient4 oauth2 http client.
      *
      * @param props oauth2 http client properties
      */
@@ -88,10 +88,7 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
         builder.setConnectionManager(this.connectionManager);
         // #################### max idle time ################################################
         Duration maxIdleTime = props.getMaxIdleTime();
-        if (maxIdleTime != null) {
-            long maxIdleTimeMillis = maxIdleTime.toMillis();
-            builder.evictIdleConnections(maxIdleTimeMillis, TimeUnit.MILLISECONDS);
-        }
+        if (maxIdleTime != null) { builder.evictIdleConnections(maxIdleTime.toMillis(), TimeUnit.MILLISECONDS); }
         // #################### keep alive ################################################
         ConnectionKeepAliveStrategy keepAliveStrategy = DefaultConnectionKeepAliveStrategy.INSTANCE;
         Duration keepAliveTimeout = props.getKeepAliveTimeout();
@@ -102,13 +99,7 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
         builder.setKeepAliveStrategy(keepAliveStrategy);
         // #################### retry handler ###############################################
         Integer retryTimes = props.getRetryTimes();
-        if (retryTimes != null) {
-            if (retryTimes == 3) {
-                builder.setRetryHandler(OAuth2HttpRequestRetryHandler.THREE_TIMES);
-            } else {
-                builder.setRetryHandler(new OAuth2HttpRequestRetryHandler(retryTimes));
-            }
-        }
+        if (retryTimes != null) { builder.setRetryHandler(new OAuth2HttpRequestRetryHandler(retryTimes)); }
         // #################### default headers #############################################
         builder.setDefaultHeaders(Collections.singleton(
                 // Disguised as a browser.
@@ -120,7 +111,7 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
     @Override
     public OAuth2HttpResponse execute(OAuth2HttpRequest request) throws OAuth2IOException {
         try {
-            return executeOriginalRequest(initOriginalRequest(request));
+            return executeOriginalHttpRequest(initOriginalHttpRequest(request));
         } catch (IOException e) {
             throw new OAuth2IOException(e);
         }
@@ -128,7 +119,7 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
 
     // #################### internal ####################################################
 
-    /** Supported http request base initializers. */
+    /** Supported {@code HttpRequestBase} initializers. */
     private static final EnumMap<OAuth2HttpRequest.Method, Function<String, HttpRequestBase>> HTTP_REQUEST_BASE_INITIALIZERS;
 
     static {
@@ -149,28 +140,28 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
      * @param request oauth2 http request
      * @return original http request
      */
-    private HttpRequestBase initOriginalRequest(OAuth2HttpRequest request) {
+    private HttpRequestBase initOriginalHttpRequest(OAuth2HttpRequest request) {
         Function<String, HttpRequestBase> initializer = HTTP_REQUEST_BASE_INITIALIZERS.get(request.getMethod());
-        HttpRequestBase httpRequestBase = initializer.apply(request.getUrl().toString());
-        request.forEachHeader(httpRequestBase::addHeader);
-        if (httpRequestBase instanceof HttpEntityEnclosingRequestBase) {
-            HttpEntityEnclosingRequestBase tmp = (HttpEntityEnclosingRequestBase) httpRequestBase;
+        HttpRequestBase httpRequest = initializer.apply(request.getUrl().toString());
+        request.forEachHeader(httpRequest::addHeader);
+        if (httpRequest instanceof HttpEntityEnclosingRequestBase) {
+            HttpEntityEnclosingRequestBase tmp = (HttpEntityEnclosingRequestBase) httpRequest;
             List<String> nameValuePairs = new LinkedList<>();
             request.forEachFormItem((name, value) -> nameValuePairs.add(name + "=" + value));
             String content = String.join("&", nameValuePairs);
             tmp.setEntity(new StringEntity(content, ContentType.APPLICATION_FORM_URLENCODED));
         }
-        return httpRequestBase;
+        return httpRequest;
     }
 
     /**
-     * Execute original request.
+     * Execute original http request.
      *
-     * @param request original request
+     * @param request original http request
      * @return oauth2 http response
      * @throws IOException if IO exception occurs
      */
-    private OAuth2HttpResponse executeOriginalRequest(HttpRequestBase request) throws IOException {
+    private OAuth2HttpResponse executeOriginalHttpRequest(HttpRequestBase request) throws IOException {
         return new HttpClient4OAuth2HttpResponse(origin.execute(request));
     }
 

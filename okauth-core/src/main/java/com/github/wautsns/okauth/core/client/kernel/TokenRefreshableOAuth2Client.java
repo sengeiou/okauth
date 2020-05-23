@@ -18,6 +18,7 @@ package com.github.wautsns.okauth.core.client.kernel;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
 import com.github.wautsns.okauth.core.client.kernel.api.basic.TokenRelatedApi;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
@@ -31,17 +32,17 @@ import java.util.Objects;
  * @author wautsns
  * @since May 17, 2020
  */
-public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T extends OAuth2Token, U extends OAuth2User>
+public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T extends OAuth2RefreshableToken, U extends OAuth2User>
         extends TokenAvailableOAuth2Client<A, T, U> {
 
-    /** API: refresh token */
+    /** API: refresh token. */
     protected final RefreshToken<T> apiRefreshToken;
 
-    /** extra: token refresh callback */
+    /** Token refresh callback. */
     protected final TokenRefreshCallback tokenRefreshCallback;
 
     /**
-     * Construct token refreshable oauth2 client.
+     * Construct a token refreshable oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client

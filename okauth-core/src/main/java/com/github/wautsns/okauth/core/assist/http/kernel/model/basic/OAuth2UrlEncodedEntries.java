@@ -198,13 +198,13 @@ public class OAuth2UrlEncodedEntries extends NameValuePairs {
      *
      * <p>Values will be url encoded.
      *
-     * @param nameValueMap {@inheritDoc}
+     * @param nameValuePairs {@inheritDoc}
      * @return self reference
      */
     @Override
-    public OAuth2UrlEncodedEntries addAll(Map<String, String> nameValueMap) {
-        if (nameValueMap == null) { return this; }
-        nameValueMap.forEach(this::add);
+    public OAuth2UrlEncodedEntries addAll(Map<String, String> nameValuePairs) {
+        if (nameValuePairs == null) { return this; }
+        nameValuePairs.forEach(this::add);
         return this;
     }
 
@@ -228,7 +228,7 @@ public class OAuth2UrlEncodedEntries extends NameValuePairs {
     }
 
     /**
-     * Add url encoded value.
+     * Add url encoded value with the specified name.
      *
      * @param name name
      * @param value url encoded value
@@ -241,15 +241,15 @@ public class OAuth2UrlEncodedEntries extends NameValuePairs {
     /**
      * Add all url encoded values.
      *
-     * @param urlEncodedMap url encoded map
+     * @param nameUrlEncodedValueMap url encoded map
      * @return self reference
      */
-    public OAuth2UrlEncodedEntries addAllUrlEncoded(Map<String, String> urlEncodedMap) {
-        return (OAuth2UrlEncodedEntries) super.addAll(urlEncodedMap);
+    public OAuth2UrlEncodedEntries addAllUrlEncoded(Map<String, String> nameUrlEncodedValueMap) {
+        return (OAuth2UrlEncodedEntries) super.addAll(nameUrlEncodedValueMap);
     }
 
     /**
-     * Set url encoded value.
+     * Associated url encoded value with the specified name(Old value will be replaced).
      *
      * @param name name
      * @param value url encoded value

@@ -28,11 +28,11 @@ import java.io.Serializable;
 public interface OAuth2Token extends OpenPlatformSupplier, Serializable {
 
     /**
-     * Get original data.
+     * Get original data map.
      *
-     * @return original data
+     * @return original data map
      */
-    DataMap getOrigin();
+    DataMap getOriginalDataMap();
 
     /**
      * Get access token.
@@ -47,26 +47,5 @@ public interface OAuth2Token extends OpenPlatformSupplier, Serializable {
      * @return access token expiration seconds
      */
     Integer getAccessTokenExpirationSeconds();
-
-    /**
-     * Get scope.
-     *
-     * @return scope
-     */
-    default String getScope() { return null; }
-
-    /**
-     * Get refresh token.
-     *
-     * @return refresh token
-     */
-    default String getRefreshToken() { return null; }
-
-    /**
-     * Get refresh token expiration seconds.
-     *
-     * @return refresh token expiration seconds
-     */
-    default Integer getRefreshTokenExpirationSeconds() { return null; }
 
 }

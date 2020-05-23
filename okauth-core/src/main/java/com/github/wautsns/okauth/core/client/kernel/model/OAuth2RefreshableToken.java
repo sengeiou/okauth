@@ -13,27 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.exception;
-
-import java.io.IOException;
+package com.github.wautsns.okauth.core.client.kernel.model;
 
 /**
- * OAuth2 IO exception.
+ * OAuth2 refreshable token.
  *
  * @author wautsns
- * @since May 16, 2020
+ * @since May 23, 2020
  */
-public class OAuth2IOException extends OAuth2Exception {
-
-    private static final long serialVersionUID = 4092905520240221126L;
+public interface OAuth2RefreshableToken extends OAuth2Token {
 
     /**
-     * Construct an {@code OAuth2Exception}.
+     * Get refresh token.
      *
-     * @param e io exception
+     * @return refresh token
      */
-    public OAuth2IOException(IOException e) {
-        super(e);
-    }
+    String getRefreshToken();
+
+    /**
+     * Get refresh token expiration seconds.
+     *
+     * @return refresh token expiration seconds
+     */
+    Integer getRefreshTokenExpirationSeconds();
 
 }

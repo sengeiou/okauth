@@ -47,7 +47,7 @@ public class GitHubOAuth2Client
         extends TokenAvailableOAuth2Client<GitHubOAuth2AppInfo, GitHubOAuth2Token, GitHubOAuth2User> {
 
     /**
-     * Construct GitHub oauth2 client.
+     * Construct a GitHub oauth2 client.
      *
      * @param appInfo oauth2 app info
      */
@@ -56,7 +56,7 @@ public class GitHubOAuth2Client
     }
 
     /**
-     * Construct GitHub oauth2 client.
+     * Construct a GitHub oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
@@ -144,7 +144,7 @@ public class GitHubOAuth2Client
         return redirectUriQuery -> exchangeForUser(exchangeForToken(redirectUriQuery));
     }
 
-    // #################### execute #####################################################
+    // #################### execute request and check response ##########################
 
     /**
      * Execute get or refresh token request and check response.

@@ -46,7 +46,7 @@ public class GiteeOAuth2Client
         extends TokenRefreshableOAuth2Client<GiteeOAuth2AppInfo, GiteeOAuth2Token, GiteeOAuth2User> {
 
     /**
-     * Construct Gitee oauth2 client.
+     * Construct a Gitee oauth2 client.
      *
      * @param appInfo oauth2 app info
      */
@@ -57,7 +57,7 @@ public class GiteeOAuth2Client
     }
 
     /**
-     * Construct Gitee oauth2 client.
+     * Construct a Gitee oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
@@ -134,7 +134,7 @@ public class GiteeOAuth2Client
         };
     }
 
-    // #################### execute #####################################################
+    // #################### execute request and check response ##########################
 
     /**
      * Execute get or refresh token request and check response.

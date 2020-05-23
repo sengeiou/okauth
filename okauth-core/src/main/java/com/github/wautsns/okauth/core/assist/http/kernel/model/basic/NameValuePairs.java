@@ -34,13 +34,13 @@ public class NameValuePairs implements Serializable {
 
     private static final long serialVersionUID = -2963874324351686069L;
 
-    /** original data */
+    /** Original data. */
     private final LinkedList<String> origin = new LinkedList<>();
 
     /**
-     * For each name value pair.
+     * Iterate over each name value pair.
      *
-     * @param action action for name value pair
+     * @param action the action to be performed for each name value pair
      */
     public void forEach(BiConsumer<String, String> action) {
         for (Iterator<String> iterator = origin.iterator(); iterator.hasNext(); ) {
@@ -49,7 +49,7 @@ public class NameValuePairs implements Serializable {
     }
 
     /**
-     * Add name value pair.
+     * Add value with the specified name.
      *
      * <p>If the value is {@code null}, the value will not be added.
      *
@@ -65,9 +65,9 @@ public class NameValuePairs implements Serializable {
     }
 
     /**
-     * Add name value pair.
+     * Add value with the specified name.
      *
-     * <p>If the value is {@code null}, default value will not be added.
+     * <p>If the value is {@code null}, the default value will be added.
      *
      * @param name name
      * @param value value
@@ -85,21 +85,21 @@ public class NameValuePairs implements Serializable {
     }
 
     /**
-     * Add all values.
+     * Add name value pairs.
      *
-     * <p>If nameValueMap is {@code null}, no values will be added.
+     * <p>If nameValuePairs is {@code null}, no values will be added.
      * <p>If value is {@code null}, the value will not be added.
      *
-     * @param nameValueMap name value map
+     * @param nameValuePairs name value map
      * @return self reference
      */
-    public NameValuePairs addAll(Map<String, String> nameValueMap) {
-        if (nameValueMap != null) { nameValueMap.forEach(this::add); }
+    public NameValuePairs addAll(Map<String, String> nameValuePairs) {
+        if (nameValuePairs != null) { nameValuePairs.forEach(this::add); }
         return this;
     }
 
     /**
-     * Set value.
+     * Associates value with the specified name(Old value will be replaced).
      *
      * @param name name
      * @param value value
@@ -110,7 +110,7 @@ public class NameValuePairs implements Serializable {
     }
 
     /**
-     * Set value.
+     * Remove value associated with the specified name.
      *
      * @param name name
      */

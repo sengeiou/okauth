@@ -118,6 +118,13 @@ public class OkAuthAutoConfiguration {
 
     // #################### utils #######################################################
 
+    /**
+     * Initialize oauth2 http client.
+     *
+     * @param okauthProps okauth properties
+     * @param okauthAppInfoProps okauth app info properties
+     * @return oauth2 http client
+     */
     private static OAuth2HttpClient initOAuth2HttpClient(
             OkAuthProperties okauthProps, OkAuthAppInfoProperties<?> okauthAppInfoProps) {
         OkAuthHttpClientProperties okauthHttpClientProps = fillNullProperties(
@@ -137,6 +144,14 @@ public class OkAuthAutoConfiguration {
         }
     }
 
+    /**
+     * Fill null properties.
+     *
+     * @param target target value
+     * @param source source value
+     * @param <T> type of value
+     * @return value after filling
+     */
     private static <T> T fillNullProperties(T target, T source) {
         if (target == null) { return source; }
         Arrays.stream(target.getClass().getDeclaredFields())

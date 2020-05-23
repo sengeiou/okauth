@@ -35,6 +35,13 @@ public class OAuth2ErrorException extends OAuth2Exception {
     /** error code */
     private final String errorCode;
 
+    /**
+     * Construct an {@code OAuth2ErrorException}.
+     *
+     * @param openPlatform open platform
+     * @param errorCode error code
+     * @param message error message
+     */
     public OAuth2ErrorException(String openPlatform, String errorCode, String message) {
         super(message);
         this.openPlatform = openPlatform;

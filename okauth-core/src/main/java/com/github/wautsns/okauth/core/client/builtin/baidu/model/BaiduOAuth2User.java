@@ -46,7 +46,8 @@ public class BaiduOAuth2User implements OAuth2User {
 
     private static final long serialVersionUID = 1596112334287788877L;
 
-    private final DataMap origin;
+    /** Original data map. */
+    private final DataMap originalDataMap;
 
     @Override
     public String getOpenPlatform() {
@@ -61,7 +62,7 @@ public class BaiduOAuth2User implements OAuth2User {
      * @return userid
      */
     public String getUserid() {
-        return origin.getAsString("userid");
+        return originalDataMap.getAsString("userid");
     }
 
     /**
@@ -73,7 +74,7 @@ public class BaiduOAuth2User implements OAuth2User {
      * @return portrait
      */
     public String getPortrait() {
-        return origin.getAsString("portrait");
+        return originalDataMap.getAsString("portrait");
     }
 
     /**
@@ -85,7 +86,7 @@ public class BaiduOAuth2User implements OAuth2User {
      */
     @Override
     public String getUsername() {
-        return origin.getAsString("username");
+        return originalDataMap.getAsString("username");
     }
 
     /**
@@ -93,8 +94,8 @@ public class BaiduOAuth2User implements OAuth2User {
      *
      * @return {@code true} if the currently logged in user is bind mobile, otherwise {@code false}
      */
-    public boolean isBindMobile() {
-        return "1".equals(origin.getAsString("is_bind_mobile"));
+    public Boolean isBindMobile() {
+        return "1".equals(originalDataMap.getAsString("is_bind_mobile"));
     }
 
     /**
@@ -102,21 +103,33 @@ public class BaiduOAuth2User implements OAuth2User {
      *
      * @return {@code true} if the currently logged in user is real name verified, otherwise {@code false}
      */
-    public boolean isRealName() {
-        return "1".equals(origin.getAsString("is_real_name"));
+    public Boolean isRealName() {
+        return "1".equals(originalDataMap.getAsString("is_real_name"));
     }
 
     @Override
     public LocalDate getBirthday() {
-        return LocalDate.parse(origin.getAsString("birthday"));
+        return LocalDate.parse(originalDataMap.getAsString("birthday"));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <ul>
+     * Optional values:
+     * <li>{@code Gender.MALE}</li>
+     * <li>{@code Gender.FEMALE}</li>
+     * <li>{@code Gender.UNKNOWN}</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public Gender getGender() {
-        String gender = origin.getAsString("sex");
-        if ("1".equals(gender)) {
+        String sex = originalDataMap.getAsString("sex");
+        if ("1".equals(sex)) {
             return Gender.MALE;
-        } else if ("0".equals(gender)) {
+        } else if ("0".equals(sex)) {
             return Gender.FEMALE;
         } else {
             return Gender.UNKNOWN;
@@ -125,7 +138,7 @@ public class BaiduOAuth2User implements OAuth2User {
 
     @Override
     public String getOpenid() {
-        return origin.getAsString("openid");
+        return originalDataMap.getAsString("openid");
     }
 
     // #################### - ###########################################################

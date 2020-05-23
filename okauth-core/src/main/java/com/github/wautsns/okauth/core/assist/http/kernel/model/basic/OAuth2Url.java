@@ -28,15 +28,15 @@ public class OAuth2Url implements Serializable {
 
     private static final long serialVersionUID = 8502059624102763590L;
 
-    /** pure url(without query, anchor...) */
+    /** Pure url(without query, anchor...). */
     private final String pureUrl;
-    /** url query */
+    /** Url query. */
     private OAuth2UrlEncodedEntries query;
-    /** url anchor */
+    /** Url anchor. */
     private String anchor;
 
     /**
-     * Construct oauth2 url.
+     * Construct an oauth2 url.
      *
      * @param url url string
      */
@@ -64,15 +64,6 @@ public class OAuth2Url implements Serializable {
     }
 
     /**
-     * Whether oauth url contains query.
-     *
-     * @return {@code true} if oauth url contains query, otherwise {@code false}
-     */
-    public boolean containsQuery() {
-        return query != null && !query.getOrigin().isEmpty();
-    }
-
-    /**
      * Get url query.
      *
      * @return url query.
@@ -84,9 +75,9 @@ public class OAuth2Url implements Serializable {
     }
 
     /**
-     * For each query item.
+     * Iterate over each query item.
      *
-     * @param action action for query item
+     * @param action the action to be performed for each query item
      */
     public void forEachQueryItem(BiConsumer<String, String> action) {
         if (query != null) { query.forEach(action); }
@@ -111,11 +102,6 @@ public class OAuth2Url implements Serializable {
         return this;
     }
 
-    /**
-     * Returns a string representation of the url.
-     *
-     * @return url string
-     */
     @Override
     public String toString() {
         if (query == null) { return (anchor == null) ? pureUrl : (pureUrl + '#' + anchor); }
@@ -137,7 +123,7 @@ public class OAuth2Url implements Serializable {
     }
 
     /**
-     * Construct oauth url.
+     * Construct an oauth2 url.
      *
      * @param prototype prototype
      */

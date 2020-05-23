@@ -33,11 +33,15 @@ import java.util.stream.Collectors;
 @Accessors(chain = true)
 public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
 
+    /** Api key. */
     private String apiKey;
+    /** Secret key. */
     private String secretKey;
+    /** Redirect uri. */
     private String redirectUri;
     /** See {@link Scope} for details. */
     private List<Scope> scope;
+    /** Extra authorize url query. */
     private final ExtraAuthorizeUrlQuery extraAuthorizeUrlQuery = new ExtraAuthorizeUrlQuery();
 
     // #################### enum ########################################################

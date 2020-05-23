@@ -35,20 +35,20 @@ import java.util.Objects;
  */
 public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User> implements OpenPlatformSupplier {
 
-    /** oauth2 app info */
+    /** OAuth2 app info. */
     protected final A appInfo;
-    /** oauth2 http client */
+    /** OAuth2 http client. */
     protected final OAuth2HttpClient httpClient;
 
-    /** API: initialize authorize url */
+    /** API: initialize authorize url. */
     protected final InitializeAuthorizeUrl apiInitializeAuthorizeUrl;
-    /** API: exchange redirect uri query for open id */
+    /** API: exchange redirect uri query for open id. */
     protected final ExchangeRedirectUriQueryForOpenid apiExchangeRedirectUriQueryForOpenid;
-    /** API: exchange redirect uri query for user */
+    /** API: exchange redirect uri query for user. */
     protected final ExchangeRedirectUriQueryForUser<U> apiExchangeRedirectUriQueryForUser;
 
     /**
-     * Construct oauth2 client.
+     * Construct an oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client

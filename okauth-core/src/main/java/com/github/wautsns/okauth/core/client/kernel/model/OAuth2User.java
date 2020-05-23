@@ -29,11 +29,11 @@ import java.time.LocalDate;
 public interface OAuth2User extends OpenPlatformSupplier, Serializable {
 
     /**
-     * Get original data.
+     * Get original data map.
      *
-     * @return original data.
+     * @return original data map.
      */
-    DataMap getOrigin();
+    DataMap getOriginalDataMap();
 
     /**
      * Get open id.

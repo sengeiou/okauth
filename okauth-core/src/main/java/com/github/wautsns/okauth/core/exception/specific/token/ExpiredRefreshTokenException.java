@@ -27,6 +27,13 @@ public class ExpiredRefreshTokenException extends OAuth2ErrorException {
 
     private static final long serialVersionUID = -1539348247553344950L;
 
+    /**
+     * Construct an {@code ExpiredRefreshTokenException}.
+     *
+     * @param openPlatform open platform
+     * @param errorCode error code
+     * @param message error message
+     */
     public ExpiredRefreshTokenException(String openPlatform, String errorCode, String message) {
         super(openPlatform, errorCode, message);
     }

@@ -31,17 +31,14 @@ import java.util.List;
  * @author wautsns
  * @since May 22, 2020
  */
-public class OAuth2HttpRequestRetryHandler extends DefaultHttpRequestRetryHandler {
+class OAuth2HttpRequestRetryHandler extends DefaultHttpRequestRetryHandler {
 
-    /** the IOException types that should not be retried */
+    /** The IOException types that should not be retried */
     private static final List<Class<? extends IOException>> EXCEPTIONS_NOT_RETRIED = Arrays.asList(
             InterruptedIOException.class,
             UnknownHostException.class,
             HttpHostConnectException.class,
             SSLException.class);
-
-    /** Retry 3 times. */
-    public static final OAuth2HttpRequestRetryHandler THREE_TIMES = new OAuth2HttpRequestRetryHandler(3);
 
     /**
      * Create the request retry handler using the specified IOException classes.

@@ -46,11 +46,11 @@ import java.util.Objects;
 public class BaiduOAuth2Client
         extends TokenRefreshableOAuth2Client<BaiduOAuth2AppInfo, BaiduOAuth2Token, BaiduOAuth2User> {
 
-    /** display switcher */
+    /** Display supplier. */
     private final BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier displaySupplier;
 
     /**
-     * Construct Baidu oauth2 client.
+     * Construct a Baidu oauth2 client.
      *
      * @param appInfo oauth2 app info
      */
@@ -62,7 +62,7 @@ public class BaiduOAuth2Client
     }
 
     /**
-     * Construct Baidu oauth2 client.
+     * Construct a Baidu oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client

@@ -40,15 +40,20 @@ public class OAuth2HttpRequest implements Serializable {
     /** Request method. */
     public enum Method {GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD, TRACE}
 
-    /** request method */
+    /** Request method. */
     private final Method method;
-    /** request url */
+    /** Request url. */
     private final OAuth2Url url;
-    /** request headers */
+    /** Request headers. */
     private OAuth2HttpHeaders headers;
-    /** request form */
+    /** Request url encoded form. */
     private OAuth2UrlEncodedEntries form;
 
+    /**
+     * Get headers.
+     *
+     * @return headers
+     */
     public OAuth2HttpHeaders getHeaders() {
         if (headers != null) { return headers; }
         headers = new OAuth2HttpHeaders();
@@ -56,14 +61,19 @@ public class OAuth2HttpRequest implements Serializable {
     }
 
     /**
-     * For each header.
+     * Iterate over each header.
      *
-     * @param action action for header
+     * @param action the action to be performed for each header
      */
     public void forEachHeader(BiConsumer<String, String> action) {
         if (headers != null) { headers.forEach(action); }
     }
 
+    /**
+     * Get url encoded form.
+     *
+     * @return url encoded form
+     */
     public OAuth2UrlEncodedEntries getForm() {
         if (form != null) { return form; }
         form = new OAuth2UrlEncodedEntries();
@@ -71,15 +81,13 @@ public class OAuth2HttpRequest implements Serializable {
     }
 
     /**
-     * For each form item.
+     * Iterate over each url encoded form item.
      *
-     * @param action action for form item
+     * @param action the action to be performed for each url encoded form item
      */
     public void forEachFormItem(BiConsumer<String, String> action) {
         if (form != null) { form.forEach(action); }
     }
-
-    // #################### initialization ##############################################
 
     /**
      * Create and return a copy of this object.
@@ -93,11 +101,13 @@ public class OAuth2HttpRequest implements Serializable {
         return copy;
     }
 
+    // #################### initialization ##############################################
+
     /**
      * Initialize request(GET).
      *
      * @param url url
-     * @return request
+     * @return request(GET)
      */
     public static OAuth2HttpRequest initGet(String url) {
         return init(Method.GET, url);
@@ -107,10 +117,40 @@ public class OAuth2HttpRequest implements Serializable {
      * Initialize request(POST).
      *
      * @param url url
-     * @return request
+     * @return request(POST)
      */
     public static OAuth2HttpRequest initPost(String url) {
         return init(Method.POST, url);
+    }
+
+    /**
+     * Initialize request(PUT).
+     *
+     * @param url url
+     * @return request(PUT)
+     */
+    public static OAuth2HttpRequest initPut(String url) {
+        return init(Method.PUT, url);
+    }
+
+    /**
+     * Initialize request(PATCH).
+     *
+     * @param url url
+     * @return request(PATCH)
+     */
+    public static OAuth2HttpRequest initPatch(String url) {
+        return init(Method.PATCH, url);
+    }
+
+    /**
+     * Initialize request(DELETE).
+     *
+     * @param url url
+     * @return request(DELETE)
+     */
+    public static OAuth2HttpRequest initDelete(String url) {
+        return init(Method.DELETE, url);
     }
 
     /**

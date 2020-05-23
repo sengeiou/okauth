@@ -27,35 +27,35 @@ import java.time.LocalDateTime;
  *
  * <pre>
  * {
- *     "id": 19xxxxx,
- *     "login": "wautsns",
- *     "name": "独自漫步〃寂静の夜空下",
- *     "avatar_url": "https://portrait.gitee.com/uploads/avatars/user/645/19xxxxx_wautsns_1578962737.png",
- *     "url": "https://gitee.com/api/v5/users/wautsns",
- *     "html_url": "https://gitee.com/wautsns",
- *     "followers_url": "https://gitee.com/api/v5/users/wautsns/followers",
- *     "following_url": "https://gitee.com/api/v5/users/wautsns/following_url{/other_user}",
- *     "gists_url": "https://gitee.com/api/v5/users/wautsns/gists{/gist_id}",
- *     "starred_url": "https://gitee.com/api/v5/users/wautsns/starred{/owner}{/repo}",
- *     "subscriptions_url": "https://gitee.com/api/v5/users/wautsns/subscriptions",
- *     "organizations_url": "https://gitee.com/api/v5/users/wautsns/orgs",
- *     "repos_url": "https://gitee.com/api/v5/users/wautsns/repos",
- *     "events_url": "https://gitee.com/api/v5/users/wautsns/events{/privacy}",
- *     "received_events_url": "https://gitee.com/api/v5/users/wautsns/received_events",
- *     "type": "User",
- *     "site_admin": false,
- *     "blog": "",
- *     "weibo": "",
- *     "bio": "",
- *     "public_repos": 0,
- *     "public_gists": 0,
- *     "followers": 0,
- *     "following": 0,
- *     "stared": 0,
- *     "watched": 2,
- *     "created_at": "2018-05-15T21:27:41+08:00",
- *     "updated_at": "2020-03-01T00:58:49+08:00",
- *     "email": null
+ * 	"id": 1937041,
+ * 	"login": "wautsns",
+ * 	"name": "独自漫步〃寂静の夜空下",
+ * 	"avatar_url": "https://portrait.gitee.com/uploads/avatars/user/645/1937041_wautsns_1578962737.png",
+ * 	"url": "https://gitee.com/api/v5/users/wautsns",
+ * 	"html_url": "https://gitee.com/wautsns",
+ * 	"followers_url": "https://gitee.com/api/v5/users/wautsns/followers",
+ * 	"following_url": "https://gitee.com/api/v5/users/wautsns/following_url{/other_user}",
+ * 	"gists_url": "https://gitee.com/api/v5/users/wautsns/gists{/gist_id}",
+ * 	"starred_url": "https://gitee.com/api/v5/users/wautsns/starred{/owner}{/repo}",
+ * 	"subscriptions_url": "https://gitee.com/api/v5/users/wautsns/subscriptions",
+ * 	"organizations_url": "https://gitee.com/api/v5/users/wautsns/orgs",
+ * 	"repos_url": "https://gitee.com/api/v5/users/wautsns/repos",
+ * 	"events_url": "https://gitee.com/api/v5/users/wautsns/events{/privacy}",
+ * 	"received_events_url": "https://gitee.com/api/v5/users/wautsns/received_events",
+ * 	"type": "User",
+ * 	"site_admin": false,
+ * 	"blog": null,
+ * 	"weibo": null,
+ * 	"bio": "",
+ * 	"public_repos": 0,
+ * 	"public_gists": 0,
+ * 	"followers": 0,
+ * 	"following": 0,
+ * 	"stared": 0,
+ * 	"watched": 3,
+ * 	"created_at": "2018-05-15T21:27:41+08:00",
+ * 	"updated_at": "2020-05-23T18:33:25+08:00",
+ * 	"email": null
  * }
  * </pre>
  *
@@ -67,141 +67,142 @@ public class GiteeOAuth2User implements OAuth2User {
 
     private static final long serialVersionUID = 7155633421437700449L;
 
-    private final DataMap origin;
+    /** Original data map. */
+    private final DataMap originalDataMap;
 
     @Override
     public String getOpenPlatform() {
         return BuiltInOpenPlatformNames.GITEE;
     }
 
-    public Long getId() {
-        return origin.getAsLong("id");
+    public String getId() {
+        return originalDataMap.getAsString("id");
     }
 
     public String getLogin() {
-        return origin.getAsString("login");
+        return originalDataMap.getAsString("login");
     }
 
     public String getName() {
-        return origin.getAsString("name");
+        return originalDataMap.getAsString("name");
     }
 
     @Override
     public String getAvatarUrl() {
-        return origin.getAsString("avatar_url");
+        return originalDataMap.getAsString("avatar_url");
     }
 
     public String getUrl() {
-        return origin.getAsString("url");
+        return originalDataMap.getAsString("url");
     }
 
     public String getHtmlUrl() {
-        return origin.getAsString("html_url");
+        return originalDataMap.getAsString("html_url");
     }
 
     public String getFollowersUrl() {
-        return origin.getAsString("followers_url");
+        return originalDataMap.getAsString("followers_url");
     }
 
     public String getFollowingUrl() {
-        return origin.getAsString("following_url");
+        return originalDataMap.getAsString("following_url");
     }
 
     public String getGistsUrl() {
-        return origin.getAsString("gists_url");
+        return originalDataMap.getAsString("gists_url");
     }
 
     public String getStarredUrl() {
-        return origin.getAsString("starredUrl");
+        return originalDataMap.getAsString("starredUrl");
     }
 
     public String getSubscriptionsUrl() {
-        return origin.getAsString("subscriptions_url");
+        return originalDataMap.getAsString("subscriptions_url");
     }
 
     public String getOrganizationsUrl() {
-        return origin.getAsString("organizations_url");
+        return originalDataMap.getAsString("organizations_url");
     }
 
     public String getReposUrl() {
-        return origin.getAsString("repos_url");
+        return originalDataMap.getAsString("repos_url");
     }
 
     public String getEventsUrl() {
-        return origin.getAsString("events_url");
+        return originalDataMap.getAsString("events_url");
     }
 
     public String getReceivedEventsUrl() {
-        return origin.getAsString("received_events_url");
+        return originalDataMap.getAsString("received_events_url");
     }
 
     public String getType() {
-        return origin.getAsString("type");
+        return originalDataMap.getAsString("type");
     }
 
     public Boolean getSiteAdmin() {
-        return origin.getAsBoolean("site_admin");
+        return originalDataMap.getAsBoolean("site_admin");
     }
 
     public String getBlog() {
-        return origin.getAsString("blog");
+        return originalDataMap.getAsString("blog");
     }
 
     public String getWeibo() {
-        return origin.getAsString("weibo");
+        return originalDataMap.getAsString("weibo");
     }
 
     public String getBio() {
-        return origin.getAsString("bio");
+        return originalDataMap.getAsString("bio");
     }
 
     public Integer getPublicRepos() {
-        return origin.getAsInteger("public_repos");
+        return originalDataMap.getAsInteger("public_repos");
     }
 
     public Integer getPublicGists() {
-        return origin.getAsInteger("public_gists");
+        return originalDataMap.getAsInteger("public_gists");
     }
 
     public Integer getFollowers() {
-        return origin.getAsInteger("followers");
+        return originalDataMap.getAsInteger("followers");
     }
 
     public Integer getFollowings() {
-        return origin.getAsInteger("followings");
+        return originalDataMap.getAsInteger("followings");
     }
 
     public Integer getStared() {
-        return origin.getAsInteger("stared");
+        return originalDataMap.getAsInteger("stared");
     }
 
     public Integer getWatched() {
-        return origin.getAsInteger("watched");
+        return originalDataMap.getAsInteger("watched");
     }
 
     public LocalDateTime getCreatedAt() {
-        return LocalDateTime.parse(origin.getAsString("created_at"));
+        return originalDataMap.getAsLocalDateTime("created_at");
     }
 
     public LocalDateTime getUpdatedAt() {
-        return LocalDateTime.parse(origin.getAsString("updated_at"));
+        return originalDataMap.getAsLocalDateTime("updated_at");
     }
 
     @Override
     public String getEmail() {
-        return origin.getAsString("email");
+        return originalDataMap.getAsString("email");
     }
 
     // #################### - ###########################################################
 
     @Override
     public String getOpenid() {
-        return getId().toString();
+        return getId();
     }
 
     @Override
     public String getUid() {
-        return getId().toString();
+        return getId();
     }
 
     @Override
