@@ -33,10 +33,9 @@ public class WeChatWorkCorpOAuth2AppInfo implements OAuth2AppInfo {
     private String corpId;
     /** Corp secret. */
     private String corpSecret;
+    /** Agent id. */
+    private String agentId;
     /** Redirect uri. */
     private String redirectUri;
-
-    /** Refresh access token when ttl less than */
-    private Integer refreshAccessTokenWhenTtlLessThan;
 
 }

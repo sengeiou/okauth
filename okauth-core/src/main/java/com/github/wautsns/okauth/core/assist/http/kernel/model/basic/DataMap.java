@@ -35,6 +35,23 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
     // #################### getAsXxx ####################################################
 
     /**
+     * Get as T value.
+     *
+     * <ul>
+     * conversion relationship:
+     * <li>{@code value} => {@code (T)value}</li>
+     * </ul>
+     *
+     * @param name name
+     * @param <T> type of value
+     * @return T value, or {@code null} if the map contains no mapping for the name.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getAs(String name) {
+        return (T) get(name);
+    }
+
+    /**
      * Get as {@code String} value.
      *
      * <ul>

@@ -24,6 +24,13 @@ import lombok.experimental.Accessors;
 /**
  * WeChatWorkCorp OAuth2 token.
  *
+ * <pre>
+ * {
+ * 	"access_token": "ACCESS_TOKEN(length:atLeast 512)",
+ * 	"expires_in": 7200
+ * }
+ * </pre>
+ *
  * @author wautsns
  * @since May 23, 2020
  */

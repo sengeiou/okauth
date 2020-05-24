@@ -16,10 +16,17 @@
 package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
+import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WeChatWorkCorpOAuth2Token;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * WeCharWork access token cache.
+ *
+ * <p><strong>No need to consider concurrency issues.(See {@link WeChatWorkCorpOAuth2Client#getToken()} for
+ * details)</strong>
  *
  * @author wautsns
  * @since May 23, 2020
@@ -39,6 +46,42 @@ public interface WeChatWorkCorpTokenCache {
      * @param originalDataMap oauth2 token original data map
      * @param accessTokenExpirationSeconds access token expiration seconds
      */
-    void save(DataMap originalDataMap, Integer accessTokenExpirationSeconds);
+    void save(DataMap originalDataMap, int accessTokenExpirationSeconds);
+
+    /** Delete oauth2 token {@linkplain WeChatWorkCorpOAuth2Token#getOriginalDataMap() original data map}. */
+    void delete();
+
+    // #################### instance ####################################################
+
+    /** Instance of local cache. */
+    WeChatWorkCorpTokenCache LOCAL_CACHE = new WeChatWorkCorpTokenCache() {
+
+        private DataMap value;
+        private Timer timerForExpiringValue;
+        private final TimerTask timerTaskForExpiringValue = new TimerTask() {
+            @Override
+            public void run() {
+                delete();
+            }
+        };
+
+        @Override
+        public DataMap get() {
+            return value;
+        }
+
+        @Override
+        public void save(DataMap originalDataMap, int accessTokenExpirationSeconds) {
+            timerForExpiringValue.cancel();
+            value = originalDataMap;
+            timerForExpiringValue = new Timer("expireWeChatWorkCorpToken", true);
+            timerForExpiringValue.schedule(timerTaskForExpiringValue, accessTokenExpirationSeconds);
+        }
+
+        @Override
+        public void delete() {
+            value = null;
+        }
+    };
 
 }

@@ -105,6 +105,6 @@ public interface OAuth2User extends OpenPlatformSupplier, Serializable {
      *
      * @return phone
      */
-    default String getPhone() { return null; }
+    default String getCellphone() { return null; }
 
 }

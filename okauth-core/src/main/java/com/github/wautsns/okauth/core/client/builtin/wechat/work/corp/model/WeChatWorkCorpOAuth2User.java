@@ -19,9 +19,87 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * WeChatWorkCorp OAuth2 user.
+ *
+ * <pre>
+ * {
+ *     "userid": "zhangsan",
+ *     "name": "李四",
+ *     "department": [1, 2],
+ *     "order": [1, 2],
+ *     "position": "后台工程师",
+ *     "mobile": "13800000000",
+ *     "gender": "1",
+ *     "email": "zhangsan@gzdev.com",
+ *     "is_leader_in_dept": [1, 0],
+ *     "avatar": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0",
+ *     "thumb_avatar": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/100",
+ *     "telephone": "020-123456",
+ *     "alias": "jackzhang",
+ *     "address": "广州市海珠区新港中路",
+ *     "open_userid": "xxxxxx",
+ *     "main_department": 1,
+ *     "extattr": {
+ *         "attrs": [
+ *             {
+ *                 "type": 0,
+ *                 "name": "文本名称",
+ *                 "text": {
+ *                     "value": "文本"
+ *                 }
+ *             },
+ *             {
+ *                 "type": 1,
+ *                 "name": "网页名称",
+ *                 "web": {
+ *                     "url": "http://www.test.com",
+ *                     "title": "标题"
+ *                 }
+ *             }
+ *         ]
+ *     },
+ *     "status": 1,
+ *     "qr_code": "https://open.work.weixin.qq.com/wwopen/userQRCode?vcode=xxx",
+ *     "external_position": "产品经理",
+ *     "external_profile": {
+ *         "external_corp_name": "企业简称",
+ *         "external_attr": [{
+ *                 "type": 0,
+ *                 "name": "文本名称",
+ *                 "text": {
+ *                     "value": "文本"
+ *                 }
+ *             },
+ *             {
+ *                 "type": 1,
+ *                 "name": "网页名称",
+ *                 "web": {
+ *                     "url": "http://www.test.com",
+ *                     "title": "标题"
+ *                 }
+ *             },
+ *             {
+ *                 "type": 2,
+ *                 "name": "测试app",
+ *                 "miniprogram": {
+ *                     "appid": "wx8bd80126147dFAKE",
+ *                     "pagepath": "/index",
+ *                     "title": "my miniprogram"
+ *                 }
+ *             }
+ *         ]
+ *     }
+ * }
+ * </pre>
  *
  * @author wautsns
  * @since May 23, 2020
@@ -39,24 +117,266 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
         return BuiltInOpenPlatformNames.WECHAT_WORK_CORP;
     }
 
-    public String getUserId() {
-        return originalDataMap.getAsString("UserId");
+    public String getUserid() {
+        return originalDataMap.getAsString("userid");
     }
 
-    public String getDeviceId() {
-        return originalDataMap.getAsString("DeviceId");
+    public String getName() {
+        return originalDataMap.getAsString("name");
+    }
+
+    public List<Integer> getDepartment() {
+        return originalDataMap.getAs("department");
+    }
+
+    public List<Integer> getOrder() {
+        return originalDataMap.getAs("order");
+    }
+
+    public String getPosition() {
+        return originalDataMap.getAs("position");
+    }
+
+    public String getMobile() {
+        return originalDataMap.getAs("mobile");
+    }
+
+    @Override
+    public Gender getGender() {
+        String gender = originalDataMap.getAs("gender");
+        if ("1".equals(gender)) {
+            return Gender.MALE;
+        } else if ("2".equals(gender)) {
+            return Gender.FEMALE;
+        } else {
+            return Gender.UNKNOWN;
+        }
+    }
+
+    @Override
+    public String getEmail() {
+        return originalDataMap.getAs("email");
+    }
+
+    public List<Integer> getIsLeaderInDept() {
+        return originalDataMap.getAs("is_leader_in_dept");
+    }
+
+    public String getAvatar() {
+        return originalDataMap.getAs("avatar");
+    }
+
+    public String getThumbAvatar() {
+        return originalDataMap.getAs("thumb_avatar");
+    }
+
+    public String getTelephone() {
+        return originalDataMap.getAs("telephone");
+    }
+
+    public String getAlias() {
+        return originalDataMap.getAs("alias");
+    }
+
+    public String getAddress() {
+        return originalDataMap.getAs("address");
+    }
+
+    public String getOpenUserid() {
+        return originalDataMap.getAs("open_userid");
+    }
+
+    public Integer getMainDepartment() {
+        return originalDataMap.getAs("main_department");
+    }
+
+    public ExtAttr getExtattr() {
+        return new ExtAttr(originalDataMap.getAsDataMap("extattr"));
+    }
+
+    @RequiredArgsConstructor
+    public enum Status {
+
+        ACTIVATED(1), DISABLED(2), INACTIVATED(3), EXIT(4);
+
+        /** Value. */
+        public final Integer value;
+
+        // #################### utils #######################################################
+
+        private static final Status[] VALUES = values();
+
+        public static Status getByValue(Integer value) {
+            for (Status status : VALUES) {
+                if (status.value.equals(value)) {
+                    return status;
+                }
+            }
+            return null;
+        }
+
+    }
+
+    public Status getStatus() {
+        return Status.getByValue(originalDataMap.getAs("status"));
+    }
+
+    public String getQrCode() {
+        return originalDataMap.getAs("qr_code");
+    }
+
+    public String getExternalPosition() {
+        return originalDataMap.getAs("external_position");
+    }
+
+    public ExternalProfile getExternalProfile() {
+        return new ExternalProfile(originalDataMap.getAsDataMap("external_profile"));
     }
 
     // #################### - ###########################################################
 
     @Override
     public String getOpenid() {
-        return getUserId();
+        return getUserid();
+    }
+
+    @Override
+    public String getUnionid() {
+        return getUserid();
     }
 
     @Override
     public String getUid() {
-        return getUserId();
+        return getUserid();
+    }
+
+    @Override
+    public String getNickname() {
+        return getName();
+    }
+
+    @Override
+    public String getAvatarUrl() {
+        return getAvatar();
+    }
+
+    @Override
+    public String getCellphone() {
+        return getMobile();
+    }
+
+    // #################### external ####################################################
+
+    @Data
+    public static class ExternalAttr {
+
+        /** Original data map. */
+        private final DataMap originalDataMap;
+
+        public Integer getType() {
+            return originalDataMap.getAs("type");
+        }
+
+        public String getName() {
+            return originalDataMap.getAs("name");
+        }
+
+        public Text getText() {
+            return new Text(originalDataMap.getAsDataMap("text"));
+        }
+
+        public Web getWeb() {
+            return new Web(originalDataMap.getAsDataMap("web"));
+        }
+
+        public Miniprogram getMiniprogram() {
+            return new Miniprogram(originalDataMap.getAsDataMap("miniprogram"));
+        }
+
+        @Data
+        public static class Text {
+
+            /** Original data map. */
+            private final DataMap originalDataMap;
+
+            public String getValue() {
+                return originalDataMap.getAs("value");
+            }
+
+        }
+
+        @Data
+        public static class Web {
+
+            /** Original data map. */
+            private final DataMap originalDataMap;
+
+            public String getUrl() {
+                return originalDataMap.getAs("url");
+            }
+
+            public String getTitle() {
+                return originalDataMap.getAs("title");
+            }
+
+        }
+
+        @Data
+        public static class Miniprogram {
+
+            /** Original data map. */
+            private final DataMap originalDataMap;
+
+            public String getAppid() {
+                return originalDataMap.getAs("appid");
+            }
+
+            public String getPagepath() {
+                return originalDataMap.getAs("pagepath");
+            }
+
+            public String getTitle() {
+                return originalDataMap.getAs("title");
+            }
+
+        }
+
+    }
+
+    @Data
+    public static class ExtAttr {
+
+        /** Original data map. */
+        private final DataMap originalDataMap;
+
+        public List<ExternalAttr> getAttrs() {
+            List<Map<String, Serializable>> attrs = originalDataMap.getAs("attrs");
+            return attrs.stream()
+                    .map(DataMap::new)
+                    .map(ExternalAttr::new)
+                    .collect(Collectors.toCollection(LinkedList::new));
+        }
+
+    }
+
+    @Data
+    public static class ExternalProfile {
+
+        /** Original data map. */
+        private final DataMap originalDataMap;
+
+        public String getExternalCorpName() {
+            return originalDataMap.getAs("external_corp_name");
+        }
+
+        public List<ExternalAttr> getExternalAttr() {
+            List<Map<String, Serializable>> externalAttr = originalDataMap.getAs("external_attr");
+            return externalAttr.stream()
+                    .map(DataMap::new)
+                    .map(ExternalAttr::new)
+                    .collect(Collectors.toCollection(LinkedList::new));
+        }
+
     }
 
 }

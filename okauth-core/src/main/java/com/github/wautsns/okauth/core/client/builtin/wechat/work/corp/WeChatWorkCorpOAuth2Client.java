@@ -29,12 +29,14 @@ import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
 import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
-import com.github.wautsns.okauth.core.client.kernel.api.basic.BiFunctionApi;
+import com.github.wautsns.okauth.core.client.kernel.api.basic.FunctionApi;
 import com.github.wautsns.okauth.core.client.kernel.api.basic.SupplierApi;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessTokenException;
 import com.github.wautsns.okauth.core.exception.specific.user.InvalidUserAuthorizationException;
+
+import java.util.concurrent.Semaphore;
 
 /**
  * WeChatWorkCorp OAuth2 client.
@@ -50,8 +52,8 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
 
     /** API: get token. */
     protected final SupplierApi<WeChatWorkCorpOAuth2Token> apiGetToken;
-    /** API: exchange access token and userid for user. */
-    protected final BiFunctionApi<String, String, WeChatWorkCorpOAuth2User> apiExchangeAccessTokenAndUseridForUser;
+    /** API: exchange userid for user. */
+    protected final FunctionApi<String, WeChatWorkCorpOAuth2User> apiExchangeUseridForUser;
 
     /**
      * Construct WeChatWorkCorp OAuth2 client.
@@ -78,7 +80,7 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
         super(appInfo, httpClient);
         this.tokenCache = tokenCache;
         this.apiGetToken = initApiGetToken();
-        this.apiExchangeAccessTokenAndUseridForUser = initApiExchangeAccessTokenAndUseridForUser();
+        this.apiExchangeUseridForUser = initApiExchangeUseridForUser();
     }
 
     @Override
@@ -86,8 +88,14 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
         return BuiltInOpenPlatformNames.WECHAT_WORK_CORP;
     }
 
+    /** semaphore for getting token */
+    private final Semaphore semaphoreForGettingToken = new Semaphore(1);
+
     /**
      * Get oauth2 token.
+     *
+     * <p><strong>If the cached token has expired, in the case of concurrency, only one request will actually perform
+     * the fetch operation.</strong>
      *
      * @return oauth2 token
      * @throws OAuth2Exception if oauth2 failed
@@ -96,43 +104,56 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
         DataMap originalDataMap = tokenCache.get();
         if (originalDataMap != null) {
             return new WeChatWorkCorpOAuth2Token(originalDataMap);
+        } else if (semaphoreForGettingToken.tryAcquire()) {
+            try {
+                WeChatWorkCorpOAuth2Token token = apiGetToken.execute();
+                tokenCache.save(token.getOriginalDataMap(), token.getAccessTokenExpirationSeconds());
+                return token;
+            } finally {
+                semaphoreForGettingToken.release();
+            }
         } else {
-            WeChatWorkCorpOAuth2Token token = apiGetToken.execute();
-            tokenCache.save(token.getOriginalDataMap(), token.getAccessTokenExpirationSeconds());
-            return token;
+            while (true) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException ignored) {
+                    Thread.currentThread().interrupt();
+                }
+                originalDataMap = tokenCache.get();
+                if (originalDataMap != null) {
+                    return new WeChatWorkCorpOAuth2Token(originalDataMap);
+                }
+            }
         }
     }
 
     /**
      * Exchange token and userid for user.
      *
-     * @param accessToken access token
      * @param userid user id
      * @return user
-     * @throws OAuth2Exception
+     * @throws OAuth2Exception if oauth2 failed
      */
-    public WeChatWorkCorpOAuth2User exchangeForUser(String accessToken, String userid)
-            throws OAuth2Exception {
-        return refreshIfAccessTokenExpired(apiExchangeAccessTokenAndUseridForUser, accessToken, userid);
+    public WeChatWorkCorpOAuth2User exchangeForUser(String userid) throws OAuth2Exception {
+        return refreshIfAccessTokenExpired(apiExchangeUseridForUser, userid);
     }
 
     /**
      * Auto-refresh access token if the api throws {@code ExpiredAccessTokenException}.
      *
-     * @param accessTokenAndUseridRelatedApi token and userid related api
-     * @param accessToken access token
+     * @param useridRelatedApi userid related api
      * @param userid userid
      * @param <R> type of result
      * @return result of the api
      * @throws OAuth2Exception if oauth2 failed
      */
-    protected <R> R refreshIfAccessTokenExpired(
-            BiFunctionApi<String, String, R> accessTokenAndUseridRelatedApi,
-            String accessToken, String userid) throws OAuth2Exception {
+    protected <R> R refreshIfAccessTokenExpired(FunctionApi<String, R> useridRelatedApi, String userid)
+            throws OAuth2Exception {
         try {
-            return accessTokenAndUseridRelatedApi.execute(accessToken, userid);
+            return useridRelatedApi.execute(userid);
         } catch (ExpiredAccessTokenException e) {
-            return accessTokenAndUseridRelatedApi.execute(getToken().getAccessToken(), userid);
+            tokenCache.delete();
+            return useridRelatedApi.execute(userid);
         }
     }
 
@@ -174,12 +195,12 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
      *
      * @return API: exchange token and userid for user
      */
-    protected BiFunctionApi<String, String, WeChatWorkCorpOAuth2User> initApiExchangeAccessTokenAndUseridForUser() {
-        return (token, userid) -> {
+    protected FunctionApi<String, WeChatWorkCorpOAuth2User> initApiExchangeUseridForUser() {
+        return userid -> {
             String url = "https://qyapi.weixin.qq.com/cgi-bin/user/get";
             OAuth2HttpRequest request = OAuth2HttpRequest.initGet(url);
             request.getUrl().getQuery()
-                    .addAccessToken(token)
+                    .addAccessToken(getToken().getAccessToken())
                     .add("userid", userid);
             return new WeChatWorkCorpOAuth2User(executeAndCheck(request));
         };
@@ -201,11 +222,7 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
 
     @Override
     protected ExchangeRedirectUriQueryForUser<WeChatWorkCorpOAuth2User> initApiExchangeRedirectUriQueryForUser() {
-        return redirectUriQuery -> {
-            String accessToken = getToken().getAccessToken();
-            String userid = exchangeForOpenid(redirectUriQuery);
-            return exchangeForUser(accessToken, userid);
-        };
+        return redirectUriQuery -> exchangeForUser(exchangeForOpenid(redirectUriQuery));
     }
 
     // #################### execute request and check response ##########################
