@@ -13,23 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin;
+package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp;
 
-import lombok.experimental.UtilityClass;
+import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
- * Built-in open platform names.
+ * WeChatWorkCorp OAuth2 app info.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since May 23, 2020
  */
-@UtilityClass
-public class BuiltInOpenPlatformNames {
+@Data
+@Accessors(chain = true)
+public class WeChatWorkCorpOAuth2AppInfo implements OAuth2AppInfo {
 
-    public static final String BAIDU = "Baidu";
-    public static final String GITHUB = "GitHub";
-    public static final String GITEE = "Gitee";
-    public static final String OSCHINA = "OSChina";
-    public static final String WECHAT_WORK_CORP = "WeChatWorkCorp";
+    /** Corp id. */
+    private String corpId;
+    /** Corp secret. */
+    private String corpSecret;
+    /** Redirect uri. */
+    private String redirectUri;
+
+    /** Refresh access token when ttl less than */
+    private Integer refreshAccessTokenWhenTtlLessThan;
 
 }
