@@ -35,6 +35,20 @@ public interface OAuth2Token extends OpenPlatformSupplier, Serializable {
     DataMap getOriginalDataMap();
 
     /**
+     * Get token id.
+     *
+     * @return token id
+     */
+    String getTokenId();
+
+    /**
+     * Set token id.
+     *
+     * @param tokenId token id
+     */
+    OAuth2Token setTokenId(String tokenId);
+
+    /**
      * Get access token.
      *
      * @return access token

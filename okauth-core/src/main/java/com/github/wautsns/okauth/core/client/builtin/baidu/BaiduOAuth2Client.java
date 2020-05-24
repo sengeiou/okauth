@@ -47,7 +47,7 @@ public class BaiduOAuth2Client
         extends TokenRefreshableOAuth2Client<BaiduOAuth2AppInfo, BaiduOAuth2Token, BaiduOAuth2User> {
 
     /** Display supplier. */
-    private final BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier displaySupplier;
+    protected final BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier displaySupplier;
 
     /**
      * Construct a Baidu oauth2 client.

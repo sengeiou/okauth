@@ -139,7 +139,7 @@ public class OSChinaOAuth2Client
     // #################### execute request and check response ##########################
 
     /**
-     * Execute request and executeAndCheck response.
+     * Execute request and check response.
      *
      * @param request request
      * @return correct data map

@@ -19,6 +19,7 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Baidu oauth2 token.
@@ -38,10 +39,13 @@ import lombok.Data;
  * @since May 17, 2020
  */
 @Data
+@Accessors(chain = true)
 public class BaiduOAuth2Token implements OAuth2RefreshableToken {
 
     private static final long serialVersionUID = 626454809091111659L;
 
+    /** Token id. */
+    private String tokenId;
     /** Original data map. */
     private final DataMap originalDataMap;
 

@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel.api;
+package com.github.wautsns.okauth.core.client.kernel.api.basic;
 
-import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
-import com.github.wautsns.okauth.core.client.kernel.api.basic.FunctionApi;
+import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
 /**
- * API: Initialize authorize url.
+ * Function api.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since May 24, 2020
  */
-@FunctionalInterface
-public interface InitializeAuthorizeUrl extends FunctionApi<String, OAuth2Url> {
+public interface FunctionApi<T, R> {
 
     /**
-     * Initialize authorize url.
+     * Execute the api.
      *
-     * @param state state
-     * @return authorize url
+     * @param argT argument T
+     * @return result
+     * @throws OAuth2Exception if oauth2 failed
      */
-    OAuth2Url execute(String state);
+    R execute(T argT) throws OAuth2Exception;
 
 }

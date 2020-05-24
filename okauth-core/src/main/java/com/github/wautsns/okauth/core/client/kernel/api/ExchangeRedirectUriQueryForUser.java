@@ -15,9 +15,9 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
+import com.github.wautsns.okauth.core.client.kernel.api.basic.FunctionApi;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RedirectUriQuery;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
-import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
 /**
  * API: Exchange redirect uri query for user.
@@ -26,15 +26,4 @@ import com.github.wautsns.okauth.core.exception.OAuth2Exception;
  * @since May 17, 2020
  */
 @FunctionalInterface
-public interface ExchangeRedirectUriQueryForUser<U extends OAuth2User> {
-
-    /**
-     * Exchange redirect uri query for user.
-     *
-     * @param redirectUriQuery redirect uri query
-     * @return user
-     * @throws OAuth2Exception if oauth is failed
-     */
-    U execute(OAuth2RedirectUriQuery redirectUriQuery) throws OAuth2Exception;
-
-}
+public interface ExchangeRedirectUriQueryForUser<U extends OAuth2User> extends FunctionApi<OAuth2RedirectUriQuery, U> {}

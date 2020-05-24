@@ -24,15 +24,17 @@ import com.github.wautsns.okauth.core.exception.OAuth2Exception;
  * @author wautsns
  * @since May 19, 2020
  */
-public interface TokenRelatedApi<T extends OAuth2Token, R> {
+@FunctionalInterface
+public interface TokenRelatedApi<T extends OAuth2Token, R> extends FunctionApi<T, R> {
 
     /**
-     * Execute the api.
+     * {@inheritDoc}
      *
      * @param token token
-     * @return result
-     * @throws OAuth2Exception if oauth is failed
+     * @return {@inheritDoc}
+     * @throws OAuth2Exception {@inheritDoc}
      */
+    @Override
     R execute(T token) throws OAuth2Exception;
 
 }

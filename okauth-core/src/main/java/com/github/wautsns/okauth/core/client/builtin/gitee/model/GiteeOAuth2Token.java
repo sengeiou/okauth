@@ -19,6 +19,7 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Gitee oauth2 token.
@@ -38,10 +39,13 @@ import lombok.Data;
  * @since May 17, 2020
  */
 @Data
+@Accessors(chain = true)
 public class GiteeOAuth2Token implements OAuth2RefreshableToken {
 
     private static final long serialVersionUID = 7155633421437700449L;
 
+    /** Token id. */
+    private String tokenId;
     /** Original data map. */
     private final DataMap originalDataMap;
 

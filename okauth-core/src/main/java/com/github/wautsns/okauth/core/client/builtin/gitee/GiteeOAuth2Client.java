@@ -148,11 +148,11 @@ public class GiteeOAuth2Client
         DataMap dataMap = response.readJsonAsDataMap();
         String error = dataMap.getAsString("error");
         if (error == null) { return dataMap; }
-        String description = dataMap.getAsString("error_description");
+        String errorDescription = dataMap.getAsString("error_description");
         if ("invalid_grant".equals(error)) {
-            throw new ExpiredRefreshTokenException(getOpenPlatform(), error, description);
+            throw new ExpiredRefreshTokenException(getOpenPlatform(), error, errorDescription);
         } else {
-            throw new OAuth2ErrorException(getOpenPlatform(), error, description);
+            throw new OAuth2ErrorException(getOpenPlatform(), error, errorDescription);
         }
     }
 

@@ -19,13 +19,13 @@ import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import lombok.Getter;
 
 /**
- * User refused authorization exception.
+ * Invalid user authorization exception.
  *
  * @author wautsns
  * @since May 16, 2020
  */
 @Getter
-public class UserRefusedAuthorizationException extends OAuth2Exception {
+public class InvalidUserAuthorizationException extends OAuth2Exception {
 
     private static final long serialVersionUID = 3286545599334883829L;
 
@@ -33,12 +33,12 @@ public class UserRefusedAuthorizationException extends OAuth2Exception {
     private final String openPlatform;
 
     /**
-     * Construct a {@code UserRefusedAuthorizationException}.
+     * Construct a {@code InvalidUserAuthorizationException}.
      *
      * @param openPlatform open platform
      */
-    public UserRefusedAuthorizationException(String openPlatform) {
-        super("User refused authorization.");
+    public InvalidUserAuthorizationException(String openPlatform) {
+        super("Invalid user authorization.");
         this.openPlatform = openPlatform;
     }
 

@@ -156,10 +156,10 @@ public class GitHubOAuth2Client
     private DataMap executeGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
         DataMap dataMap = response.readJsonAsDataMap();
-        String errorCode = dataMap.getAsString("error");
-        if (errorCode == null) { return dataMap; }
-        String errorMsg = dataMap.getAsString("error_description");
-        throw new OAuth2ErrorException(getOpenPlatform(), errorCode, errorMsg);
+        String error = dataMap.getAsString("error");
+        if (error == null) { return dataMap; }
+        String errorDescription = dataMap.getAsString("error_description");
+        throw new OAuth2ErrorException(getOpenPlatform(), error, errorDescription);
     }
 
     /**
@@ -173,12 +173,12 @@ public class GitHubOAuth2Client
         OAuth2HttpResponse response = httpClient.execute(request);
         DataMap dataMap = response.readJsonAsDataMap();
         if (response.getStatus() < 400) { return dataMap; }
-        String errorCode = Integer.toString(response.getStatus());
+        String error = Integer.toString(response.getStatus());
         String message = dataMap.getAsString("message");
         if ("Bad credentials".equals(message)) {
-            throw new InvalidAccessTokenException(getOpenPlatform(), errorCode, message);
+            throw new InvalidAccessTokenException(getOpenPlatform(), error, message);
         } else {
-            throw new OAuth2ErrorException(getOpenPlatform(), errorCode, message);
+            throw new OAuth2ErrorException(getOpenPlatform(), error, message);
         }
     }
 
