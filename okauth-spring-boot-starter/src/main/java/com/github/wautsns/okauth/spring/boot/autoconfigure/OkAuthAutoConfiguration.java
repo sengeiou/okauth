@@ -66,7 +66,6 @@ public class OkAuthAutoConfiguration {
     // #################### common component ############################################
 
     @Bean
-    @ConditionalOnBean(TokenRefreshableOAuth2Client.class)
     @ConditionalOnMissingBean
     public TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback() {
         return TokenRefreshableOAuth2Client.TokenRefreshCallback.DEFAULT;
