@@ -16,9 +16,9 @@
 package com.github.wautsns.okauth.spring.boot.autoconfigure.configuration;
 
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
+import com.github.wautsns.okauth.spring.boot.autoconfigure.configuration.condition.ConditionalOnOkAuthEnabled;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
  * @since May 25, 2020
  */
 @Configuration
-@ConditionalOnProperty("okauth.enabled")
+@ConditionalOnOkAuthEnabled
 public class OkAuthCommonServiceAutoConfiguration {
 
     @Bean

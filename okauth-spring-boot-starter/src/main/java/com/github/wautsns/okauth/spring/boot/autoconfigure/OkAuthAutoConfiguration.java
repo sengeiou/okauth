@@ -17,7 +17,8 @@ package com.github.wautsns.okauth.spring.boot.autoconfigure;
 
 import com.github.wautsns.okauth.core.client.OAuth2ClientManager;
 import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
-import com.github.wautsns.okauth.spring.boot.autoconfigure.configuration.OkAuthBuiltInOAuth2ClientConfiguration;
+import com.github.wautsns.okauth.spring.boot.autoconfigure.configuration.OkAuthBuiltInOAuth2ClientAutoConfiguration;
+import com.github.wautsns.okauth.spring.boot.autoconfigure.configuration.condition.ConditionalOnOkAuthEnabled;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,7 +34,8 @@ import java.util.List;
  */
 @ComponentScan
 @Configuration
-@AutoConfigureAfter(OkAuthBuiltInOAuth2ClientConfiguration.class)
+@AutoConfigureAfter(OkAuthBuiltInOAuth2ClientAutoConfiguration.class)
+@ConditionalOnOkAuthEnabled
 public class OkAuthAutoConfiguration {
 
     @Bean

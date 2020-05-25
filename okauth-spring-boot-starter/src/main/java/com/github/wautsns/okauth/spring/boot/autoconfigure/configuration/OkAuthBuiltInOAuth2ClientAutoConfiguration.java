@@ -28,6 +28,7 @@ import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWork
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.WeChatWorkCorpTokenCache;
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
+import com.github.wautsns.okauth.spring.boot.autoconfigure.configuration.condition.ConditionalOnOkAuthEnabled;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppInfoProperties;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthProperties;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.util.OkAuthAutoConfigureUtils;
@@ -40,15 +41,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * OkAuth built-in open platform client configuration.
+ * OkAuth built-in oauth2 client auto-configuration.
  *
  * @author wautsns
  * @since May 25, 2020
  */
 @Configuration
 @AutoConfigureAfter(OkAuthCommonServiceAutoConfiguration.class)
+@ConditionalOnOkAuthEnabled
 @EnableConfigurationProperties(OkAuthProperties.class)
-public class OkAuthBuiltInOAuth2ClientConfiguration {
+public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
 
     // #################### Baidu #######################################################
 
