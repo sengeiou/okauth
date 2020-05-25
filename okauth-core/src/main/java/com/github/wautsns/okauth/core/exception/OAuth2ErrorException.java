@@ -30,9 +30,9 @@ public class OAuth2ErrorException extends OAuth2Exception {
 
     private static final long serialVersionUID = 5271329869899694038L;
 
-    /** open platform */
+    /** Open platform. */
     private final String openPlatform;
-    /** error code */
+    /** Error code. */
     private final String errorCode;
 
     /**

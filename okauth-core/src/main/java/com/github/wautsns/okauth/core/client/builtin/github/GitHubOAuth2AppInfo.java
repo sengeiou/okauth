@@ -165,7 +165,7 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
          */
         WORK_FLOW("workflow");
 
-        /** value */
+        /** Value. */
         public final String value;
 
         /**
@@ -210,12 +210,12 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
 
             /** Use default value(null). */
             DEFAULT(null),
-            /** The value is equal to {@linkplain AllowSignup#DEFAULT} */
+            /** The value is equal to {@linkplain AllowSignup#DEFAULT}. */
             ENABLED(null),
             /** Unauthenticated users will not be offered an option to sign up for GitHub during the OAuth flow. */
             DISABLED("false");
 
-            /** value */
+            /** Value. */
             public final String value;
 
         }

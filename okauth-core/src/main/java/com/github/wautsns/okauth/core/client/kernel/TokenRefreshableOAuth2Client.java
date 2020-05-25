@@ -134,7 +134,7 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
 
         // #################### instance ####################################################
 
-        /** default token refresh callback */
+        /** Default token refresh callback. */
         TokenRefreshCallback DEFAULT = (openPlatform, oldToken, newToken) -> {};
 
     }

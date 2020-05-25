@@ -67,7 +67,7 @@ public class GiteeOAuth2AppInfo implements OAuth2AppInfo {
         /** View user's personal mailbox information. */
         ENTERPRISES("enterprises");
 
-        /** value */
+        /** Value. */
         public final String value;
 
         /**

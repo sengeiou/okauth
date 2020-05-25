@@ -68,7 +68,7 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
          */
         HAO123("hao123");
 
-        /** value */
+        /** Value. */
         public final String value;
 
         /**
@@ -88,6 +88,7 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
 
     // #################### extraAuthorizeUrlQuery ######################################
 
+    /** Extra authorize url query. */
     @Data
     @Accessors(chain = true)
     public static class ExtraAuthorizeUrlQuery {
@@ -139,7 +140,7 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
             /** Authorization page for large screens such as TVs. */
             TV("tv");
 
-            /** value */
+            /** Value. */
             public final String value;
 
         }
@@ -163,10 +164,10 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
              * login status will not be read from the cookie.
              */
             ENABLED("1"),
-            /** The value is equal to {@linkplain ConfirmLogin#DEFAULT} */
+            /** The value is equal to {@linkplain ConfirmLogin#DEFAULT}. */
             DISABLED(null);
 
-            /** value */
+            /** Value. */
             public final String value;
 
         }
@@ -190,10 +191,10 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
              * authorize the application.
              */
             ENABLED("1"),
-            /** The value is equal to {@linkplain ConfirmLogin#DEFAULT} */
+            /** The value is equal to {@linkplain ConfirmLogin#DEFAULT}. */
             DISABLED(null);
 
-            /** value */
+            /** Value. */
             public final String value;
 
         }
@@ -214,14 +215,14 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
             /** The authorization page will use the SMS dynamic password to register the login method by default. */
             SMS("sms");
 
-            /** value */
+            /** Value. */
             public final String value;
 
         }
 
         // #################### service #####################################################
 
-        /** Display supplier */
+        /** Display supplier. */
         public interface DisplaySupplier {
 
             /**
@@ -234,7 +235,7 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
 
             // #################### default #####################################################
 
-            /** default display supplier */
+            /** Default display supplier. */
             DisplaySupplier DEFAULT = state -> Display.DEFAULT;
 
         }

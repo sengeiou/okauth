@@ -33,7 +33,7 @@ import java.util.List;
  */
 class OAuth2HttpRequestRetryHandler extends DefaultHttpRequestRetryHandler {
 
-    /** The IOException types that should not be retried */
+    /** The IOException types that should not be retried. */
     private static final List<Class<? extends IOException>> EXCEPTIONS_NOT_RETRIED = Arrays.asList(
             InterruptedIOException.class,
             UnknownHostException.class,
