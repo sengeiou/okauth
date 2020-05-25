@@ -19,6 +19,7 @@ import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2AppInfo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -49,5 +50,9 @@ public class OkAuthAppsInfoProperties {
     @NestedConfigurationProperty
     private final OkAuthAppInfoProperties<OSChinaOAuth2AppInfo> oschina
             = new OkAuthAppInfoProperties<>(new OSChinaOAuth2AppInfo());
+    /** WeChatWorkCorp app info properties. */
+    @NestedConfigurationProperty
+    private final OkAuthAppInfoProperties<WeChatWorkCorpOAuth2AppInfo> wechatWorkCorp
+            = new OkAuthAppInfoProperties<>(new WeChatWorkCorpOAuth2AppInfo());
 
 }

@@ -29,6 +29,11 @@
       "name": "okauth.apps-info.oschina.app-info",
       "type": "com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2AppInfo",
       "sourceType": "com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppsInfoProperties"
+    },
+    {
+      "name": "okauth.apps-info.wechat-work-corp.app-info",
+      "type": "com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2AppInfo",
+      "sourceType": "com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppsInfoProperties"
     }
   ],
   "properties": [
@@ -150,6 +155,26 @@
     {
       "name": "okauth.apps-info.oschina.app-info.redirect-uri",
       "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.wechat-work-corp.app-info.corp-id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.wechat-work-corp.app-info.corp-secret",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.wechat-work-corp.app-info.authorize-type",
+      "type": "com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2AppInfo$AuthorizeType"
+    },
+    {
+      "name": "okauth.apps-info.wechat-work-corp.app-info.agent-id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.wechat-work-corp.app-info.redirect-uri",
+      "type": "java.lang.String"
     }
   ],
   "hints": [
@@ -226,6 +251,17 @@
           "name": "handle-as",
           "parameters": {
             "target": "com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo$Scope"
+          }
+        }
+      ]
+    },
+    {
+      "name": "okauth.apps-info.wechat-work-corp.app-info.authorize-type",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2AppInfo$AuthorizeType"
           }
         }
       ]

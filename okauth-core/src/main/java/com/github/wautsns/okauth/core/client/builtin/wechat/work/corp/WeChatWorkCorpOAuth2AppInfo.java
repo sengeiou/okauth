@@ -33,9 +33,21 @@ public class WeChatWorkCorpOAuth2AppInfo implements OAuth2AppInfo {
     private String corpId;
     /** Corp secret. */
     private String corpSecret;
-    /** Agent id. */
+    /** See {@link AuthorizeType} for details(default is {@link AuthorizeType#WEB}). */
+    private AuthorizeType authorizeType = AuthorizeType.WEB;
+    /** Agent id(required if the authorize type is {@link AuthorizeType#QR_CODE}). */
     private String agentId;
     /** Redirect uri. */
     private String redirectUri;
+
+    // #################### enum ########################################################
+
+    /** Authorize type. */
+    public enum AuthorizeType {
+        /** Web page authorization link. */
+        WEB,
+        /** QR code login link. */
+        QR_CODE
+    }
 
 }

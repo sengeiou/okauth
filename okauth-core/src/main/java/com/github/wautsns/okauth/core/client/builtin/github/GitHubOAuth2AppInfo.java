@@ -185,6 +185,7 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
 
     // #################### extraAuthorizeUrlQuery ######################################
 
+    /** Extra authorize url query. */
     @Data
     @Accessors(chain = true)
     public static class ExtraAuthorizeUrlQuery {

@@ -23,7 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * WeCharWork access token cache.
+ * WeCharWorkCorp token cache.
  *
  * <p><strong>No need to consider concurrency issues.(See {@link WeChatWorkCorpOAuth2Client#getToken()} for
  * details)</strong>
@@ -55,7 +55,6 @@ public interface WeChatWorkCorpTokenCache {
 
     /** Instance of local cache. */
     WeChatWorkCorpTokenCache LOCAL_CACHE = new WeChatWorkCorpTokenCache() {
-
         private DataMap value;
         private Timer timerForExpiringValue;
         private final TimerTask timerTaskForExpiringValue = new TimerTask() {
@@ -72,7 +71,7 @@ public interface WeChatWorkCorpTokenCache {
 
         @Override
         public void save(DataMap originalDataMap, int accessTokenExpirationSeconds) {
-            timerForExpiringValue.cancel();
+            if (timerForExpiringValue != null) { timerForExpiringValue.cancel(); }
             value = originalDataMap;
             timerForExpiringValue = new Timer("expireWeChatWorkCorpToken", true);
             timerForExpiringValue.schedule(timerTaskForExpiringValue, accessTokenExpirationSeconds);

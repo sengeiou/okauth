@@ -153,7 +153,7 @@ public class GitHubOAuth2Client
      * @return correct data map
      * @throws OAuth2Exception if oauth2 failed
      */
-    private DataMap executeGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
+    protected DataMap executeGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
         DataMap dataMap = response.readJsonAsDataMap();
         String error = dataMap.getAsString("error");
@@ -169,7 +169,7 @@ public class GitHubOAuth2Client
      * @return correct data map
      * @throws OAuth2Exception if oauth2 failed
      */
-    private DataMap executeNotGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
+    protected DataMap executeNotGetOrRefreshTokenAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
         DataMap dataMap = response.readJsonAsDataMap();
         if (response.getStatus() < 400) { return dataMap; }

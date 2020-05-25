@@ -34,6 +34,7 @@ import com.github.wautsns.okauth.core.client.kernel.api.basic.SupplierApi;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessTokenException;
+import com.github.wautsns.okauth.core.exception.specific.token.InvalidAccessTokenException;
 import com.github.wautsns.okauth.core.exception.specific.user.InvalidUserAuthorizationException;
 
 import java.util.concurrent.Semaphore;
@@ -42,7 +43,7 @@ import java.util.concurrent.Semaphore;
  * WeChatWorkCorp OAuth2 client.
  *
  * @author wautsns
- * @see <a href="https://work.weixin.qq.com/api/doc/90000/90135/91039">WeChatWorkCorp OAuth2 doc</a>
+ * @see <a href="https://work.weixin.qq.com/api/doc/90000/90135/91022">WeChatWorkCorp OAuth2 doc</a>
  * @since May 23, 2020
  */
 public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth2AppInfo, WeChatWorkCorpOAuth2User> {
@@ -59,12 +60,9 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
      * Construct WeChatWorkCorp OAuth2 client.
      *
      * @param appInfo oauth2 app info
-     * @param tokenCache token service
      */
-    public WeChatWorkCorpOAuth2Client(
-            WeChatWorkCorpOAuth2AppInfo appInfo,
-            WeChatWorkCorpTokenCache tokenCache) {
-        this(appInfo, HttpClient4OAuth2HttpClient.DEFAULT, tokenCache);
+    public WeChatWorkCorpOAuth2Client(WeChatWorkCorpOAuth2AppInfo appInfo) {
+        this(appInfo, HttpClient4OAuth2HttpClient.DEFAULT, WeChatWorkCorpTokenCache.LOCAL_CACHE);
     }
 
     /**
@@ -88,7 +86,7 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
         return BuiltInOpenPlatformNames.WECHAT_WORK_CORP;
     }
 
-    /** semaphore for getting token */
+    /** Semaphore for getting token. */
     private final Semaphore semaphoreForGettingToken = new Semaphore(1);
 
     /**
@@ -113,17 +111,18 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
                 semaphoreForGettingToken.release();
             }
         } else {
-            while (true) {
+            // Not directly recursive is to prevent stack overflow.
+            do {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException ignored) {
                     Thread.currentThread().interrupt();
                 }
                 originalDataMap = tokenCache.get();
-                if (originalDataMap != null) {
-                    return new WeChatWorkCorpOAuth2Token(originalDataMap);
-                }
-            }
+                if (originalDataMap != null) { return new WeChatWorkCorpOAuth2Token(originalDataMap); }
+            } while (semaphoreForGettingToken.availablePermits() == 0);
+            // Do not use `tokenCache.get()` directly, because the semaphore may be released due to an exception.
+            return getToken();
         }
     }
 
@@ -161,14 +160,26 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
 
     @Override
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
-        String url = "https://open.weixin.qq.com/connect/oauth2/authorize";
-        OAuth2Url basic = new OAuth2Url(url);
-        basic.getQuery()
-                .addAppid(appInfo.getCorpId())
-                .addRedirectUri(appInfo.getRedirectUri())
-                .addResponseTypeWithValueCode()
-                .addScope("snsapi_base");
-        basic.setAnchor("wechat_redirect");
+        OAuth2Url basic;
+        if (appInfo.getAuthorizeType() == WeChatWorkCorpOAuth2AppInfo.AuthorizeType.WEB) {
+            String url = "https://open.weixin.qq.com/connect/oauth2/authorize";
+            basic = new OAuth2Url(url);
+            basic.getQuery()
+                    .addAppid(appInfo.getCorpId())
+                    .addRedirectUri(appInfo.getRedirectUri())
+                    .addResponseTypeWithValueCode()
+                    .addScope("snsapi_base");
+            basic.setAnchor("wechat_redirect");
+        } else if (appInfo.getAuthorizeType() == WeChatWorkCorpOAuth2AppInfo.AuthorizeType.QR_CODE) {
+            String url = "https://open.work.weixin.qq.com/wwopen/sso/qrConnect";
+            basic = new OAuth2Url(url);
+            basic.getQuery()
+                    .addAppid(appInfo.getCorpId())
+                    .add("agentid", appInfo.getAgentId())
+                    .addRedirectUri(appInfo.getRedirectUri());
+        } else {
+            throw new IllegalStateException("Unsupported authorizeType: " + appInfo.getAuthorizeType());
+        }
         return state -> {
             OAuth2Url oauth2Url = basic.copy();
             oauth2Url.getQuery().addState(state);
@@ -234,7 +245,7 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
      * @return correct data map
      * @throws OAuth2Exception if oauth2 failed
      */
-    private DataMap executeAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
+    protected DataMap executeAndCheck(OAuth2HttpRequest request) throws OAuth2Exception {
         OAuth2HttpResponse response = httpClient.execute(request);
         DataMap dataMap = response.readJsonAsDataMap();
         String errcode = dataMap.getAsString("errcode");
@@ -243,6 +254,8 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
         if ("0".equals(errcode)) { return dataMap; }
         if ("42001".equals(errcode)) {
             throw new ExpiredAccessTokenException(getOpenPlatform(), errcode, errmsg);
+        } else if ("40014".equals(errcode) || "41001".equals(errcode)) {
+            throw new InvalidAccessTokenException(getOpenPlatform(), errcode, errmsg);
         } else {
             throw new OAuth2ErrorException(getOpenPlatform(), errcode, errmsg);
         }
