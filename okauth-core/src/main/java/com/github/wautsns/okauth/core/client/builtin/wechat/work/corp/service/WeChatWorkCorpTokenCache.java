@@ -19,9 +19,6 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WeChatWorkCorpOAuth2Token;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * WeCharWorkCorp token cache.
  *
@@ -56,25 +53,23 @@ public interface WeChatWorkCorpTokenCache {
     /** Instance of local cache. */
     WeChatWorkCorpTokenCache LOCAL_CACHE = new WeChatWorkCorpTokenCache() {
         private DataMap value;
-        private Timer timerForExpiringValue;
-        private final TimerTask timerTaskForExpiringValue = new TimerTask() {
-            @Override
-            public void run() {
-                delete();
-            }
-        };
+        private long expirationTimestamp = Long.MAX_VALUE;
 
         @Override
         public DataMap get() {
-            return value;
+            if (value == null) {
+                return null;
+            } else if (expirationTimestamp < System.currentTimeMillis()) {
+                return null;
+            } else {
+                return value;
+            }
         }
 
         @Override
         public void save(DataMap originalDataMap, int accessTokenExpirationSeconds) {
-            if (timerForExpiringValue != null) { timerForExpiringValue.cancel(); }
             value = originalDataMap;
-            timerForExpiringValue = new Timer("expireWeChatWorkCorpToken", true);
-            timerForExpiringValue.schedule(timerTaskForExpiringValue, accessTokenExpirationSeconds);
+            expirationTimestamp = System.currentTimeMillis() + accessTokenExpirationSeconds * 1000;
         }
 
         @Override
