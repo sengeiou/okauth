@@ -19,6 +19,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.Duration;
+import java.util.Map;
 
 /**
  * OAuth2 http client properties.
@@ -42,6 +43,8 @@ public class OAuth2HttpClientProperties {
     private Duration keepAliveTimeout;
     /** Retry times. */
     private Integer retryTimes;
+    /** Custom properties. */
+    private Map<String,Object> customProperties;
 
     // #################### utils #######################################################
 
@@ -67,7 +70,7 @@ public class OAuth2HttpClientProperties {
                 .setMaxConcurrentRequests(64)
                 .setMaxIdleTime(Duration.parse("PT5M"))
                 .setKeepAliveTimeout(Duration.parse("PT3M"))
-                .setRetryTimes(2);
+                .setRetryTimes(1);
     }
 
 }

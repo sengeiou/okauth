@@ -73,6 +73,11 @@
       "defaultValue": "3M"
     },
     {
+      "name": "okauth.default-http-client.properties.retry-times",
+      "type": "java.lang.Integer",
+      "defaultValue": 1
+    },
+    {
       "name": "okauth.apps-info.baidu.app-info.api-key",
       "type": "java.lang.String"
     },
