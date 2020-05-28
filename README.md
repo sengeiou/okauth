@@ -116,7 +116,7 @@ okauth 底层默认使用的是 `httpClient4` 作为与开放平台交互的 Htt
 okauth:
   # default http client properties are as followers:
   default-http-client:
-    implementation: com.github.wautsns.okauth.core.assist.http.builtin.okhttp3.OkHttp3OAuth2HttpClient
+    implementation: com.github.wautsns.okauth.core.assist.http.builtin.httpclient4.HttpClient4OAuth2HttpClient
     properties:
       connect-timeout: 3S
       read-timeout: 7S
@@ -124,6 +124,7 @@ okauth:
       max-idle-connections: 16
       max-idle-time: 5M
       keep-alive-timout: 3M
+      retry-times: 1
   apps-info:
     github:
       app-info:
@@ -131,20 +132,17 @@ okauth:
       http-client:
         properties:
           connect-timeout: 5S
+          retry-times: 3
 ```
 
 ### 2.4.2 非 Spring Boot 环境
 
 ``` java
-OAuthClients oauthClients = new OAuthClientsBuilder()
-    .register(BuiltInOpenPlatform.GITEE.initOAuthClient(
-        new OAuthAppProperties()
-            .setClientId("yourGitHubClientId")
-            .setClientSecret("yourGitHubClientSecret")
-            .setRedirectUri("yourGitHubRedirectUri"),
-        new OkHttp3HttpClient(HttpClientProperties.initDefault()
-            .setKeepAlive(Duration.ofMinutes(3)))))
-    .build();
+HttpClient4OAuth2HttpClient oauth2HttpClient = new HttpClient4OAuth2HttpClient(
+    OAuth2HttpClientProperties.initDefault()
+        .setConnectTimeout(Duration.ofSeconds(5))
+        .setRetryTimes(3));
+GitHubOAuth2Client client = new GitHubOAuth2Client(null, oauth2HttpClient);
 ```
 
 # 3 进阶
@@ -159,4 +157,4 @@ OAuthClients oauthClients = new OAuthClientsBuilder()
 | Gitee(码云) | [GiteeOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/gitee/GiteeOAuth2Client.java "点击查看源码") | [查看官方文档](https://gitee.com/api/v5/oauth_doc) |
 | GitHub | [GitHubOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/github/GitHubOAuth2Client.java "点击查看源码") | [查看官方文档](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/) |
 | OSChina(开源中国) | [OSChinaOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/oschina/OSChinaOAuth2Client.java "点击查看源码") | [查看官方文档](https://www.oschina.net/openapi/docs) |
-| ~~WeChatWorkCorp(企业微信-企业内部应用)~~ | [~~WeChatWorkCorpOAuth2Client~~](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/wechat/work/corp/WeChatWorkCorpOAuth2Client.java "点击查看源码") | [查看官方文档](https://work.weixin.qq.com/api/doc/90000/90135/91039) |
+| ~~WeChatWorkCorp(企业微信-企业内部应用)~~ | [~~WeChatWorkCorpOAuth2Client~~](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/wechat/work/corp/WeChatWorkCorpOAuth2Client.java "点击查看源码(尚未通过完整验证)") | [查看官方文档](https://work.weixin.qq.com/api/doc/90000/90135/91039) |
