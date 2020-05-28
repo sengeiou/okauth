@@ -64,6 +64,15 @@ public class OAuth2Url implements Serializable {
     }
 
     /**
+     * Get pure url(without query, anchor...).
+     *
+     * @return pure url
+     */
+    public String getPureUrl() {
+        return pureUrl;
+    }
+
+    /**
      * Get url query.
      *
      * @return url query.

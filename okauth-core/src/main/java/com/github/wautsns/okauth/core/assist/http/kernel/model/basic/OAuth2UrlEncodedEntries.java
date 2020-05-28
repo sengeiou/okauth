@@ -86,6 +86,17 @@ public class OAuth2UrlEncodedEntries extends NameValuePairs {
         return add("redirect_uri", value);
     }
 
+    /**
+     * Set `redirect_uri`.
+     *
+     * @param value redirect uri
+     * @return self reference
+     * @see #set(String, String)
+     */
+    public OAuth2UrlEncodedEntries setRedirectUri(String value) {
+        return set("redirect_uri", value);
+    }
+
     // #################### authorize url ###############################################
 
     /**
