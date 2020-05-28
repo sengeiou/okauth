@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.wautsns.okauth.springbootstarter.OkAuthAutoConfiguration
+com.github.wautsns.okauth.spring.boot.autoconfigure.OkAuthAutoConfiguration

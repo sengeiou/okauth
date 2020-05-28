@@ -15,23 +15,24 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
-import com.github.wautsns.okauth.core.http.model.basic.OAuthUrl;
+import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
+import com.github.wautsns.okauth.core.client.kernel.api.basic.FunctionApi;
 
 /**
- * Initialize authorize url.
+ * API: Initialize authorize url.
  *
  * @author wautsns
- * @since Mar 04, 2020
+ * @since May 17, 2020
  */
 @FunctionalInterface
-public interface InitializeAuthorizeUrl {
+public interface InitializeAuthorizeUrl extends FunctionApi<String, OAuth2Url> {
 
     /**
      * Initialize authorize url.
      *
-     * @param state state, require nonnull
+     * @param state state
      * @return authorize url
      */
-    OAuthUrl apply(String state);
+    OAuth2Url execute(String state);
 
 }

@@ -15,27 +15,14 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
-import com.github.wautsns.okauth.core.client.kernel.model.OAuthToken;
-import com.github.wautsns.okauth.core.exception.OAuthErrorException;
-import com.github.wautsns.okauth.core.exception.OAuthIOException;
+import com.github.wautsns.okauth.core.client.kernel.api.basic.TokenRelatedApi;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 
 /**
- * Exchange token for openid.
+ * API: Exchange token for openid.
  *
  * @author wautsns
- * @since Mar 04, 2020
+ * @since May 17, 2020
  */
 @FunctionalInterface
-public interface ExchangeTokenForOpenid {
-
-    /**
-     * Exchange token for openid
-     *
-     * @param token token, require nonnull
-     * @return openid
-     * @throws OAuthErrorException if open platform gives error message
-     * @throws OAuthIOException if IO exception occurs
-     */
-    String apply(OAuthToken token) throws OAuthErrorException, OAuthIOException;
-
-}
+public interface ExchangeTokenForOpenid<T extends OAuth2Token> extends TokenRelatedApi<T, String> {}
