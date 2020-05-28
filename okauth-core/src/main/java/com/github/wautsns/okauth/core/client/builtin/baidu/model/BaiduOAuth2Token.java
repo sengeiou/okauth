@@ -65,12 +65,12 @@ public class BaiduOAuth2Token implements OAuth2RefreshableToken {
     }
 
     /**
-     * {@inheritDoc}
+     * Get scope.
      *
      * <p>Final access scope of access token, that is the list of permissions actually granted by the user (the user
      * may cancel some requested permissions when authorizing the page)
      *
-     * @return {@inheritDoc}
+     * @return scope
      * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth/list">optioanl scopes</a>
      */
     public String getScope() {

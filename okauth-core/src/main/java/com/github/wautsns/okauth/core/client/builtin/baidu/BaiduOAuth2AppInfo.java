@@ -229,7 +229,6 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
              * Get display.
              *
              * @return display
-             * @see #getDisplay()
              */
             Display get(String state);
 
