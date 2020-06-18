@@ -59,22 +59,15 @@ public class BaiduOAuth2Token implements OAuth2RefreshableToken {
         return originalDataMap.getAsString("access_token");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth/overview">Access token life cycle.</a>
+     */
     @Override
     public Integer getAccessTokenExpirationSeconds() {
         return originalDataMap.getAsInteger("expire_in");
-    }
-
-    /**
-     * Get scope.
-     *
-     * <p>Final access scope of access token, that is the list of permissions actually granted by the user (the user
-     * may cancel some requested permissions when authorizing the page)
-     *
-     * @return scope
-     * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth/list">optioanl scopes</a>
-     */
-    public String getScope() {
-        return originalDataMap.getAsString("scope");
     }
 
     @Override
@@ -85,9 +78,29 @@ public class BaiduOAuth2Token implements OAuth2RefreshableToken {
     /** Baidu oauth2 refresh token expires in ten years. */
     private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 10 * 365 * 24 * 3600;
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Baidu oauth2 refresh token expires in ten years.
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public Integer getRefreshTokenExpirationSeconds() {
         return REFRESH_TOKEN_EXPIRATION_SECONDS;
+    }
+
+    /**
+     * Get scope(delimiter: space).
+     *
+     * <p>Final access scope of access token, that is the list of permissions actually granted by the user (the user
+     * may cancel some requested permissions when authorizing the page)
+     *
+     * @return scope
+     * @see com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo.Scope
+     */
+    public String getScopes() {
+        return originalDataMap.getAsString("scope");
     }
 
 }

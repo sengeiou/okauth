@@ -59,14 +59,15 @@ import java.util.function.Function;
 @Getter
 public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
 
-    /** Default HttpClient4 oauth2 http client. */
-    public static final HttpClient4OAuth2HttpClient DEFAULT
-            = new HttpClient4OAuth2HttpClient(OAuth2HttpClientProperties.initDefault());
-
     /** Original http client. */
     protected final HttpClient origin;
     /** Http client connection manager. */
     protected final PoolingHttpClientConnectionManager connectionManager;
+
+    /** Construct a default HttpClient4 oauth2 http client. */
+    public HttpClient4OAuth2HttpClient() {
+        this(OAuth2HttpClientProperties.initDefault());
+    }
 
     /**
      * Construct a HttpClient4 oauth2 http client.
@@ -75,21 +76,23 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
      */
     public HttpClient4OAuth2HttpClient(OAuth2HttpClientProperties props) {
         HttpClientBuilder builder = HttpClientBuilder.create();
-        // #################### request config ##############################################
+        // ==================== request config ==============================================
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout((int) props.getConnectTimeout().toMillis())
                 .setSocketTimeout((int) props.getReadTimeout().toMillis())
                 .build();
         builder.setDefaultRequestConfig(requestConfig);
-        // #################### connect manager ##############################################
+        // ==================== connect manager =============================================
         this.connectionManager = new PoolingHttpClientConnectionManager();
         this.connectionManager.setMaxTotal(props.getMaxConcurrentRequests());
         this.connectionManager.setDefaultMaxPerRoute(props.getMaxConcurrentRequests());
         builder.setConnectionManager(this.connectionManager);
-        // #################### max idle time ################################################
+        // ==================== max idle time ===============================================
         Duration maxIdleTime = props.getMaxIdleTime();
-        if (maxIdleTime != null) { builder.evictIdleConnections(maxIdleTime.toMillis(), TimeUnit.MILLISECONDS); }
-        // #################### keep alive ################################################
+        if (maxIdleTime != null) {
+            builder.evictIdleConnections(maxIdleTime.toMillis(), TimeUnit.MILLISECONDS);
+        }
+        // ==================== keep alive ==================================================
         ConnectionKeepAliveStrategy keepAliveStrategy = DefaultConnectionKeepAliveStrategy.INSTANCE;
         Duration keepAliveTimeout = props.getKeepAliveTimeout();
         if (keepAliveTimeout != null) {
@@ -97,16 +100,18 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
             keepAliveStrategy = (resp, ctx) -> keepAliveTimeoutMillis;
         }
         builder.setKeepAliveStrategy(keepAliveStrategy);
-        // #################### retry handler ###############################################
+        // ==================== retry handler ===============================================
         Integer retryTimes = props.getRetryTimes();
-        if (retryTimes != null) { builder.setRetryHandler(new OAuth2HttpRequestRetryHandler(retryTimes)); }
-        // #################### default headers #############################################
+        if (retryTimes != null) {
+            builder.setRetryHandler(new OAuth2HttpRequestRetryHandler(retryTimes));
+        }
+        // ==================== default headers =============================================
         builder.setDefaultHeaders(Collections.singleton(
-                // Disguised as a browser.
+                // Some open platforms will response 403, if not disguised as a browser.
                 new BasicHeader("User-Agent", "Chrome/83.0.4103.61")));
-        // #################### custom properties ###########################################
+        // ==================== custom properties ===========================================
         setCustomProperties(builder, props);
-        // #################### http client #################################################
+        // ==================== build http client ===========================================
         this.origin = builder.build();
     }
 

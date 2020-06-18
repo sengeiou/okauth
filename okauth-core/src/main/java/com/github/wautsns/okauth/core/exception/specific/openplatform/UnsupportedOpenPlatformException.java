@@ -28,7 +28,7 @@ public class UnsupportedOpenPlatformException extends OAuth2Exception {
     private static final long serialVersionUID = -1539348247553344950L;
 
     /**
-     * Construct an {@code UnsupportedOpenPlatformException}.
+     * Construct an UnsupportedOpenPlatformException.
      *
      * @param openPlatform open platform
      */

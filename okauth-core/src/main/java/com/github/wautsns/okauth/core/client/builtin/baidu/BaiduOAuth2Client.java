@@ -28,13 +28,10 @@ import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForToken;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForUser;
-import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
 import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessTokenException;
-
-import java.util.Objects;
 
 /**
  * Baidu oauth2 client.
@@ -56,9 +53,9 @@ public class BaiduOAuth2Client
      */
     public BaiduOAuth2Client(BaiduOAuth2AppInfo appInfo) {
         this(
-                appInfo, HttpClient4OAuth2HttpClient.DEFAULT,
-                TokenRefreshCallback.DEFAULT,
-                BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier.DEFAULT);
+                appInfo, new HttpClient4OAuth2HttpClient(),
+                TokenRefreshCallback.IGNORE,
+                null);
     }
 
     /**
@@ -67,14 +64,14 @@ public class BaiduOAuth2Client
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
      * @param tokenRefreshCallback token refresh callback
-     * @param displaySupplier display switcher
+     * @param displaySupplier display supplier, nullable
      */
     public BaiduOAuth2Client(
             BaiduOAuth2AppInfo appInfo, OAuth2HttpClient httpClient,
             TokenRefreshCallback tokenRefreshCallback,
             BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier displaySupplier) {
         super(appInfo, httpClient, tokenRefreshCallback);
-        this.displaySupplier = Objects.requireNonNull(displaySupplier);
+        this.displaySupplier = displaySupplier;
     }
 
     @Override
@@ -92,20 +89,29 @@ public class BaiduOAuth2Client
                 .addClientId(appInfo.getApiKey())
                 .addResponseTypeWithValueCode()
                 .addRedirectUri(appInfo.getRedirectUri())
-                .addScope(BaiduOAuth2AppInfo.Scope.join(appInfo.getScope()));
+                .addScope(BaiduOAuth2AppInfo.Scope.joinWith(appInfo.getScopes(), " "));
         BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery extra = appInfo.getExtraAuthorizeUrlQuery();
         basic.getQuery()
                 .add("display", extra.getDisplay().value)
                 .add("force_login", extra.getForceLogin().value)
                 .add("confirm_login", extra.getConfirmLogin().value)
                 .add("login_type", extra.getLoginType().value);
-        return state -> {
-            OAuth2Url oauth2Url = basic.copy();
-            oauth2Url.getQuery()
-                    .addState(state)
-                    .set("display", displaySupplier.get(state).value);
-            return oauth2Url;
-        };
+        if (displaySupplier == null) {
+            return state -> {
+                OAuth2Url authorizeUrl = basic.copy();
+                authorizeUrl.getQuery().addState(state);
+                return authorizeUrl;
+            };
+        } else {
+            basic.getQuery().remove("display");
+            return state -> {
+                OAuth2Url authorizeUrl = basic.copy();
+                authorizeUrl.getQuery()
+                        .addState(state)
+                        .add("display", displaySupplier.get(state).value);
+                return authorizeUrl;
+            };
+        }
     }
 
     @Override
@@ -132,7 +138,7 @@ public class BaiduOAuth2Client
                 .addGrantTypeWithValueRefreshToken()
                 .addClientId(appInfo.getApiKey())
                 .addClientSecret(appInfo.getSecretKey())
-                .addScope(BaiduOAuth2AppInfo.Scope.join(appInfo.getScope()));
+                .addScope(BaiduOAuth2AppInfo.Scope.joinWith(appInfo.getScopes(), " "));
         return token -> {
             OAuth2HttpRequest request = basic.copy();
             request.getUrl().getQuery().addRefreshToken(token.getRefreshToken());

@@ -20,6 +20,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,10 +40,14 @@ public class GiteeOAuth2AppInfo implements OAuth2AppInfo {
     private String clientSecret;
     /** Redirect uri. */
     private String redirectUri;
-    /** See {@link Scope} for details. */
-    private List<Scope> scope;
+    /** The scope indicates the scope of permissions. */
+    private List<Scope> scopes;
 
-    /** The scope indicates the scope of permissions, separated by spaces when requesting. */
+    /**
+     * Scope.
+     *
+     * @see <a href="https://gitee.com/api/v5/oauth_doc#/">Scope list.</a>
+     */
     @RequiredArgsConstructor
     public enum Scope {
 
@@ -71,16 +76,18 @@ public class GiteeOAuth2AppInfo implements OAuth2AppInfo {
         public final String value;
 
         /**
-         * Join scope with space.
+         * Join scopes with specified delimiter.
          *
-         * @param scope scope set
+         * @param scopes scopes
+         * @param delimiter delimiter
          * @return space-separated list of scopes
          */
-        public static String join(List<Scope> scope) {
-            if (scope == null || scope.isEmpty()) { return null; }
-            return scope.stream()
+        public static String joinWith(Collection<Scope> scopes, String delimiter) {
+            if (scopes == null || scopes.isEmpty()) { return null; }
+            return scopes.stream()
+                    .distinct()
                     .map(s -> s.value)
-                    .collect(Collectors.joining(" "));
+                    .collect(Collectors.joining(delimiter));
         }
 
     }

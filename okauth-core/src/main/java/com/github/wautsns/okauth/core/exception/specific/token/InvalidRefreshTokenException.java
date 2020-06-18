@@ -13,25 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel.api.basic;
+package com.github.wautsns.okauth.core.exception.specific.token;
 
-import com.github.wautsns.okauth.core.exception.OAuth2Exception;
+import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 
 /**
- * Function api.
+ * Invalid refresh token exception.
  *
  * @author wautsns
- * @since May 24, 2020
+ * @since May 16, 2020
  */
-public interface FunctionApi<T, R> {
+public class InvalidRefreshTokenException extends OAuth2ErrorException {
+
+    private static final long serialVersionUID = -1539348247553344950L;
 
     /**
-     * Execute the api.
+     * Construct an InvalidRefreshTokenException.
      *
-     * @param argT argument T
-     * @return result
-     * @throws OAuth2Exception if oauth2 failed
+     * @param openPlatform open platform
+     * @param errorCode error code
+     * @param message error message
      */
-    R execute(T argT) throws OAuth2Exception;
+    public InvalidRefreshTokenException(String openPlatform, String errorCode, String message) {
+        super(openPlatform, errorCode, message);
+    }
 
 }

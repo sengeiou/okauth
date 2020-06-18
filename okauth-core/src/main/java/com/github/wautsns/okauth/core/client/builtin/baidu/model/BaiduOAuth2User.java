@@ -69,7 +69,7 @@ public class BaiduOAuth2User implements OAuth2User {
      * Get portrait.
      *
      * <p>The currently logged in user's avatar.
-     * <p>If you need avatar url, please use {@linkplain #getAvatarUrl()}.
+     * <p>If you need avatar url, please use {@linkplain #getAvatarUrl()} instead.
      *
      * @return portrait
      */
@@ -141,7 +141,7 @@ public class BaiduOAuth2User implements OAuth2User {
         return originalDataMap.getAsString("openid");
     }
 
-    // #################### - ###########################################################
+    // #################### amendment ###################################################
 
     @Override
     public String getUid() {

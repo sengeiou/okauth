@@ -203,7 +203,7 @@ public class GitHubOAuth2User implements OAuth2User {
         return originalDataMap.getAsLocalDateTime("updated_at");
     }
 
-    // #################### - ###########################################################
+    // #################### amendment ###################################################
 
     @Override
     public String getOpenid() {

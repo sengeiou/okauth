@@ -15,7 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.api;
 
-import com.github.wautsns.okauth.core.client.kernel.api.basic.FunctionApi;
+import com.github.wautsns.okauth.core.client.kernel.api.basic.OAuth2FunctionApi;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RedirectUriQuery;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 
@@ -27,4 +27,4 @@ import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
  */
 @FunctionalInterface
 public interface ExchangeRedirectUriQueryForToken<T extends OAuth2Token>
-        extends FunctionApi<OAuth2RedirectUriQuery, T> {}
+        extends OAuth2FunctionApi<OAuth2RedirectUriQuery, T> {}

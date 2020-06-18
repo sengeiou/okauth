@@ -73,6 +73,11 @@ public class GitHubOAuth2Token implements OAuth2Token {
         return originalDataMap.getAsString("scope");
     }
 
+    /**
+     * Get token type: {@code "bearer"}.
+     *
+     * @return {@code "bearer"}
+     */
     public String getTokenType() {
         return originalDataMap.getAsString("token_type");
     }

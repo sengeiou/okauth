@@ -28,7 +28,7 @@ public class ExpiredAccessTokenException extends OAuth2ErrorException {
     private static final long serialVersionUID = -1539348247553344950L;
 
     /**
-     * Construct an {@code ExpiredAccessTokenException}.
+     * Construct an ExpiredAccessTokenException.
      *
      * @param openPlatform open platform
      * @param errorCode error code

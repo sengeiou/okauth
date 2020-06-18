@@ -28,11 +28,11 @@ import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForToken;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForUser;
-import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
 import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.InvalidAccessTokenException;
+import com.github.wautsns.okauth.core.exception.specific.token.InvalidRefreshTokenException;
 
 /**
  * OSChina oauth2 client.
@@ -51,8 +51,8 @@ public class OSChinaOAuth2Client
      */
     public OSChinaOAuth2Client(OSChinaOAuth2AppInfo appInfo) {
         this(
-                appInfo, HttpClient4OAuth2HttpClient.DEFAULT,
-                TokenRefreshCallback.DEFAULT);
+                appInfo, new HttpClient4OAuth2HttpClient(),
+                TokenRefreshCallback.IGNORE);
     }
 
     /**
@@ -153,8 +153,9 @@ public class OSChinaOAuth2Client
         String errorDescription = dataMap.getAsString("error_description");
         if ("invalid_token".equals(error) && errorDescription.startsWith("Invalid access token")) {
             throw new InvalidAccessTokenException(getOpenPlatform(), error, errorDescription);
+        } else if ("400".equals(error) && errorDescription.startsWith("Invalid refresh token")) {
+            throw new InvalidRefreshTokenException(getOpenPlatform(), error, errorDescription);
         } else {
-            // FIXME OSChina oauth2 refresh token expired exception
             throw new OAuth2ErrorException(getOpenPlatform(), error, errorDescription);
         }
     }

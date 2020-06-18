@@ -91,7 +91,7 @@ public class OSChinaOAuth2User implements OAuth2User {
         return originalDataMap.getAsString("url");
     }
 
-    // #################### - ###########################################################
+    // #################### amendment ###################################################
 
     @Override
     public String getOpenid() {

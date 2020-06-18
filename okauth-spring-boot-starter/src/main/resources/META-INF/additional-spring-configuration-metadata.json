@@ -54,7 +54,7 @@
       "type": "java.lang.String"
     },
     {
-      "name": "okauth.apps-info.baidu.app-info.scope",
+      "name": "okauth.apps-info.baidu.app-info.scopes",
       "type": "java.util.List<com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo.Scope>"
     },
     {
@@ -86,7 +86,7 @@
       "type": "java.lang.String"
     },
     {
-      "name": "okauth.apps-info.gitee.app-info.scope",
+      "name": "okauth.apps-info.gitee.app-info.scopes",
       "type": "java.util.List<com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo.Scope>"
     },
     {
@@ -102,7 +102,7 @@
       "type": "java.lang.String"
     },
     {
-      "name": "okauth.apps-info.github.app-info.scope",
+      "name": "okauth.apps-info.github.app-info.scopes",
       "type": "java.util.List<com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo.Scope>"
     },
     {

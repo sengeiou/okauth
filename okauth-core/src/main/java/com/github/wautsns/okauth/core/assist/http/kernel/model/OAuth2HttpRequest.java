@@ -38,7 +38,10 @@ public class OAuth2HttpRequest implements Serializable {
     private static final long serialVersionUID = -5239420641606727328L;
 
     /** Request method. */
-    public enum Method {GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD, TRACE}
+    public enum Method {
+        GET, POST, PUT, PATCH, DELETE,
+        OPTIONS, HEAD, TRACE
+    }
 
     /** Request method. */
     private final Method method;
@@ -82,6 +85,8 @@ public class OAuth2HttpRequest implements Serializable {
 
     /**
      * Iterate over each url encoded form item.
+     *
+     * <p><strong>Value has been url encoded.</strong>
      *
      * @param action the action to be performed for each url encoded form item
      */

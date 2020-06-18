@@ -74,7 +74,6 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * <li>{@code null} => {@code null}</li>
      * <li>{@code Boolean} => {@code value}</li>
      * <li>{@code String} => {@code Boolean.valueOf((String) value)}</li>
-     * <li>{@code Number} => {@code (value.doubleValue() == 0 && "0".equals(value.toString()))}</li>
      * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
      *
      * @param name name
@@ -88,8 +87,6 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
             return (Boolean) value;
         } else if (value instanceof String) {
             return Boolean.valueOf((String) value);
-        } else if (value instanceof Number) {
-            return (((Number) value).doubleValue() == 0 && "0".equals(value.toString()));
         }
         throw initExceptionForCannotConvert(Boolean.class, value);
     }
@@ -103,7 +100,6 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * <li>{@code Integer} => {@code value}</li>
      * <li>{@code String} => {@code Integer.parseInt(value)}</li>
      * <li>{@code Number} => {@code value.intValue()}</li>
-     * <li>{@code Boolean} => {@code Boolean.TRUE.equals(value) ? 1 : 0}</li>
      * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
      *
      * @param name name
@@ -119,8 +115,6 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
             return Integer.parseInt((String) value);
         } else if (value instanceof Number) {
             return ((Number) value).intValue();
-        } else if (value instanceof Boolean) {
-            return Boolean.TRUE.equals(value) ? 1 : 0;
         }
         throw initExceptionForCannotConvert(Integer.class, value);
     }
@@ -132,9 +126,8 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * conversion relationship:
      * <li>{@code null} => {@code null}</li>
      * <li>{@code Long} => {@code value}</li>
-     * <li>{@code String} => {@code Long.parseLong(value)}</li>
      * <li>{@code Number} => {@code value.longValue()}</li>
-     * <li>{@code Boolean} => {@code Boolean.TRUE.equals(value) ? 1L : 0L}</li>
+     * <li>{@code String} => {@code Long.parseLong(value)}</li>
      * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
      *
      * @param name name
@@ -146,12 +139,10 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
             return null;
         } else if (value instanceof Long) {
             return (Long) value;
-        } else if (value instanceof String) {
-            return Long.parseLong((String) value);
         } else if (value instanceof Number) {
             return ((Number) value).longValue();
-        } else if (value instanceof Boolean) {
-            return Boolean.TRUE.equals(value) ? 1L : 0L;
+        } else if (value instanceof String) {
+            return Long.parseLong((String) value);
         }
         throw initExceptionForCannotConvert(Long.class, value);
     }
@@ -167,17 +158,17 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
      * </ul>
      *
-     * @param name
+     * @param name name
      * @return {@code LocalDateTime} value, or {@code null} if the map contains no mapping for the name.
      */
     public LocalDateTime getAsLocalDateTime(String name) {
         Serializable value = get(name);
         if (value == null) {
             return null;
-        } else if (value instanceof LocalDateTime) {
-            return (LocalDateTime) value;
         } else if (value instanceof String) {
             return LocalDateTime.parse((String) value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        } else if (value instanceof LocalDateTime) {
+            return (LocalDateTime) value;
         }
         throw initExceptionForCannotConvert(LocalDateTime.class, value);
     }
@@ -188,8 +179,8 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * <ul>
      * conversion relationship:
      * <li>{@code null} => {@code null}</li>
-     * <li>{@code DataMap} => {@code value}</li>
      * <li>{@code Map} => {@code new DataMap(value)}</li>
+     * <li>{@code DataMap} => {@code value}</li>
      * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
      * </ul>
      *
@@ -201,10 +192,10 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
         Serializable value = get(name);
         if (value == null) {
             return null;
-        } else if (value instanceof DataMap) {
-            return (DataMap) value;
         } else if (value instanceof Map) {
             return new DataMap((Map<String, Serializable>) value);
+        } else if (value instanceof DataMap) {
+            return (DataMap) value;
         }
         throw initExceptionForCannotConvert(DataMap.class, value);
     }
@@ -226,7 +217,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
     public DataMap() {}
 
     /**
-     * Constructs an empty {@code DataMap} instance with the specified initial capacity and a default load factor
+     * Construct an empty {@code DataMap} instance with the specified initial capacity and a default load factor
      * (0.75).
      *
      * @param initialCapacity the initial capacity
@@ -236,7 +227,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
     }
 
     /**
-     * Constructs an empty {@code DataMap} instance with the specified initial capacity and load factor.
+     * Construct an empty {@code DataMap} instance with the specified initial capacity and load factor.
      *
      * @param initialCapacity the initial capacity
      * @param loadFactor the load factor
@@ -246,7 +237,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
     }
 
     /**
-     * Constructs an {@code DataMap} instance with the same mappings as the specified map. The {@code DataMap} instance
+     * Construct an {@code DataMap} instance with the same mappings as the specified map. The {@code DataMap} instance
      * is created with a default load factor (0.75) and an initial capacity sufficient to hold the mappings in the
      * specified map.
      *

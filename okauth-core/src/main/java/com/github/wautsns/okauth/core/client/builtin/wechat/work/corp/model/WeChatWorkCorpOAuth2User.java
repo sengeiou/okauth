@@ -233,7 +233,7 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
         return new ExternalProfile(originalDataMap.getAsDataMap("external_profile"));
     }
 
-    // #################### - ###########################################################
+    // #################### amendment ###################################################
 
     @Override
     public String getOpenid() {
@@ -300,7 +300,7 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
             private final DataMap originalDataMap;
 
             public String getValue() {
-                return originalDataMap.getAs("value");
+                return originalDataMap.getAsString("value");
             }
 
         }
@@ -312,11 +312,11 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
             private final DataMap originalDataMap;
 
             public String getUrl() {
-                return originalDataMap.getAs("url");
+                return originalDataMap.getAsString("url");
             }
 
             public String getTitle() {
-                return originalDataMap.getAs("title");
+                return originalDataMap.getAsString("title");
             }
 
         }
@@ -328,15 +328,15 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
             private final DataMap originalDataMap;
 
             public String getAppid() {
-                return originalDataMap.getAs("appid");
+                return originalDataMap.getAsString("appid");
             }
 
             public String getPagepath() {
-                return originalDataMap.getAs("pagepath");
+                return originalDataMap.getAsString("pagepath");
             }
 
             public String getTitle() {
-                return originalDataMap.getAs("title");
+                return originalDataMap.getAsString("title");
             }
 
         }
@@ -366,7 +366,7 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
         private final DataMap originalDataMap;
 
         public String getExternalCorpName() {
-            return originalDataMap.getAs("external_corp_name");
+            return originalDataMap.getAsString("external_corp_name");
         }
 
         public List<ExternalAttr> getExternalAttr() {

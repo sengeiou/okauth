@@ -27,8 +27,8 @@ import lombok.experimental.UtilityClass;
 public class BuiltInOpenPlatformNames {
 
     public static final String BAIDU = "Baidu";
-    public static final String GITHUB = "GitHub";
     public static final String GITEE = "Gitee";
+    public static final String GITHUB = "GitHub";
     public static final String OSCHINA = "OSChina";
     public static final String WECHAT_WORK_CORP = "WeChatWorkCorp";
 

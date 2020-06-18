@@ -28,7 +28,7 @@ public class InvalidAccessTokenException extends OAuth2ErrorException {
     private static final long serialVersionUID = -1539348247553344950L;
 
     /**
-     * Construct an {@code InvalidAccessTokenException}.
+     * Construct an InvalidAccessTokenException.
      *
      * @param openPlatform open platform
      * @param errorCode error code

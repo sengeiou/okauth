@@ -26,7 +26,7 @@ public abstract class OAuth2Exception extends Exception {
     private static final long serialVersionUID = 775296624639159639L;
 
     /**
-     * Construct an {@code OAuth2Exception}.
+     * Construct an OAuth2Exception.
      *
      * @param message error message
      */
@@ -35,7 +35,7 @@ public abstract class OAuth2Exception extends Exception {
     }
 
     /**
-     * Construct an {@code OAuth2Exception}.
+     * Construct an OAuth2Exception.
      *
      * @param cause cause
      * @param message error message
@@ -45,7 +45,7 @@ public abstract class OAuth2Exception extends Exception {
     }
 
     /**
-     * Construct an {@code OAuth2Exception}.
+     * Construct an OAuth2Exception.
      *
      * @param cause cause
      */

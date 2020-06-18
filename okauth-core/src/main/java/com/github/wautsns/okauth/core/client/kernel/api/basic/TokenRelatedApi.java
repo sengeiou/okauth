@@ -16,7 +16,6 @@
 package com.github.wautsns.okauth.core.client.kernel.api.basic;
 
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
-import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
 /**
  * Token related api.
@@ -25,16 +24,4 @@ import com.github.wautsns.okauth.core.exception.OAuth2Exception;
  * @since May 19, 2020
  */
 @FunctionalInterface
-public interface TokenRelatedApi<T extends OAuth2Token, R> extends FunctionApi<T, R> {
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param token token
-     * @return {@inheritDoc}
-     * @throws OAuth2Exception {@inheritDoc}
-     */
-    @Override
-    R execute(T token) throws OAuth2Exception;
-
-}
+public interface TokenRelatedApi<T extends OAuth2Token, R> extends OAuth2FunctionApi<T, R> {}

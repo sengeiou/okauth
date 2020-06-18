@@ -193,7 +193,7 @@ public class GiteeOAuth2User implements OAuth2User {
         return originalDataMap.getAsString("email");
     }
 
-    // #################### - ###########################################################
+    // #################### amendment ###################################################
 
     @Override
     public String getOpenid() {
