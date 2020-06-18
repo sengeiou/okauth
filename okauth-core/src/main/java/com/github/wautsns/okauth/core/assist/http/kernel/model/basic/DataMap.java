@@ -35,7 +35,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
     // #################### getAsXxx ####################################################
 
     /**
-     * Get as T value.
+     * Get as {@code T} value.
      *
      * <ul>
      * conversion relationship:

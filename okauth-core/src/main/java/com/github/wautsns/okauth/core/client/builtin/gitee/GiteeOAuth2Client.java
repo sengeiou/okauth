@@ -136,7 +136,7 @@ public class GiteeOAuth2Client
     // #################### execute request and check response ##########################
 
     /**
-     * Execute get or refresh token request and check response.
+     * Execute request that is GET_TOKEN or REFRESH_TOKEN, and check response.
      *
      * @param request request
      * @return correct data map
@@ -156,7 +156,7 @@ public class GiteeOAuth2Client
     }
 
     /**
-     * Execute not get or refresh token request and check response.
+     * Execute request that is neither GET_TOKEN nor REFRESH_TOKEN, and check response.
      *
      * @param request request
      * @return correct data map
