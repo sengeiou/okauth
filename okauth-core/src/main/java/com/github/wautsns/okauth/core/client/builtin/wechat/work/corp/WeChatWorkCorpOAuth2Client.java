@@ -40,7 +40,7 @@ import com.github.wautsns.okauth.core.exception.specific.user.InvalidUserAuthori
 import java.util.concurrent.Semaphore;
 
 /**
- * WeChatWorkCorp OAuth2 client.
+ * WeChatWorkCorp oauth2 client.
  *
  * @author wautsns
  * @see <a href="https://work.weixin.qq.com/api/doc/90000/90135/91022">WeChatWorkCorp OAuth2 doc</a>
@@ -66,7 +66,7 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
     }
 
     /**
-     * Construct WeChatWorkCorp OAuth2 client.
+     * Construct WeChatWorkCorp oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client

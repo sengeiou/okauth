@@ -44,7 +44,9 @@ public class OAuth2HttpClientProperties {
     /** Retry times. */
     private Integer retryTimes;
     /** Custom properties. */
-    private Map<String,Object> customProperties;
+    private Map<String, Object> customProperties;
+    /** Proxy(IP:PORT). */
+    private String proxy;
 
     // #################### utils #######################################################
 

@@ -28,7 +28,7 @@ public class OAuth2Url implements Serializable {
 
     private static final long serialVersionUID = 8502059624102763590L;
 
-    /** Pure url(without query, anchor...). */
+    /** Pure url(without query, anchor). */
     private final String pureUrl;
     /** Url query. */
     private OAuth2UrlEncodedEntries query;
@@ -36,7 +36,7 @@ public class OAuth2Url implements Serializable {
     private String anchor;
 
     /**
-     * Construct an oauth2 url.
+     * Construct an {@code OAuth2Url}.
      *
      * @param url url string
      */
@@ -64,7 +64,7 @@ public class OAuth2Url implements Serializable {
     }
 
     /**
-     * Get pure url(without query, anchor...).
+     * Get pure url(without query, anchor).
      *
      * @return pure url
      */

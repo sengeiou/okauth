@@ -33,9 +33,10 @@ import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessTokenException;
 import com.github.wautsns.okauth.core.exception.specific.token.ExpiredRefreshTokenException;
 import com.github.wautsns.okauth.core.exception.specific.token.InvalidAccessTokenException;
+import com.github.wautsns.okauth.core.exception.specific.token.InvalidRefreshTokenException;
 
 /**
- * WeChatOfficialAccount OAuth2 client.
+ * WeChatOfficialAccount oauth2 client.
  *
  * @author wautsns
  * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html">
@@ -155,7 +156,7 @@ public class WeChatOfficialAccountOAuth2Client
             case "42002":
                 throw new ExpiredRefreshTokenException(getOpenPlatform(), errcode, errmsg);
             case "40030":
-                throw new ExpiredRefreshTokenException(getOpenPlatform(), errcode, errmsg);
+                throw new InvalidRefreshTokenException(getOpenPlatform(), errcode, errmsg);
             default:
                 throw new OAuth2ErrorException(getOpenPlatform(), errcode, errmsg);
         }

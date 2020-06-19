@@ -106,11 +106,10 @@ public class NameValuePairs implements Serializable {
      * @param value value
      */
     public NameValuePairs set(String name, String value) {
-        for (ListIterator<String> iterator = origin.listIterator(); origin.iterator().hasNext(); ) {
-            if (iterator.next().equals(name)) {
-                iterator.set(value);
-            }
+        for (ListIterator<String> iterator = origin.listIterator(); iterator.hasNext(); ) {
+            String target = iterator.next();
             iterator.next();
+            if (target.equals(name)) { iterator.set(value); }
         }
         return this;
     }

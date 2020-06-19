@@ -44,7 +44,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      *
      * @param name name
      * @param <T> type of value
-     * @return T value, or {@code null} if the map contains no mapping for the name.
+     * @return {@code T} value, or {@code null} if the dataMap contains no mapping for the name
      */
     @SuppressWarnings("unchecked")
     public <T> T getAs(String name) {
@@ -60,7 +60,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * <li>others => {@code value.toString()}</li>
      *
      * @param name name
-     * @return {@code String} value, or {@code null} if the map contains no mapping for the name.
+     * @return {@code String} value, or {@code null} if the map contains no mapping for the name
      */
     public String getAsString(String name) {
         return Objects.toString(get(name), null);
@@ -77,7 +77,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
      *
      * @param name name
-     * @return {@code Boolean} value, or {@code null} if the map contains no mapping for the name.
+     * @return {@code Boolean} value, or {@code null} if the map contains no mapping for the name
      */
     public Boolean getAsBoolean(String name) {
         Serializable value = get(name);
@@ -103,7 +103,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
      *
      * @param name name
-     * @return {@code Integer} value, or {@code null} if the map contains no mapping for the name.
+     * @return {@code Integer} value, or {@code null} if the map contains no mapping for the name
      */
     public Integer getAsInteger(String name) {
         Serializable value = get(name);
@@ -131,7 +131,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
      *
      * @param name name
-     * @return {@code Long} value, or {@code null} if the map contains no mapping for the name.
+     * @return {@code Long} value, or {@code null} if the map contains no mapping for the name
      */
     public Long getAsLong(String name) {
         Serializable value = get(name);
@@ -159,7 +159,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * </ul>
      *
      * @param name name
-     * @return {@code LocalDateTime} value, or {@code null} if the map contains no mapping for the name.
+     * @return {@code LocalDateTime} value, or {@code null} if the map contains no mapping for the name
      */
     public LocalDateTime getAsLocalDateTime(String name) {
         Serializable value = get(name);
@@ -179,23 +179,23 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * <ul>
      * conversion relationship:
      * <li>{@code null} => {@code null}</li>
-     * <li>{@code Map} => {@code new DataMap(value)}</li>
      * <li>{@code DataMap} => {@code value}</li>
+     * <li>{@code Map} => {@code new DataMap(value)}</li>
      * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
      * </ul>
      *
      * @param name names
-     * @return {@code DataMap} value, or {@code null} if the map contains no mapping for the name.
+     * @return {@code DataMap} value, or {@code null} if the map contains no mapping for the name
      */
     @SuppressWarnings("unchecked")
     public DataMap getAsDataMap(String name) {
         Serializable value = get(name);
         if (value == null) {
             return null;
-        } else if (value instanceof Map) {
-            return new DataMap((Map<String, Serializable>) value);
         } else if (value instanceof DataMap) {
             return (DataMap) value;
+        } else if (value instanceof Map) {
+            return new DataMap((Map<String, Serializable>) value);
         }
         throw initExceptionForCannotConvert(DataMap.class, value);
     }

@@ -21,6 +21,7 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRespons
 import com.github.wautsns.okauth.core.assist.http.kernel.properties.OAuth2HttpClientProperties;
 import com.github.wautsns.okauth.core.exception.OAuth2IOException;
 import lombok.Getter;
+import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
@@ -64,13 +65,13 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
     /** Http client connection manager. */
     protected final PoolingHttpClientConnectionManager connectionManager;
 
-    /** Construct a default HttpClient4 oauth2 http client. */
+    /** Construct a default {@code HttpClient4OAuth2HttpClient}. */
     public HttpClient4OAuth2HttpClient() {
         this(OAuth2HttpClientProperties.initDefault());
     }
 
     /**
-     * Construct a HttpClient4 oauth2 http client.
+     * Construct a {@code HttpClient4OAuth2HttpClient}.
      *
      * @param props oauth2 http client properties
      */
@@ -104,6 +105,11 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
         Integer retryTimes = props.getRetryTimes();
         if (retryTimes != null) {
             builder.setRetryHandler(new OAuth2HttpRequestRetryHandler(retryTimes));
+        }
+        // ==================== proxy =======================================================
+        String proxy = props.getProxy();
+        if (proxy != null) {
+            builder.setProxy(HttpHost.create(proxy));
         }
         // ==================== default headers =============================================
         builder.setDefaultHeaders(Collections.singleton(
@@ -157,16 +163,16 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
      */
     private HttpRequestBase initOriginalHttpRequest(OAuth2HttpRequest request) {
         Function<String, HttpRequestBase> initializer = HTTP_REQUEST_BASE_INITIALIZERS.get(request.getMethod());
-        HttpRequestBase httpRequest = initializer.apply(request.getUrl().toString());
-        request.forEachHeader(httpRequest::addHeader);
-        if (httpRequest instanceof HttpEntityEnclosingRequestBase) {
-            HttpEntityEnclosingRequestBase tmp = (HttpEntityEnclosingRequestBase) httpRequest;
+        HttpRequestBase originalHttpRequest = initializer.apply(request.getUrl().toString());
+        request.forEachHeader(originalHttpRequest::addHeader);
+        if (originalHttpRequest instanceof HttpEntityEnclosingRequestBase) {
+            HttpEntityEnclosingRequestBase tmp = (HttpEntityEnclosingRequestBase) originalHttpRequest;
             List<String> nameValuePairs = new LinkedList<>();
             request.forEachFormItem((name, value) -> nameValuePairs.add(name + "=" + value));
             String content = String.join("&", nameValuePairs);
             tmp.setEntity(new StringEntity(content, ContentType.APPLICATION_FORM_URLENCODED));
         }
-        return httpRequest;
+        return originalHttpRequest;
     }
 
     /**
