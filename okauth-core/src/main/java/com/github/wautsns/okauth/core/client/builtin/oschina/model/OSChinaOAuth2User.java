@@ -21,7 +21,7 @@ import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import lombok.Data;
 
 /**
- * OSChina oauth2 token.
+ * OSChina oauth2 user.
  *
  * <pre>
  * {
@@ -41,7 +41,7 @@ import lombok.Data;
 @Data
 public class OSChinaOAuth2User implements OAuth2User {
 
-    private static final long serialVersionUID = 7155633421437700449L;
+    private static final long serialVersionUID = -5177778649683021808L;
 
     /** Original data map. */
     private final DataMap originalDataMap;

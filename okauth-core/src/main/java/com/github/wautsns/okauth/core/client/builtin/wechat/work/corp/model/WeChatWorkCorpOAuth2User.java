@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * WeChatWorkCorp OAuth2 user.
+ * WeChatWorkCorp oauth2 user.
  *
  * <pre>
  * {
@@ -134,16 +134,16 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
     }
 
     public String getPosition() {
-        return originalDataMap.getAs("position");
+        return originalDataMap.getAsString("position");
     }
 
     public String getMobile() {
-        return originalDataMap.getAs("mobile");
+        return originalDataMap.getAsString("mobile");
     }
 
     @Override
     public Gender getGender() {
-        String gender = originalDataMap.getAs("gender");
+        String gender = originalDataMap.getAsString("gender");
         if ("1".equals(gender)) {
             return Gender.MALE;
         } else if ("2".equals(gender)) {
@@ -155,7 +155,7 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
 
     @Override
     public String getEmail() {
-        return originalDataMap.getAs("email");
+        return originalDataMap.getAsString("email");
     }
 
     public List<Integer> getIsLeaderInDept() {
@@ -163,31 +163,31 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
     }
 
     public String getAvatar() {
-        return originalDataMap.getAs("avatar");
+        return originalDataMap.getAsString("avatar");
     }
 
     public String getThumbAvatar() {
-        return originalDataMap.getAs("thumb_avatar");
+        return originalDataMap.getAsString("thumb_avatar");
     }
 
     public String getTelephone() {
-        return originalDataMap.getAs("telephone");
+        return originalDataMap.getAsString("telephone");
     }
 
     public String getAlias() {
-        return originalDataMap.getAs("alias");
+        return originalDataMap.getAsString("alias");
     }
 
     public String getAddress() {
-        return originalDataMap.getAs("address");
+        return originalDataMap.getAsString("address");
     }
 
     public String getOpenUserid() {
-        return originalDataMap.getAs("open_userid");
+        return originalDataMap.getAsString("open_userid");
     }
 
     public Integer getMainDepartment() {
-        return originalDataMap.getAs("main_department");
+        return originalDataMap.getAsInteger("main_department");
     }
 
     public ExtAttr getExtattr() {
@@ -218,15 +218,15 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
     }
 
     public Status getStatus() {
-        return Status.getByValue(originalDataMap.getAs("status"));
+        return Status.getByValue(originalDataMap.getAsInteger("status"));
     }
 
     public String getQrCode() {
-        return originalDataMap.getAs("qr_code");
+        return originalDataMap.getAsString("qr_code");
     }
 
     public String getExternalPosition() {
-        return originalDataMap.getAs("external_position");
+        return originalDataMap.getAsString("external_position");
     }
 
     public ExternalProfile getExternalProfile() {
@@ -274,11 +274,11 @@ public class WeChatWorkCorpOAuth2User implements OAuth2User {
         private final DataMap originalDataMap;
 
         public Integer getType() {
-            return originalDataMap.getAs("type");
+            return originalDataMap.getAsInteger("type");
         }
 
         public String getName() {
-            return originalDataMap.getAs("name");
+            return originalDataMap.getAsString("name");
         }
 
         public Text getText() {

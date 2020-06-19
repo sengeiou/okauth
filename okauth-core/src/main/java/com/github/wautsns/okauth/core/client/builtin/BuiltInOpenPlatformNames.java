@@ -30,6 +30,7 @@ public class BuiltInOpenPlatformNames {
     public static final String GITEE = "Gitee";
     public static final String GITHUB = "GitHub";
     public static final String OSCHINA = "OSChina";
+    public static final String WECHAT_OFFICIAL_ACCOUNT = "WeChatOfficialAccount";
     public static final String WECHAT_WORK_CORP = "WeChatWorkCorp";
 
 }

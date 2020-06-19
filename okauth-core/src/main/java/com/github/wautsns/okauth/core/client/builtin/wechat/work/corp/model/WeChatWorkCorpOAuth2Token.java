@@ -22,7 +22,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * WeChatWorkCorp OAuth2 token.
+ * WeChatWorkCorp oauth2 token.
  *
  * <pre>
  * {

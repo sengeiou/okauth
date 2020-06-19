@@ -126,6 +126,22 @@
       "type": "java.lang.String"
     },
     {
+      "name": "okauth.apps-info.wechat-official-account.app-info.unique-identifier",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.wechat-official-account.app-info.app-secret",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.wechat-official-account.app-info.redirect-uri",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "okauth.apps-info.wechat-official-account.app-info.scope",
+      "type": "com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.WeChatOfficialAccountOAuth2AppInfo$Scope"
+    },
+    {
       "name": "okauth.apps-info.wechat-work-corp.app-info.corp-id",
       "type": "java.lang.String"
     },

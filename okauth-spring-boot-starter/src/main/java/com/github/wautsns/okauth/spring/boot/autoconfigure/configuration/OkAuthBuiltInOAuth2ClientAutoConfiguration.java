@@ -24,6 +24,8 @@ import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2Client;
+import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.WeChatOfficialAccountOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.WeChatOfficialAccountOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache.WeChatWorkCorpTokenCache;
@@ -40,7 +42,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.Nullable;
 
 /**
  * OkAuth built-in oauth2 client auto-configuration.
@@ -60,12 +61,11 @@ public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
     @ConditionalOnProperty("okauth.apps-info.baidu.enabled")
     public BaiduOAuth2Client baiduOAuth2Client(
             OkAuthProperties okauthProps,
-            TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback,
-            @Nullable BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier displaySupplier) {
+            TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback) {
         OkAuthAppInfoProperties<BaiduOAuth2AppInfo> baidu = okauthProps.getAppsInfo().getBaidu();
         BaiduOAuth2AppInfo appInfo = baidu.getAppInfo();
         OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, baidu);
-        return new BaiduOAuth2Client(appInfo, httpClient, tokenRefreshCallback, displaySupplier);
+        return new BaiduOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
     }
 
     // #################### Gitee #######################################################
@@ -103,6 +103,20 @@ public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
         OSChinaOAuth2AppInfo appInfo = oschina.getAppInfo();
         OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, oschina);
         return new OSChinaOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
+    }
+
+    // #################### WeChatOfficialAccount #######################################
+
+    @Bean
+    @ConditionalOnProperty("okauth.apps-info.oschina.enabled")
+    public WeChatOfficialAccountOAuth2Client weChatOfficialAccount(
+            OkAuthProperties okauthProps,
+            TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback) {
+        OkAuthAppInfoProperties<WeChatOfficialAccountOAuth2AppInfo> wechatOfficialAccount
+                = okauthProps.getAppsInfo().getWechatOfficialAccount();
+        WeChatOfficialAccountOAuth2AppInfo appInfo = wechatOfficialAccount.getAppInfo();
+        OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, wechatOfficialAccount);
+        return new WeChatOfficialAccountOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
     }
 
     // #################### WechatWorkCorp ##############################################

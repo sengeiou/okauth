@@ -57,7 +57,7 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
     protected final OAuth2FunctionApi<String, WeChatWorkCorpOAuth2User> apiExchangeUseridForUser;
 
     /**
-     * Construct WeChatWorkCorp OAuth2 client.
+     * Construct WeChatWorkCorp oauth2 client.
      *
      * @param appInfo oauth2 app info
      */
@@ -271,15 +271,19 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
         OAuth2HttpResponse response = httpClient.execute(request);
         DataMap dataMap = response.readJsonAsDataMap();
         String errcode = dataMap.getAsString("errcode");
-        String errmsg = (String) dataMap.remove("errmsg");
+        String errmsg = dataMap.getAsString("errmsg");
         dataMap.remove("errcode");
-        if ("0".equals(errcode)) { return dataMap; }
-        if ("42001".equals(errcode)) {
-            throw new ExpiredAccessTokenException(getOpenPlatform(), errcode, errmsg);
-        } else if ("40014".equals(errcode) || "41001".equals(errcode)) {
-            throw new InvalidAccessTokenException(getOpenPlatform(), errcode, errmsg);
-        } else {
-            throw new OAuth2ErrorException(getOpenPlatform(), errcode, errmsg);
+        dataMap.remove("errmsg");
+        switch (errcode) {
+            case "0":
+                return dataMap;
+            case "42001":
+                throw new ExpiredAccessTokenException(getOpenPlatform(), errcode, errmsg);
+            case "40014":
+            case "41001":
+                throw new InvalidAccessTokenException(getOpenPlatform(), errcode, errmsg);
+            default:
+                throw new OAuth2ErrorException(getOpenPlatform(), errcode, errmsg);
         }
     }
 

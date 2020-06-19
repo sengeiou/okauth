@@ -40,8 +40,6 @@ public class WeChatWorkCorpOAuth2AppInfo implements OAuth2AppInfo {
     /** Redirect uri. */
     private String redirectUri;
 
-    // #################### enum ########################################################
-
     /** Authorize type. */
     public enum AuthorizeType {
         /** Web page authorization link. */

@@ -52,8 +52,6 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
     /** Extra authorize url query. */
     private final ExtraAuthorizeUrlQuery extraAuthorizeUrlQuery = new ExtraAuthorizeUrlQuery();
 
-    // #################### enum ########################################################
-
     /**
      * Scope.
      *
@@ -191,8 +189,6 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
 
     }
 
-    // #################### extraAuthorizeUrlQuery ######################################
-
     /** Extra authorize url query. */
     @Data
     @Accessors(chain = true)
@@ -202,8 +198,6 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
         private String login;
         /** See {@link AllowSignup} for details. */
         private AllowSignup allowSignup = AllowSignup.DEFAULT;
-
-        // #################### enum ########################################################
 
         /**
          * Allow signup.
