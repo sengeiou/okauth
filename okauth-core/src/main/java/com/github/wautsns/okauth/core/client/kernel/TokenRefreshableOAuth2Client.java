@@ -35,11 +35,11 @@ import java.util.Objects;
 public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T extends OAuth2RefreshableToken, U extends OAuth2User>
         extends TokenAvailableOAuth2Client<A, T, U> {
 
-    /** API: refresh token. */
-    protected final RefreshToken<T> apiRefreshToken;
-
     /** Token refresh callback. */
     protected final TokenRefreshCallback tokenRefreshCallback;
+
+    /** API: refresh token. */
+    protected final RefreshToken<T> apiRefreshToken;
 
     /**
      * Construct a token refreshable oauth2 client.
@@ -52,8 +52,8 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
             A appInfo, OAuth2HttpClient httpClient,
             TokenRefreshCallback tokenRefreshCallback) {
         super(appInfo, httpClient);
-        this.apiRefreshToken = Objects.requireNonNull(initApiRefreshToken());
         this.tokenRefreshCallback = Objects.requireNonNull(tokenRefreshCallback);
+        this.apiRefreshToken = Objects.requireNonNull(initApiRefreshToken());
     }
 
     @Override

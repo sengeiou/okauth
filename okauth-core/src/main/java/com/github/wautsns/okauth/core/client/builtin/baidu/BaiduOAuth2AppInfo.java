@@ -105,12 +105,7 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
         /** See {@link LoginType} for details. */
         private LoginType loginType = LoginType.DEFAULT;
 
-        /**
-         * The display style of the login and authorization pages.
-         *
-         * <p>If you need to get `display` <strong>dynamically</strong>, please use {@linkplain DisplaySupplier
-         * DisplaySupplier}.
-         */
+        /** The display style of the login and authorization pages. */
         @RequiredArgsConstructor
         public enum Display {
 
@@ -195,21 +190,6 @@ public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
 
             /** Value. */
             public final String value;
-
-        }
-
-        // #################### dynamic #####################################################
-
-        /** Display supplier. */
-        public interface DisplaySupplier {
-
-            /**
-             * Get display.
-             *
-             * @param state state
-             * @return display
-             */
-            Display get(String state);
 
         }
 

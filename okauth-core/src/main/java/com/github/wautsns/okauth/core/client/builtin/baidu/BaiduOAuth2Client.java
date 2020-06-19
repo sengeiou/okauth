@@ -43,9 +43,6 @@ import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessToke
 public class BaiduOAuth2Client
         extends TokenRefreshableOAuth2Client<BaiduOAuth2AppInfo, BaiduOAuth2Token, BaiduOAuth2User> {
 
-    /** Display supplier. */
-    protected final BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier displaySupplier;
-
     /**
      * Construct a Baidu oauth2 client.
      *
@@ -54,8 +51,7 @@ public class BaiduOAuth2Client
     public BaiduOAuth2Client(BaiduOAuth2AppInfo appInfo) {
         this(
                 appInfo, new HttpClient4OAuth2HttpClient(),
-                TokenRefreshCallback.IGNORE,
-                null);
+                TokenRefreshCallback.IGNORE);
     }
 
     /**
@@ -64,14 +60,11 @@ public class BaiduOAuth2Client
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
      * @param tokenRefreshCallback token refresh callback
-     * @param displaySupplier display supplier, nullable
      */
     public BaiduOAuth2Client(
             BaiduOAuth2AppInfo appInfo, OAuth2HttpClient httpClient,
-            TokenRefreshCallback tokenRefreshCallback,
-            BaiduOAuth2AppInfo.ExtraAuthorizeUrlQuery.DisplaySupplier displaySupplier) {
+            TokenRefreshCallback tokenRefreshCallback) {
         super(appInfo, httpClient, tokenRefreshCallback);
-        this.displaySupplier = displaySupplier;
     }
 
     @Override
@@ -96,22 +89,11 @@ public class BaiduOAuth2Client
                 .add("force_login", extra.getForceLogin().value)
                 .add("confirm_login", extra.getConfirmLogin().value)
                 .add("login_type", extra.getLoginType().value);
-        if (displaySupplier == null) {
-            return state -> {
-                OAuth2Url authorizeUrl = basic.copy();
-                authorizeUrl.getQuery().addState(state);
-                return authorizeUrl;
-            };
-        } else {
-            basic.getQuery().remove("display");
-            return state -> {
-                OAuth2Url authorizeUrl = basic.copy();
-                authorizeUrl.getQuery()
-                        .addState(state)
-                        .add("display", displaySupplier.get(state).value);
-                return authorizeUrl;
-            };
-        }
+        return state -> {
+            OAuth2Url authorizeUrl = basic.copy();
+            authorizeUrl.getQuery().addState(state);
+            return authorizeUrl;
+        };
     }
 
     @Override

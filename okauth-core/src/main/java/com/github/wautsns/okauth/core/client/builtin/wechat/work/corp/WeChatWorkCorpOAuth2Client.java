@@ -162,21 +162,9 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         OAuth2Url basic;
         if (appInfo.getAuthorizeType() == WeChatWorkCorpOAuth2AppInfo.AuthorizeType.WEB) {
-            String url = "https://open.weixin.qq.com/connect/oauth2/authorize";
-            basic = new OAuth2Url(url);
-            basic.getQuery()
-                    .addAppid(appInfo.getCorpId())
-                    .addRedirectUri(appInfo.getRedirectUri())
-                    .addResponseTypeWithValueCode()
-                    .addScope("snsapi_base");
-            basic.setAnchor("wechat_redirect");
+            basic = initBasicAuthorizeUrlForWeb();
         } else if (appInfo.getAuthorizeType() == WeChatWorkCorpOAuth2AppInfo.AuthorizeType.QR_CODE) {
-            String url = "https://open.work.weixin.qq.com/wwopen/sso/qrConnect";
-            basic = new OAuth2Url(url);
-            basic.getQuery()
-                    .addAppid(appInfo.getCorpId())
-                    .add("agentid", appInfo.getAgentId())
-                    .addRedirectUri(appInfo.getRedirectUri());
+            basic = initBasicAuthorizeUrlForQRCode();
         } else {
             throw new IllegalStateException("Unsupported authorizeType: " + appInfo.getAuthorizeType());
         }
@@ -185,6 +173,38 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
             authorizeUrl.getQuery().addState(state);
             return authorizeUrl;
         };
+    }
+
+    /**
+     * Initialize basic authorize url for {@linkplain WeChatWorkCorpOAuth2AppInfo.AuthorizeType#WEB WEB}
+     *
+     * @return basic authorize url
+     */
+    private OAuth2Url initBasicAuthorizeUrlForWeb() {
+        String url = "https://open.weixin.qq.com/connect/oauth2/authorize";
+        OAuth2Url basic = new OAuth2Url(url);
+        basic.getQuery()
+                .addAppid(appInfo.getCorpId())
+                .addRedirectUri(appInfo.getRedirectUri())
+                .addResponseTypeWithValueCode()
+                .addScope("snsapi_base");
+        basic.setAnchor("wechat_redirect");
+        return basic;
+    }
+
+    /**
+     * Initialize basic authorize url for {@linkplain WeChatWorkCorpOAuth2AppInfo.AuthorizeType#QR_CODE QR_CODE}
+     *
+     * @return basic authorize url
+     */
+    private OAuth2Url initBasicAuthorizeUrlForQRCode() {
+        String url = "https://open.work.weixin.qq.com/wwopen/sso/qrConnect";
+        OAuth2Url basic = new OAuth2Url(url);
+        basic.getQuery()
+                .addAppid(appInfo.getCorpId())
+                .add("agentid", appInfo.getAgentId())
+                .addRedirectUri(appInfo.getRedirectUri());
+        return basic;
     }
 
     /**
@@ -207,9 +227,10 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
      * @return API: exchange token and userid for user
      */
     protected OAuth2FunctionApi<String, WeChatWorkCorpOAuth2User> initApiExchangeUseridForUser() {
+        String url = "https://qyapi.weixin.qq.com/cgi-bin/user/get";
+        OAuth2HttpRequest basic = OAuth2HttpRequest.initGet(url);
         return userid -> {
-            String url = "https://qyapi.weixin.qq.com/cgi-bin/user/get";
-            OAuth2HttpRequest request = OAuth2HttpRequest.initGet(url);
+            OAuth2HttpRequest request = basic.copy();
             request.getUrl().getQuery()
                     .addAccessToken(getToken().getAccessToken())
                     .add("userid", userid);
@@ -219,9 +240,10 @@ public class WeChatWorkCorpOAuth2Client extends OAuth2Client<WeChatWorkCorpOAuth
 
     @Override
     protected ExchangeRedirectUriQueryForOpenid initApiExchangeRedirectUriQueryForOpenid() {
+        String url = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo";
+        OAuth2HttpRequest basic = OAuth2HttpRequest.initGet(url);
         return redirectUriQuery -> {
-            String url = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo";
-            OAuth2HttpRequest request = OAuth2HttpRequest.initGet(url);
+            OAuth2HttpRequest request = basic.copy();
             request.getUrl().getQuery()
                     .addAccessToken(getToken().getAccessToken())
                     .addCode(redirectUriQuery.getCode());
