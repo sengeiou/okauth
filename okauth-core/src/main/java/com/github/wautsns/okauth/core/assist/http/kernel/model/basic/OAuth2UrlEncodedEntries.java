@@ -280,7 +280,7 @@ public class OAuth2UrlEncodedEntries extends NameValuePairs {
     }
 
     /**
-     * Associated url encoded value with the specified name(Old value will be replaced).
+     * Associate url encoded value with the specified name(Old value will be replaced).
      *
      * @param name name
      * @param value url encoded value

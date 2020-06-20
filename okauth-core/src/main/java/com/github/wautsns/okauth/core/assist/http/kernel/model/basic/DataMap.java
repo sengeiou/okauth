@@ -237,7 +237,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
     }
 
     /**
-     * Construct an {@code DataMap} instance with the same mappings as the specified map. The {@code DataMap} instance
+     * Construct a {@code DataMap} instance with the same mappings as the specified map. The {@code DataMap} instance
      * is created with a default load factor (0.75) and an initial capacity sufficient to hold the mappings in the
      * specified map.
      *

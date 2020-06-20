@@ -23,7 +23,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * GitHub oauth2 user.
+ * Gitee oauth2 user.
  *
  * <pre>
  * {

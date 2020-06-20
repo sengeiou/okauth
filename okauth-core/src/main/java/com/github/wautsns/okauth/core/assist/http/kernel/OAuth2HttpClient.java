@@ -28,10 +28,10 @@ import com.github.wautsns.okauth.core.exception.OAuth2IOException;
 public interface OAuth2HttpClient {
 
     /**
-     * Execute oauth request and return oauth response.
+     * Execute oauth2 request and return response.
      *
-     * @param request oauth request
-     * @return oauth response
+     * @param request oauth2 request
+     * @return oauth2 response
      * @throws OAuth2IOException if IO exception occurs
      */
     OAuth2HttpResponse execute(OAuth2HttpRequest request) throws OAuth2IOException;

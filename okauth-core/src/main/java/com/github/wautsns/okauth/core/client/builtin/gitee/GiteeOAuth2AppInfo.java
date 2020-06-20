@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * GitHub oauth2 app info.
+ * Gitee oauth2 app info.
  *
  * @author wautsns
  * @since May 17, 2020

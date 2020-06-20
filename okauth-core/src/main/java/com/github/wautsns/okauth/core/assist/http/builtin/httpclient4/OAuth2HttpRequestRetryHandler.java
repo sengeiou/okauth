@@ -41,7 +41,7 @@ class OAuth2HttpRequestRetryHandler extends DefaultHttpRequestRetryHandler {
             SSLException.class);
 
     /**
-     * Create an OAuth2 http request retry handler.
+     * Construct an {@code OAuth2HttpRequestRetryHandler}.
      *
      * @param retryCount how many times to retry; 0 means no retries
      */

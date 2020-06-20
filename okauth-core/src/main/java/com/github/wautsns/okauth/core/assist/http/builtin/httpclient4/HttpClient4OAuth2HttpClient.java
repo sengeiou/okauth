@@ -40,11 +40,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.message.BasicHeader;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -108,26 +106,24 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
         }
         // ==================== proxy =======================================================
         String proxy = props.getProxy();
-        if (proxy != null) {
-            builder.setProxy(HttpHost.create(proxy));
-        }
+        if (proxy != null) { builder.setProxy(HttpHost.create(proxy)); }
         // ==================== default headers =============================================
-        builder.setDefaultHeaders(Collections.singleton(
-                // Some open platforms will response 403, if not disguised as a browser.
-                new BasicHeader("User-Agent", "Chrome/83.0.4103.61")));
-        // ==================== custom properties ===========================================
-        setCustomProperties(builder, props);
+        // Some open platforms will response 403, if not disguised as a browser.
+        builder.setUserAgent("Chrome/83.0.4103.61");
         // ==================== build http client ===========================================
-        this.origin = builder.build();
+        this.origin = buildOriginHttpClient(builder, props);
     }
 
     /**
-     * Set custom properties.
+     * Build original http client.
      *
      * @param builder httpClient4 builder
      * @param props oauth2 http client properties
+     * @return original http client
      */
-    protected void setCustomProperties(HttpClientBuilder builder, OAuth2HttpClientProperties props) {}
+    protected HttpClient buildOriginHttpClient(HttpClientBuilder builder, OAuth2HttpClientProperties props) {
+        return builder.build();
+    }
 
     @Override
     public OAuth2HttpResponse execute(OAuth2HttpRequest request) throws OAuth2IOException {

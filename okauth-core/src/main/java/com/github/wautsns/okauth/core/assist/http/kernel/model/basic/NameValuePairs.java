@@ -100,7 +100,7 @@ public class NameValuePairs implements Serializable {
     }
 
     /**
-     * Associates value with the specified name(Old value will be replaced).
+     * Associate value with the specified name(Old value will be replaced).
      *
      * @param name name
      * @param value value
