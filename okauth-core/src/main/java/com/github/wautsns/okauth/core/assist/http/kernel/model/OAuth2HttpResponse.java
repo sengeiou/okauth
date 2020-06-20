@@ -111,7 +111,7 @@ public interface OAuth2HttpResponse {
         } catch (IOException e) {
             throw new OAuth2IOException(e);
         } finally {
-            OAuth2HttpResponse.this.close();
+            close();
         }
     }
 

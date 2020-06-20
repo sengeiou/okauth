@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.baidu.model;
+package com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
@@ -22,27 +22,16 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * Baidu oauth2 token.
- *
- * <pre>
- * {
- * 	"expires_in": 2592000,
- * 	"refresh_token": "REFRESH_TOKEN(length:83)",
- * 	"access_token": "ACCESS_TOKEN(length:83)",
- * 	"session_secret": "",
- * 	"session_key": "",
- * 	"scope": "SCOPE(delimiter:space)"
- * }
- * </pre>
+ * WeChatOfficialAccount oauth2 token.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since May 23, 2020
  */
 @Data
 @Accessors(chain = true)
-public class BaiduOAuth2Token implements OAuth2RefreshableToken {
+public class WeChatOfficialAccountOAuth2Token implements OAuth2RefreshableToken {
 
-    private static final long serialVersionUID = 626454809091111659L;
+    private static final long serialVersionUID = 6551303389398223705L;
 
     /** Token id. */
     private String tokenId;
@@ -51,7 +40,7 @@ public class BaiduOAuth2Token implements OAuth2RefreshableToken {
 
     @Override
     public String getOpenPlatform() {
-        return BuiltInOpenPlatformNames.BAIDU;
+        return BuiltInOpenPlatformNames.WECHAT_OFFICIAL_ACCOUNT;
     }
 
     @Override
@@ -59,15 +48,9 @@ public class BaiduOAuth2Token implements OAuth2RefreshableToken {
         return originalDataMap.getAsString("access_token");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @return {@inheritDoc}
-     * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth/overview">Access token life cycle.</a>
-     */
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return originalDataMap.getAsInteger("expire_in");
+        return originalDataMap.getAsInteger("expires_in");
     }
 
     @Override
@@ -75,29 +58,32 @@ public class BaiduOAuth2Token implements OAuth2RefreshableToken {
         return originalDataMap.getAsString("refresh_token");
     }
 
-    /** Baidu oauth2 refresh token expires in ten years. */
-    private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 10 * 365 * 24 * 3600;
+    /** WeChatOfficialAccount oauth2 refresh token expires in thirty days. */
+    private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 30 * 24 * 3600;
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Baidu oauth2 refresh token expires in ten years.
-     *
-     * @return {@inheritDoc}
-     */
     @Override
     public Integer getRefreshTokenExpirationSeconds() {
         return REFRESH_TOKEN_EXPIRATION_SECONDS;
     }
 
     /**
-     * Get scope(delimiter: space).
+     * Get openid.
      *
-     * <p>Final access scope of access token, that is the list of permissions actually granted by the user (the user
-     * may cancel some requested permissions when authorizing the page)
+     * <p>User unique identification, please note that when a user does not follow the official account, the user will
+     * also generate a unique openid and official account when you visit the official account web page.
+     *
+     * @return openid
+     */
+    public String getOpenId() {
+        return originalDataMap.getAsString("openid");
+    }
+
+    /**
+     * Get scopes(delimiter: comma).
+     *
+     * <p>User authorization scope.
      *
      * @return scope
-     * @see com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo.Scope
      */
     public String getScopes() {
         return originalDataMap.getAsString("scope");

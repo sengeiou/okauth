@@ -21,6 +21,7 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRespons
 import com.github.wautsns.okauth.core.assist.http.kernel.properties.OAuth2HttpClientProperties;
 import com.github.wautsns.okauth.core.exception.OAuth2IOException;
 import lombok.Getter;
+import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
@@ -39,11 +40,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.message.BasicHeader;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,37 +58,40 @@ import java.util.function.Function;
 @Getter
 public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
 
-    /** Default HttpClient4 oauth2 http client. */
-    public static final HttpClient4OAuth2HttpClient DEFAULT
-            = new HttpClient4OAuth2HttpClient(OAuth2HttpClientProperties.initDefault());
-
     /** Original http client. */
     protected final HttpClient origin;
     /** Http client connection manager. */
     protected final PoolingHttpClientConnectionManager connectionManager;
 
+    /** Construct a default {@code HttpClient4OAuth2HttpClient}. */
+    public HttpClient4OAuth2HttpClient() {
+        this(OAuth2HttpClientProperties.initDefault());
+    }
+
     /**
-     * Construct a HttpClient4 oauth2 http client.
+     * Construct a {@code HttpClient4OAuth2HttpClient}.
      *
      * @param props oauth2 http client properties
      */
     public HttpClient4OAuth2HttpClient(OAuth2HttpClientProperties props) {
         HttpClientBuilder builder = HttpClientBuilder.create();
-        // #################### request config ##############################################
+        // ==================== request config ==============================================
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout((int) props.getConnectTimeout().toMillis())
                 .setSocketTimeout((int) props.getReadTimeout().toMillis())
                 .build();
         builder.setDefaultRequestConfig(requestConfig);
-        // #################### connect manager ##############################################
+        // ==================== connect manager =============================================
         this.connectionManager = new PoolingHttpClientConnectionManager();
         this.connectionManager.setMaxTotal(props.getMaxConcurrentRequests());
         this.connectionManager.setDefaultMaxPerRoute(props.getMaxConcurrentRequests());
         builder.setConnectionManager(this.connectionManager);
-        // #################### max idle time ################################################
+        // ==================== max idle time ===============================================
         Duration maxIdleTime = props.getMaxIdleTime();
-        if (maxIdleTime != null) { builder.evictIdleConnections(maxIdleTime.toMillis(), TimeUnit.MILLISECONDS); }
-        // #################### keep alive ################################################
+        if (maxIdleTime != null) {
+            builder.evictIdleConnections(maxIdleTime.toMillis(), TimeUnit.MILLISECONDS);
+        }
+        // ==================== keep alive ==================================================
         ConnectionKeepAliveStrategy keepAliveStrategy = DefaultConnectionKeepAliveStrategy.INSTANCE;
         Duration keepAliveTimeout = props.getKeepAliveTimeout();
         if (keepAliveTimeout != null) {
@@ -97,26 +99,31 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
             keepAliveStrategy = (resp, ctx) -> keepAliveTimeoutMillis;
         }
         builder.setKeepAliveStrategy(keepAliveStrategy);
-        // #################### retry handler ###############################################
+        // ==================== retry handler ===============================================
         Integer retryTimes = props.getRetryTimes();
-        if (retryTimes != null) { builder.setRetryHandler(new OAuth2HttpRequestRetryHandler(retryTimes)); }
-        // #################### default headers #############################################
-        builder.setDefaultHeaders(Collections.singleton(
-                // Disguised as a browser.
-                new BasicHeader("User-Agent", "Chrome/83.0.4103.61")));
-        // #################### custom properties ###########################################
-        setCustomProperties(builder, props);
-        // #################### http client #################################################
-        this.origin = builder.build();
+        if (retryTimes != null) {
+            builder.setRetryHandler(new OAuth2HttpRequestRetryHandler(retryTimes));
+        }
+        // ==================== proxy =======================================================
+        String proxy = props.getProxy();
+        if (proxy != null) { builder.setProxy(HttpHost.create(proxy)); }
+        // ==================== default headers =============================================
+        // Some open platforms will response 403, if not disguised as a browser.
+        builder.setUserAgent("Chrome/83.0.4103.61");
+        // ==================== build http client ===========================================
+        this.origin = buildOriginHttpClient(builder, props);
     }
 
     /**
-     * Set custom properties.
+     * Build original http client.
      *
      * @param builder httpClient4 builder
      * @param props oauth2 http client properties
+     * @return original http client
      */
-    protected void setCustomProperties(HttpClientBuilder builder, OAuth2HttpClientProperties props) {}
+    protected HttpClient buildOriginHttpClient(HttpClientBuilder builder, OAuth2HttpClientProperties props) {
+        return builder.build();
+    }
 
     @Override
     public OAuth2HttpResponse execute(OAuth2HttpRequest request) throws OAuth2IOException {
@@ -152,16 +159,16 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
      */
     private HttpRequestBase initOriginalHttpRequest(OAuth2HttpRequest request) {
         Function<String, HttpRequestBase> initializer = HTTP_REQUEST_BASE_INITIALIZERS.get(request.getMethod());
-        HttpRequestBase httpRequest = initializer.apply(request.getUrl().toString());
-        request.forEachHeader(httpRequest::addHeader);
-        if (httpRequest instanceof HttpEntityEnclosingRequestBase) {
-            HttpEntityEnclosingRequestBase tmp = (HttpEntityEnclosingRequestBase) httpRequest;
+        HttpRequestBase originalHttpRequest = initializer.apply(request.getUrl().toString());
+        request.forEachHeader(originalHttpRequest::addHeader);
+        if (originalHttpRequest instanceof HttpEntityEnclosingRequestBase) {
+            HttpEntityEnclosingRequestBase tmp = (HttpEntityEnclosingRequestBase) originalHttpRequest;
             List<String> nameValuePairs = new LinkedList<>();
             request.forEachFormItem((name, value) -> nameValuePairs.add(name + "=" + value));
             String content = String.join("&", nameValuePairs);
             tmp.setEntity(new StringEntity(content, ContentType.APPLICATION_FORM_URLENCODED));
         }
-        return httpRequest;
+        return originalHttpRequest;
     }
 
     /**

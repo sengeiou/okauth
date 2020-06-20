@@ -54,27 +54,18 @@ public class BaiduOAuth2User implements OAuth2User {
         return BuiltInOpenPlatformNames.BAIDU;
     }
 
+    @Override
+    public String getOpenid() {
+        return originalDataMap.getAsString("openid");
+    }
+
     /**
      * Get userid.
-     *
-     * <p>The userid is the digital ID of the currently logged in user.
      *
      * @return userid
      */
     public String getUserid() {
         return originalDataMap.getAsString("userid");
-    }
-
-    /**
-     * Get portrait.
-     *
-     * <p>The currently logged in user's avatar.
-     * <p>If you need avatar url, please use {@linkplain #getAvatarUrl()}.
-     *
-     * @return portrait
-     */
-    public String getPortrait() {
-        return originalDataMap.getAsString("portrait");
     }
 
     /**
@@ -87,6 +78,46 @@ public class BaiduOAuth2User implements OAuth2User {
     @Override
     public String getUsername() {
         return originalDataMap.getAsString("username");
+    }
+
+    /**
+     * Get portrait.
+     *
+     * <p>The currently logged in user's avatar.
+     * <p>If you need avatar url, please use {@linkplain #getAvatarUrl()} instead.
+     *
+     * @return portrait
+     */
+    public String getPortrait() {
+        return originalDataMap.getAsString("portrait");
+    }
+
+    /**
+     * Get sex.
+     *
+     * <ul>
+     * Optional values:
+     * <li>{@code Gender.MALE}</li>
+     * <li>{@code Gender.FEMALE}</li>
+     * <li>{@code Gender.UNKNOWN}</li>
+     * </ul>
+     *
+     * @return Gender enumeration.
+     */
+    public Gender getSex() {
+        String sex = originalDataMap.getAsString("sex");
+        if ("1".equals(sex)) {
+            return Gender.MALE;
+        } else if ("0".equals(sex)) {
+            return Gender.FEMALE;
+        } else {
+            return Gender.UNKNOWN;
+        }
+    }
+
+    @Override
+    public LocalDate getBirthday() {
+        return LocalDate.parse(originalDataMap.getAsString("birthday"));
     }
 
     /**
@@ -107,41 +138,7 @@ public class BaiduOAuth2User implements OAuth2User {
         return "1".equals(originalDataMap.getAsString("is_real_name"));
     }
 
-    @Override
-    public LocalDate getBirthday() {
-        return LocalDate.parse(originalDataMap.getAsString("birthday"));
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <ul>
-     * Optional values:
-     * <li>{@code Gender.MALE}</li>
-     * <li>{@code Gender.FEMALE}</li>
-     * <li>{@code Gender.UNKNOWN}</li>
-     * </ul>
-     *
-     * @return {@inheritDoc}
-     */
-    @Override
-    public Gender getGender() {
-        String sex = originalDataMap.getAsString("sex");
-        if ("1".equals(sex)) {
-            return Gender.MALE;
-        } else if ("0".equals(sex)) {
-            return Gender.FEMALE;
-        } else {
-            return Gender.UNKNOWN;
-        }
-    }
-
-    @Override
-    public String getOpenid() {
-        return originalDataMap.getAsString("openid");
-    }
-
-    // #################### - ###########################################################
+    // #################### amendment ###################################################
 
     @Override
     public String getUid() {
@@ -151,6 +148,11 @@ public class BaiduOAuth2User implements OAuth2User {
     @Override
     public String getAvatarUrl() {
         return "http://tb.himg.baidu.com/sys/portrait/item/" + getPortrait();
+    }
+
+    @Override
+    public Gender getGender() {
+        return getSex();
     }
 
 }

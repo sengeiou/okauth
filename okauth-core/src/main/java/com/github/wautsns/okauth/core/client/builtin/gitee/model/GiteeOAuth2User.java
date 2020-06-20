@@ -23,7 +23,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * GitHub oauth2 token.
+ * Gitee oauth2 user.
  *
  * <pre>
  * {
@@ -65,7 +65,7 @@ import java.time.LocalDateTime;
 @Data
 public class GiteeOAuth2User implements OAuth2User {
 
-    private static final long serialVersionUID = 7155633421437700449L;
+    private static final long serialVersionUID = -2925874836823140573L;
 
     /** Original data map. */
     private final DataMap originalDataMap;
@@ -193,7 +193,7 @@ public class GiteeOAuth2User implements OAuth2User {
         return originalDataMap.getAsString("email");
     }
 
-    // #################### - ###########################################################
+    // #################### amendment ###################################################
 
     @Override
     public String getOpenid() {

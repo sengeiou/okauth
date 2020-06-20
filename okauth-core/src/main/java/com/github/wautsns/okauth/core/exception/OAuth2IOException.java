@@ -28,7 +28,7 @@ public class OAuth2IOException extends OAuth2Exception {
     private static final long serialVersionUID = 4092905520240221126L;
 
     /**
-     * Construct an {@code OAuth2Exception}.
+     * Construct an OAuth2Exception.
      *
      * @param e io exception
      */

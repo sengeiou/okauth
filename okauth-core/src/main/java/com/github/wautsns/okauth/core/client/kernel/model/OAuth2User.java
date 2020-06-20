@@ -77,7 +77,11 @@ public interface OAuth2User extends OpenPlatformSupplier, Serializable {
      */
     default String getAvatarUrl() { return null; }
 
-    enum Gender {MALE, FEMALE, SECRET, UNKNOWN}
+    /** Gender. */
+    enum Gender {
+        MALE, FEMALE,
+        SECRET, UNKNOWN
+    }
 
     /**
      * Get gender.

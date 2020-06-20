@@ -39,7 +39,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class GitHubOAuth2Token implements OAuth2Token {
 
-    private static final long serialVersionUID = 7155633421437700449L;
+    private static final long serialVersionUID = 8408050532302185568L;
 
     /** Token id. */
     private String tokenId;
@@ -73,6 +73,11 @@ public class GitHubOAuth2Token implements OAuth2Token {
         return originalDataMap.getAsString("scope");
     }
 
+    /**
+     * Get token type: {@code "bearer"}.
+     *
+     * @return {@code "bearer"}
+     */
     public String getTokenType() {
         return originalDataMap.getAsString("token_type");
     }

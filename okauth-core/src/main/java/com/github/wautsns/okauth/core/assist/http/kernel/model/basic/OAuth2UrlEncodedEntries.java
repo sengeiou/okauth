@@ -207,6 +207,21 @@ public class OAuth2UrlEncodedEntries extends NameValuePairs {
     /**
      * {@inheritDoc}
      *
+     * <p>The value will be url encoded.
+     *
+     * @param name {@inheritDoc}
+     * @param value {@inheritDoc}
+     * @param defaultValue {@inheritDoc}
+     * @return self reference
+     */
+    @Override
+    public NameValuePairs add(String name, String value, String defaultValue) {
+        return add(name, (value != null) ? value : defaultValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * <p>Values will be url encoded.
      *
      * @param nameValuePairs {@inheritDoc}
@@ -230,12 +245,17 @@ public class OAuth2UrlEncodedEntries extends NameValuePairs {
      */
     @Override
     public OAuth2UrlEncodedEntries set(String name, String value) {
-        if (value == null) { return this; }
-        try {
-            return setUrlEncoded(name, URLEncoder.encode(value, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException(e);
+        String urlEncodedValue;
+        if (value == null) {
+            urlEncodedValue = null;
+        } else {
+            try {
+                urlEncodedValue = URLEncoder.encode(value, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new IllegalStateException(e);
+            }
         }
+        return setUrlEncoded(name, urlEncodedValue);
     }
 
     /**
@@ -260,7 +280,7 @@ public class OAuth2UrlEncodedEntries extends NameValuePairs {
     }
 
     /**
-     * Associated url encoded value with the specified name(Old value will be replaced).
+     * Associate url encoded value with the specified name(Old value will be replaced).
      *
      * @param name name
      * @param value url encoded value

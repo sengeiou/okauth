@@ -19,11 +19,11 @@ import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
-import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RedirectUriQuery;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import com.github.wautsns.okauth.core.client.kernel.model.OpenPlatformSupplier;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
+import lombok.Getter;
 
 import java.util.Objects;
 
@@ -36,11 +36,12 @@ import java.util.Objects;
 public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User> implements OpenPlatformSupplier {
 
     /** OAuth2 app info. */
+    @Getter
     protected final A appInfo;
     /** OAuth2 http client. */
     protected final OAuth2HttpClient httpClient;
 
-    /** API: initialize authorize url. */
+    /** Initialize authorize url. */
     protected final InitializeAuthorizeUrl apiInitializeAuthorizeUrl;
     /** API: exchange redirect uri query for open id. */
     protected final ExchangeRedirectUriQueryForOpenid apiExchangeRedirectUriQueryForOpenid;
@@ -100,6 +101,7 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
      *
      * @return API: initialize authorize url
      * @see #appInfo
+     * @see #httpClient
      */
     protected abstract InitializeAuthorizeUrl initApiInitializeAuthorizeUrl();
 
@@ -108,6 +110,7 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
      *
      * @return API: exchange redirect uri query for openid
      * @see #appInfo
+     * @see #httpClient
      */
     protected abstract ExchangeRedirectUriQueryForOpenid initApiExchangeRedirectUriQueryForOpenid();
 
@@ -116,7 +119,22 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
      *
      * @return API: exchange redirect uri query for user
      * @see #appInfo
+     * @see #httpClient
      */
     protected abstract ExchangeRedirectUriQueryForUser<U> initApiExchangeRedirectUriQueryForUser();
+
+    /** Initialize authorize url. */
+    @FunctionalInterface
+    protected interface InitializeAuthorizeUrl {
+
+        /**
+         * Initialize authorize url.
+         *
+         * @param state state
+         * @return authorize url
+         */
+        OAuth2Url execute(String state);
+
+    }
 
 }

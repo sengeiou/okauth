@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service;
+package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2Client;
@@ -31,51 +31,23 @@ import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WeCh
 public interface WeChatWorkCorpTokenCache {
 
     /**
-     * Get oauth2 token {@linkplain WeChatWorkCorpOAuth2Token#getOriginalDataMap() original data map}.
+     * Get oauth2 token original data map.
      *
      * @return oauth2 token original data map
+     * @see WeChatWorkCorpOAuth2Token#getOriginalDataMap()
      */
     DataMap get();
 
     /**
-     * Save oauth2 token {@linkplain WeChatWorkCorpOAuth2Token#getOriginalDataMap() original data map}.
+     * Save oauth2 token original data map.
      *
      * @param originalDataMap oauth2 token original data map
      * @param accessTokenExpirationSeconds access token expiration seconds
+     * @see WeChatWorkCorpOAuth2Token#getOriginalDataMap()
      */
     void save(DataMap originalDataMap, int accessTokenExpirationSeconds);
 
-    /** Delete oauth2 token {@linkplain WeChatWorkCorpOAuth2Token#getOriginalDataMap() original data map}. */
+    /** Delete oauth2 token original data map. */
     void delete();
-
-    // #################### instance ####################################################
-
-    /** Instance of local cache. */
-    WeChatWorkCorpTokenCache LOCAL_CACHE = new WeChatWorkCorpTokenCache() {
-        private DataMap value;
-        private long expirationTimestamp = Long.MAX_VALUE;
-
-        @Override
-        public DataMap get() {
-            if (value == null) {
-                return null;
-            } else if (expirationTimestamp < System.currentTimeMillis()) {
-                return null;
-            } else {
-                return value;
-            }
-        }
-
-        @Override
-        public void save(DataMap originalDataMap, int accessTokenExpirationSeconds) {
-            value = originalDataMap;
-            expirationTimestamp = System.currentTimeMillis() + accessTokenExpirationSeconds * 1000;
-        }
-
-        @Override
-        public void delete() {
-            value = null;
-        }
-    };
 
 }

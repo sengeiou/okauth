@@ -20,6 +20,7 @@ import lombok.Getter;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -99,14 +100,18 @@ public class NameValuePairs implements Serializable {
     }
 
     /**
-     * Associates value with the specified name(Old value will be replaced).
+     * Associate value with the specified name(Old value will be replaced).
      *
      * @param name name
      * @param value value
      */
     public NameValuePairs set(String name, String value) {
-        remove(name);
-        return add(name, value);
+        for (ListIterator<String> iterator = origin.listIterator(); iterator.hasNext(); ) {
+            String target = iterator.next();
+            iterator.next();
+            if (target.equals(name)) { iterator.set(value); }
+        }
+        return this;
     }
 
     /**

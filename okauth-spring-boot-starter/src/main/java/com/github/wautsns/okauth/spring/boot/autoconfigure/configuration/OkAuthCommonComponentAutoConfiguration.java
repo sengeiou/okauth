@@ -17,26 +17,24 @@ package com.github.wautsns.okauth.spring.boot.autoconfigure.configuration;
 
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.configuration.condition.ConditionalOnOkAuthEnabled;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * OkAuth common service auto-configuration.
+ * OkAuth common component auto configuration.
  *
  * @author wautsns
- * @since May 25, 2020
+ * @since Jun 15, 2020
  */
 @Configuration
 @ConditionalOnOkAuthEnabled
-public class OkAuthCommonServiceAutoConfiguration {
+public class OkAuthCommonComponentAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnBean(TokenRefreshableOAuth2Client.class)
     public TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback() {
-        return TokenRefreshableOAuth2Client.TokenRefreshCallback.DEFAULT;
+        return TokenRefreshableOAuth2Client.TokenRefreshCallback.IGNORE;
     }
 
 }

@@ -33,7 +33,7 @@ public class UserRefusedAuthorizationException extends OAuth2Exception {
     private final String openPlatform;
 
     /**
-     * Construct a {@code UserRefusedAuthorizationException}.
+     * Construct a UserRefusedAuthorizationException.
      *
      * @param openPlatform open platform
      */

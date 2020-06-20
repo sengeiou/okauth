@@ -30,7 +30,6 @@ import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQuery
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForUser;
-import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.InvalidAccessTokenException;
@@ -52,7 +51,7 @@ public class GitHubOAuth2Client
      * @param appInfo oauth2 app info
      */
     public GitHubOAuth2Client(GitHubOAuth2AppInfo appInfo) {
-        super(appInfo, HttpClient4OAuth2HttpClient.DEFAULT);
+        super(appInfo, new HttpClient4OAuth2HttpClient());
     }
 
     /**
@@ -77,15 +76,15 @@ public class GitHubOAuth2Client
         basic.getQuery()
                 .addClientId(appInfo.getClientId())
                 .addRedirectUri(appInfo.getRedirectUri())
-                .addScope(GitHubOAuth2AppInfo.Scope.join(appInfo.getScope()));
+                .addScope(GitHubOAuth2AppInfo.Scope.joinWith(appInfo.getScopes(), " "));
         GitHubOAuth2AppInfo.ExtraAuthorizeUrlQuery extra = appInfo.getExtraAuthorizeUrlQuery();
         basic.getQuery()
                 .add("login", extra.getLogin())
                 .add("allow_signup", extra.getAllowSignup().value);
         return state -> {
-            OAuth2Url oauth2Url = basic.copy();
-            oauth2Url.getQuery().addState(state);
-            return oauth2Url;
+            OAuth2Url authorizeUrl = basic.copy();
+            authorizeUrl.getQuery().addState(state);
+            return authorizeUrl;
         };
     }
 
@@ -147,7 +146,7 @@ public class GitHubOAuth2Client
     // #################### execute request and check response ##########################
 
     /**
-     * Execute get or refresh token request and check response.
+     * Execute request that is GET_TOKEN or REFRESH_TOKEN, and check response.
      *
      * @param request request
      * @return correct data map
@@ -163,7 +162,7 @@ public class GitHubOAuth2Client
     }
 
     /**
-     * Execute not get or refresh token request and check response.
+     * Execute request that is neither GET_TOKEN nor REFRESH_TOKEN, and check response.
      *
      * @param request request
      * @return correct data map

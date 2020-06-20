@@ -28,7 +28,6 @@ import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForToken;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForUser;
-import com.github.wautsns.okauth.core.client.kernel.api.InitializeAuthorizeUrl;
 import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
@@ -52,8 +51,8 @@ public class GiteeOAuth2Client
      */
     public GiteeOAuth2Client(GiteeOAuth2AppInfo appInfo) {
         super(
-                appInfo, HttpClient4OAuth2HttpClient.DEFAULT,
-                TokenRefreshCallback.DEFAULT);
+                appInfo, new HttpClient4OAuth2HttpClient(),
+                TokenRefreshCallback.IGNORE);
     }
 
     /**
@@ -82,7 +81,7 @@ public class GiteeOAuth2Client
                 .addClientId(appInfo.getClientId())
                 .addRedirectUri(appInfo.getRedirectUri())
                 .addResponseTypeWithValueCode()
-                .addScope(GiteeOAuth2AppInfo.Scope.join(appInfo.getScope()));
+                .addScope(GiteeOAuth2AppInfo.Scope.joinWith(appInfo.getScopes(), " "));
         return state -> {
             OAuth2Url oAuth2Url = basic.copy();
             oAuth2Url.getQuery().addState(state);
@@ -137,7 +136,7 @@ public class GiteeOAuth2Client
     // #################### execute request and check response ##########################
 
     /**
-     * Execute get or refresh token request and check response.
+     * Execute request that is GET_TOKEN or REFRESH_TOKEN, and check response.
      *
      * @param request request
      * @return correct data map
@@ -157,7 +156,7 @@ public class GiteeOAuth2Client
     }
 
     /**
-     * Execute not get or refresh token request and check response.
+     * Execute request that is neither GET_TOKEN nor REFRESH_TOKEN, and check response.
      *
      * @param request request
      * @return correct data map

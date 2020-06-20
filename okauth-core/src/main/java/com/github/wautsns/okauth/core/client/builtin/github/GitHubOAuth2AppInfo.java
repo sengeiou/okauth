@@ -20,6 +20,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,20 +40,23 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
     private String clientSecret;
     /** Redirect uri. */
     private String redirectUri;
-    /** See {@link Scope} for details. */
-    private List<Scope> scope;
+    /**
+     * A list of scopes. If not provided, scope defaults to an empty list for users that have not authorized any scopes
+     * for the application. For users who have authorized scopes for the application, the user won't be shown the OAuth
+     * authorization page with the list of scopes. Instead, this step of the flow will automatically complete with the
+     * set of scopes the user has authorized for the application. For example, if a user has already performed the web
+     * flow twice and has authorized one token with user scope and another token with repo scope, a third web flow that
+     * does not provide a scope will receive a token with user and repo scope.
+     */
+    private List<Scope> scopes;
     /** Extra authorize url query. */
     private final ExtraAuthorizeUrlQuery extraAuthorizeUrlQuery = new ExtraAuthorizeUrlQuery();
 
-    // #################### enum ########################################################
-
     /**
-     * A space-delimited list of scopes. If not provided, scope defaults to an empty list for users that have not
-     * authorized any scopes for the application. For users who have authorized scopes for the application, the user
-     * won't be shown the OAuth authorization page with the list of scopes. Instead, this step of the flow will
-     * automatically complete with the set of scopes the user has authorized for the application. For example, if a user
-     * has already performed the web flow twice and has authorized one token with user scope and another token with repo
-     * scope, a third web flow that does not provide a scope will receive a token with user and repo scope.
+     * Scope.
+     *
+     * @see <a href="https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/">Scope
+     * list.</a>
      */
     @RequiredArgsConstructor
     public enum Scope {
@@ -169,21 +173,21 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
         public final String value;
 
         /**
-         * Join scope with space.
+         * Join scopes with specified delimiter.
          *
-         * @param scope scope set
+         * @param scopes scopes
+         * @param delimiter delimiter
          * @return space-separated list of scopes
          */
-        public static String join(List<Scope> scope) {
-            if (scope == null || scope.isEmpty()) { return null; }
-            return scope.stream()
+        public static String joinWith(Collection<Scope> scopes, String delimiter) {
+            if (scopes == null || scopes.isEmpty()) { return null; }
+            return scopes.stream()
+                    .distinct()
                     .map(s -> s.value)
-                    .collect(Collectors.joining(" "));
+                    .collect(Collectors.joining(delimiter));
         }
 
     }
-
-    // #################### extraAuthorizeUrlQuery ######################################
 
     /** Extra authorize url query. */
     @Data
@@ -194,8 +198,6 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
         private String login;
         /** See {@link AllowSignup} for details. */
         private AllowSignup allowSignup = AllowSignup.DEFAULT;
-
-        // #################### enum ########################################################
 
         /**
          * Allow signup.

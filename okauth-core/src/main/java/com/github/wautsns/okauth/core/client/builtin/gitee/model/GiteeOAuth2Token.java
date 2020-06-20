@@ -78,11 +78,12 @@ public class GiteeOAuth2Token implements OAuth2RefreshableToken {
     }
 
     /**
-     * Get scope(delimiter: space).
+     * Get scopes(delimiter: space).
      *
      * @return scope
+     * @see com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo.Scope
      */
-    public String getScope() {
+    public String getScopes() {
         return originalDataMap.getAsString("scope");
     }
 

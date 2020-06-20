@@ -33,7 +33,7 @@ public class InvalidUserAuthorizationException extends OAuth2Exception {
     private final String openPlatform;
 
     /**
-     * Construct a {@code InvalidUserAuthorizationException}.
+     * Construct a InvalidUserAuthorizationException.
      *
      * @param openPlatform open platform
      */

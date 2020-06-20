@@ -43,8 +43,11 @@ public class OAuth2HttpClientProperties {
     private Duration keepAliveTimeout;
     /** Retry times. */
     private Integer retryTimes;
+    /** Proxy([SCHEME://]IP[:PORT]). */
+    private String proxy;
     /** Custom properties. */
-    private Map<String,Object> customProperties;
+    private Map<String, Object> customProperties;
+
 
     // #################### utils #######################################################
 

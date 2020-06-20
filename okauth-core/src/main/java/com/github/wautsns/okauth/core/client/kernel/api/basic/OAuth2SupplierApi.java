@@ -18,15 +18,15 @@ package com.github.wautsns.okauth.core.client.kernel.api.basic;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 
 /**
- * Supplier api.
+ * OAuth2 supplier api.
  *
  * @author wautsns
  * @since May 24, 2020
  */
-public interface SupplierApi<T> {
+public interface OAuth2SupplierApi<T> {
 
     /**
-     * Get result.
+     * Execute and return result.
      *
      * @return result
      * @throws OAuth2Exception if oauth2 failed

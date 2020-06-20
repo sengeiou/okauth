@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.assist.http.kernel.util;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
@@ -33,13 +34,16 @@ import java.io.InputStream;
 @UtilityClass
 public class ReadUtils {
 
-    /** Jackson object map. */
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    /** Jackson ObjectMapper. */
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
+            .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
     /** Java type: {@code DataMap}. */
     private static final JavaType JAVA_TYPE_DATA_MAP = OBJECT_MAPPER.getTypeFactory().constructType(DataMap.class);
 
     /**
-     * Read input stream as string.
+     * Read input stream as {@code String} value.
+     *
+     * <p><strong>The method will not close the input stream.</strong>
      *
      * @param inputStream input stream
      * @return {@code String} value
@@ -52,12 +56,13 @@ public class ReadUtils {
         while ((length = inputStream.read(buffer)) != -1) {
             result.write(buffer, 0, length);
         }
-        inputStream.close();
         return result.toString();
     }
 
     /**
-     * Read query like input stream(eg. a=3&b=4) as data map.
+     * Read query like input stream(eg. a=3&b=4) as {@code DataMap} value.
+     *
+     * <p><strong>The method will not close the input stream.</strong>
      *
      * @param inputStream query like input stream
      * @return {@code DataMap} value
@@ -67,7 +72,7 @@ public class ReadUtils {
     }
 
     /**
-     * Read query like text(eg. a=3&b=4) as data map.
+     * Read query like text(eg. a=3&b=4) as {@code DataMap} value.
      *
      * @param string query like string
      * @return {@code DataMap} value
@@ -82,7 +87,7 @@ public class ReadUtils {
     }
 
     /**
-     * Read json string as data map.
+     * Read json string as {@code DataMap} value.
      *
      * @param string json string
      * @return {@code DataMap} value
@@ -93,10 +98,12 @@ public class ReadUtils {
     }
 
     /**
-     * Read json input stream as data map.
+     * Read json input stream as {@code DataMap} value.
+     *
+     * <p><strong>The method will not close the input stream.</strong>
      *
      * @param inputStream json input stream
-     * @return data map
+     * @return {@code DataMap} value
      * @throws IOException if IO exception occurs
      */
     public static DataMap readJsonAsDataMap(InputStream inputStream) throws IOException {

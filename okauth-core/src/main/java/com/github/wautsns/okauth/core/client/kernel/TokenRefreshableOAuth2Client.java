@@ -35,11 +35,11 @@ import java.util.Objects;
 public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T extends OAuth2RefreshableToken, U extends OAuth2User>
         extends TokenAvailableOAuth2Client<A, T, U> {
 
-    /** API: refresh token. */
-    protected final RefreshToken<T> apiRefreshToken;
-
     /** Token refresh callback. */
     protected final TokenRefreshCallback tokenRefreshCallback;
+
+    /** API: refresh token. */
+    protected final RefreshToken<T> apiRefreshToken;
 
     /**
      * Construct a token refreshable oauth2 client.
@@ -52,8 +52,8 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
             A appInfo, OAuth2HttpClient httpClient,
             TokenRefreshCallback tokenRefreshCallback) {
         super(appInfo, httpClient);
-        this.apiRefreshToken = Objects.requireNonNull(initApiRefreshToken());
         this.tokenRefreshCallback = Objects.requireNonNull(tokenRefreshCallback);
+        this.apiRefreshToken = Objects.requireNonNull(initApiRefreshToken());
     }
 
     @Override
@@ -108,25 +108,21 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
 
     // #################### extra #######################################################
 
-    /**
-     * Token refresh callback.
-     *
-     * @author wautsns
-     * @since May 19, 2020
-     */
+    /** Token refresh callback. */
     public interface TokenRefreshCallback {
 
         /**
          * Before refreshing.
          *
          * @param openPlatform open platform
-         * @param token token
+         * @param oldToken old token
          */
-        default void beforeRefreshing(String openPlatform, OAuth2Token token) {}
+        void beforeRefreshing(String openPlatform, OAuth2Token oldToken);
 
         /**
          * After refreshing.
          *
+         * @param openPlatform open platform
          * @param oldToken old token
          * @param newToken new token
          */
@@ -134,8 +130,14 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
 
         // #################### instance ####################################################
 
-        /** Default token refresh callback. */
-        TokenRefreshCallback DEFAULT = (openPlatform, oldToken, newToken) -> {};
+        /** Ignore the callback(<strong>Strongly not recommended if you need token.</strong>). */
+        TokenRefreshCallback IGNORE = new TokenRefreshCallback() {
+            @Override
+            public void beforeRefreshing(String openPlatform, OAuth2Token oldToken) {}
+
+            @Override
+            public void afterRefreshing(String openPlatform, OAuth2Token oldToken, OAuth2Token newToken) {}
+        };
 
     }
 
