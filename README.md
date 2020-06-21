@@ -49,8 +49,8 @@ okauth:
         client-id: CLIENT_ID
         client-secret: CLIENT_SECRET
         redirect-uri: REDIRECT_URI
-        # scope 为枚举列表, 可自动提示
-        scope: [user_email, notifications]
+        # scopes 为枚举列表, 可自动提示
+        scopes: [user_email, notifications]
         extra-authorize-url-query:
           allow-signup: disabled
 ```
@@ -74,7 +74,7 @@ private static GitHubOAuth2Client github() {
 ## 2.3 简单示例
 
 ``` java
-@Controller
+@RestController
 @RequestMapping("/api/cmd/oauth2")
 @RequiredArgsConstructor
 public class OAuth2Controller {
@@ -82,10 +82,10 @@ public class OAuth2Controller {
     /** OAuth2 client manager. */
     private final OAuth2ClientManager manager;
 
-    @GetMapping("/redirect-to-authorize-url")
+    @GetMapping("/get-authorize-url")
     public String redirectToAuthorizeUrl(String openPlatform) throws OAuth2Exception {
         String state = "generate state and save if needed";
-        return "redirect:" + manager.get(openPlatform).initAuthorizeUrl(state);
+        return manager.get(openPlatform).initAuthorizeUrl(state);
     }
 
     @GetMapping("/handle-authorize-callback/{openPlatform}")
