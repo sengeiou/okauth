@@ -22,14 +22,14 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * WeChatOfficialAccount oauth2 token.
+ * WechatOfficialAccount oauth2 token.
  *
  * @author wautsns
  * @since May 23, 2020
  */
 @Data
 @Accessors(chain = true)
-public class WeChatOfficialAccountOAuth2Token implements OAuth2RefreshableToken {
+public class WechatOfficialAccountOAuth2Token implements OAuth2RefreshableToken {
 
     private static final long serialVersionUID = 6551303389398223705L;
 
@@ -58,7 +58,7 @@ public class WeChatOfficialAccountOAuth2Token implements OAuth2RefreshableToken 
         return originalDataMap.getAsString("refresh_token");
     }
 
-    /** WeChatOfficialAccount oauth2 refresh token expires in thirty days. */
+    /** WechatOfficialAccount oauth2 refresh token expires in thirty days. */
     private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 30 * 24 * 3600;
 
     @Override

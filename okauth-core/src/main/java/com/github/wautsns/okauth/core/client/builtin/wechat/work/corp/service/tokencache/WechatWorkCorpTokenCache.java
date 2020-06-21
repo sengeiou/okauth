@@ -16,25 +16,25 @@
 package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2Client;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WeChatWorkCorpOAuth2Token;
+import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WechatWorkCorpOAuth2Client;
+import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WechatWorkCorpOAuth2Token;
 
 /**
  * WeCharWorkCorp token cache.
  *
- * <p><strong>No need to consider concurrency issues.(See {@link WeChatWorkCorpOAuth2Client#getToken()} for
+ * <p><strong>No need to consider concurrency issues.(See {@link WechatWorkCorpOAuth2Client#getToken()} for
  * details)</strong>
  *
  * @author wautsns
  * @since May 23, 2020
  */
-public interface WeChatWorkCorpTokenCache {
+public interface WechatWorkCorpTokenCache {
 
     /**
      * Get oauth2 token original data map.
      *
      * @return oauth2 token original data map
-     * @see WeChatWorkCorpOAuth2Token#getOriginalDataMap()
+     * @see WechatWorkCorpOAuth2Token#getOriginalDataMap()
      */
     DataMap get();
 
@@ -43,7 +43,7 @@ public interface WeChatWorkCorpTokenCache {
      *
      * @param originalDataMap oauth2 token original data map
      * @param accessTokenExpirationSeconds access token expiration seconds
-     * @see WeChatWorkCorpOAuth2Token#getOriginalDataMap()
+     * @see WechatWorkCorpOAuth2Token#getOriginalDataMap()
      */
     void save(DataMap originalDataMap, int accessTokenExpirationSeconds);
 

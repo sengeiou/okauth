@@ -42,6 +42,6 @@ public class OkAuthProperties {
             .setProperties(OAuth2HttpClientProperties.initDefault());
     /** Apps info properties. */
     @NestedConfigurationProperty
-    private final OkAuthAppsInfoProperties appsInfo = new OkAuthAppsInfoProperties();
+    private OkAuthAppsInfoProperties appsInfo;
 
 }

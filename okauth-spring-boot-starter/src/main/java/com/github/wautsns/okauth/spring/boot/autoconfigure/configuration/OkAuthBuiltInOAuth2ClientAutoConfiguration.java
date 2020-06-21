@@ -24,15 +24,15 @@ import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2Client;
-import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.WeChatOfficialAccountOAuth2AppInfo;
-import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.WeChatOfficialAccountOAuth2Client;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2AppInfo;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2Client;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache.WeChatWorkCorpTokenCache;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache.builtin.WeChatWorkCorpTokenLocalCache;
+import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.WechatOfficialAccountOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.WechatOfficialAccountOAuth2Client;
+import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WechatWorkCorpOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WechatWorkCorpOAuth2Client;
+import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache.WechatWorkCorpTokenCache;
+import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache.builtin.WechatWorkCorpTokenLocalCache;
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.configuration.condition.ConditionalOnOkAuthEnabled;
-import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppInfoProperties;
+import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppsInfoProperties;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthProperties;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.util.OkAuthAutoConfigureUtils;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -51,8 +51,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnOkAuthEnabled
-@AutoConfigureAfter(OkAuthCommonComponentAutoConfiguration.class)
 @EnableConfigurationProperties(OkAuthProperties.class)
+@AutoConfigureAfter(OkAuthCommonComponentAutoConfiguration.class)
 public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
 
     // #################### Baidu #######################################################
@@ -62,7 +62,7 @@ public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
     public BaiduOAuth2Client baiduOAuth2Client(
             OkAuthProperties okauthProps,
             TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback) {
-        OkAuthAppInfoProperties<BaiduOAuth2AppInfo> baidu = okauthProps.getAppsInfo().getBaidu();
+        OkAuthAppsInfoProperties.OkAuthBaiduAppInfo baidu = okauthProps.getAppsInfo().getBaidu();
         BaiduOAuth2AppInfo appInfo = baidu.getAppInfo();
         OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, baidu);
         return new BaiduOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
@@ -75,7 +75,7 @@ public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
     public GiteeOAuth2Client giteeOAuth2Client(
             OkAuthProperties okauthProps,
             TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback) {
-        OkAuthAppInfoProperties<GiteeOAuth2AppInfo> gitee = okauthProps.getAppsInfo().getGitee();
+        OkAuthAppsInfoProperties.OkAuthGiteeAppInfo gitee = okauthProps.getAppsInfo().getGitee();
         GiteeOAuth2AppInfo appInfo = gitee.getAppInfo();
         OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, gitee);
         return new GiteeOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
@@ -86,7 +86,7 @@ public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
     @Bean
     @ConditionalOnProperty("okauth.apps-info.github.enabled")
     public GitHubOAuth2Client gitHubOAuth2Client(OkAuthProperties okauthProps) {
-        OkAuthAppInfoProperties<GitHubOAuth2AppInfo> github = okauthProps.getAppsInfo().getGithub();
+        OkAuthAppsInfoProperties.OkAuthGitHubAppInfo github = okauthProps.getAppsInfo().getGithub();
         GitHubOAuth2AppInfo appInfo = github.getAppInfo();
         OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, github);
         return new GitHubOAuth2Client(appInfo, httpClient);
@@ -99,45 +99,45 @@ public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
     public OSChinaOAuth2Client oschinaOAuth2Client(
             OkAuthProperties okauthProps,
             TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback) {
-        OkAuthAppInfoProperties<OSChinaOAuth2AppInfo> oschina = okauthProps.getAppsInfo().getOschina();
+        OkAuthAppsInfoProperties.OkAuthOSChinaAppInfo oschina = okauthProps.getAppsInfo().getOschina();
         OSChinaOAuth2AppInfo appInfo = oschina.getAppInfo();
         OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, oschina);
         return new OSChinaOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
     }
 
-    // #################### WeChatOfficialAccount #######################################
+    // #################### WechatOfficialAccount #######################################
 
     @Bean
     @ConditionalOnProperty("okauth.apps-info.oschina.enabled")
-    public WeChatOfficialAccountOAuth2Client weChatOfficialAccountOAuth2Client(
+    public WechatOfficialAccountOAuth2Client weChatOfficialAccountOAuth2Client(
             OkAuthProperties okauthProps,
             TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback) {
-        OkAuthAppInfoProperties<WeChatOfficialAccountOAuth2AppInfo> wechatOfficialAccount
+        OkAuthAppsInfoProperties.OkAuthWechatOfficialAccountAppInfo wechatOfficialAccount
                 = okauthProps.getAppsInfo().getWechatOfficialAccount();
-        WeChatOfficialAccountOAuth2AppInfo appInfo = wechatOfficialAccount.getAppInfo();
+        WechatOfficialAccountOAuth2AppInfo appInfo = wechatOfficialAccount.getAppInfo();
         OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, wechatOfficialAccount);
-        return new WeChatOfficialAccountOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
+        return new WechatOfficialAccountOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
     }
 
     // #################### WechatWorkCorp ##############################################
 
     @Bean
     @ConditionalOnProperty("okauth.apps-info.wechat-work-corp.enabled")
-    public WeChatWorkCorpOAuth2Client wechatWorkCorpOAuth2Client(
+    public WechatWorkCorpOAuth2Client wechatWorkCorpOAuth2Client(
             OkAuthProperties okauthProps,
-            WeChatWorkCorpTokenCache tokenCache) {
-        OkAuthAppInfoProperties<WeChatWorkCorpOAuth2AppInfo> wechatWorkCorp
+            WechatWorkCorpTokenCache tokenCache) {
+        OkAuthAppsInfoProperties.OkAuthWechatWorkCorpAppInfo wechatWorkCorp
                 = okauthProps.getAppsInfo().getWechatWorkCorp();
-        WeChatWorkCorpOAuth2AppInfo appInfo = wechatWorkCorp.getAppInfo();
+        WechatWorkCorpOAuth2AppInfo appInfo = wechatWorkCorp.getAppInfo();
         OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, wechatWorkCorp);
-        return new WeChatWorkCorpOAuth2Client(appInfo, httpClient, tokenCache);
+        return new WechatWorkCorpOAuth2Client(appInfo, httpClient, tokenCache);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnBean(WeChatWorkCorpOAuth2Client.class)
-    public WeChatWorkCorpTokenCache wechatWorkCorpTokenCache() {
-        return WeChatWorkCorpTokenLocalCache.INSTANCE;
+    @ConditionalOnBean(WechatWorkCorpOAuth2Client.class)
+    public WechatWorkCorpTokenCache wechatWorkCorpTokenCache() {
+        return WechatWorkCorpTokenLocalCache.INSTANCE;
     }
 
 }

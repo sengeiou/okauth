@@ -19,6 +19,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -48,6 +49,22 @@ public class OAuth2HttpClientProperties {
     /** Custom properties. */
     private Map<String, Object> customProperties;
 
+    /**
+     * Create and return a copy of this properties.
+     *
+     * @return a copy of this properties
+     */
+    public OAuth2HttpClientProperties copy() {
+        return new OAuth2HttpClientProperties()
+                .setConnectTimeout(connectTimeout)
+                .setReadTimeout(readTimeout)
+                .setMaxConcurrentRequests(maxConcurrentRequests)
+                .setMaxIdleTime(maxIdleTime)
+                .setKeepAliveTimeout(keepAliveTimeout)
+                .setReadTimeout(readTimeout)
+                .setProxy(proxy)
+                .setCustomProperties(new HashMap<>(customProperties));
+    }
 
     // #################### utils #######################################################
 
@@ -55,7 +72,6 @@ public class OAuth2HttpClientProperties {
      * Initialize default http client properties.
      *
      * <ul>
-     * default properties are as followers:
      * <li>connectTimeout: {@code 3s}</li>
      * <li>readTimeout: {@code 7s}</li>
      * <li>maxConcurrentRequests: {@code 64}</li>

@@ -21,14 +21,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * WeChatOfficialAccount OAuth2 app info.
+ * WechatOfficialAccount OAuth2 app info.
  *
  * @author wautsns
  * @since May 23, 2020
  */
 @Data
 @Accessors(chain = true)
-public class WeChatOfficialAccountOAuth2AppInfo implements OAuth2AppInfo {
+public class WechatOfficialAccountOAuth2AppInfo implements OAuth2AppInfo {
 
     /** Official account unique identifier. */
     private String uniqueIdentifier;

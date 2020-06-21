@@ -201,8 +201,8 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
 
         /**
          * Allow signup.
+         *
          * <ul>
-         * optional values:
          * <li>{@link AllowSignup#DEFAULT}</li>
          * <li>{@link AllowSignup#ENABLED}</li>
          * <li>{@link AllowSignup#DISABLED}</li>

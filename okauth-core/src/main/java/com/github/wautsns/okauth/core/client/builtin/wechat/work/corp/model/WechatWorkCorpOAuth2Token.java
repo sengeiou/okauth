@@ -22,7 +22,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * WeChatWorkCorp oauth2 token.
+ * WechatWorkCorp oauth2 token.
  *
  * <pre>
  * {
@@ -36,7 +36,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class WeChatWorkCorpOAuth2Token implements OAuth2Token {
+public class WechatWorkCorpOAuth2Token implements OAuth2Token {
 
     private static final long serialVersionUID = -8354114542294039343L;
 
@@ -66,7 +66,7 @@ public class WeChatWorkCorpOAuth2Token implements OAuth2Token {
      * @param accessTokenExpirationSeconds access token expiration seconds
      * @return self reference
      */
-    public WeChatWorkCorpOAuth2Token setAccessTokenExpirationSeconds(Integer accessTokenExpirationSeconds) {
+    public WechatWorkCorpOAuth2Token setAccessTokenExpirationSeconds(Integer accessTokenExpirationSeconds) {
         originalDataMap.put("expires_in", accessTokenExpirationSeconds);
         return this;
     }

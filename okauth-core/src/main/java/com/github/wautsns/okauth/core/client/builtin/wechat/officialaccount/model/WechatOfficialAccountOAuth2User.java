@@ -23,7 +23,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * WeChatOfficialAccount oauth2 user.
+ * WechatOfficialAccount oauth2 user.
  *
  * <pre>
  * {
@@ -43,7 +43,7 @@ import java.util.List;
  * @since Jun 19, 2020
  */
 @Data
-public class WeChatOfficialAccountOAuth2User implements OAuth2User {
+public class WechatOfficialAccountOAuth2User implements OAuth2User {
 
     private static final long serialVersionUID = 133319205583865255L;
 
@@ -83,7 +83,6 @@ public class WeChatOfficialAccountOAuth2User implements OAuth2User {
      * Get sex.
      *
      * <ul>
-     * Optional values:
      * <li>{@code Gender.MALE}</li>
      * <li>{@code Gender.FEMALE}</li>
      * <li>{@code Gender.UNKNOWN}</li>
@@ -132,7 +131,7 @@ public class WeChatOfficialAccountOAuth2User implements OAuth2User {
     /**
      * Get privilege.
      *
-     * <p>User privilege information, such as WeChat Woka user(chinaunicom).
+     * <p>User privilege information, such as Wechat Woka user(chinaunicom).
      *
      * @return privilege
      */

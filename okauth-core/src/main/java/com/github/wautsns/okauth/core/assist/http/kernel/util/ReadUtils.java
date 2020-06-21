@@ -60,19 +60,20 @@ public class ReadUtils {
     }
 
     /**
-     * Read query like input stream(eg. a=3&b=4) as {@code DataMap} value.
+     * Read query like input stream(eg. a=3&amp;b=4) as {@code DataMap} value.
      *
      * <p><strong>The method will not close the input stream.</strong>
      *
      * @param inputStream query like input stream
      * @return {@code DataMap} value
+     * @throws IOException if IO exception occurs
      */
     public static DataMap readQueryLikeTextAsDataMap(InputStream inputStream) throws IOException {
         return readQueryLikeTextAsDataMap(readInputStreamAsString(inputStream));
     }
 
     /**
-     * Read query like text(eg. a=3&b=4) as {@code DataMap} value.
+     * Read query like text(eg. a=3&amp;b=4) as {@code DataMap} value.
      *
      * @param string query like string
      * @return {@code DataMap} value

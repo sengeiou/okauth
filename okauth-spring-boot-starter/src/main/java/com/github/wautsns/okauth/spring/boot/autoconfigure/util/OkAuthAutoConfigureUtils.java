@@ -17,7 +17,7 @@ package com.github.wautsns.okauth.spring.boot.autoconfigure.util;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.properties.OAuth2HttpClientProperties;
-import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppInfoProperties;
+import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthAppsInfoProperties;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthHttpClientProperties;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthProperties;
 import lombok.experimental.UtilityClass;
@@ -43,7 +43,7 @@ public class OkAuthAutoConfigureUtils {
      * @return oauth2 http client
      */
     public static OAuth2HttpClient initOAuth2HttpClient(
-            OkAuthProperties okauthProps, OkAuthAppInfoProperties<?> okauthAppInfoProps) {
+            OkAuthProperties okauthProps, OkAuthAppsInfoProperties.OkAuthAppInfo<?> okauthAppInfoProps) {
         OkAuthHttpClientProperties okauthHttpClientProps = fillNullProperties(
                 okauthAppInfoProps.getHttpClient(), okauthProps.getDefaultHttpClient());
         try {

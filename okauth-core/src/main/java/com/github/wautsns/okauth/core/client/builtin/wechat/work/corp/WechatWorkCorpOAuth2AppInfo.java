@@ -20,14 +20,14 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * WeChatWorkCorp OAuth2 app info.
+ * WechatWorkCorp OAuth2 app info.
  *
  * @author wautsns
  * @since May 23, 2020
  */
 @Data
 @Accessors(chain = true)
-public class WeChatWorkCorpOAuth2AppInfo implements OAuth2AppInfo {
+public class WechatWorkCorpOAuth2AppInfo implements OAuth2AppInfo {
 
     /** Corp id. */
     private String corpId;

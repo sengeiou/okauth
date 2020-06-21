@@ -96,7 +96,6 @@ public class BaiduOAuth2User implements OAuth2User {
      * Get sex.
      *
      * <ul>
-     * Optional values:
      * <li>{@code Gender.MALE}</li>
      * <li>{@code Gender.FEMALE}</li>
      * <li>{@code Gender.UNKNOWN}</li>

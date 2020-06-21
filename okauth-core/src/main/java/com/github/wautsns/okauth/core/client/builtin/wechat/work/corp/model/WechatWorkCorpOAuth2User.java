@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * WeChatWorkCorp oauth2 user.
+ * WechatWorkCorp oauth2 user.
  *
  * <pre>
  * {
@@ -105,7 +105,7 @@ import java.util.stream.Collectors;
  * @since May 23, 2020
  */
 @Data
-public class WeChatWorkCorpOAuth2User implements OAuth2User {
+public class WechatWorkCorpOAuth2User implements OAuth2User {
 
     private static final long serialVersionUID = -8284465889855788132L;
 

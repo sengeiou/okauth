@@ -58,7 +58,6 @@ public class OAuth2ClientManager {
      * Register oauth2 client.
      *
      * <ul>
-     * registered names:
      * <li>{@code client.getOpenPlatform()}</li>
      * <li>{@code client.getOpenPlatform().toLowerCase()}</li>
      * <li>{@code client.getOpenPlatform().toUpperCase()}</li>

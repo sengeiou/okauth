@@ -104,6 +104,7 @@ public class OAuth2Url implements Serializable {
     /**
      * Set url anchor.
      *
+     * @param anchor anchor
      * @return self reference
      */
     public OAuth2Url setAnchor(String anchor) {

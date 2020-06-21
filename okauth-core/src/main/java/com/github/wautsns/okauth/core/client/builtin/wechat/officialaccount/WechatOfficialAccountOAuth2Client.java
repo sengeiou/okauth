@@ -21,8 +21,8 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRespons
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
-import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model.WeChatOfficialAccountOAuth2Token;
-import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model.WeChatOfficialAccountOAuth2User;
+import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model.WechatOfficialAccountOAuth2Token;
+import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model.WechatOfficialAccountOAuth2User;
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForToken;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
@@ -36,24 +36,26 @@ import com.github.wautsns.okauth.core.exception.specific.token.InvalidAccessToke
 import com.github.wautsns.okauth.core.exception.specific.token.InvalidRefreshTokenException;
 
 /**
- * WeChatOfficialAccount oauth2 client.
+ * WechatOfficialAccount oauth2 client.
  *
  * @author wautsns
  * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html">
- * WeChatOfficialAccount OAuth2 doc</a>
+ * WechatOfficialAccount OAuth2 doc</a>
  * @since May 23, 2020
  */
-public class WeChatOfficialAccountOAuth2Client
-        extends TokenRefreshableOAuth2Client<WeChatOfficialAccountOAuth2AppInfo, WeChatOfficialAccountOAuth2Token, WeChatOfficialAccountOAuth2User> {
+public class WechatOfficialAccountOAuth2Client
+        extends
+        TokenRefreshableOAuth2Client<WechatOfficialAccountOAuth2AppInfo, WechatOfficialAccountOAuth2Token, WechatOfficialAccountOAuth2User> {
 
     /**
-     * Construct an WeChatOfficialAccount oauth2 client.
+     * Construct an WechatOfficialAccount oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
+     * @param tokenRefreshCallback token refresh callback
      */
-    public WeChatOfficialAccountOAuth2Client(
-            WeChatOfficialAccountOAuth2AppInfo appInfo, OAuth2HttpClient httpClient,
+    public WechatOfficialAccountOAuth2Client(
+            WechatOfficialAccountOAuth2AppInfo appInfo, OAuth2HttpClient httpClient,
             TokenRefreshCallback tokenRefreshCallback) {
         super(appInfo, httpClient, tokenRefreshCallback);
     }
@@ -81,7 +83,7 @@ public class WeChatOfficialAccountOAuth2Client
     }
 
     @Override
-    protected ExchangeRedirectUriQueryForToken<WeChatOfficialAccountOAuth2Token> initApiExchangeRedirectUriQueryForToken() {
+    protected ExchangeRedirectUriQueryForToken<WechatOfficialAccountOAuth2Token> initApiExchangeRedirectUriQueryForToken() {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token";
         OAuth2HttpRequest basic = OAuth2HttpRequest.initGet(url);
         basic.getUrl().getQuery()
@@ -94,12 +96,12 @@ public class WeChatOfficialAccountOAuth2Client
         return redirectUriQuery -> {
             OAuth2HttpRequest request = basic.copy();
             request.getUrl().getQuery().addCode(redirectUriQuery.getCode());
-            return new WeChatOfficialAccountOAuth2Token(executeAndCheck(request));
+            return new WechatOfficialAccountOAuth2Token(executeAndCheck(request));
         };
     }
 
     @Override
-    protected RefreshToken<WeChatOfficialAccountOAuth2Token> initApiRefreshToken() {
+    protected RefreshToken<WechatOfficialAccountOAuth2Token> initApiRefreshToken() {
         String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token";
         OAuth2HttpRequest basic = OAuth2HttpRequest.initGet(url);
         basic.getUrl().getQuery()
@@ -108,17 +110,17 @@ public class WeChatOfficialAccountOAuth2Client
         return token -> {
             OAuth2HttpRequest request = basic.copy();
             request.getUrl().getQuery().addRefreshToken(token.getRefreshToken());
-            return new WeChatOfficialAccountOAuth2Token(executeAndCheck(request));
+            return new WechatOfficialAccountOAuth2Token(executeAndCheck(request));
         };
     }
 
     @Override
-    protected ExchangeTokenForOpenid<WeChatOfficialAccountOAuth2Token> initApiExchangeTokenForOpenid() {
-        return WeChatOfficialAccountOAuth2Token::getOpenId;
+    protected ExchangeTokenForOpenid<WechatOfficialAccountOAuth2Token> initApiExchangeTokenForOpenid() {
+        return WechatOfficialAccountOAuth2Token::getOpenId;
     }
 
     @Override
-    protected ExchangeTokenForUser<WeChatOfficialAccountOAuth2Token, WeChatOfficialAccountOAuth2User> initApiExchangeTokenForUser() {
+    protected ExchangeTokenForUser<WechatOfficialAccountOAuth2Token, WechatOfficialAccountOAuth2User> initApiExchangeTokenForUser() {
         String url = "https://api.weixin.qq.com/sns/userinfo";
         OAuth2HttpRequest basic = OAuth2HttpRequest.initGet(url);
         return token -> {
@@ -126,7 +128,7 @@ public class WeChatOfficialAccountOAuth2Client
             request.getUrl().getQuery()
                     .addAccessToken(token.getAccessToken())
                     .add("openid", token.getOpenId());
-            return new WeChatOfficialAccountOAuth2User(executeAndCheck(request));
+            return new WechatOfficialAccountOAuth2User(executeAndCheck(request));
         };
     }
 
