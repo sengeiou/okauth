@@ -18,6 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.t
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WechatWorkCorpOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WechatWorkCorpOAuth2Token;
+import com.github.wautsns.okauth.core.client.kernel.api.basic.OAuth2SupplierApi;
 
 /**
  * WeCharWorkCorp token cache.
@@ -29,6 +30,16 @@ import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.Wech
  * @since May 23, 2020
  */
 public interface WechatWorkCorpTokenCache {
+
+    /**
+     * Inject API: get token.
+     *
+     * <p>The method will be called after {@linkplain WechatWorkCorpOAuth2Client} is constructed.
+     * <p>When the old token is abort to expire, you can use the api to refresh token asynchronously.
+     *
+     * @param apiGetToken API: get token
+     */
+    default void injectApiGetToken(OAuth2SupplierApi<WechatWorkCorpOAuth2Token> apiGetToken) {}
 
     /**
      * Get oauth2 token original data map.

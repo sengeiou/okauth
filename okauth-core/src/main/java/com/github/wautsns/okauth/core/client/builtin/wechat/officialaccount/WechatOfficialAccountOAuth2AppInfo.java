@@ -37,7 +37,7 @@ public class WechatOfficialAccountOAuth2AppInfo implements OAuth2AppInfo {
     /** Redirect uri. */
     private String redirectUri;
     /** See {@link Scope} for details. */
-    private Scope scope = Scope.SNSAPI_BASE;
+    private Scope scope = Scope.SNSAPI_USER_INFO;
 
     /** Application authorization scope. */
     @RequiredArgsConstructor

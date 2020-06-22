@@ -79,6 +79,7 @@ public class WechatWorkCorpOAuth2Client extends OAuth2Client<WechatWorkCorpOAuth
         this.tokenCache = tokenCache;
         this.apiGetToken = initApiGetToken();
         this.apiExchangeUseridForUser = initApiExchangeUseridForUser();
+        this.tokenCache.injectApiGetToken(this.apiGetToken);
     }
 
     @Override
