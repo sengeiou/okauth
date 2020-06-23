@@ -13,25 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin;
+package com.github.wautsns.okauth.core.client.kernel.util;
 
-import lombok.experimental.UtilityClass;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
- * Built-in open platform names.
+ * Encryptor.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since Jun 23, 2020
  */
-@UtilityClass
-public class BuiltInOpenPlatformNames {
+@FunctionalInterface
+public interface Encryptor {
 
-    public static final String BAIDU = "Baidu";
-    public static final String DING_TALK = "DingTalk";
-    public static final String GITEE = "Gitee";
-    public static final String GITHUB = "GitHub";
-    public static final String OSCHINA = "OSChina";
-    public static final String WECHAT_OFFICIAL_ACCOUNT = "WechatOfficialAccount";
-    public static final String WECHAT_WORK_CORP = "WechatWorkCorp";
+    /**
+     * Encrypt bytes.
+     *
+     * @param bytes bytes
+     * @return bytes after being encrypted
+     */
+    byte[] encrypt(byte[] bytes);
+
+    /**
+     * Encrypt string.
+     *
+     * @param string string
+     * @return string after being encrypted
+     */
+    default String encrypt(String string) {
+        return new String(encrypt(string.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+    }
 
 }
