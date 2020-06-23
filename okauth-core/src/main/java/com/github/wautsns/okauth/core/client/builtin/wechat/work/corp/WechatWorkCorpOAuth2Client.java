@@ -161,19 +161,28 @@ public class WechatWorkCorpOAuth2Client extends OAuth2Client<WechatWorkCorpOAuth
 
     @Override
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
-        OAuth2Url basic;
-        if (appInfo.getAuthorizeType() == WechatWorkCorpOAuth2AppInfo.AuthorizeType.WEB) {
-            basic = initBasicAuthorizeUrlForWeb();
-        } else if (appInfo.getAuthorizeType() == WechatWorkCorpOAuth2AppInfo.AuthorizeType.QR_CODE) {
-            basic = initBasicAuthorizeUrlForQRCode();
-        } else {
-            throw new IllegalStateException("Unsupported authorizeType: " + appInfo.getAuthorizeType());
-        }
+        OAuth2Url basic = initBasicAuthorizeUrl(appInfo.getAuthorizeType());
         return state -> {
             OAuth2Url authorizeUrl = basic.copy();
             authorizeUrl.getQuery().addState(state);
             return authorizeUrl;
         };
+    }
+
+    /**
+     * Initialize basic authorize url.
+     *
+     * @return basic authorize url
+     */
+    private OAuth2Url initBasicAuthorizeUrl(WechatWorkCorpOAuth2AppInfo.AuthorizeType authorizeType) {
+        switch (authorizeType) {
+            case WEB:
+                return initBasicAuthorizeUrlForWeb();
+            case QR_CODE:
+                return initBasicAuthorizeUrlForQRCode();
+            default:
+                throw new IllegalStateException("Unsupported authorizeType: " + authorizeType);
+        }
     }
 
     /**
@@ -273,10 +282,10 @@ public class WechatWorkCorpOAuth2Client extends OAuth2Client<WechatWorkCorpOAuth
         DataMap dataMap = response.readJsonAsDataMap();
         String errcode = dataMap.getAsString("errcode");
         String errmsg = dataMap.getAsString("errmsg");
-        dataMap.remove("errcode");
-        dataMap.remove("errmsg");
         switch (errcode) {
             case "0":
+                dataMap.remove("errcode");
+                dataMap.remove("errmsg");
                 return dataMap;
             case "42001":
                 throw new ExpiredAccessTokenException(getOpenPlatform(), errcode, errmsg);

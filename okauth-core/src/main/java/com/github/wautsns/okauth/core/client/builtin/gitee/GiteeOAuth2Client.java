@@ -83,9 +83,9 @@ public class GiteeOAuth2Client
                 .addResponseTypeWithValueCode()
                 .addScope(GiteeOAuth2AppInfo.Scope.joinWith(appInfo.getScopes(), " "));
         return state -> {
-            OAuth2Url oAuth2Url = basic.copy();
-            oAuth2Url.getQuery().addState(state);
-            return oAuth2Url;
+            OAuth2Url authorizeUrl = basic.copy();
+            authorizeUrl.getQuery().addState(state);
+            return authorizeUrl;
         };
     }
 

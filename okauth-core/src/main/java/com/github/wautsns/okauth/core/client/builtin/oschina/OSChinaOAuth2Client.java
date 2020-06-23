@@ -82,9 +82,9 @@ public class OSChinaOAuth2Client
                 .addResponseTypeWithValueCode()
                 .addRedirectUri(appInfo.getRedirectUri());
         return state -> {
-            OAuth2Url oAuth2Url = basic.copy();
-            oAuth2Url.getQuery().addState(state);
-            return oAuth2Url;
+            OAuth2Url authorizeUrl = basic.copy();
+            authorizeUrl.getQuery().addState(state);
+            return authorizeUrl;
         };
     }
 

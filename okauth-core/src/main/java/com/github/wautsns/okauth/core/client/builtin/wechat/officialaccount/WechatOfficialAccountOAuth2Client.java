@@ -146,13 +146,13 @@ public class WechatOfficialAccountOAuth2Client
         DataMap dataMap = response.readJsonAsDataMap();
         String errcode = dataMap.getAsString("errcode");
         String errmsg = dataMap.getAsString("errmsg");
-        dataMap.remove("errcode");
-        dataMap.remove("errmsg");
         switch (errcode) {
             case "0":
+                dataMap.remove("errcode");
+                dataMap.remove("errmsg");
                 return dataMap;
             case "40014":
-                throw new InvalidAccessTokenException(getOpenPlatform(), errcode, errcode);
+                throw new InvalidAccessTokenException(getOpenPlatform(), errcode, errmsg);
             case "42001":
                 throw new ExpiredAccessTokenException(getOpenPlatform(), errcode, errmsg);
             case "42002":
