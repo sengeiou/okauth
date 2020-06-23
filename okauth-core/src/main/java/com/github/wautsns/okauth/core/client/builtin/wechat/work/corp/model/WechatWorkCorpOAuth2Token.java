@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
  *
  * <pre>
  * {
- * 	"access_token": "ACCESS_TOKEN(length:atLeast 512)",
+ * 	"access_token": "ACCESS_TOKEN",
  * 	"expires_in": 7200
  * }
  * </pre>

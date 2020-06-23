@@ -59,12 +59,8 @@ public class BaiduOAuth2User implements OAuth2User {
         return originalDataMap.getAsString("openid");
     }
 
-    /**
-     * Get userid.
-     *
-     * @return userid
-     */
-    public String getUserid() {
+    @Override
+    public String getUid() {
         return originalDataMap.getAsString("userid");
     }
 
@@ -92,18 +88,8 @@ public class BaiduOAuth2User implements OAuth2User {
         return originalDataMap.getAsString("portrait");
     }
 
-    /**
-     * Get sex.
-     *
-     * <ul>
-     * <li>{@code Gender.MALE}</li>
-     * <li>{@code Gender.FEMALE}</li>
-     * <li>{@code Gender.UNKNOWN}</li>
-     * </ul>
-     *
-     * @return Gender enumeration.
-     */
-    public Gender getSex() {
+    @Override
+    public Gender getGender() {
         String sex = originalDataMap.getAsString("sex");
         if ("1".equals(sex)) {
             return Gender.MALE;
@@ -140,18 +126,8 @@ public class BaiduOAuth2User implements OAuth2User {
     // #################### amendment ###################################################
 
     @Override
-    public String getUid() {
-        return getUserid();
-    }
-
-    @Override
     public String getAvatarUrl() {
         return "http://tb.himg.baidu.com/sys/portrait/item/" + getPortrait();
-    }
-
-    @Override
-    public Gender getGender() {
-        return getSex();
     }
 
 }

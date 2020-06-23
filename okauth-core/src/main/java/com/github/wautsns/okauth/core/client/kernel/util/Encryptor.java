@@ -15,7 +15,6 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.util;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**

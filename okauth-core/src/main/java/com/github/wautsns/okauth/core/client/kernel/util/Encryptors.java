@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Encryptors.
  *
- * @author jinjie.qiu
+ * @author wautsns
  * @since Jun 23, 2020
  */
 @UtilityClass

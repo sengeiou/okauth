@@ -83,7 +83,7 @@ public class WechatOfficialAccountOAuth2Token implements OAuth2RefreshableToken 
      *
      * <p>User authorization scope.
      *
-     * @return scope
+     * @return scopes
      */
     public String getScopes() {
         return originalDataMap.getAsString("scope");

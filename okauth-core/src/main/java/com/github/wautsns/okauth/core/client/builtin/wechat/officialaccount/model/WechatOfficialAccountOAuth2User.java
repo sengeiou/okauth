@@ -70,27 +70,13 @@ public class WechatOfficialAccountOAuth2User implements OAuth2User {
         return originalDataMap.getAsString("nickname");
     }
 
-    /**
-     * Get head img url.
-     *
-     * @return head img url
-     */
-    public String getHeadimgurl() {
+    @Override
+    public String getAvatarUrl() {
         return originalDataMap.getAsString("headimgurl");
     }
 
-    /**
-     * Get sex.
-     *
-     * <ul>
-     * <li>{@code Gender.MALE}</li>
-     * <li>{@code Gender.FEMALE}</li>
-     * <li>{@code Gender.UNKNOWN}</li>
-     * </ul>
-     *
-     * @return Gender enumeration.
-     */
-    public Gender getSex() {
+    @Override
+    public Gender getGender() {
         String sex = originalDataMap.getAsString("sex");
         if ("1".equals(sex)) {
             return Gender.MALE;
@@ -137,18 +123,6 @@ public class WechatOfficialAccountOAuth2User implements OAuth2User {
      */
     public List<String> getPrivilege() {
         return originalDataMap.getAs("privilege");
-    }
-
-    // #################### amendment ###################################################
-
-    @Override
-    public String getAvatarUrl() {
-        return getHeadimgurl();
-    }
-
-    @Override
-    public Gender getGender() {
-        return getSex();
     }
 
 }

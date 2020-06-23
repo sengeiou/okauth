@@ -27,11 +27,11 @@ import lombok.experimental.Accessors;
  * <pre>
  * {
  * 	"expires_in": 2592000,
- * 	"refresh_token": "REFRESH_TOKEN(length:83)",
- * 	"access_token": "ACCESS_TOKEN(length:83)",
+ * 	"refresh_token": "REFRESH_TOKEN",
+ * 	"access_token": "ACCESS_TOKEN",
  * 	"session_secret": "",
  * 	"session_key": "",
- * 	"scope": "SCOPE(delimiter:space)"
+ * 	"scope": "SCOPE"
  * }
  * </pre>
  *
@@ -91,12 +91,12 @@ public class BaiduOAuth2Token implements OAuth2RefreshableToken {
     }
 
     /**
-     * Get scope(delimiter: space).
+     * Get scopes(delimiter: space).
      *
      * <p>Final access scope of access token, that is the list of permissions actually granted by the user (the user
      * may cancel some requested permissions when authorizing the page)
      *
-     * @return scope
+     * @return scopes
      * @see com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo.Scope
      */
     public String getScopes() {

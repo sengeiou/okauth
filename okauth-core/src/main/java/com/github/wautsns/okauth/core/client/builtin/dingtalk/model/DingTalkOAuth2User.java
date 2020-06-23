@@ -24,6 +24,14 @@ import lombok.experimental.Accessors;
 /**
  * DingTalk oauth2 user.
  *
+ * <pre>
+ * {
+ *  "nick": "张三",
+ *  "openid": "liSii8KCxxxxx",
+ *  "unionid": "7Huu46kk"
+ * }
+ * </pre>
+ *
  * @author wautsns
  * @since Jun 22, 2020
  */
@@ -51,20 +59,9 @@ public class DingTalkOAuth2User implements OAuth2User {
         return originalDataMap.getAsString("unionid");
     }
 
-    /**
-     * Get nick.
-     *
-     * @return nick
-     */
-    public String getNick() {
-        return originalDataMap.getAsString("nick");
-    }
-
-    // #################### amendment ###################################################
-
     @Override
     public String getNickname() {
-        return getNick();
+        return originalDataMap.getAsString("nick");
     }
 
 }
