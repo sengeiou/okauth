@@ -54,6 +54,8 @@ public class DingTalkOAuth2Client extends OAuth2Client<DingTalkOAuth2AppInfo, Di
         return BuiltInOpenPlatformNames.DING_TALK;
     }
 
+    // #################### initialize api ##############################################
+
     @Override
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         OAuth2Url basic = initBasicAuthorizeUrl(appInfo.getAuthorizeType());
@@ -152,6 +154,8 @@ public class DingTalkOAuth2Client extends OAuth2Client<DingTalkOAuth2AppInfo, Di
             return new DingTalkOAuth2User(executeAndCheck(request));
         };
     }
+
+    // #################### execute request and check response ##########################
 
     /**
      * Execute request and check response.

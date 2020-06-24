@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount;
+package com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
 import lombok.Data;

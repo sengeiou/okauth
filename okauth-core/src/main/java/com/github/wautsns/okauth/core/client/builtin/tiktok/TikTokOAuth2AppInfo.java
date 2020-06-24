@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.gitee;
+package com.github.wautsns.okauth.core.client.builtin.tiktok;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
 import lombok.Data;
@@ -25,17 +25,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Gitee oauth2 app info.
+ * TikTok oauth2 app info.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since Jun 23, 2020
  */
 @Data
 @Accessors(chain = true)
-public class GiteeOAuth2AppInfo implements OAuth2AppInfo {
+public class TikTokOAuth2AppInfo implements OAuth2AppInfo {
 
-    /** Client id. */
-    private String clientId;
+    /** Client key. */
+    private String clientKey;
     /** Client secret. */
     private String clientSecret;
     /** Redirect uri. */
@@ -43,36 +43,38 @@ public class GiteeOAuth2AppInfo implements OAuth2AppInfo {
     /** The list of permissions. */
     private List<Scope> scopes;
 
-    /**
-     * Scope.
-     *
-     * @see <a href="https://gitee.com/api/v5/oauth_doc#/">Scope list.</a>
-     */
+    /** Scope. */
     @RequiredArgsConstructor
     public enum Scope {
 
-        /** Access user's personal information, latest news, etc. */
+        LOGIN_ID("login_id"),
         USER_INFO("user_info"),
-        /** View, create, and update user's projects. */
-        PROJECTS("projects"),
-        /** View, publish, and update user's Pull Request. */
-        PULL_REQUESTS("pull_requests"),
-        /** View, publish, and update user issues. */
-        ISSUES("issues"),
-        /** View, post, and manage user comments in projects and code snippets. */
-        NOTES("notes"),
-        /** View, deploy, and delete a user's public key. */
-        KEYS("keys"),
-        /** View, deploy, and update users' webhooks. */
-        HOOK("hook"),
-        /** View and manage user organizations and members. */
-        GROUPS("groups"),
-        /** View, delete, and update user code snippets. */
-        GISTS("gists"),
-        /** View user's personal mailbox information. */
-        ENTERPRISES("enterprises");
+        FANS_LIST("fans.list"),
+        FANS_DATA("fans.data"),
+        FOLLOWING_LIST("following.list"),
+        IM("im"),
+        HOT_SEARCH("hotsearch"),
+        AWEME_SHARE("aweme.share"),
+        DISCOVERY_ENT("discovery.ent"),
+        VIDEO_CREATE("video.create"),
+        VIDEO_LIST("video.list"),
+        VIDEO_DATE("video.data"),
+        VIDEO_DELETE("video.delete"),
+        VIDEO_COMMENT("video.comment"),
+        POI_BASE("poi.base"),
+        POI_SEARCH("poi.search"),
+        POI_PRODUCT("poi.product"),
+        STAR_TOPS("star_tops"),
+        STAR_TOP_SCORE_DISPLAY("star_top_score_display"),
+        STAR_AUTHOR_SCORE_DISPLAY("star_author_score_display"),
+        ENTERPRISE_IM("enterprise.im"),
+        ENTERPRISE_DATA("enterprise.data"),
+        ENTERPRISE_GROUPON("enterprise.groupon"),
+        DATA_EXTERNAL_USER("data.external.user"),
+        DATA_EXTERNAL_POI("data.external.poi"),
+        DATA_EXTERNAL_ITEM("data.external.item"),
+        DATA_EXTERNAL_SDK_SHARE("data.external.sdk_share");
 
-        /** Value. */
         public final String value;
 
         /**

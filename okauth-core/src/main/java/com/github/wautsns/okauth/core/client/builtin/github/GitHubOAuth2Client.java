@@ -69,6 +69,8 @@ public class GitHubOAuth2Client
         return BuiltInOpenPlatformNames.GITHUB;
     }
 
+    // #################### initialize api ##############################################
+
     @Override
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         String url = "https://github.com/login/oauth/authorize";

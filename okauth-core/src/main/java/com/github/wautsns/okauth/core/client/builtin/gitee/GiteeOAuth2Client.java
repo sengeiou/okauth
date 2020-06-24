@@ -73,6 +73,8 @@ public class GiteeOAuth2Client
         return BuiltInOpenPlatformNames.GITEE;
     }
 
+    // #################### initialize api ##############################################
+
     @Override
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         String url = "https://gitee.com/oauth/authorize";

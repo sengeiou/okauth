@@ -13,56 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model;
+package com.github.wautsns.okauth.core.client.builtin.tiktok.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import lombok.Data;
-
-import java.util.List;
+import lombok.experimental.Accessors;
 
 /**
- * WechatOfficialAccount oauth2 user.
+ * TikTok oauth2 user.
  *
  * <pre>
  * {
- *   "openid":" OPENID",
- *   "nickname": NICKNAME,
- *   "sex":"1",
- *   "province":"PROVINCE",
- *   "city":"CITY",
- *   "country":"COUNTRY",
- *   "headimgurl": "http://thirdwx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46",
- *   "privilege":["PRIVILEGE1" "PRIVILEGE2"],
- *   "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"
+ *  "open_id": "OPEN_ID",
+ *  "union_id": "UNION_ID",
+ *  "nickname": "NICKNAME",
+ *  "avatar": "AVATAR",
+ *  "city": "CITY",
+ *  "province": "PROVINCE",
+ *  "country": "COUNTRY",
+ *  "gender": GENDER,
+ *  "e_account_role": "E_ACCOUNT_ROLE",
  * }
  * </pre>
  *
  * @author wautsns
- * @since Jun 19, 2020
+ * @since Jun 23, 2020
  */
 @Data
-public class WechatOfficialAccountOAuth2User implements OAuth2User {
+@Accessors(chain = true)
+public class TikTokOAuth2User implements OAuth2User {
 
-    private static final long serialVersionUID = 133319205583865255L;
+    private static final long serialVersionUID = -3175318888587047072L;
 
     /** Original data map. */
     private final DataMap originalDataMap;
 
     @Override
     public String getOpenPlatform() {
-        return BuiltInOpenPlatformNames.WECHAT_OFFICIAL_ACCOUNT;
+        return BuiltInOpenPlatformNames.TIK_TOK;
     }
 
     @Override
     public String getOpenid() {
-        return originalDataMap.getAsString("openid");
+        return originalDataMap.getAsString("open_id");
     }
 
     @Override
     public String getUnionid() {
-        return originalDataMap.getAsString("unionid");
+        return originalDataMap.getAsString("union_id");
     }
 
     @Override
@@ -72,15 +72,15 @@ public class WechatOfficialAccountOAuth2User implements OAuth2User {
 
     @Override
     public String getAvatarUrl() {
-        return originalDataMap.getAsString("headimgurl");
+        return originalDataMap.getAsString("avatar");
     }
 
     @Override
     public Gender getGender() {
-        String sex = originalDataMap.getAsString("sex");
-        if ("1".equals(sex)) {
+        String gender = originalDataMap.getAsString("gender");
+        if ("1".equals(gender)) {
             return Gender.MALE;
-        } else if ("2".equals(sex)) {
+        } else if ("2".equals(gender)) {
             return Gender.FEMALE;
         } else {
             return Gender.UNKNOWN;
@@ -88,7 +88,7 @@ public class WechatOfficialAccountOAuth2User implements OAuth2User {
     }
 
     /**
-     * Get country(eg. China: {@code "CN"}).
+     * Get country.
      *
      * @return country
      */
@@ -112,17 +112,6 @@ public class WechatOfficialAccountOAuth2User implements OAuth2User {
      */
     public String getCity() {
         return originalDataMap.getAsString("city");
-    }
-
-    /**
-     * Get privilege.
-     *
-     * <p>User privilege information, such as Wechat Woka user(chinaunicom).
-     *
-     * @return privilege
-     */
-    public List<String> getPrivilege() {
-        return originalDataMap.getAs("privilege");
     }
 
 }

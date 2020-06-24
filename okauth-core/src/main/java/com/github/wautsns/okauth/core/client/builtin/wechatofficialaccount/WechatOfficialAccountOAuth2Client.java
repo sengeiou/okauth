@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount;
+package com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
@@ -21,8 +21,8 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRespons
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
-import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model.WechatOfficialAccountOAuth2Token;
-import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model.WechatOfficialAccountOAuth2User;
+import com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount.model.WechatOfficialAccountOAuth2Token;
+import com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount.model.WechatOfficialAccountOAuth2User;
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForToken;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
@@ -64,6 +64,8 @@ public class WechatOfficialAccountOAuth2Client
     public String getOpenPlatform() {
         return BuiltInOpenPlatformNames.WECHAT_OFFICIAL_ACCOUNT;
     }
+
+    // #################### initialize api ##############################################
 
     @Override
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {

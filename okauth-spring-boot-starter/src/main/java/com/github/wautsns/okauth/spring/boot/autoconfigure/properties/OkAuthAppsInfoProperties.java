@@ -16,12 +16,13 @@
 package com.github.wautsns.okauth.spring.boot.autoconfigure.properties;
 
 import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.dingtalk.DingTalkOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2AppInfo;
-import com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.WechatOfficialAccountOAuth2AppInfo;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WechatWorkCorpOAuth2AppInfo;
-import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.tiktok.TikTokOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount.WechatOfficialAccountOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.WechatWorkCorpOAuth2AppInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -39,22 +40,26 @@ public class OkAuthAppsInfoProperties {
 
     /** Baidu app info properties. */
     private OkAuthBaiduAppInfo baidu;
+    /** DingTalk app info properties. */
+    private OkAuthDingTalkAppInfo dingTalk;
     /** Gitee app info properties. */
     private OkAuthGiteeAppInfo gitee;
-    /** Baidu app info properties. */
+    /** GitHub app info properties. */
     private OkAuthGitHubAppInfo github;
-    /** Baidu app info properties. */
+    /** OSChina app info properties. */
     private OkAuthOSChinaAppInfo oschina;
-    /** Baidu app info properties. */
+    /** TikTok app info properties. */
+    private OkAuthTikTokAppInfo tikTok;
+    /** WechatOfficialAccount app info properties. */
     private OkAuthWechatOfficialAccountAppInfo wechatOfficialAccount;
-    /** Baidu app info properties. */
+    /** WechatWorkCorp app info properties. */
     private OkAuthWechatWorkCorpAppInfo wechatWorkCorp;
 
     // #################### built-in open platform app info #############################
 
     @Data
     @Accessors(chain = true)
-    public abstract static class OkAuthAppInfo<I extends OAuth2AppInfo> {
+    public abstract static class OkAuthAppInfo {
 
         /** Whether to enable the open platform. */
         private Boolean enabled;
@@ -67,7 +72,7 @@ public class OkAuthAppsInfoProperties {
     @Data
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class OkAuthBaiduAppInfo extends OkAuthAppInfo<BaiduOAuth2AppInfo> {
+    public static class OkAuthBaiduAppInfo extends OkAuthAppInfo {
 
         /** Baidu app info. */
         @NestedConfigurationProperty
@@ -78,7 +83,18 @@ public class OkAuthAppsInfoProperties {
     @Data
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class OkAuthGiteeAppInfo extends OkAuthAppInfo<GiteeOAuth2AppInfo> {
+    public static class OkAuthDingTalkAppInfo extends OkAuthAppInfo {
+
+        /** DingTalk app info. */
+        @NestedConfigurationProperty
+        private DingTalkOAuth2AppInfo appInfo;
+
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @EqualsAndHashCode(callSuper = true)
+    public static class OkAuthGiteeAppInfo extends OkAuthAppInfo {
 
         /** Gitee app info. */
         @NestedConfigurationProperty
@@ -89,7 +105,7 @@ public class OkAuthAppsInfoProperties {
     @Data
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class OkAuthGitHubAppInfo extends OkAuthAppInfo<GitHubOAuth2AppInfo> {
+    public static class OkAuthGitHubAppInfo extends OkAuthAppInfo {
 
         /** GitHub app info. */
         @NestedConfigurationProperty
@@ -100,7 +116,7 @@ public class OkAuthAppsInfoProperties {
     @Data
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class OkAuthOSChinaAppInfo extends OkAuthAppInfo<OSChinaOAuth2AppInfo> {
+    public static class OkAuthOSChinaAppInfo extends OkAuthAppInfo {
 
         /** OSChina app info. */
         @NestedConfigurationProperty
@@ -111,7 +127,18 @@ public class OkAuthAppsInfoProperties {
     @Data
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class OkAuthWechatOfficialAccountAppInfo extends OkAuthAppInfo<WechatOfficialAccountOAuth2AppInfo> {
+    public static class OkAuthTikTokAppInfo extends OkAuthAppInfo {
+
+        /** TikTok app info. */
+        @NestedConfigurationProperty
+        private TikTokOAuth2AppInfo appInfo;
+
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @EqualsAndHashCode(callSuper = true)
+    public static class OkAuthWechatOfficialAccountAppInfo extends OkAuthAppInfo {
 
         /** WechatOfficialAccount app info. */
         @NestedConfigurationProperty
@@ -122,7 +149,7 @@ public class OkAuthAppsInfoProperties {
     @Data
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class OkAuthWechatWorkCorpAppInfo extends OkAuthAppInfo<WechatWorkCorpOAuth2AppInfo> {
+    public static class OkAuthWechatWorkCorpAppInfo extends OkAuthAppInfo {
 
         /** WechatWorkCorp app info. */
         @NestedConfigurationProperty

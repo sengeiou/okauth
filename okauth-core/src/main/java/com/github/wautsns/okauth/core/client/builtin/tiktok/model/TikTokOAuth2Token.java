@@ -13,32 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model;
+package com.github.wautsns.okauth.core.client.builtin.tiktok.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
-import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * WechatWorkCorp oauth2 token.
+ * TikTok oauth2 token.
  *
  * <pre>
  * {
- * 	"access_token": "ACCESS_TOKEN",
- * 	"expires_in": 7200
+ *  "access_token": "access_token",
+ *  "expires_in": 86400,
+ *  "refresh_token": "refresh_token",
+ *  "refresh_expires_in": 86400,
+ *  "open_id": "aaa-bbb-ccc",
+ *  "scope": "user_info"
  * }
  * </pre>
  *
  * @author wautsns
- * @since May 23, 2020
+ * @since Jun 23, 2020
  */
 @Data
 @Accessors(chain = true)
-public class WechatWorkCorpOAuth2Token implements OAuth2Token {
+public class TikTokOAuth2Token implements OAuth2RefreshableToken {
 
-    private static final long serialVersionUID = -8354114542294039343L;
+    private static final long serialVersionUID = -7768424686277910638L;
 
     /** Token id. */
     private String tokenId;
@@ -47,7 +51,7 @@ public class WechatWorkCorpOAuth2Token implements OAuth2Token {
 
     @Override
     public String getOpenPlatform() {
-        return BuiltInOpenPlatformNames.WECHAT_WORK_CORP;
+        return BuiltInOpenPlatformNames.TIK_TOK;
     }
 
     @Override
@@ -60,15 +64,32 @@ public class WechatWorkCorpOAuth2Token implements OAuth2Token {
         return originalDataMap.getAsInteger("expires_in");
     }
 
+    @Override
+    public String getRefreshToken() {
+        return originalDataMap.getAsString("refresh_token");
+    }
+
+    @Override
+    public Integer getRefreshTokenExpirationSeconds() {
+        return originalDataMap.getAsInteger("refresh_expires_in");
+    }
+
     /**
-     * Set access token expiration seconds.
+     * Get openid.
      *
-     * @param accessTokenExpirationSeconds access token expiration seconds
-     * @return self reference
+     * @return openid
      */
-    public WechatWorkCorpOAuth2Token setAccessTokenExpirationSeconds(Integer accessTokenExpirationSeconds) {
-        originalDataMap.put("expires_in", accessTokenExpirationSeconds);
-        return this;
+    public String getOpenid() {
+        return originalDataMap.getAsString("open_id");
+    }
+
+    /**
+     * Get scopes(delimiter: comma).
+     *
+     * @return scopes
+     */
+    public String getScopes() {
+        return originalDataMap.getAsString("scope");
     }
 
 }

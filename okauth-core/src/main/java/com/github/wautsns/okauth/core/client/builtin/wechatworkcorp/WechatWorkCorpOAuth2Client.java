@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp;
+package com.github.wautsns.okauth.core.client.builtin.wechatworkcorp;
 
 import com.github.wautsns.okauth.core.assist.http.builtin.httpclient4.HttpClient4OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
@@ -22,10 +22,10 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRespons
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WechatWorkCorpOAuth2Token;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WechatWorkCorpOAuth2User;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache.WechatWorkCorpTokenCache;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache.builtin.WechatWorkCorpTokenLocalCache;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.model.WechatWorkCorpOAuth2Token;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.model.WechatWorkCorpOAuth2User;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.service.tokencache.WechatWorkCorpTokenCache;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.service.tokencache.builtin.WechatWorkCorpTokenLocalCache;
 import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;

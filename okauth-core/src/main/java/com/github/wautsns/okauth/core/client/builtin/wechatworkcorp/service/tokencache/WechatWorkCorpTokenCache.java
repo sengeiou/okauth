@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache;
+package com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.service.tokencache;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WechatWorkCorpOAuth2Client;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WechatWorkCorpOAuth2Token;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.WechatWorkCorpOAuth2Client;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.model.WechatWorkCorpOAuth2Token;
 import com.github.wautsns.okauth.core.client.kernel.api.basic.OAuth2SupplierApi;
 
 /**
