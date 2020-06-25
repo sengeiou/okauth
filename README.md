@@ -125,6 +125,7 @@ okauth:
       max-idle-time: 5M
       keep-alive-timout: 3M
       retry-times: 1
+      proxy: null
   apps-info:
     github:
       app-info:
@@ -133,6 +134,7 @@ okauth:
         properties:
           connect-timeout: 5S
           retry-times: 3
+          proxy: https://proxy-ip:proxy-port
 ```
 
 ### 2.4.2 非 Spring Boot 环境
@@ -151,10 +153,11 @@ GitHubOAuth2Client client = new GitHubOAuth2Client(null, oauth2HttpClient);
 
 # 4 目前已支持的开放平台
 
-| 🏢 开放平台 | ✅ OkAuthClient | 📄 官方文档 |
+| 🏢 开放平台 | ✅ OAuth2Client | 📄 官方文档 |
 |:----------|:---------------:|:----------:|
 | Baidu(百度) | [BaiduOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/baidu/BaiduOAuth2Client.java "点击查看源码") | [查看官方文档](http://developer.baidu.com/wiki/index.php?title=docs/oauth) |
 | DingTalk(钉钉) | [DingTalkOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/dingtalk/DingTalkOAuth2Client.java "点击查看源码") | [查看官方文档](https://ding-doc.dingtalk.com/doc#/serverapi3/mrugr3) |
+| ElemeShopIsv(饿了么-商家开放平台-企业应用/平台应用) | [ElemeShopIsvOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/elemeshopisv/ElemeShopIsvOAuth2Client.java "点击查看源码") | [查看官方文档](https://open.shop.ele.me/openapi/documents/isvoauth) |
 | Gitee(码云) | [GiteeOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/gitee/GiteeOAuth2Client.java "点击查看源码") | [查看官方文档](https://gitee.com/api/v5/oauth_doc) |
 | GitHub | [GitHubOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/github/GitHubOAuth2Client.java "点击查看源码") | [查看官方文档](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/) |
 | OSChina(开源中国) | [OSChinaOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/oschina/OSChinaOAuth2Client.java "点击查看源码") | [查看官方文档](https://www.oschina.net/openapi/docs) |
