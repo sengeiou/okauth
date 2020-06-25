@@ -20,6 +20,8 @@ import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.dingtalk.DingTalkOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.dingtalk.DingTalkOAuth2Client;
+import com.github.wautsns.okauth.core.client.builtin.elemeshopisv.ElemeShopIsvOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.elemeshopisv.ElemeShopIsvOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2Client;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo;
@@ -83,6 +85,20 @@ public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
         DingTalkOAuth2AppInfo appInfo = dingTalk.getAppInfo();
         OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, dingTalk);
         return new DingTalkOAuth2Client(appInfo, httpClient);
+    }
+
+    // #################### ElemeShopIsv ################################################
+
+    @Bean
+    @ConditionalOnProperty("okauth.apps-info.eleme-shop-isv.enabled")
+    @ConditionalOnMissingBean
+    public ElemeShopIsvOAuth2Client elemeShopIsvOAuth2Client(
+            OkAuthProperties okauthProps,
+            TokenRefreshableOAuth2Client.TokenRefreshCallback tokenRefreshCallback) {
+        OkAuthAppsInfoProperties.OkAuthElemeShopIsvAppInfo elemeShopIsv = okauthProps.getAppsInfo().getElemeShopIsv();
+        ElemeShopIsvOAuth2AppInfo appInfo = elemeShopIsv.getAppInfo();
+        OAuth2HttpClient httpClient = OkAuthAutoConfigureUtils.initOAuth2HttpClient(okauthProps, elemeShopIsv);
+        return new ElemeShopIsvOAuth2Client(appInfo, httpClient, tokenRefreshCallback);
     }
 
     // #################### Gitee #######################################################

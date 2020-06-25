@@ -17,6 +17,7 @@ package com.github.wautsns.okauth.spring.boot.autoconfigure.properties;
 
 import com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.dingtalk.DingTalkOAuth2AppInfo;
+import com.github.wautsns.okauth.core.client.builtin.elemeshopisv.ElemeShopIsvOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.github.GitHubOAuth2AppInfo;
 import com.github.wautsns.okauth.core.client.builtin.oschina.OSChinaOAuth2AppInfo;
@@ -42,6 +43,8 @@ public class OkAuthAppsInfoProperties {
     private OkAuthBaiduAppInfo baidu;
     /** DingTalk app info properties. */
     private OkAuthDingTalkAppInfo dingTalk;
+    /** ElemeShopIsv app info properties. */
+    private OkAuthElemeShopIsvAppInfo elemeShopIsv;
     /** Gitee app info properties. */
     private OkAuthGiteeAppInfo gitee;
     /** GitHub app info properties. */
@@ -88,6 +91,17 @@ public class OkAuthAppsInfoProperties {
         /** DingTalk app info. */
         @NestedConfigurationProperty
         private DingTalkOAuth2AppInfo appInfo;
+
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @EqualsAndHashCode(callSuper = true)
+    public static class OkAuthElemeShopIsvAppInfo extends OkAuthAppInfo {
+
+        /** ElemeShopIsv app info. */
+        @NestedConfigurationProperty
+        private ElemeShopIsvOAuth2AppInfo appInfo;
 
     }
 

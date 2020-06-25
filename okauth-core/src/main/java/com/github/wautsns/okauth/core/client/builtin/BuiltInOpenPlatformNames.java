@@ -28,6 +28,7 @@ public class BuiltInOpenPlatformNames {
 
     public static final String BAIDU = "Baidu";
     public static final String DING_TALK = "DingTalk";
+    public static final String ELEME_SHOP_ISV = "ElemeShopIsv";
     public static final String GITEE = "Gitee";
     public static final String GITHUB = "GitHub";
     public static final String OSCHINA = "OSChina";

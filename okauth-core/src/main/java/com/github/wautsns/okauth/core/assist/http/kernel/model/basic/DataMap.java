@@ -208,6 +208,20 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
         return new UnsupportedOperationException(String.format("Cannot convert [%s] to [%s].", value, targetClass));
     }
 
+    // #################### others ######################################################
+
+    /**
+     * Put value with the specified name and return self reference.
+     *
+     * @param name name
+     * @param value value
+     * @return self reference
+     */
+    public DataMap with(String name, Serializable value) {
+        put(name, value);
+        return this;
+    }
+
     // #################### constructors ################################################
 
     /** Construct an empty {@code DataMap} instance with the default initial capacity (16) and load factor (0.75). */

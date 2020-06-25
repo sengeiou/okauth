@@ -15,13 +15,14 @@
  */
 package com.github.wautsns.okauth.core.assist.http.kernel.model.basic.entity.builtin;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.entity.OAuth2HttpEntity;
 import com.github.wautsns.okauth.core.assist.http.kernel.util.WriteUtils;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * OAuth2 http json entity.
@@ -33,54 +34,83 @@ public class OAuth2HttpJsonEntity implements OAuth2HttpEntity {
 
     private static final long serialVersionUID = -5283149053170420932L;
 
-    /** DataMap for shallow copyable values. */
-    @JsonUnwrapped
-    private DataMap shallowCopyableDataMap;
-    /** DataMap for deep copy values. */
-    @JsonUnwrapped
-    private DataMap deepCopyDataMap;
+    /** Changeable dataMap names. */
+    private Set<String> changeableDataMapNames;
+    /** Original data map. */
+    private DataMap origin;
 
     /**
-     * Put shallow copyable value.
+     * Put unchanged value.
      *
      * @param name name
-     * @param value shallow copyable value
+     * @param value unchanged value
      * @return self reference
      */
-    public OAuth2HttpJsonEntity putShallowCopyableValue(String name, Serializable value) {
-        if (shallowCopyableDataMap == null) {
-            shallowCopyableDataMap = new DataMap();
-        }
-        shallowCopyableDataMap.put(name, value);
+    public OAuth2HttpJsonEntity putUnchangedValue(String name, Serializable value) {
+        if (origin == null) { origin = new DataMap(8); }
+        origin.put(name, value);
         return this;
     }
 
     /**
-     * Put deep copy value.
+     * Put changeable data map.
      *
      * @param name name
-     * @param value shallow copyable value
+     * @param value changeable data map
      * @return self reference
      */
-    public OAuth2HttpJsonEntity putDeepCopyValue(String name, Serializable value) {
-        if (deepCopyDataMap == null) {
-            deepCopyDataMap = new DataMap();
-        }
-        deepCopyDataMap.put(name, value);
+    public OAuth2HttpJsonEntity putChangeableDataMap(String name, DataMap value) {
+        origin.put(name, value);
+        if (changeableDataMapNames == null) { changeableDataMapNames = new HashSet<>(); }
+        changeableDataMapNames.add(name);
         return this;
+    }
+
+    /**
+     * Get as {@code T} value.
+     *
+     * <ul>
+     * <li>{@code value} =&gt; {@code (T)value}</li>
+     * </ul>
+     *
+     * @param name name
+     * @param <T> type of value
+     * @return {@code T} value, or {@code null} if the json entity contains no mapping for the name
+     */
+    public <T> T getAs(String name) {
+        return origin.getAs(name);
+    }
+
+    /**
+     * Get data map with specified name.
+     *
+     * @param name name
+     * @return data map with specified name
+     */
+    public DataMap getDataMap(String name) {
+        return origin.getAsDataMap(name);
     }
 
     @Override
     public byte[] toBytes() {
-        return WriteUtils.writeObjectAsJsonString(this).getBytes(StandardCharsets.UTF_8);
+        return WriteUtils.writeObjectAsJsonString(origin).getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
     public OAuth2HttpJsonEntity copy() {
         OAuth2HttpJsonEntity copy = new OAuth2HttpJsonEntity();
-        copy.shallowCopyableDataMap = this.shallowCopyableDataMap;
-        if (this.deepCopyDataMap != null) {
-            copy.deepCopyDataMap = copyDataMap(this.deepCopyDataMap);
+        copy.changeableDataMapNames = this.changeableDataMapNames;
+        if (changeableDataMapNames == null) {
+            copy.origin = new DataMap(this.origin);
+        } else {
+            copy.origin = new DataMap(this.origin.size() + 2);
+            this.origin.forEach((name, value) -> {
+                if (value instanceof DataMap && changeableDataMapNames.contains(name)) {
+                    copy.origin.put(name, copyDataMap((DataMap) value));
+                } else {
+                    copy.origin.put(name, value);
+                }
+            });
         }
         return copy;
     }

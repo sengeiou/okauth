@@ -50,7 +50,7 @@ public class OAuth2RedirectUriQuery implements Serializable {
     /**
      * Set error_description.
      *
-     * <p>Apply to: GitHub.
+     * <p>Apply to: GitHub, ElemeShopIsv
      *
      * @param errorDescription error description
      * @return self reference

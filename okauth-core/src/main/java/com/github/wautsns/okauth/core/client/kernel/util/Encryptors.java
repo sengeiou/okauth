@@ -22,6 +22,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -32,6 +33,36 @@ import java.security.NoSuchAlgorithmException;
  */
 @UtilityClass
 public class Encryptors {
+
+    /** Md5. */
+    public static final Encryptor MD5 = new Encryptor() {
+
+        private final char[] hexs = "0123456789ABCDEF".toCharArray();
+
+        @Override
+        public byte[] encrypt(byte[] bytes) {
+            return doEncrypt(bytes).getBytes(StandardCharsets.UTF_8);
+        }
+
+        @Override
+        public String encrypt(String string) {
+            return doEncrypt(string.getBytes(StandardCharsets.UTF_8));
+        }
+
+        private String doEncrypt(byte[] bytes) {
+            try {
+                byte[] digest = MessageDigest.getInstance("MD5").digest(bytes);
+                StringBuilder md5 = new StringBuilder(digest.length);
+                for (int b : digest) {
+                    b &= 0xFF;
+                    md5.append(hexs[b >>> 4]).append(hexs[b & 0xF]);
+                }
+                return md5.toString();
+            } catch (NoSuchAlgorithmException e) {
+                throw new IllegalStateException("Unreachable.", e);
+            }
+        }
+    };
 
     /**
      * Encryption algorithm: HmacSHA256
@@ -49,7 +80,7 @@ public class Encryptors {
                 byte[] signatureBytes = mac.doFinal(bytes);
                 return Base64.encodeBase64(signatureBytes);
             } catch (NoSuchAlgorithmException e) {
-                throw new IllegalStateException("Unreachable.");
+                throw new IllegalStateException("Unreachable.", e);
             } catch (InvalidKeyException e) {
                 throw new IllegalArgumentException("Invalid key", e);
             }

@@ -18,6 +18,7 @@ package com.github.wautsns.okauth.core.assist.http.kernel.util;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2UrlEncodedEntries;
 import lombok.experimental.UtilityClass;
 
@@ -34,7 +35,8 @@ public class WriteUtils {
 
     /** Jackson ObjectMapper. */
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
-            .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
+            .configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false)
+            .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
     /**
      * Write urlEncodedEntries as query like text(eg. a=3&b=qwe).
