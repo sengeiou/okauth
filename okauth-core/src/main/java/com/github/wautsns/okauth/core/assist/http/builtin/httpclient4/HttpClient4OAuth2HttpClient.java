@@ -18,6 +18,7 @@ package com.github.wautsns.okauth.core.assist.http.builtin.httpclient4;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
+import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.entity.OAuth2HttpEntity;
 import com.github.wautsns.okauth.core.assist.http.kernel.properties.OAuth2HttpClientProperties;
 import com.github.wautsns.okauth.core.exception.OAuth2IOException;
 import lombok.Getter;
@@ -35,8 +36,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -44,8 +44,6 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.EnumMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -162,11 +160,11 @@ public class HttpClient4OAuth2HttpClient implements OAuth2HttpClient {
         HttpRequestBase originalHttpRequest = initializer.apply(request.getUrl().toString());
         request.forEachHeader(originalHttpRequest::addHeader);
         if (originalHttpRequest instanceof HttpEntityEnclosingRequestBase) {
-            HttpEntityEnclosingRequestBase tmp = (HttpEntityEnclosingRequestBase) originalHttpRequest;
-            List<String> nameValuePairs = new LinkedList<>();
-            request.forEachFormItem((name, value) -> nameValuePairs.add(name + "=" + value));
-            String content = String.join("&", nameValuePairs);
-            tmp.setEntity(new StringEntity(content, ContentType.APPLICATION_FORM_URLENCODED));
+            OAuth2HttpEntity entity = request.getEntity();
+            if (entity != null) {
+                ByteArrayEntity originalEntity = new ByteArrayEntity(entity.toBytes());
+                ((HttpEntityEnclosingRequestBase) originalHttpRequest).setEntity(originalEntity);
+            }
         }
         return originalHttpRequest;
     }

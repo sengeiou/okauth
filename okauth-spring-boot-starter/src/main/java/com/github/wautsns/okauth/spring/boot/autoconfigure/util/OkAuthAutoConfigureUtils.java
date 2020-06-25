@@ -43,7 +43,7 @@ public class OkAuthAutoConfigureUtils {
      * @return oauth2 http client
      */
     public static OAuth2HttpClient initOAuth2HttpClient(
-            OkAuthProperties okauthProps, OkAuthAppsInfoProperties.OkAuthAppInfo<?> okauthAppInfoProps) {
+            OkAuthProperties okauthProps, OkAuthAppsInfoProperties.OkAuthAppInfo okauthAppInfoProps) {
         OkAuthHttpClientProperties okauthHttpClientProps = fillNullProperties(
                 okauthAppInfoProps.getHttpClient(), okauthProps.getDefaultHttpClient());
         try {

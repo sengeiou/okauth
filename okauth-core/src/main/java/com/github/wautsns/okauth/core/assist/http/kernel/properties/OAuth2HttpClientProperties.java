@@ -50,7 +50,7 @@ public class OAuth2HttpClientProperties {
     private Map<String, Object> customProperties;
 
     /**
-     * Create and return a copy of this properties.
+     * Create and return a copy of this object.
      *
      * @return a copy of this properties
      */
