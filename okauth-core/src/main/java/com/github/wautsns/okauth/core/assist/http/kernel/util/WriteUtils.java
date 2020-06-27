@@ -39,7 +39,7 @@ public class WriteUtils {
             .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
     /**
-     * Write urlEncodedEntries as query like text(eg. a=3&b=qwe).
+     * Write urlEncodedEntries as query like text(eg. a=3&amp;b=qwe).
      *
      * @param urlEncodedEntries url encoded entries
      * @return query like text
@@ -52,7 +52,7 @@ public class WriteUtils {
     }
 
     /**
-     * Write urlEncodedEntries as query like text(eg. a=3&b=qwe) bytes.
+     * Write urlEncodedEntries as query like text(eg. a=3&amp;b=qwe) bytes.
      *
      * @param urlEncodedEntries url encoded entries
      * @return query like text bytes
