@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount;
 
+import com.github.wautsns.okauth.core.assist.http.builtin.httpclient4.HttpClient4OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
@@ -46,6 +47,15 @@ import com.github.wautsns.okauth.core.exception.specific.token.InvalidRefreshTok
 public class WechatOfficialAccountOAuth2Client
         extends
         TokenRefreshableOAuth2Client<WechatOfficialAccountOAuth2AppInfo, WechatOfficialAccountOAuth2Token, WechatOfficialAccountOAuth2User> {
+
+    /**
+     * Construct an WechatOfficialAccount oauth2 client.
+     *
+     * @param appInfo oauth2 app info
+     */
+    public WechatOfficialAccountOAuth2Client(WechatOfficialAccountOAuth2AppInfo appInfo) {
+        this(appInfo, new HttpClient4OAuth2HttpClient(), TokenRefreshCallback.IGNORE);
+    }
 
     /**
      * Construct an WechatOfficialAccount oauth2 client.

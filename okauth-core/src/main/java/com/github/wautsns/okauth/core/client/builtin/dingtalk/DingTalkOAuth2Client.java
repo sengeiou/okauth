@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.dingtalk;
 
+import com.github.wautsns.okauth.core.assist.http.builtin.httpclient4.HttpClient4OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
@@ -38,6 +39,15 @@ import com.github.wautsns.okauth.core.exception.OAuth2Exception;
  * @since Jun 22, 2020
  */
 public class DingTalkOAuth2Client extends OAuth2Client<DingTalkOAuth2AppInfo, DingTalkOAuth2User> {
+
+    /**
+     * Construct a DingTalk oauth2 client.
+     *
+     * @param appInfo oauth2 app info
+     */
+    public DingTalkOAuth2Client(DingTalkOAuth2AppInfo appInfo) {
+        this(appInfo, new HttpClient4OAuth2HttpClient());
+    }
 
     /**
      * Construct a DingTalk oauth2 client.

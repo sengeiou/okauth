@@ -50,9 +50,7 @@ public class GiteeOAuth2Client
      * @param appInfo oauth2 app info
      */
     public GiteeOAuth2Client(GiteeOAuth2AppInfo appInfo) {
-        super(
-                appInfo, new HttpClient4OAuth2HttpClient(),
-                TokenRefreshCallback.IGNORE);
+        this(appInfo, new HttpClient4OAuth2HttpClient(), TokenRefreshCallback.IGNORE);
     }
 
     /**

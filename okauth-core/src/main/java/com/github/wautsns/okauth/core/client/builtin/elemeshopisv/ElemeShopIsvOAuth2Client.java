@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.elemeshopisv;
 
+import com.github.wautsns.okauth.core.assist.http.builtin.httpclient4.HttpClient4OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
@@ -34,6 +35,7 @@ import com.github.wautsns.okauth.core.client.kernel.util.Encryptors;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.InvalidAccessTokenException;
+import com.github.wautsns.okauth.core.exception.specific.user.UserRefusedAuthorizationException;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -51,6 +53,15 @@ import java.util.stream.Collectors;
 public class ElemeShopIsvOAuth2Client
         extends
         TokenRefreshableOAuth2Client<ElemeShopIsvOAuth2AppInfo, ElemeShopIsvOAuth2Token, ElemeShopIsvOAuth2User> {
+
+    /**
+     * Construct a ElemeShopIsv oauth2 client.
+     *
+     * @param appInfo oauth2 app info
+     */
+    public ElemeShopIsvOAuth2Client(ElemeShopIsvOAuth2AppInfo appInfo) {
+        this(appInfo, new HttpClient4OAuth2HttpClient(), TokenRefreshCallback.IGNORE);
+    }
 
     /**
      * Construct a ElemeShopIsv oauth2 client.
@@ -99,11 +110,17 @@ public class ElemeShopIsvOAuth2Client
                 .addClientId(appInfo.getKey());
         Integer refreshTokenExpiresIn = getRefreshTokenExpiresInOfCurrentEnv();
         return redirectUriQuery -> {
-            OAuth2HttpRequest request = basic.copy();
-            request.getEntityFormUrlEncoded().addCode(redirectUriQuery.getCode());
-            ElemeShopIsvOAuth2Token token = new ElemeShopIsvOAuth2Token(executeGetOrRefreshTokenAndCheck(request));
-            token.getOriginalDataMap().put("refresh_token_expires_in", refreshTokenExpiresIn);
-            return token;
+            String error = redirectUriQuery.getError();
+            if (error != null) {
+                String errorDescription = redirectUriQuery.getErrorDescription();
+                throw new UserRefusedAuthorizationException(getOpenPlatform());
+            } else {
+                OAuth2HttpRequest request = basic.copy();
+                request.getEntityFormUrlEncoded().addCode(redirectUriQuery.getCode());
+                ElemeShopIsvOAuth2Token token = new ElemeShopIsvOAuth2Token(executeGetOrRefreshTokenAndCheck(request));
+                token.getOriginalDataMap().put("refresh_token_expires_in", refreshTokenExpiresIn);
+                return token;
+            }
         };
     }
 

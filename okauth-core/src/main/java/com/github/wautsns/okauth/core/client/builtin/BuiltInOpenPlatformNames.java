@@ -26,14 +26,23 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class BuiltInOpenPlatformNames {
 
+    /** Baidu(百度). */
     public static final String BAIDU = "Baidu";
+    /** DingTalk(钉钉). */
     public static final String DING_TALK = "DingTalk";
+    /** ElemeShopIsv(饿了么-商家开放平台-企业应用/平台应用). */
     public static final String ELEME_SHOP_ISV = "ElemeShopIsv";
+    /** Gitee(码云). */
     public static final String GITEE = "Gitee";
+    /** GitHub. */
     public static final String GITHUB = "GitHub";
+    /** OSChina(开源中国). */
     public static final String OSCHINA = "OSChina";
+    /** TikTok(抖音) */
     public static final String TIK_TOK = "TikTok";
+    /** WechatOfficialAccount(微信公众号). */
     public static final String WECHAT_OFFICIAL_ACCOUNT = "WechatOfficialAccount";
+    /** WechatWorkCorp(企业微信-企业内部引用) */
     public static final String WECHAT_WORK_CORP = "WechatWorkCorp";
 
 }

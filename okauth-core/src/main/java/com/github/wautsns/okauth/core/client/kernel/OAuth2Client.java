@@ -41,7 +41,7 @@ public abstract class OAuth2Client<A extends OAuth2AppInfo, U extends OAuth2User
     /** OAuth2 http client. */
     protected final OAuth2HttpClient httpClient;
 
-    /** Initialize authorize url. */
+    /** API: Initialize authorize url. */
     protected final InitializeAuthorizeUrl apiInitializeAuthorizeUrl;
     /** API: exchange redirect uri query for open id. */
     protected final ExchangeRedirectUriQueryForOpenid apiExchangeRedirectUriQueryForOpenid;

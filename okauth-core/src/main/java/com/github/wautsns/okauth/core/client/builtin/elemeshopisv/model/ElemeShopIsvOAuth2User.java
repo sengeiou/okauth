@@ -21,6 +21,11 @@ import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * ElemeShopIsv oauth2 user.
  *
@@ -43,7 +48,51 @@ public class ElemeShopIsvOAuth2User implements OAuth2User {
 
     @Override
     public String getOpenid() {
-        return null;
+        return originalDataMap.getAsString("userId");
+    }
+
+    @Override
+    public String getUsername() {
+        return originalDataMap.getAsString("userName");
+    }
+
+    /**
+     * Get authorized shops.
+     *
+     * @return authorized shops
+     */
+    public List<AuthorizedShop> getAuthorizedShops() {
+        return originalDataMap.getAsDataMapList("authorizedShops").stream()
+                .map(AuthorizedShop::new)
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Data
+    public static class AuthorizedShop implements Serializable {
+
+        private static final long serialVersionUID = -3247156523818038685L;
+
+        /** Original data map. */
+        private final DataMap originalDataMap;
+
+        /**
+         * Get id.
+         *
+         * @return id
+         */
+        public String getId() {
+            return originalDataMap.getAsString("id");
+        }
+
+        /**
+         * Get name.
+         *
+         * @return name
+         */
+        public String getName() {
+            return originalDataMap.getAsString("name");
+        }
+
     }
 
 }

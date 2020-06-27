@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.builtin.tiktok;
 
+import com.github.wautsns.okauth.core.assist.http.builtin.httpclient4.HttpClient4OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.OAuth2HttpClient;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
@@ -43,6 +44,15 @@ import com.github.wautsns.okauth.core.exception.specific.token.InvalidAccessToke
  */
 public class TikTokOAuth2Client
         extends TokenRefreshableOAuth2Client<TikTokOAuth2AppInfo, TikTokOAuth2Token, TikTokOAuth2User> {
+
+    /**
+     * Construct a TikTok oauth2 client.
+     *
+     * @param appInfo oauth2 app info
+     */
+    public TikTokOAuth2Client(TikTokOAuth2AppInfo appInfo) {
+        this(appInfo, new HttpClient4OAuth2HttpClient(), TokenRefreshCallback.IGNORE);
+    }
 
     /**
      * Construct a TikTok oauth2 client.

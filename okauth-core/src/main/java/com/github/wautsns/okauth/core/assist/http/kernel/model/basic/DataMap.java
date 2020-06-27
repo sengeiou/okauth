@@ -18,9 +18,13 @@ package com.github.wautsns.okauth.core.assist.http.kernel.model.basic;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Data map.
@@ -193,6 +197,32 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
             return (DataMap) value;
         } else if (value instanceof Map) {
             return new DataMap((Map<String, Serializable>) value);
+        }
+        throw initExceptionForCannotConvert(DataMap.class, value);
+    }
+
+    /**
+     * Get as {@code DataMap} value.
+     *
+     * <ul>
+     * <li>{@code null} =&gt; {@code null}</li>
+     * <li>{@code DataMap} =&gt; {@code value}</li>
+     * <li>{@code Map} =&gt; {@code new DataMap(value)}</li>
+     * <li><strong>others =&gt; throw {@code UnsupportedOperationException}</strong></li>
+     * </ul>
+     *
+     * @param name names
+     * @return {@code DataMap} value, or {@code null} if the map contains no mapping for the name
+     */
+    @SuppressWarnings("unchecked")
+    public List<DataMap> getAsDataMapList(String name) {
+        Serializable value = get(name);
+        if (value == null) {
+            return null;
+        } else if (value instanceof Collection) {
+            return ((Collection<Map<String, Serializable>>) value).stream()
+                    .map(DataMap::new)
+                    .collect(Collectors.toCollection(LinkedList::new));
         }
         throw initExceptionForCannotConvert(DataMap.class, value);
     }
