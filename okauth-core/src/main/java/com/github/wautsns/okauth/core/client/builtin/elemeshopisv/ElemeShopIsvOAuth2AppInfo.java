@@ -13,30 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.spring.boot.autoconfigure.properties;
+package com.github.wautsns.okauth.core.client.builtin.elemeshopisv;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
- * OkAuth app info properties.
+ * ElemeShopIsv oauth2 app info.
  *
  * @author wautsns
- * @since Mar 05, 2020
+ * @since Jun 25, 2020
  */
 @Data
 @Accessors(chain = true)
-public class OkAuthAppInfoProperties<I extends OAuth2AppInfo> {
+public class ElemeShopIsvOAuth2AppInfo implements OAuth2AppInfo {
 
-    /** Whether to enable the open platform. */
-    private Boolean enabled;
-    /** OAuth2 app info. */
-    @NestedConfigurationProperty
-    private final I appInfo;
-    /** OAuth2 http client properties. */
-    @NestedConfigurationProperty
-    private final OkAuthHttpClientProperties httpClient = new OkAuthHttpClientProperties();
+    /** Key. */
+    private String key;
+    /** Secret. */
+    private String secret;
+    /** Redirect uri. */
+    private String redirectUri;
+    /** Environment. */
+    private Environment env = Environment.PRODUCTION;
+
+    /** Environment. */
+    public enum Environment {SANDBOX, PRODUCTION}
 
 }

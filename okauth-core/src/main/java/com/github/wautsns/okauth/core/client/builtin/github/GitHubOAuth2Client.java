@@ -51,7 +51,7 @@ public class GitHubOAuth2Client
      * @param appInfo oauth2 app info
      */
     public GitHubOAuth2Client(GitHubOAuth2AppInfo appInfo) {
-        super(appInfo, new HttpClient4OAuth2HttpClient());
+        this(appInfo, new HttpClient4OAuth2HttpClient());
     }
 
     /**
@@ -68,6 +68,8 @@ public class GitHubOAuth2Client
     public String getOpenPlatform() {
         return BuiltInOpenPlatformNames.GITHUB;
     }
+
+    // #################### initialize api ##############################################
 
     @Override
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {

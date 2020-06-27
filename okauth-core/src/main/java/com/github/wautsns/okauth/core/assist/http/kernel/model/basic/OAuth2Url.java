@@ -15,6 +15,8 @@
  */
 package com.github.wautsns.okauth.core.assist.http.kernel.model.basic;
 
+import com.github.wautsns.okauth.core.assist.http.kernel.util.WriteUtils;
+
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 
@@ -104,6 +106,7 @@ public class OAuth2Url implements Serializable {
     /**
      * Set url anchor.
      *
+     * @param anchor anchor
      * @return self reference
      */
     public OAuth2Url setAnchor(String anchor) {
@@ -115,9 +118,7 @@ public class OAuth2Url implements Serializable {
     public String toString() {
         if (query == null) { return (anchor == null) ? pureUrl : (pureUrl + '#' + anchor); }
         StringBuilder url = new StringBuilder(pureUrl);
-        url.append('?');
-        query.forEach((name, value) -> url.append(name).append('=').append(value).append('&'));
-        url.deleteCharAt(url.length() - 1);
+        url.append('?').append(WriteUtils.writeUrlEncodedEntriesAsQueryLikeText(query));
         if (anchor != null) { url.append('#').append(anchor); }
         return url.toString();
     }

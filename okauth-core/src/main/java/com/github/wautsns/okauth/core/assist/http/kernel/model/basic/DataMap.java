@@ -18,9 +18,13 @@ package com.github.wautsns.okauth.core.assist.http.kernel.model.basic;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Data map.
@@ -38,8 +42,7 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * Get as {@code T} value.
      *
      * <ul>
-     * conversion relationship:
-     * <li>{@code value} => {@code (T)value}</li>
+     * <li>{@code value} =&gt; {@code (T)value}</li>
      * </ul>
      *
      * @param name name
@@ -55,9 +58,9 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * Get as {@code String} value.
      *
      * <ul>
-     * conversion relationship:
-     * <li>{@code null} => {@code null}</li>
-     * <li>others => {@code value.toString()}</li>
+     * <li>{@code null} =&gt; {@code null}</li>
+     * <li>others =&gt; {@code value.toString()}</li>
+     * </ul>
      *
      * @param name name
      * @return {@code String} value, or {@code null} if the map contains no mapping for the name
@@ -70,11 +73,11 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * Get as {@code Boolean} value.
      *
      * <ul>
-     * conversion relationship:
-     * <li>{@code null} => {@code null}</li>
-     * <li>{@code Boolean} => {@code value}</li>
-     * <li>{@code String} => {@code Boolean.valueOf((String) value)}</li>
-     * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
+     * <li>{@code null} =&gt; {@code null}</li>
+     * <li>{@code Boolean} =&gt; {@code value}</li>
+     * <li>{@code String} =&gt; {@code Boolean.valueOf((String) value)}</li>
+     * <li><strong>others =&gt; throw {@code UnsupportedOperationException}</strong></li>
+     * </ul>
      *
      * @param name name
      * @return {@code Boolean} value, or {@code null} if the map contains no mapping for the name
@@ -95,12 +98,12 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * Get as {@code Integer} value.
      *
      * <ul>
-     * conversion relationship:
-     * <li>{@code null} => {@code null}</li>
-     * <li>{@code Integer} => {@code value}</li>
-     * <li>{@code String} => {@code Integer.parseInt(value)}</li>
-     * <li>{@code Number} => {@code value.intValue()}</li>
-     * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
+     * <li>{@code null} =&gt; {@code null}</li>
+     * <li>{@code Integer} =&gt; {@code value}</li>
+     * <li>{@code String} =&gt; {@code Integer.parseInt(value)}</li>
+     * <li>{@code Number} =&gt; {@code value.intValue()}</li>
+     * <li><strong>others =&gt; throw {@code UnsupportedOperationException}</strong></li>
+     * </ul>
      *
      * @param name name
      * @return {@code Integer} value, or {@code null} if the map contains no mapping for the name
@@ -123,12 +126,12 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * Get as {@code Long} value.
      *
      * <ul>
-     * conversion relationship:
-     * <li>{@code null} => {@code null}</li>
-     * <li>{@code Long} => {@code value}</li>
-     * <li>{@code Number} => {@code value.longValue()}</li>
-     * <li>{@code String} => {@code Long.parseLong(value)}</li>
-     * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
+     * <li>{@code null} =&gt; {@code null}</li>
+     * <li>{@code Long} =&gt; {@code value}</li>
+     * <li>{@code Number} =&gt; {@code value.longValue()}</li>
+     * <li>{@code String} =&gt; {@code Long.parseLong(value)}</li>
+     * <li><strong>others =&gt; throw {@code UnsupportedOperationException}</strong></li>
+     * </ul>
      *
      * @param name name
      * @return {@code Long} value, or {@code null} if the map contains no mapping for the name
@@ -151,11 +154,10 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * Get as {@code LocalDateTime} value.
      *
      * <ul>
-     * conversion relationship:
-     * <li>{@code null} => {@code null}</li>
-     * <li>{@code LocalDateTime} => {@code value}</li>
-     * <li>{@code String} => {@code LocalDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)}</li>
-     * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
+     * <li>{@code null} =&gt; {@code null}</li>
+     * <li>{@code LocalDateTime} =&gt; {@code value}</li>
+     * <li>{@code String} =&gt; {@code LocalDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)}</li>
+     * <li><strong>others =&gt; throw {@code UnsupportedOperationException}</strong></li>
      * </ul>
      *
      * @param name name
@@ -177,11 +179,10 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      * Get as {@code DataMap} value.
      *
      * <ul>
-     * conversion relationship:
-     * <li>{@code null} => {@code null}</li>
-     * <li>{@code DataMap} => {@code value}</li>
-     * <li>{@code Map} => {@code new DataMap(value)}</li>
-     * <li><strong>others => throw {@code UnsupportedOperationException}</strong></li>
+     * <li>{@code null} =&gt; {@code null}</li>
+     * <li>{@code DataMap} =&gt; {@code value}</li>
+     * <li>{@code Map} =&gt; {@code new DataMap(value)}</li>
+     * <li><strong>others =&gt; throw {@code UnsupportedOperationException}</strong></li>
      * </ul>
      *
      * @param name names
@@ -201,6 +202,32 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
     }
 
     /**
+     * Get as {@code DataMap} value.
+     *
+     * <ul>
+     * <li>{@code null} =&gt; {@code null}</li>
+     * <li>{@code DataMap} =&gt; {@code value}</li>
+     * <li>{@code Map} =&gt; {@code new DataMap(value)}</li>
+     * <li><strong>others =&gt; throw {@code UnsupportedOperationException}</strong></li>
+     * </ul>
+     *
+     * @param name names
+     * @return {@code DataMap} value, or {@code null} if the map contains no mapping for the name
+     */
+    @SuppressWarnings("unchecked")
+    public List<DataMap> getAsDataMapList(String name) {
+        Serializable value = get(name);
+        if (value == null) {
+            return null;
+        } else if (value instanceof Collection) {
+            return ((Collection<Map<String, Serializable>>) value).stream()
+                    .map(DataMap::new)
+                    .collect(Collectors.toCollection(LinkedList::new));
+        }
+        throw initExceptionForCannotConvert(DataMap.class, value);
+    }
+
+    /**
      * Initialize exception for "cannot convert".
      *
      * @param targetClass target class
@@ -209,6 +236,20 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
      */
     private static UnsupportedOperationException initExceptionForCannotConvert(Class<?> targetClass, Object value) {
         return new UnsupportedOperationException(String.format("Cannot convert [%s] to [%s].", value, targetClass));
+    }
+
+    // #################### others ######################################################
+
+    /**
+     * Put value with the specified name and return self reference.
+     *
+     * @param name name
+     * @param value value
+     * @return self reference
+     */
+    public DataMap with(String name, Serializable value) {
+        put(name, value);
+        return this;
     }
 
     // #################### constructors ################################################
@@ -237,8 +278,8 @@ public class DataMap extends LinkedHashMap<String, Serializable> {
     }
 
     /**
-     * Construct a {@code DataMap} instance with the same mappings as the specified map. The {@code DataMap} instance
-     * is created with a default load factor (0.75) and an initial capacity sufficient to hold the mappings in the
+     * Construct a {@code DataMap} instance with the same mappings as the specified map. The {@code DataMap} instance is
+     * created with a default load factor (0.75) and an initial capacity sufficient to hold the mappings in the
      * specified map.
      *
      * @param m the map whose mappings are to be placed in this map

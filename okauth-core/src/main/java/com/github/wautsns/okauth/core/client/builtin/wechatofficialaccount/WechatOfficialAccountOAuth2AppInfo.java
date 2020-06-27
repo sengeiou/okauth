@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount;
+package com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
 import lombok.Data;
@@ -21,14 +21,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * WeChatOfficialAccount OAuth2 app info.
+ * WechatOfficialAccount OAuth2 app info.
  *
  * @author wautsns
  * @since May 23, 2020
  */
 @Data
 @Accessors(chain = true)
-public class WeChatOfficialAccountOAuth2AppInfo implements OAuth2AppInfo {
+public class WechatOfficialAccountOAuth2AppInfo implements OAuth2AppInfo {
 
     /** Official account unique identifier. */
     private String uniqueIdentifier;
@@ -37,7 +37,7 @@ public class WeChatOfficialAccountOAuth2AppInfo implements OAuth2AppInfo {
     /** Redirect uri. */
     private String redirectUri;
     /** See {@link Scope} for details. */
-    private Scope scope = Scope.SNSAPI_BASE;
+    private Scope scope = Scope.SNSAPI_USER_INFO;
 
     /** Application authorization scope. */
     @RequiredArgsConstructor

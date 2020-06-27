@@ -64,6 +64,7 @@ public interface OAuth2HttpResponse {
      * Get http response input stream.
      *
      * @return http response input stream
+     * @throws IOException if IO exception occurs
      */
     InputStream getInputStream() throws IOException;
 

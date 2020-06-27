@@ -45,6 +45,7 @@ public interface OAuth2Token extends OpenPlatformSupplier, Serializable {
      * Set token id.
      *
      * @param tokenId token id
+     * @return self reference
      */
     OAuth2Token setTokenId(String tokenId);
 

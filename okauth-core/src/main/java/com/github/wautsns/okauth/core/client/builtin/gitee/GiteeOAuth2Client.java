@@ -50,9 +50,7 @@ public class GiteeOAuth2Client
      * @param appInfo oauth2 app info
      */
     public GiteeOAuth2Client(GiteeOAuth2AppInfo appInfo) {
-        super(
-                appInfo, new HttpClient4OAuth2HttpClient(),
-                TokenRefreshCallback.IGNORE);
+        this(appInfo, new HttpClient4OAuth2HttpClient(), TokenRefreshCallback.IGNORE);
     }
 
     /**
@@ -73,6 +71,8 @@ public class GiteeOAuth2Client
         return BuiltInOpenPlatformNames.GITEE;
     }
 
+    // #################### initialize api ##############################################
+
     @Override
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         String url = "https://gitee.com/oauth/authorize";
@@ -83,9 +83,9 @@ public class GiteeOAuth2Client
                 .addResponseTypeWithValueCode()
                 .addScope(GiteeOAuth2AppInfo.Scope.joinWith(appInfo.getScopes(), " "));
         return state -> {
-            OAuth2Url oAuth2Url = basic.copy();
-            oAuth2Url.getQuery().addState(state);
-            return oAuth2Url;
+            OAuth2Url authorizeUrl = basic.copy();
+            authorizeUrl.getQuery().addState(state);
+            return authorizeUrl;
         };
     }
 

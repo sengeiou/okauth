@@ -17,7 +17,9 @@ package com.github.wautsns.okauth.core.assist.http.kernel.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2HttpHeaders;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
-import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2UrlEncodedEntries;
+import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.entity.OAuth2HttpEntity;
+import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.entity.builtin.OAuth2HttpFormUrlEncodedEntity;
+import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.entity.builtin.OAuth2HttpJsonEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -49,8 +51,8 @@ public class OAuth2HttpRequest implements Serializable {
     private final OAuth2Url url;
     /** Request headers. */
     private OAuth2HttpHeaders headers;
-    /** Request url encoded form. */
-    private OAuth2UrlEncodedEntries form;
+    /** Request entity. */
+    private OAuth2HttpEntity entity;
 
     /**
      * Get headers.
@@ -73,25 +75,23 @@ public class OAuth2HttpRequest implements Serializable {
     }
 
     /**
-     * Get url encoded form.
+     * Get entity: form url encoded.
      *
-     * @return url encoded form
+     * @return entity: form url encoded
      */
-    public OAuth2UrlEncodedEntries getForm() {
-        if (form != null) { return form; }
-        form = new OAuth2UrlEncodedEntries();
-        return form;
+    public OAuth2HttpFormUrlEncodedEntity getEntityFormUrlEncoded() {
+        if (entity == null) { entity = new OAuth2HttpFormUrlEncodedEntity(); }
+        return (OAuth2HttpFormUrlEncodedEntity) entity;
     }
 
     /**
-     * Iterate over each url encoded form item.
+     * Get entity: json.
      *
-     * <p><strong>Value has been url encoded.</strong>
-     *
-     * @param action the action to be performed for each url encoded form item
+     * @return entity: json
      */
-    public void forEachFormItem(BiConsumer<String, String> action) {
-        if (form != null) { form.forEach(action); }
+    public OAuth2HttpJsonEntity getEntityJson() {
+        if (entity == null) { entity = new OAuth2HttpJsonEntity(); }
+        return (OAuth2HttpJsonEntity) entity;
     }
 
     /**
@@ -101,8 +101,8 @@ public class OAuth2HttpRequest implements Serializable {
      */
     public OAuth2HttpRequest copy() {
         OAuth2HttpRequest copy = new OAuth2HttpRequest(method, url.copy());
-        copy.headers = (headers == null) ? null : headers.copy();
-        copy.form = (form == null) ? null : form.copy();
+        copy.headers = (this.headers == null) ? null : this.headers.copy();
+        copy.entity = (this.entity == null) ? null : this.entity.copy();
         return copy;
     }
 

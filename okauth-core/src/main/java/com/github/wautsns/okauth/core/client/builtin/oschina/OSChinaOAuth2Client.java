@@ -50,9 +50,7 @@ public class OSChinaOAuth2Client
      * @param appInfo oauth2 app info
      */
     public OSChinaOAuth2Client(OSChinaOAuth2AppInfo appInfo) {
-        this(
-                appInfo, new HttpClient4OAuth2HttpClient(),
-                TokenRefreshCallback.IGNORE);
+        this(appInfo, new HttpClient4OAuth2HttpClient(), TokenRefreshCallback.IGNORE);
     }
 
     /**
@@ -73,6 +71,8 @@ public class OSChinaOAuth2Client
         return BuiltInOpenPlatformNames.OSCHINA;
     }
 
+    // #################### initialize api ##############################################
+
     @Override
     protected InitializeAuthorizeUrl initApiInitializeAuthorizeUrl() {
         String url = "https://www.oschina.net/action/oauth2/authorize";
@@ -82,9 +82,9 @@ public class OSChinaOAuth2Client
                 .addResponseTypeWithValueCode()
                 .addRedirectUri(appInfo.getRedirectUri());
         return state -> {
-            OAuth2Url oAuth2Url = basic.copy();
-            oAuth2Url.getQuery().addState(state);
-            return oAuth2Url;
+            OAuth2Url authorizeUrl = basic.copy();
+            authorizeUrl.getQuery().addState(state);
+            return authorizeUrl;
         };
     }
 

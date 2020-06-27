@@ -26,9 +26,9 @@ import lombok.experimental.Accessors;
  *
  * <pre>
  * {
- * 	"access_token": "ACCESS_TOKEN(length:40)",
+ * 	"access_token": "ACCESS_TOKEN",
  * 	"token_type": "bearer",
- * 	"scope": "SCOPE(delimiter:comma)"
+ * 	"scope": "SCOPE"
  * }
  * </pre>
  *
@@ -65,11 +65,11 @@ public class GitHubOAuth2Token implements OAuth2Token {
     }
 
     /**
-     * Get scope(delimiter: comma).
+     * Get scopes(delimiter: comma).
      *
-     * @return scope
+     * @return scopes
      */
-    public String getScope() {
+    public String getScopes() {
         return originalDataMap.getAsString("scope");
     }
 

@@ -104,6 +104,7 @@ public class NameValuePairs implements Serializable {
      *
      * @param name name
      * @param value value
+     * @return self reference
      */
     public NameValuePairs set(String name, String value) {
         for (ListIterator<String> iterator = origin.listIterator(); iterator.hasNext(); ) {

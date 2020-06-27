@@ -49,8 +49,8 @@ okauth:
         client-id: CLIENT_ID
         client-secret: CLIENT_SECRET
         redirect-uri: REDIRECT_URI
-        # scope 为枚举列表, 可自动提示
-        scope: [user_email, notifications]
+        # scopes 为枚举列表, 可自动提示
+        scopes: [user_email, notifications]
         extra-authorize-url-query:
           allow-signup: disabled
 ```
@@ -74,7 +74,7 @@ private static GitHubOAuth2Client github() {
 ## 2.3 简单示例
 
 ``` java
-@Controller
+@RestController
 @RequestMapping("/api/cmd/oauth2")
 @RequiredArgsConstructor
 public class OAuth2Controller {
@@ -82,10 +82,10 @@ public class OAuth2Controller {
     /** OAuth2 client manager. */
     private final OAuth2ClientManager manager;
 
-    @GetMapping("/redirect-to-authorize-url")
+    @GetMapping("/get-authorize-url")
     public String redirectToAuthorizeUrl(String openPlatform) throws OAuth2Exception {
         String state = "generate state and save if needed";
-        return "redirect:" + manager.get(openPlatform).initAuthorizeUrl(state);
+        return manager.get(openPlatform).initAuthorizeUrl(state);
     }
 
     @GetMapping("/handle-authorize-callback/{openPlatform}")
@@ -125,6 +125,7 @@ okauth:
       max-idle-time: 5M
       keep-alive-timout: 3M
       retry-times: 1
+      proxy: null
   apps-info:
     github:
       app-info:
@@ -133,6 +134,7 @@ okauth:
         properties:
           connect-timeout: 5S
           retry-times: 3
+          proxy: https://proxy-ip:proxy-port
 ```
 
 ### 2.4.2 非 Spring Boot 环境
@@ -151,11 +153,14 @@ GitHubOAuth2Client client = new GitHubOAuth2Client(null, oauth2HttpClient);
 
 # 4 目前已支持的开放平台
 
-| 🏢 开放平台 | ✅ OkAuthClient | 📄 官方文档 |
+| 🏢 开放平台 | ✅ OAuth2Client | 📄 官方文档 |
 |:----------|:---------------:|:----------:|
 | Baidu(百度) | [BaiduOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/baidu/BaiduOAuth2Client.java "点击查看源码") | [查看官方文档](http://developer.baidu.com/wiki/index.php?title=docs/oauth) |
+| DingTalk(钉钉) | [DingTalkOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/dingtalk/DingTalkOAuth2Client.java "点击查看源码") | [查看官方文档](https://ding-doc.dingtalk.com/doc#/serverapi3/mrugr3) |
+| ElemeShopIsv(饿了么-商家开放平台-企业应用/平台应用) | [ElemeShopIsvOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/elemeshopisv/ElemeShopIsvOAuth2Client.java "点击查看源码") | [查看官方文档](https://open.shop.ele.me/openapi/documents/isvoauth) |
 | Gitee(码云) | [GiteeOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/gitee/GiteeOAuth2Client.java "点击查看源码") | [查看官方文档](https://gitee.com/api/v5/oauth_doc) |
 | GitHub | [GitHubOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/github/GitHubOAuth2Client.java "点击查看源码") | [查看官方文档](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/) |
 | OSChina(开源中国) | [OSChinaOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/oschina/OSChinaOAuth2Client.java "点击查看源码") | [查看官方文档](https://www.oschina.net/openapi/docs) |
-| ~~WeChatOfficialAccount(微信-公众号)~~ | [~~WeChatOfficialAccountOAuth2Client~~](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/wechat/officialaccount/WeChatOfficialAccountOAuth2Client.java "点击查看源码(尚未通过完整验证)") | [查看官方文档](https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html) |
-| ~~WeChatWorkCorp(企业微信-企业内部应用)~~ | [~~WeChatWorkCorpOAuth2Client~~](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/wechat/work/corp/WeChatWorkCorpOAuth2Client.java "点击查看源码(尚未通过完整验证)") | [查看官方文档](https://work.weixin.qq.com/api/doc/90000/90135/91039) |
+| TikTok(抖音) | [TikTokOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/tiktok/TikTokOAuth2Client.java "点击查看源码") | [查看官方文档](https://open.douyin.com/platform/doc/OpenAPI-oauth2) |
+| WechatOfficialAccount(微信公众号) | [WechatOfficialAccountOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/wechatofficialaccount/WechatOfficialAccountOAuth2Client.java "点击查看源码") | [查看官方文档](https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html) |
+| WechatWorkCorp(企业微信-企业内部应用) | [WechatWorkCorpOAuth2Client](/okauth-core/src/main/java/com/github/wautsns/okauth/core/client/builtin/wechatworkcorp/WechatWorkCorpOAuth2Client.java "点击查看源码") | [查看官方文档](https://work.weixin.qq.com/api/doc/90000/90135/91039) |

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model;
+package com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
@@ -23,7 +23,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * WeChatOfficialAccount oauth2 user.
+ * WechatOfficialAccount oauth2 user.
  *
  * <pre>
  * {
@@ -43,7 +43,7 @@ import java.util.List;
  * @since Jun 19, 2020
  */
 @Data
-public class WeChatOfficialAccountOAuth2User implements OAuth2User {
+public class WechatOfficialAccountOAuth2User implements OAuth2User {
 
     private static final long serialVersionUID = 133319205583865255L;
 
@@ -70,28 +70,13 @@ public class WeChatOfficialAccountOAuth2User implements OAuth2User {
         return originalDataMap.getAsString("nickname");
     }
 
-    /**
-     * Get head img url.
-     *
-     * @return head img url
-     */
-    public String getHeadimgurl() {
+    @Override
+    public String getAvatarUrl() {
         return originalDataMap.getAsString("headimgurl");
     }
 
-    /**
-     * Get sex.
-     *
-     * <ul>
-     * Optional values:
-     * <li>{@code Gender.MALE}</li>
-     * <li>{@code Gender.FEMALE}</li>
-     * <li>{@code Gender.UNKNOWN}</li>
-     * </ul>
-     *
-     * @return Gender enumeration.
-     */
-    public Gender getSex() {
+    @Override
+    public Gender getGender() {
         String sex = originalDataMap.getAsString("sex");
         if ("1".equals(sex)) {
             return Gender.MALE;
@@ -132,24 +117,12 @@ public class WeChatOfficialAccountOAuth2User implements OAuth2User {
     /**
      * Get privilege.
      *
-     * <p>User privilege information, such as WeChat Woka user(chinaunicom).
+     * <p>User privilege information, such as Wechat Woka user(chinaunicom).
      *
      * @return privilege
      */
     public List<String> getPrivilege() {
         return originalDataMap.getAs("privilege");
-    }
-
-    // #################### amendment ###################################################
-
-    @Override
-    public String getAvatarUrl() {
-        return getHeadimgurl();
-    }
-
-    @Override
-    public Gender getGender() {
-        return getSex();
     }
 
 }

@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache.builtin;
+package com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.service.tokencache.builtin;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WeChatWorkCorpOAuth2Token;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache.WeChatWorkCorpTokenCache;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.model.WechatWorkCorpOAuth2Token;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.service.tokencache.WechatWorkCorpTokenCache;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Local WeChatWorkCorp token cache.
+ * Local WechatWorkCorp token cache.
  *
  * @author wautsns
  * @since Jun 16, 2020
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class WeChatWorkCorpTokenLocalCache implements WeChatWorkCorpTokenCache {
+public class WechatWorkCorpTokenLocalCache implements WechatWorkCorpTokenCache {
 
-    /** Local WeChatWorkCorp token cache instance. */
-    public static final WeChatWorkCorpTokenLocalCache INSTANCE = new WeChatWorkCorpTokenLocalCache();
+    /** Local WechatWorkCorp token cache instance. */
+    public static final WechatWorkCorpTokenLocalCache INSTANCE = new WechatWorkCorpTokenLocalCache();
 
-    /** {@linkplain WeChatWorkCorpOAuth2Token#getOriginalDataMap() Original token data map}. */
+    /** {@linkplain WechatWorkCorpOAuth2Token#getOriginalDataMap() Original token data map}. */
     private DataMap value;
     /** Timestamp token expire at. */
     private long expirationTimestamp = Long.MIN_VALUE;

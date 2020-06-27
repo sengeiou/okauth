@@ -13,28 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.service.tokencache;
+package com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.service.tokencache;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.WeChatWorkCorpOAuth2Client;
-import com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model.WeChatWorkCorpOAuth2Token;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.WechatWorkCorpOAuth2Client;
+import com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.model.WechatWorkCorpOAuth2Token;
+import com.github.wautsns.okauth.core.client.kernel.api.basic.OAuth2SupplierApi;
 
 /**
  * WeCharWorkCorp token cache.
  *
- * <p><strong>No need to consider concurrency issues.(See {@link WeChatWorkCorpOAuth2Client#getToken()} for
+ * <p><strong>No need to consider concurrency issues.(See {@link WechatWorkCorpOAuth2Client#getToken()} for
  * details)</strong>
  *
  * @author wautsns
  * @since May 23, 2020
  */
-public interface WeChatWorkCorpTokenCache {
+public interface WechatWorkCorpTokenCache {
+
+    /**
+     * Inject API: get token.
+     *
+     * <p>The method will be called after {@linkplain WechatWorkCorpOAuth2Client} is constructed.
+     * <p>When the old token is abort to expire, you can use the api to refresh token asynchronously.
+     *
+     * @param apiGetToken API: get token
+     */
+    default void injectApiGetToken(OAuth2SupplierApi<WechatWorkCorpOAuth2Token> apiGetToken) {}
 
     /**
      * Get oauth2 token original data map.
      *
      * @return oauth2 token original data map
-     * @see WeChatWorkCorpOAuth2Token#getOriginalDataMap()
+     * @see WechatWorkCorpOAuth2Token#getOriginalDataMap()
      */
     DataMap get();
 
@@ -43,7 +54,7 @@ public interface WeChatWorkCorpTokenCache {
      *
      * @param originalDataMap oauth2 token original data map
      * @param accessTokenExpirationSeconds access token expiration seconds
-     * @see WeChatWorkCorpOAuth2Token#getOriginalDataMap()
+     * @see WechatWorkCorpOAuth2Token#getOriginalDataMap()
      */
     void save(DataMap originalDataMap, int accessTokenExpirationSeconds);
 

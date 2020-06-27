@@ -67,14 +67,12 @@ public class OSChinaOAuth2User implements OAuth2User {
     @Override
     public Gender getGender() {
         String gender = originalDataMap.getAsString("gender");
-        if (gender == null) { return Gender.UNKNOWN; }
-        switch (gender) {
-            case "male":
-                return Gender.MALE;
-            case "female":
-                return Gender.FEMALE;
-            default:
-                return Gender.UNKNOWN;
+        if ("male".equals(gender)) {
+            return Gender.MALE;
+        } else if ("female".equals(gender)) {
+            return Gender.FEMALE;
+        } else {
+            return Gender.UNKNOWN;
         }
     }
 

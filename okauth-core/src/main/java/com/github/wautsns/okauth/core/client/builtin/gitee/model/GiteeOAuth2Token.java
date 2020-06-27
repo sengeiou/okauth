@@ -26,11 +26,11 @@ import lombok.experimental.Accessors;
  *
  * <pre>
  * {
- * 	"access_token": "ACCESS_TOKEN(length:32)",
+ * 	"access_token": "ACCESS_TOKEN",
  * 	"token_type": "bearer",
  * 	"expires_in": 86400,
- * 	"refresh_token": "REFRESH_TOKEN(length:64)",
- * 	"scope": "SCOPE(delimiter:space)",
+ * 	"refresh_token": "REFRESH_TOKEN",
+ * 	"scope": "SCOPE",
  * 	"created_at": 1590230103
  * }
  * </pre>
@@ -80,7 +80,7 @@ public class GiteeOAuth2Token implements OAuth2RefreshableToken {
     /**
      * Get scopes(delimiter: space).
      *
-     * @return scope
+     * @return scopes
      * @see com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo.Scope
      */
     public String getScopes() {

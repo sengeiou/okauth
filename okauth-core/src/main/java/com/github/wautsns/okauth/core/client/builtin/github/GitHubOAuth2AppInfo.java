@@ -177,13 +177,13 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
          *
          * @param scopes scopes
          * @param delimiter delimiter
-         * @return space-separated list of scopes
+         * @return string of scopes with specified delimiter
          */
         public static String joinWith(Collection<Scope> scopes, String delimiter) {
             if (scopes == null || scopes.isEmpty()) { return null; }
             return scopes.stream()
                     .distinct()
-                    .map(s -> s.value)
+                    .map(scope -> scope.value)
                     .collect(Collectors.joining(delimiter));
         }
 
@@ -201,8 +201,8 @@ public class GitHubOAuth2AppInfo implements OAuth2AppInfo {
 
         /**
          * Allow signup.
+         *
          * <ul>
-         * optional values:
          * <li>{@link AllowSignup#DEFAULT}</li>
          * <li>{@link AllowSignup#ENABLED}</li>
          * <li>{@link AllowSignup#DISABLED}</li>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.officialaccount.model;
+package com.github.wautsns.okauth.core.client.builtin.tiktok.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
@@ -22,16 +22,27 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * WeChatOfficialAccount oauth2 token.
+ * TikTok oauth2 token.
+ *
+ * <pre>
+ * {
+ *  "access_token": "access_token",
+ *  "expires_in": 86400,
+ *  "refresh_token": "refresh_token",
+ *  "refresh_expires_in": 86400,
+ *  "open_id": "aaa-bbb-ccc",
+ *  "scope": "user_info"
+ * }
+ * </pre>
  *
  * @author wautsns
- * @since May 23, 2020
+ * @since Jun 23, 2020
  */
 @Data
 @Accessors(chain = true)
-public class WeChatOfficialAccountOAuth2Token implements OAuth2RefreshableToken {
+public class TikTokOAuth2Token implements OAuth2RefreshableToken {
 
-    private static final long serialVersionUID = 6551303389398223705L;
+    private static final long serialVersionUID = -7768424686277910638L;
 
     /** Token id. */
     private String tokenId;
@@ -40,7 +51,7 @@ public class WeChatOfficialAccountOAuth2Token implements OAuth2RefreshableToken 
 
     @Override
     public String getOpenPlatform() {
-        return BuiltInOpenPlatformNames.WECHAT_OFFICIAL_ACCOUNT;
+        return BuiltInOpenPlatformNames.TIK_TOK;
     }
 
     @Override
@@ -58,32 +69,24 @@ public class WeChatOfficialAccountOAuth2Token implements OAuth2RefreshableToken 
         return originalDataMap.getAsString("refresh_token");
     }
 
-    /** WeChatOfficialAccount oauth2 refresh token expires in thirty days. */
-    private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 30 * 24 * 3600;
-
     @Override
     public Integer getRefreshTokenExpirationSeconds() {
-        return REFRESH_TOKEN_EXPIRATION_SECONDS;
+        return originalDataMap.getAsInteger("refresh_expires_in");
     }
 
     /**
      * Get openid.
      *
-     * <p>User unique identification, please note that when a user does not follow the official account, the user will
-     * also generate a unique openid and official account when you visit the official account web page.
-     *
      * @return openid
      */
-    public String getOpenId() {
-        return originalDataMap.getAsString("openid");
+    public String getOpenid() {
+        return originalDataMap.getAsString("open_id");
     }
 
     /**
      * Get scopes(delimiter: comma).
      *
-     * <p>User authorization scope.
-     *
-     * @return scope
+     * @return scopes
      */
     public String getScopes() {
         return originalDataMap.getAsString("scope");

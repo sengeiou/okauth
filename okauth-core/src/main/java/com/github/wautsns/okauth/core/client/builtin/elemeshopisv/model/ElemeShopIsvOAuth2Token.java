@@ -13,32 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp.model;
+package com.github.wautsns.okauth.core.client.builtin.elemeshopisv.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
-import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
+import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * WeChatWorkCorp oauth2 token.
+ * ElemeShopIsv oauth2 token.
  *
  * <pre>
  * {
- * 	"access_token": "ACCESS_TOKEN(length:atLeast 512)",
- * 	"expires_in": 7200
+ *  "access_token": "b43192a80bbb24be0c97522f44a96dc35ee37cb9",
+ *  "expires_in": 86400,
+ *  "open_id": "o356a19dae6eef6f5ljP5G9Y",
  * }
  * </pre>
  *
  * @author wautsns
- * @since May 23, 2020
+ * @since Jun 25, 2020
  */
 @Data
 @Accessors(chain = true)
-public class WeChatWorkCorpOAuth2Token implements OAuth2Token {
+public class ElemeShopIsvOAuth2Token implements OAuth2RefreshableToken {
 
-    private static final long serialVersionUID = -8354114542294039343L;
+    private static final long serialVersionUID = 105807095993919241L;
 
     /** Token id. */
     private String tokenId;
@@ -47,7 +48,7 @@ public class WeChatWorkCorpOAuth2Token implements OAuth2Token {
 
     @Override
     public String getOpenPlatform() {
-        return BuiltInOpenPlatformNames.WECHAT_WORK_CORP;
+        return BuiltInOpenPlatformNames.ELEME_SHOP_ISV;
     }
 
     @Override
@@ -60,15 +61,33 @@ public class WeChatWorkCorpOAuth2Token implements OAuth2Token {
         return originalDataMap.getAsInteger("expires_in");
     }
 
+    @Override
+    public String getRefreshToken() {
+        return originalDataMap.getAs("refresh_token");
+    }
+
+    @Override
+    public Integer getRefreshTokenExpirationSeconds() {
+        // *** The value `refresh_token_expires_in` is added by okauth.
+        return originalDataMap.getAsInteger("refresh_token_expires_in");
+    }
+
     /**
-     * Set access token expiration seconds.
+     * Get token type.
      *
-     * @param accessTokenExpirationSeconds access token expiration seconds
-     * @return self reference
+     * @return token type
      */
-    public WeChatWorkCorpOAuth2Token setAccessTokenExpirationSeconds(Integer accessTokenExpirationSeconds) {
-        originalDataMap.put("expires_in", accessTokenExpirationSeconds);
-        return this;
+    public String getTokenType() {
+        return originalDataMap.getAsString("token_type");
+    }
+
+    /**
+     * Get scopes.
+     *
+     * @return scopes
+     */
+    public String getScopes() {
+        return originalDataMap.getAsString("scope");
     }
 
 }

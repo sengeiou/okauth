@@ -34,8 +34,8 @@ import java.util.List;
  */
 @ComponentScan
 @Configuration
-@AutoConfigureAfter(OkAuthBuiltInOAuth2ClientAutoConfiguration.class)
 @ConditionalOnOkAuthEnabled
+@AutoConfigureAfter(OkAuthBuiltInOAuth2ClientAutoConfiguration.class)
 public class OkAuthAutoConfiguration {
 
     @Bean

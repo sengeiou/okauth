@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.builtin.wechat.work.corp;
+package com.github.wautsns.okauth.core.client.builtin.wechatworkcorp;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * WeChatWorkCorp OAuth2 app info.
+ * WechatWorkCorp OAuth2 app info.
  *
  * @author wautsns
  * @since May 23, 2020
  */
 @Data
 @Accessors(chain = true)
-public class WeChatWorkCorpOAuth2AppInfo implements OAuth2AppInfo {
+public class WechatWorkCorpOAuth2AppInfo implements OAuth2AppInfo {
 
     /** Corp id. */
     private String corpId;

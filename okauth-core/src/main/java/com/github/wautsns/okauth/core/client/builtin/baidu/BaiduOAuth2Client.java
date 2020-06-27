@@ -49,9 +49,7 @@ public class BaiduOAuth2Client
      * @param appInfo oauth2 app info
      */
     public BaiduOAuth2Client(BaiduOAuth2AppInfo appInfo) {
-        this(
-                appInfo, new HttpClient4OAuth2HttpClient(),
-                TokenRefreshCallback.IGNORE);
+        this(appInfo, new HttpClient4OAuth2HttpClient(), TokenRefreshCallback.IGNORE);
     }
 
     /**
