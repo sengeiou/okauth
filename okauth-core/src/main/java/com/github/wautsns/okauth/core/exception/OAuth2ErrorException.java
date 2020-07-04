@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.exception;
 
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import lombok.Getter;
 
 /**
@@ -31,7 +32,7 @@ public class OAuth2ErrorException extends OAuth2Exception {
     private static final long serialVersionUID = 5271329869899694038L;
 
     /** Open platform. */
-    private final String openPlatform;
+    private final OpenPlatform openPlatform;
     /** Error code. */
     private final String errorCode;
 
@@ -42,7 +43,7 @@ public class OAuth2ErrorException extends OAuth2Exception {
      * @param errorCode error code
      * @param message error message
      */
-    public OAuth2ErrorException(String openPlatform, String errorCode, String message) {
+    public OAuth2ErrorException(OpenPlatform openPlatform, String errorCode, String message) {
         super(message);
         this.openPlatform = openPlatform;
         this.errorCode = errorCode;

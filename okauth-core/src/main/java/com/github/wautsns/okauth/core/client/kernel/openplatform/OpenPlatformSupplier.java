@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel.model;
+package com.github.wautsns.okauth.core.client.kernel.openplatform;
 
 /**
  * Open platform supplier.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since Jul 04, 2020
  */
 public interface OpenPlatformSupplier {
 
@@ -28,6 +28,6 @@ public interface OpenPlatformSupplier {
      *
      * @return open platform
      */
-    String getOpenPlatform();
+    OpenPlatform getOpenPlatform();
 
 }

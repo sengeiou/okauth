@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.exception.specific.token;
 
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 
 /**
@@ -34,7 +35,7 @@ public class InvalidRefreshTokenException extends OAuth2ErrorException {
      * @param errorCode error code
      * @param message error message
      */
-    public InvalidRefreshTokenException(String openPlatform, String errorCode, String message) {
+    public InvalidRefreshTokenException(OpenPlatform openPlatform, String errorCode, String message) {
         super(openPlatform, errorCode, message);
     }
 

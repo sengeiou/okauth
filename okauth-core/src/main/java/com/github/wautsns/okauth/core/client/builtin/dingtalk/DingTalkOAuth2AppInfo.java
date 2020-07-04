@@ -17,6 +17,7 @@ package com.github.wautsns.okauth.core.client.builtin.dingtalk;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -27,7 +28,8 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class DingTalkOAuth2AppInfo implements OAuth2AppInfo {
+@EqualsAndHashCode(callSuper = true)
+public class DingTalkOAuth2AppInfo extends OAuth2AppInfo {
 
     /** App id. */
     private String appId;

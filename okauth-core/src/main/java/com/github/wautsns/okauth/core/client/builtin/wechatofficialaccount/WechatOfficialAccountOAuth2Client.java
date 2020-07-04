@@ -29,6 +29,7 @@ import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQuery
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForUser;
 import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessTokenException;
@@ -49,7 +50,7 @@ public class WechatOfficialAccountOAuth2Client
         TokenRefreshableOAuth2Client<WechatOfficialAccountOAuth2AppInfo, WechatOfficialAccountOAuth2Token, WechatOfficialAccountOAuth2User> {
 
     /**
-     * Construct an WechatOfficialAccount oauth2 client.
+     * Construct a WechatOfficialAccount oauth2 client.
      *
      * @param appInfo oauth2 app info
      */
@@ -58,7 +59,7 @@ public class WechatOfficialAccountOAuth2Client
     }
 
     /**
-     * Construct an WechatOfficialAccount oauth2 client.
+     * Construct a WechatOfficialAccount oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
@@ -71,7 +72,7 @@ public class WechatOfficialAccountOAuth2Client
     }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.WECHAT_OFFICIAL_ACCOUNT;
     }
 

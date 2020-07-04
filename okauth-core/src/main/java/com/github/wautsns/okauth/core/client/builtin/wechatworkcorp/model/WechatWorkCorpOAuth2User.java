@@ -18,6 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -104,46 +105,51 @@ import java.util.stream.Collectors;
  * @author wautsns
  * @since May 23, 2020
  */
-@Data
-public class WechatWorkCorpOAuth2User implements OAuth2User {
+public class WechatWorkCorpOAuth2User extends OAuth2User {
 
     private static final long serialVersionUID = -8284465889855788132L;
 
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a WechatWorkCorp oauth2 user.
+     *
+     * @param originalDataMap original data map
+     */
+    public WechatWorkCorpOAuth2User(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.WECHAT_WORK_CORP;
     }
 
     public String getUserid() {
-        return originalDataMap.getAsString("userid");
+        return getOriginalDataMap().getAsString("userid");
     }
 
     public String getName() {
-        return originalDataMap.getAsString("name");
+        return getOriginalDataMap().getAsString("name");
     }
 
     public List<Integer> getDepartment() {
-        return originalDataMap.getAs("department");
+        return getOriginalDataMap().getAs("department");
     }
 
     public List<Integer> getOrder() {
-        return originalDataMap.getAs("order");
+        return getOriginalDataMap().getAs("order");
     }
 
     public String getPosition() {
-        return originalDataMap.getAsString("position");
+        return getOriginalDataMap().getAsString("position");
     }
 
     public String getMobile() {
-        return originalDataMap.getAsString("mobile");
+        return getOriginalDataMap().getAsString("mobile");
     }
 
     @Override
     public Gender getGender() {
-        String gender = originalDataMap.getAsString("gender");
+        String gender = getOriginalDataMap().getAsString("gender");
         if ("1".equals(gender)) {
             return Gender.MALE;
         } else if ("2".equals(gender)) {
@@ -155,43 +161,43 @@ public class WechatWorkCorpOAuth2User implements OAuth2User {
 
     @Override
     public String getEmail() {
-        return originalDataMap.getAsString("email");
+        return getOriginalDataMap().getAsString("email");
     }
 
     public List<Integer> getIsLeaderInDept() {
-        return originalDataMap.getAs("is_leader_in_dept");
+        return getOriginalDataMap().getAs("is_leader_in_dept");
     }
 
     public String getAvatar() {
-        return originalDataMap.getAsString("avatar");
+        return getOriginalDataMap().getAsString("avatar");
     }
 
     public String getThumbAvatar() {
-        return originalDataMap.getAsString("thumb_avatar");
+        return getOriginalDataMap().getAsString("thumb_avatar");
     }
 
     public String getTelephone() {
-        return originalDataMap.getAsString("telephone");
+        return getOriginalDataMap().getAsString("telephone");
     }
 
     public String getAlias() {
-        return originalDataMap.getAsString("alias");
+        return getOriginalDataMap().getAsString("alias");
     }
 
     public String getAddress() {
-        return originalDataMap.getAsString("address");
+        return getOriginalDataMap().getAsString("address");
     }
 
     public String getOpenUserid() {
-        return originalDataMap.getAsString("open_userid");
+        return getOriginalDataMap().getAsString("open_userid");
     }
 
     public Integer getMainDepartment() {
-        return originalDataMap.getAsInteger("main_department");
+        return getOriginalDataMap().getAsInteger("main_department");
     }
 
     public ExtAttr getExtattr() {
-        return new ExtAttr(originalDataMap.getAsDataMap("extattr"));
+        return new ExtAttr(getOriginalDataMap().getAsDataMap("extattr"));
     }
 
     @RequiredArgsConstructor
@@ -218,19 +224,19 @@ public class WechatWorkCorpOAuth2User implements OAuth2User {
     }
 
     public Status getStatus() {
-        return Status.getByValue(originalDataMap.getAsInteger("status"));
+        return Status.getByValue(getOriginalDataMap().getAsInteger("status"));
     }
 
     public String getQrCode() {
-        return originalDataMap.getAsString("qr_code");
+        return getOriginalDataMap().getAsString("qr_code");
     }
 
     public String getExternalPosition() {
-        return originalDataMap.getAsString("external_position");
+        return getOriginalDataMap().getAsString("external_position");
     }
 
     public ExternalProfile getExternalProfile() {
-        return new ExternalProfile(originalDataMap.getAsDataMap("external_profile"));
+        return new ExternalProfile(getOriginalDataMap().getAsDataMap("external_profile"));
     }
 
     // #################### amendment ###################################################

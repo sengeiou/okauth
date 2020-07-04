@@ -18,8 +18,8 @@ package com.github.wautsns.okauth.core.client.builtin.elemeshopisv.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -32,28 +32,32 @@ import java.util.stream.Collectors;
  * @author wautsns
  * @since Jun 25, 2020
  */
-@Data
-@Accessors(chain = true)
-public class ElemeShopIsvOAuth2User implements OAuth2User {
+public class ElemeShopIsvOAuth2User extends OAuth2User {
 
     private static final long serialVersionUID = 8870928954038155141L;
 
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct an ElemeShopIsv oauth2 user.
+     *
+     * @param originalDataMap original data map
+     */
+    public ElemeShopIsvOAuth2User(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.ELEME_SHOP_ISV;
     }
 
     @Override
     public String getOpenid() {
-        return originalDataMap.getAsString("userId");
+        return getOriginalDataMap().getAsString("userId");
     }
 
     @Override
     public String getUsername() {
-        return originalDataMap.getAsString("userName");
+        return getOriginalDataMap().getAsString("userName");
     }
 
     /**
@@ -62,7 +66,7 @@ public class ElemeShopIsvOAuth2User implements OAuth2User {
      * @return authorized shops
      */
     public List<AuthorizedShop> getAuthorizedShops() {
-        return originalDataMap.getAsDataMapList("authorizedShops").stream()
+        return getOriginalDataMap().getAsDataMapList("authorizedShops").stream()
                 .map(AuthorizedShop::new)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -81,7 +85,7 @@ public class ElemeShopIsvOAuth2User implements OAuth2User {
          * @return id
          */
         public String getId() {
-            return originalDataMap.getAsString("id");
+            return getOriginalDataMap().getAsString("id");
         }
 
         /**
@@ -90,7 +94,7 @@ public class ElemeShopIsvOAuth2User implements OAuth2User {
          * @return name
          */
         public String getName() {
-            return originalDataMap.getAsString("name");
+            return getOriginalDataMap().getAsString("name");
         }
 
     }

@@ -21,6 +21,7 @@ import com.github.wautsns.okauth.core.client.kernel.api.basic.TokenRelatedApi;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.token.ExpiredAccessTokenException;
 
@@ -76,6 +77,7 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
     public final T refreshToken(T token) throws OAuth2Exception {
         tokenRefreshCallback.beforeRefreshing(getOpenPlatform(), token);
         T newToken = apiRefreshToken.execute(token);
+        newToken.setTokenId(token.getTokenId());
         tokenRefreshCallback.afterRefreshing(getOpenPlatform(), token, newToken);
         return newToken;
     }
@@ -117,7 +119,7 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
          * @param openPlatform open platform
          * @param oldToken old token
          */
-        void beforeRefreshing(String openPlatform, OAuth2Token oldToken);
+        void beforeRefreshing(OpenPlatform openPlatform, OAuth2Token oldToken);
 
         /**
          * After refreshing.
@@ -126,17 +128,17 @@ public abstract class TokenRefreshableOAuth2Client<A extends OAuth2AppInfo, T ex
          * @param oldToken old token
          * @param newToken new token
          */
-        void afterRefreshing(String openPlatform, OAuth2Token oldToken, OAuth2Token newToken);
+        void afterRefreshing(OpenPlatform openPlatform, OAuth2Token oldToken, OAuth2Token newToken);
 
         // #################### instance ####################################################
 
         /** Ignore the callback(<strong>Strongly not recommended if you need token.</strong>). */
         TokenRefreshCallback IGNORE = new TokenRefreshCallback() {
             @Override
-            public void beforeRefreshing(String openPlatform, OAuth2Token oldToken) {}
+            public void beforeRefreshing(OpenPlatform openPlatform, OAuth2Token oldToken) {}
 
             @Override
-            public void afterRefreshing(String openPlatform, OAuth2Token oldToken, OAuth2Token newToken) {}
+            public void afterRefreshing(OpenPlatform openPlatform, OAuth2Token oldToken, OAuth2Token newToken) {}
         };
 
     }

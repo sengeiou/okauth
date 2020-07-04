@@ -31,6 +31,7 @@ import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQuery
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeTokenForUser;
 import com.github.wautsns.okauth.core.client.kernel.api.RefreshToken;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.client.kernel.util.Encryptors;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
@@ -55,7 +56,7 @@ public class ElemeShopIsvOAuth2Client
         TokenRefreshableOAuth2Client<ElemeShopIsvOAuth2AppInfo, ElemeShopIsvOAuth2Token, ElemeShopIsvOAuth2User> {
 
     /**
-     * Construct a ElemeShopIsv oauth2 client.
+     * Construct an ElemeShopIsv oauth2 client.
      *
      * @param appInfo oauth2 app info
      */
@@ -64,7 +65,7 @@ public class ElemeShopIsvOAuth2Client
     }
 
     /**
-     * Construct a ElemeShopIsv oauth2 client.
+     * Construct an ElemeShopIsv oauth2 client.
      *
      * @param appInfo oauth2 app info
      * @param httpClient oauth2 http client
@@ -77,7 +78,7 @@ public class ElemeShopIsvOAuth2Client
     }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.ELEME_SHOP_ISV;
     }
 

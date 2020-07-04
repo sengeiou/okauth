@@ -18,8 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.tiktok.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 /**
  * TikTok oauth2 token.
@@ -38,40 +37,42 @@ import lombok.experimental.Accessors;
  * @author wautsns
  * @since Jun 23, 2020
  */
-@Data
-@Accessors(chain = true)
-public class TikTokOAuth2Token implements OAuth2RefreshableToken {
+public class TikTokOAuth2Token extends OAuth2RefreshableToken {
 
     private static final long serialVersionUID = -7768424686277910638L;
 
-    /** Token id. */
-    private String tokenId;
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a TikTok oauth2 refreshable token.
+     *
+     * @param originalDataMap original data map
+     */
+    public TikTokOAuth2Token(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.TIK_TOK;
     }
 
     @Override
     public String getAccessToken() {
-        return originalDataMap.getAsString("access_token");
+        return getOriginalDataMap().getAsString("access_token");
     }
 
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return originalDataMap.getAsInteger("expires_in");
+        return getOriginalDataMap().getAsInteger("expires_in");
     }
 
     @Override
     public String getRefreshToken() {
-        return originalDataMap.getAsString("refresh_token");
+        return getOriginalDataMap().getAsString("refresh_token");
     }
 
     @Override
     public Integer getRefreshTokenExpirationSeconds() {
-        return originalDataMap.getAsInteger("refresh_expires_in");
+        return getOriginalDataMap().getAsInteger("refresh_expires_in");
     }
 
     /**
@@ -80,7 +81,7 @@ public class TikTokOAuth2Token implements OAuth2RefreshableToken {
      * @return openid
      */
     public String getOpenid() {
-        return originalDataMap.getAsString("open_id");
+        return getOriginalDataMap().getAsString("open_id");
     }
 
     /**
@@ -89,7 +90,7 @@ public class TikTokOAuth2Token implements OAuth2RefreshableToken {
      * @return scopes
      */
     public String getScopes() {
-        return originalDataMap.getAsString("scope");
+        return getOriginalDataMap().getAsString("scope");
     }
 
 }

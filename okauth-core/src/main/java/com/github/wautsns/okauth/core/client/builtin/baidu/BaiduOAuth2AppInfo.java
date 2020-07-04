@@ -17,6 +17,7 @@ package com.github.wautsns.okauth.core.client.builtin.baidu;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -32,7 +33,8 @@ import java.util.stream.Collectors;
  */
 @Data
 @Accessors(chain = true)
-public class BaiduOAuth2AppInfo implements OAuth2AppInfo {
+@EqualsAndHashCode(callSuper = true)
+public class BaiduOAuth2AppInfo extends OAuth2AppInfo {
 
     /** Api key. */
     private String apiKey;

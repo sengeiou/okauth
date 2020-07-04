@@ -16,6 +16,9 @@
 package com.github.wautsns.okauth.core.client.kernel.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatformSupplier;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -25,42 +28,38 @@ import java.io.Serializable;
  * @author wautsns
  * @since May 17, 2020
  */
-public interface OAuth2Token extends OpenPlatformSupplier, Serializable {
+@Data
+@Accessors(chain = true)
+public abstract class OAuth2Token implements OpenPlatformSupplier, Serializable {
+
+    private static final long serialVersionUID = 4059179893255816617L;
+
+    /** Token id. */
+    private String tokenId;
+    /** Original data map. */
+    private final DataMap originalDataMap;
 
     /**
-     * Get original data map.
+     * Construct an oauth2 token.
      *
-     * @return original data map
+     * @param originalDataMap original data map
      */
-    DataMap getOriginalDataMap();
-
-    /**
-     * Get token id.
-     *
-     * @return token id
-     */
-    String getTokenId();
-
-    /**
-     * Set token id.
-     *
-     * @param tokenId token id
-     * @return self reference
-     */
-    OAuth2Token setTokenId(String tokenId);
+    public OAuth2Token(DataMap originalDataMap) {
+        this.originalDataMap = originalDataMap;
+    }
 
     /**
      * Get access token.
      *
      * @return access token
      */
-    String getAccessToken();
+    public abstract String getAccessToken();
 
     /**
      * Get access token expiration seconds.
      *
      * @return access token expiration seconds
      */
-    Integer getAccessTokenExpirationSeconds();
+    public abstract Integer getAccessTokenExpirationSeconds();
 
 }

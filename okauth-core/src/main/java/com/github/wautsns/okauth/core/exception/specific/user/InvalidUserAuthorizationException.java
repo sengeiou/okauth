@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.exception.specific.user;
 
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import lombok.Getter;
 
@@ -30,14 +31,14 @@ public class InvalidUserAuthorizationException extends OAuth2Exception {
     private static final long serialVersionUID = 3286545599334883829L;
 
     /** Open platform name. */
-    private final String openPlatform;
+    private final OpenPlatform openPlatform;
 
     /**
-     * Construct a InvalidUserAuthorizationException.
+     * Construct an InvalidUserAuthorizationException.
      *
      * @param openPlatform open platform
      */
-    public InvalidUserAuthorizationException(String openPlatform) {
+    public InvalidUserAuthorizationException(OpenPlatform openPlatform) {
         super("Invalid user authorization.");
         this.openPlatform = openPlatform;
     }

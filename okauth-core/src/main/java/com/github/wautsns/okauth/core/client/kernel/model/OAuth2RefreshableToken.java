@@ -15,26 +15,39 @@
  */
 package com.github.wautsns.okauth.core.client.kernel.model;
 
+import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
+
 /**
  * OAuth2 refreshable token.
  *
  * @author wautsns
  * @since May 23, 2020
  */
-public interface OAuth2RefreshableToken extends OAuth2Token {
+public abstract class OAuth2RefreshableToken extends OAuth2Token {
+
+    private static final long serialVersionUID = 5373620882337328043L;
+
+    /**
+     * Construct an oauth2 refreshable token.
+     *
+     * @param originalDataMap original data map
+     */
+    public OAuth2RefreshableToken(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     /**
      * Get refresh token.
      *
      * @return refresh token
      */
-    String getRefreshToken();
+    public abstract String getRefreshToken();
 
     /**
      * Get refresh token expiration seconds.
      *
      * @return refresh token expiration seconds
      */
-    Integer getRefreshTokenExpirationSeconds();
+    public abstract Integer getRefreshTokenExpirationSeconds();
 
 }

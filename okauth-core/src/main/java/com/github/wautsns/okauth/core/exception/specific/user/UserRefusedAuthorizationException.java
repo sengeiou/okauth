@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.exception.specific.user;
 
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import lombok.Getter;
 
@@ -29,15 +30,15 @@ public class UserRefusedAuthorizationException extends OAuth2Exception {
 
     private static final long serialVersionUID = 3286545599334883829L;
 
-    /** Open platform name. */
-    private final String openPlatform;
+    /** Open platform. */
+    private final OpenPlatform openPlatform;
 
     /**
      * Construct a UserRefusedAuthorizationException.
      *
      * @param openPlatform open platform
      */
-    public UserRefusedAuthorizationException(String openPlatform) {
+    public UserRefusedAuthorizationException(OpenPlatform openPlatform) {
         super("User refused authorization.");
         this.openPlatform = openPlatform;
     }

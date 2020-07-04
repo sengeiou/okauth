@@ -21,7 +21,7 @@ import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQuery
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RedirectUriQuery;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
-import com.github.wautsns.okauth.core.client.kernel.model.OpenPlatformSupplier;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatformSupplier;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import lombok.Getter;
 

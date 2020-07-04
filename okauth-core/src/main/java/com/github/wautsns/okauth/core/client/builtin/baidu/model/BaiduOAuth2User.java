@@ -18,7 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.baidu.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
-import lombok.Data;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 import java.time.LocalDate;
 
@@ -41,27 +41,32 @@ import java.time.LocalDate;
  * @author wautsns
  * @since May 17, 2020
  */
-@Data
-public class BaiduOAuth2User implements OAuth2User {
+public class BaiduOAuth2User extends OAuth2User {
 
     private static final long serialVersionUID = 1596112334287788877L;
 
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a Baidu oauth2 user.
+     *
+     * @param originalDataMap original data map
+     */
+    public BaiduOAuth2User(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.BAIDU;
     }
 
     @Override
     public String getOpenid() {
-        return originalDataMap.getAsString("openid");
+        return getOriginalDataMap().getAsString("openid");
     }
 
     @Override
     public String getUid() {
-        return originalDataMap.getAsString("userid");
+        return getOriginalDataMap().getAsString("userid");
     }
 
     /**
@@ -73,7 +78,7 @@ public class BaiduOAuth2User implements OAuth2User {
      */
     @Override
     public String getUsername() {
-        return originalDataMap.getAsString("username");
+        return getOriginalDataMap().getAsString("username");
     }
 
     /**
@@ -85,12 +90,12 @@ public class BaiduOAuth2User implements OAuth2User {
      * @return portrait
      */
     public String getPortrait() {
-        return originalDataMap.getAsString("portrait");
+        return getOriginalDataMap().getAsString("portrait");
     }
 
     @Override
     public Gender getGender() {
-        String sex = originalDataMap.getAsString("sex");
+        String sex = getOriginalDataMap().getAsString("sex");
         if ("1".equals(sex)) {
             return Gender.MALE;
         } else if ("0".equals(sex)) {
@@ -102,7 +107,7 @@ public class BaiduOAuth2User implements OAuth2User {
 
     @Override
     public LocalDate getBirthday() {
-        return LocalDate.parse(originalDataMap.getAsString("birthday"));
+        return LocalDate.parse(getOriginalDataMap().getAsString("birthday"));
     }
 
     /**
@@ -111,7 +116,7 @@ public class BaiduOAuth2User implements OAuth2User {
      * @return {@code true} if the currently logged in user is bind mobile, otherwise {@code false}
      */
     public Boolean isBindMobile() {
-        return "1".equals(originalDataMap.getAsString("is_bind_mobile"));
+        return "1".equals(getOriginalDataMap().getAsString("is_bind_mobile"));
     }
 
     /**
@@ -120,7 +125,7 @@ public class BaiduOAuth2User implements OAuth2User {
      * @return {@code true} if the currently logged in user is real name verified, otherwise {@code false}
      */
     public Boolean isRealName() {
-        return "1".equals(originalDataMap.getAsString("is_real_name"));
+        return "1".equals(getOriginalDataMap().getAsString("is_real_name"));
     }
 
     // #################### amendment ###################################################

@@ -16,6 +16,9 @@
 package com.github.wautsns.okauth.core.client.kernel.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatformSupplier;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -26,59 +29,68 @@ import java.time.LocalDate;
  * @author wautsns
  * @since May 17, 2020
  */
-public interface OAuth2User extends OpenPlatformSupplier, Serializable {
+@Data
+@Accessors(chain = true)
+public abstract class OAuth2User implements OpenPlatformSupplier, Serializable {
+
+    private static final long serialVersionUID = 1366329814055492214L;
+
+    /** Original data map. */
+    private final DataMap originalDataMap;
 
     /**
-     * Get original data map.
+     * Construct an oauth2 user.
      *
-     * @return original data map.
+     * @param originalDataMap original data map
      */
-    DataMap getOriginalDataMap();
+    public OAuth2User(DataMap originalDataMap) {
+        this.originalDataMap = originalDataMap;
+    }
 
     /**
      * Get open id.
      *
      * @return open id
      */
-    String getOpenid();
+    public abstract String getOpenid();
 
     /**
      * Get union id.
      *
      * @return union id
      */
-    default String getUnionid() { return null; }
+    public String getUnionid() { return null; }
 
     /**
      * Get uid.
      *
      * @return uid
      */
-    default String getUid() { return null; }
+    public String getUid() { return null; }
 
     /**
      * Get username.
      *
      * @return username
      */
-    default String getUsername() { return null; }
+    public String getUsername() { return null; }
 
     /**
      * Get nickname.
      *
      * @return nickname
      */
-    default String getNickname() { return null; }
+    public String getNickname() { return null; }
 
     /**
      * Get avatar url.
      *
      * @return avatar url
      */
-    default String getAvatarUrl() { return null; }
+    public String getAvatarUrl() { return null; }
 
     /** Gender. */
-    enum Gender {
+    public enum Gender {
         MALE, FEMALE,
         SECRET, UNKNOWN
     }
@@ -88,27 +100,27 @@ public interface OAuth2User extends OpenPlatformSupplier, Serializable {
      *
      * @return gender
      */
-    default Gender getGender() { return Gender.UNKNOWN; }
+    public Gender getGender() { return Gender.UNKNOWN; }
 
     /**
      * Get birthday.
      *
      * @return birthday
      */
-    default LocalDate getBirthday() { return null; }
+    public LocalDate getBirthday() { return null; }
 
     /**
      * Get email.
      *
      * @return email
      */
-    default String getEmail() { return null; }
+    public String getEmail() { return null; }
 
     /**
-     * Get phone.
+     * Get cellphone.
      *
-     * @return phone
+     * @return cellphone
      */
-    default String getCellphone() { return null; }
+    public String getCellphone() { return null; }
 
 }

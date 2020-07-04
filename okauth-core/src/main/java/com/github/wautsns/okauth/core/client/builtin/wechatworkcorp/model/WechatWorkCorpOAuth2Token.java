@@ -18,8 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 /**
  * WechatWorkCorp oauth2 token.
@@ -34,30 +33,32 @@ import lombok.experimental.Accessors;
  * @author wautsns
  * @since May 23, 2020
  */
-@Data
-@Accessors(chain = true)
-public class WechatWorkCorpOAuth2Token implements OAuth2Token {
+public class WechatWorkCorpOAuth2Token extends OAuth2Token {
 
     private static final long serialVersionUID = -8354114542294039343L;
 
-    /** Token id. */
-    private String tokenId;
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a WechatWorkCorp oauth2 token.
+     *
+     * @param originalDataMap original data map
+     */
+    public WechatWorkCorpOAuth2Token(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.WECHAT_WORK_CORP;
     }
 
     @Override
     public String getAccessToken() {
-        return originalDataMap.getAsString("access_token");
+        return getOriginalDataMap().getAsString("access_token");
     }
 
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return originalDataMap.getAsInteger("expires_in");
+        return getOriginalDataMap().getAsInteger("expires_in");
     }
 
     /**
@@ -67,7 +68,7 @@ public class WechatWorkCorpOAuth2Token implements OAuth2Token {
      * @return self reference
      */
     public WechatWorkCorpOAuth2Token setAccessTokenExpirationSeconds(Integer accessTokenExpirationSeconds) {
-        originalDataMap.put("expires_in", accessTokenExpirationSeconds);
+        getOriginalDataMap().put("expires_in", accessTokenExpirationSeconds);
         return this;
     }
 

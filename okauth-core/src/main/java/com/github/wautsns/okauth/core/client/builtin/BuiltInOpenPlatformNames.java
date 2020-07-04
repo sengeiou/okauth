@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.client.builtin;
 
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -27,22 +28,22 @@ import lombok.experimental.UtilityClass;
 public class BuiltInOpenPlatformNames {
 
     /** Baidu(百度). */
-    public static final String BAIDU = "Baidu";
+    public static final OpenPlatform BAIDU = new OpenPlatform("Baidu");
     /** DingTalk(钉钉). */
-    public static final String DING_TALK = "DingTalk";
+    public static final OpenPlatform DING_TALK = new OpenPlatform("DingTalk");
     /** ElemeShopIsv(饿了么-商家开放平台-企业应用/平台应用). */
-    public static final String ELEME_SHOP_ISV = "ElemeShopIsv";
+    public static final OpenPlatform ELEME_SHOP_ISV = new OpenPlatform("ElemeShopIsv");
     /** Gitee(码云). */
-    public static final String GITEE = "Gitee";
+    public static final OpenPlatform GITEE = new OpenPlatform("Gitee");
     /** GitHub. */
-    public static final String GITHUB = "GitHub";
+    public static final OpenPlatform GITHUB = new OpenPlatform("GitHub");
     /** OSChina(开源中国). */
-    public static final String OSCHINA = "OSChina";
+    public static final OpenPlatform OSCHINA = new OpenPlatform("OSChina");
     /** TikTok(抖音) */
-    public static final String TIK_TOK = "TikTok";
+    public static final OpenPlatform TIK_TOK = new OpenPlatform("TikTok");
     /** WechatOfficialAccount(微信公众号). */
-    public static final String WECHAT_OFFICIAL_ACCOUNT = "WechatOfficialAccount";
+    public static final OpenPlatform WECHAT_OFFICIAL_ACCOUNT = new OpenPlatform("WechatOfficialAccount");
     /** WechatWorkCorp(企业微信-企业内部引用) */
-    public static final String WECHAT_WORK_CORP = "WechatWorkCorp";
+    public static final OpenPlatform WECHAT_WORK_CORP = new OpenPlatform("WechatWorkCorp");
 
 }

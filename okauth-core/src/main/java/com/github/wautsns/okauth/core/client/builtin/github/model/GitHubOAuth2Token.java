@@ -18,8 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.github.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 /**
  * GitHub oauth2 token.
@@ -35,25 +34,27 @@ import lombok.experimental.Accessors;
  * @author wautsns
  * @since May 17, 2020
  */
-@Data
-@Accessors(chain = true)
-public class GitHubOAuth2Token implements OAuth2Token {
+public class GitHubOAuth2Token extends OAuth2Token {
 
     private static final long serialVersionUID = 8408050532302185568L;
 
-    /** Token id. */
-    private String tokenId;
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a GitHub oauth2 token.
+     *
+     * @param originalDataMap original data map
+     */
+    public GitHubOAuth2Token(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.GITHUB;
     }
 
     @Override
     public String getAccessToken() {
-        return originalDataMap.getAsString("access_token");
+        return getOriginalDataMap().getAsString("access_token");
     }
 
     /** FIXME GitHub oauth2 access token expires in ??(Assume 1 day). */
@@ -70,7 +71,7 @@ public class GitHubOAuth2Token implements OAuth2Token {
      * @return scopes
      */
     public String getScopes() {
-        return originalDataMap.getAsString("scope");
+        return getOriginalDataMap().getAsString("scope");
     }
 
     /**
@@ -79,7 +80,7 @@ public class GitHubOAuth2Token implements OAuth2Token {
      * @return {@code "bearer"}
      */
     public String getTokenType() {
-        return originalDataMap.getAsString("token_type");
+        return getOriginalDataMap().getAsString("token_type");
     }
 
 }

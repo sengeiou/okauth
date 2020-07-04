@@ -18,7 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount.mode
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
-import lombok.Data;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 import java.util.List;
 
@@ -42,42 +42,47 @@ import java.util.List;
  * @author wautsns
  * @since Jun 19, 2020
  */
-@Data
-public class WechatOfficialAccountOAuth2User implements OAuth2User {
+public class WechatOfficialAccountOAuth2User extends OAuth2User {
 
     private static final long serialVersionUID = 133319205583865255L;
 
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a WechatOfficialAccount oauth2 user.
+     *
+     * @param originalDataMap original data map
+     */
+    public WechatOfficialAccountOAuth2User(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.WECHAT_OFFICIAL_ACCOUNT;
     }
 
     @Override
     public String getOpenid() {
-        return originalDataMap.getAsString("openid");
+        return getOriginalDataMap().getAsString("openid");
     }
 
     @Override
     public String getUnionid() {
-        return originalDataMap.getAsString("unionid");
+        return getOriginalDataMap().getAsString("unionid");
     }
 
     @Override
     public String getNickname() {
-        return originalDataMap.getAsString("nickname");
+        return getOriginalDataMap().getAsString("nickname");
     }
 
     @Override
     public String getAvatarUrl() {
-        return originalDataMap.getAsString("headimgurl");
+        return getOriginalDataMap().getAsString("headimgurl");
     }
 
     @Override
     public Gender getGender() {
-        String sex = originalDataMap.getAsString("sex");
+        String sex = getOriginalDataMap().getAsString("sex");
         if ("1".equals(sex)) {
             return Gender.MALE;
         } else if ("2".equals(sex)) {
@@ -93,7 +98,7 @@ public class WechatOfficialAccountOAuth2User implements OAuth2User {
      * @return country
      */
     public String getCountry() {
-        return originalDataMap.getAsString("country");
+        return getOriginalDataMap().getAsString("country");
     }
 
     /**
@@ -102,7 +107,7 @@ public class WechatOfficialAccountOAuth2User implements OAuth2User {
      * @return province
      */
     public String getProvince() {
-        return originalDataMap.getAsString("province");
+        return getOriginalDataMap().getAsString("province");
     }
 
     /**
@@ -111,7 +116,7 @@ public class WechatOfficialAccountOAuth2User implements OAuth2User {
      * @return city
      */
     public String getCity() {
-        return originalDataMap.getAsString("city");
+        return getOriginalDataMap().getAsString("city");
     }
 
     /**
@@ -122,7 +127,7 @@ public class WechatOfficialAccountOAuth2User implements OAuth2User {
      * @return privilege
      */
     public List<String> getPrivilege() {
-        return originalDataMap.getAs("privilege");
+        return getOriginalDataMap().getAs("privilege");
     }
 
 }

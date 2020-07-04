@@ -18,7 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.gitee.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
-import lombok.Data;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 import java.time.LocalDateTime;
 
@@ -62,135 +62,140 @@ import java.time.LocalDateTime;
  * @author wautsns
  * @since May 17, 2020
  */
-@Data
-public class GiteeOAuth2User implements OAuth2User {
+public class GiteeOAuth2User extends OAuth2User {
 
     private static final long serialVersionUID = -2925874836823140573L;
 
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a Gitee oauth2 user.
+     *
+     * @param originalDataMap original data map
+     */
+    public GiteeOAuth2User(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.GITEE;
     }
 
     public String getId() {
-        return originalDataMap.getAsString("id");
+        return getOriginalDataMap().getAsString("id");
     }
 
     public String getLogin() {
-        return originalDataMap.getAsString("login");
+        return getOriginalDataMap().getAsString("login");
     }
 
     public String getName() {
-        return originalDataMap.getAsString("name");
+        return getOriginalDataMap().getAsString("name");
     }
 
     @Override
     public String getAvatarUrl() {
-        return originalDataMap.getAsString("avatar_url");
+        return getOriginalDataMap().getAsString("avatar_url");
     }
 
     public String getUrl() {
-        return originalDataMap.getAsString("url");
+        return getOriginalDataMap().getAsString("url");
     }
 
     public String getHtmlUrl() {
-        return originalDataMap.getAsString("html_url");
+        return getOriginalDataMap().getAsString("html_url");
     }
 
     public String getFollowersUrl() {
-        return originalDataMap.getAsString("followers_url");
+        return getOriginalDataMap().getAsString("followers_url");
     }
 
     public String getFollowingUrl() {
-        return originalDataMap.getAsString("following_url");
+        return getOriginalDataMap().getAsString("following_url");
     }
 
     public String getGistsUrl() {
-        return originalDataMap.getAsString("gists_url");
+        return getOriginalDataMap().getAsString("gists_url");
     }
 
     public String getStarredUrl() {
-        return originalDataMap.getAsString("starredUrl");
+        return getOriginalDataMap().getAsString("starredUrl");
     }
 
     public String getSubscriptionsUrl() {
-        return originalDataMap.getAsString("subscriptions_url");
+        return getOriginalDataMap().getAsString("subscriptions_url");
     }
 
     public String getOrganizationsUrl() {
-        return originalDataMap.getAsString("organizations_url");
+        return getOriginalDataMap().getAsString("organizations_url");
     }
 
     public String getReposUrl() {
-        return originalDataMap.getAsString("repos_url");
+        return getOriginalDataMap().getAsString("repos_url");
     }
 
     public String getEventsUrl() {
-        return originalDataMap.getAsString("events_url");
+        return getOriginalDataMap().getAsString("events_url");
     }
 
     public String getReceivedEventsUrl() {
-        return originalDataMap.getAsString("received_events_url");
+        return getOriginalDataMap().getAsString("received_events_url");
     }
 
     public String getType() {
-        return originalDataMap.getAsString("type");
+        return getOriginalDataMap().getAsString("type");
     }
 
     public Boolean getSiteAdmin() {
-        return originalDataMap.getAsBoolean("site_admin");
+        return getOriginalDataMap().getAsBoolean("site_admin");
     }
 
     public String getBlog() {
-        return originalDataMap.getAsString("blog");
+        return getOriginalDataMap().getAsString("blog");
     }
 
     public String getWeibo() {
-        return originalDataMap.getAsString("weibo");
+        return getOriginalDataMap().getAsString("weibo");
     }
 
     public String getBio() {
-        return originalDataMap.getAsString("bio");
+        return getOriginalDataMap().getAsString("bio");
     }
 
     public Integer getPublicRepos() {
-        return originalDataMap.getAsInteger("public_repos");
+        return getOriginalDataMap().getAsInteger("public_repos");
     }
 
     public Integer getPublicGists() {
-        return originalDataMap.getAsInteger("public_gists");
+        return getOriginalDataMap().getAsInteger("public_gists");
     }
 
     public Integer getFollowers() {
-        return originalDataMap.getAsInteger("followers");
+        return getOriginalDataMap().getAsInteger("followers");
     }
 
     public Integer getFollowings() {
-        return originalDataMap.getAsInteger("followings");
+        return getOriginalDataMap().getAsInteger("followings");
     }
 
     public Integer getStared() {
-        return originalDataMap.getAsInteger("stared");
+        return getOriginalDataMap().getAsInteger("stared");
     }
 
     public Integer getWatched() {
-        return originalDataMap.getAsInteger("watched");
+        return getOriginalDataMap().getAsInteger("watched");
     }
 
     public LocalDateTime getCreatedAt() {
-        return originalDataMap.getAsLocalDateTime("created_at");
+        return getOriginalDataMap().getAsLocalDateTime("created_at");
     }
 
     public LocalDateTime getUpdatedAt() {
-        return originalDataMap.getAsLocalDateTime("updated_at");
+        return getOriginalDataMap().getAsLocalDateTime("updated_at");
     }
 
     @Override
     public String getEmail() {
-        return originalDataMap.getAsString("email");
+        return getOriginalDataMap().getAsString("email");
     }
 
     // #################### amendment ###################################################

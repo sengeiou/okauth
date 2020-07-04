@@ -17,6 +17,7 @@ package com.github.wautsns.okauth.core.client.builtin.wechatworkcorp;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -27,7 +28,8 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class WechatWorkCorpOAuth2AppInfo implements OAuth2AppInfo {
+@EqualsAndHashCode(callSuper = true)
+public class WechatWorkCorpOAuth2AppInfo extends OAuth2AppInfo {
 
     /** Corp id. */
     private String corpId;

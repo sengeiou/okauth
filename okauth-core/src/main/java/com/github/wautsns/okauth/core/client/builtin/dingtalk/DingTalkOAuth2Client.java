@@ -26,6 +26,7 @@ import com.github.wautsns.okauth.core.client.builtin.dingtalk.model.DingTalkOAut
 import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForOpenid;
 import com.github.wautsns.okauth.core.client.kernel.api.ExchangeRedirectUriQueryForUser;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.client.kernel.util.Encryptor;
 import com.github.wautsns.okauth.core.client.kernel.util.Encryptors;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
@@ -60,7 +61,7 @@ public class DingTalkOAuth2Client extends OAuth2Client<DingTalkOAuth2AppInfo, Di
     }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.DING_TALK;
     }
 

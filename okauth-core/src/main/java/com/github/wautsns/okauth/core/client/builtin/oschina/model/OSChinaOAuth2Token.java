@@ -18,8 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.oschina.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 /**
  * OSChina oauth2 token.
@@ -37,35 +36,37 @@ import lombok.experimental.Accessors;
  * @author wautsns
  * @since May 22, 2020
  */
-@Data
-@Accessors(chain = true)
-public class OSChinaOAuth2Token implements OAuth2RefreshableToken {
+public class OSChinaOAuth2Token extends OAuth2RefreshableToken {
 
     private static final long serialVersionUID = 1387178519741274078L;
 
-    /** Token id. */
-    private String tokenId;
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct an OSChina oauth2 refreshable token.
+     *
+     * @param originalDataMap original data map
+     */
+    public OSChinaOAuth2Token(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.OSCHINA;
     }
 
     @Override
     public String getAccessToken() {
-        return originalDataMap.getAsString("access_token");
+        return getOriginalDataMap().getAsString("access_token");
     }
 
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return originalDataMap.getAsInteger("expires_in");
+        return getOriginalDataMap().getAsInteger("expires_in");
     }
 
     @Override
     public String getRefreshToken() {
-        return originalDataMap.getAsString("refresh_token");
+        return getOriginalDataMap().getAsString("refresh_token");
     }
 
     /** FIXME OSChina oauth2 refresh token expires in ??(Assume 7 days). */
@@ -82,7 +83,7 @@ public class OSChinaOAuth2Token implements OAuth2RefreshableToken {
      * @return token type
      */
     public String getTokenType() {
-        return originalDataMap.getAsString("token_type");
+        return getOriginalDataMap().getAsString("token_type");
     }
 
     /**
@@ -91,7 +92,7 @@ public class OSChinaOAuth2Token implements OAuth2RefreshableToken {
      * @return uid
      */
     public String getUid() {
-        return originalDataMap.getAsString("uid");
+        return getOriginalDataMap().getAsString("uid");
     }
 
 }

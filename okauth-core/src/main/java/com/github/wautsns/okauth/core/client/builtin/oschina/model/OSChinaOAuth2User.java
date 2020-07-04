@@ -18,7 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.oschina.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
-import lombok.Data;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 /**
  * OSChina oauth2 user.
@@ -38,35 +38,40 @@ import lombok.Data;
  * @author wautsns
  * @since May 22, 2020
  */
-@Data
-public class OSChinaOAuth2User implements OAuth2User {
+public class OSChinaOAuth2User extends OAuth2User {
 
     private static final long serialVersionUID = -5177778649683021808L;
 
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct an OSChina oauth2 user.
+     *
+     * @param originalDataMap original data map
+     */
+    public OSChinaOAuth2User(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.OSCHINA;
     }
 
     public String getId() {
-        return originalDataMap.getAsString("id");
+        return getOriginalDataMap().getAsString("id");
     }
 
     @Override
     public String getEmail() {
-        return originalDataMap.getAsString("email");
+        return getOriginalDataMap().getAsString("email");
     }
 
     public String getName() {
-        return originalDataMap.getAsString("name");
+        return getOriginalDataMap().getAsString("name");
     }
 
     @Override
     public Gender getGender() {
-        String gender = originalDataMap.getAsString("gender");
+        String gender = getOriginalDataMap().getAsString("gender");
         if ("male".equals(gender)) {
             return Gender.MALE;
         } else if ("female".equals(gender)) {
@@ -78,15 +83,15 @@ public class OSChinaOAuth2User implements OAuth2User {
 
     @Override
     public String getAvatarUrl() {
-        return originalDataMap.getAsString("avatar");
+        return getOriginalDataMap().getAsString("avatar");
     }
 
     public String getLocation() {
-        return originalDataMap.getAsString("location");
+        return getOriginalDataMap().getAsString("location");
     }
 
     public String getUrl() {
-        return originalDataMap.getAsString("url");
+        return getOriginalDataMap().getAsString("url");
     }
 
     // #################### amendment ###################################################

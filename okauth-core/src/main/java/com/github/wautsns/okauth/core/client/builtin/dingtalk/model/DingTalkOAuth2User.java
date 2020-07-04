@@ -18,8 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.dingtalk.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 /**
  * DingTalk oauth2 user.
@@ -35,33 +34,37 @@ import lombok.experimental.Accessors;
  * @author wautsns
  * @since Jun 22, 2020
  */
-@Data
-@Accessors(chain = true)
-public class DingTalkOAuth2User implements OAuth2User {
+public class DingTalkOAuth2User extends OAuth2User {
 
     private static final long serialVersionUID = -4496518945943399963L;
 
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a DingTalk oauth2 user.
+     *
+     * @param originalDataMap original data map
+     */
+    public DingTalkOAuth2User(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.DING_TALK;
     }
 
     @Override
     public String getOpenid() {
-        return originalDataMap.getAsString("openid");
+        return getOriginalDataMap().getAsString("openid");
     }
 
     @Override
     public String getUnionid() {
-        return originalDataMap.getAsString("unionid");
+        return getOriginalDataMap().getAsString("unionid");
     }
 
     @Override
     public String getNickname() {
-        return originalDataMap.getAsString("nick");
+        return getOriginalDataMap().getAsString("nick");
     }
 
 }

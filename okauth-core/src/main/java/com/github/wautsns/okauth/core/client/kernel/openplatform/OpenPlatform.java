@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.core.client.kernel;
+package com.github.wautsns.okauth.core.client.kernel.openplatform;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
- * OAuth2 app info.
+ * Open platform.
  *
  * @author wautsns
- * @since May 17, 2020
+ * @since Jul 04, 2020
  */
-public abstract class OAuth2AppInfo {
+@Data
+@Accessors(chain = true)
+public class OpenPlatform {
 
-    /** Construct an oauth2 app info. */
-    public OAuth2AppInfo() {}
+    /** Name. */
+    private final String name;
 
 }

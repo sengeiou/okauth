@@ -17,6 +17,7 @@ package com.github.wautsns.okauth.core.client.builtin.oschina;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2AppInfo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -27,7 +28,8 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class OSChinaOAuth2AppInfo implements OAuth2AppInfo {
+@EqualsAndHashCode(callSuper = true)
+public class OSChinaOAuth2AppInfo extends OAuth2AppInfo {
 
     /** Client id. */
     private String clientId;

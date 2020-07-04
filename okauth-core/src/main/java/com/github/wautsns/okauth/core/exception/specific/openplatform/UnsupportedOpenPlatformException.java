@@ -33,7 +33,7 @@ public class UnsupportedOpenPlatformException extends OAuth2Exception {
      * @param openPlatform open platform
      */
     public UnsupportedOpenPlatformException(String openPlatform) {
-        super(openPlatform);
+        super("Unsupported open platform: " + openPlatform);
     }
 
 }

@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.okauth.core.exception.specific.token;
 
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OAuth2ErrorException;
 
 /**
@@ -34,7 +35,7 @@ public class InvalidAccessTokenException extends OAuth2ErrorException {
      * @param errorCode error code
      * @param message error message
      */
-    public InvalidAccessTokenException(String openPlatform, String errorCode, String message) {
+    public InvalidAccessTokenException(OpenPlatform openPlatform, String errorCode, String message) {
         super(openPlatform, errorCode, message);
     }
 

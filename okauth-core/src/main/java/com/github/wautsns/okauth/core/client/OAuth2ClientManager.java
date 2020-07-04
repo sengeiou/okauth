@@ -67,10 +67,10 @@ public class OAuth2ClientManager {
      * @return self reference
      */
     public OAuth2ClientManager register(OAuth2Client<?, ?> client) {
-        String openPlatform = client.getOpenPlatform();
-        clients.put(openPlatform, client);
-        clients.put(openPlatform.toLowerCase(), client);
-        clients.put(openPlatform.toUpperCase(), client);
+        String name = client.getOpenPlatform().getName();
+        clients.put(name, client);
+        clients.put(name.toLowerCase(), client);
+        clients.put(name.toUpperCase(), client);
         return this;
     }
 

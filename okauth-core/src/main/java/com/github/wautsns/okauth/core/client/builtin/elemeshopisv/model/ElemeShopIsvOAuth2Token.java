@@ -18,8 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.elemeshopisv.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 /**
  * ElemeShopIsv oauth2 token.
@@ -35,41 +34,43 @@ import lombok.experimental.Accessors;
  * @author wautsns
  * @since Jun 25, 2020
  */
-@Data
-@Accessors(chain = true)
-public class ElemeShopIsvOAuth2Token implements OAuth2RefreshableToken {
+public class ElemeShopIsvOAuth2Token extends OAuth2RefreshableToken {
 
     private static final long serialVersionUID = 105807095993919241L;
 
-    /** Token id. */
-    private String tokenId;
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct an ElemeShopIsv oauth2 refreshable token.
+     *
+     * @param originalDataMap original data map
+     */
+    public ElemeShopIsvOAuth2Token(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.ELEME_SHOP_ISV;
     }
 
     @Override
     public String getAccessToken() {
-        return originalDataMap.getAsString("access_token");
+        return getOriginalDataMap().getAsString("access_token");
     }
 
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return originalDataMap.getAsInteger("expires_in");
+        return getOriginalDataMap().getAsInteger("expires_in");
     }
 
     @Override
     public String getRefreshToken() {
-        return originalDataMap.getAs("refresh_token");
+        return getOriginalDataMap().getAsString("refresh_token");
     }
 
     @Override
     public Integer getRefreshTokenExpirationSeconds() {
         // *** The value `refresh_token_expires_in` is added by okauth.
-        return originalDataMap.getAsInteger("refresh_token_expires_in");
+        return getOriginalDataMap().getAsInteger("refresh_token_expires_in");
     }
 
     /**
@@ -78,7 +79,7 @@ public class ElemeShopIsvOAuth2Token implements OAuth2RefreshableToken {
      * @return token type
      */
     public String getTokenType() {
-        return originalDataMap.getAsString("token_type");
+        return getOriginalDataMap().getAsString("token_type");
     }
 
     /**
@@ -87,7 +88,7 @@ public class ElemeShopIsvOAuth2Token implements OAuth2RefreshableToken {
      * @return scopes
      */
     public String getScopes() {
-        return originalDataMap.getAsString("scope");
+        return getOriginalDataMap().getAsString("scope");
     }
 
 }

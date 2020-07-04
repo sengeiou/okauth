@@ -18,8 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.baidu.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 /**
  * Baidu oauth2 token.
@@ -38,25 +37,27 @@ import lombok.experimental.Accessors;
  * @author wautsns
  * @since May 17, 2020
  */
-@Data
-@Accessors(chain = true)
-public class BaiduOAuth2Token implements OAuth2RefreshableToken {
+public class BaiduOAuth2Token extends OAuth2RefreshableToken {
 
     private static final long serialVersionUID = 626454809091111659L;
 
-    /** Token id. */
-    private String tokenId;
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a Baidu oauth2 token.
+     *
+     * @param originalDataMap original data map
+     */
+    public BaiduOAuth2Token(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.BAIDU;
     }
 
     @Override
     public String getAccessToken() {
-        return originalDataMap.getAsString("access_token");
+        return getOriginalDataMap().getAsString("access_token");
     }
 
     /**
@@ -67,12 +68,12 @@ public class BaiduOAuth2Token implements OAuth2RefreshableToken {
      */
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return originalDataMap.getAsInteger("expire_in");
+        return getOriginalDataMap().getAsInteger("expire_in");
     }
 
     @Override
     public String getRefreshToken() {
-        return originalDataMap.getAsString("refresh_token");
+        return getOriginalDataMap().getAsString("refresh_token");
     }
 
     /** Baidu oauth2 refresh token expires in ten years. */
@@ -100,7 +101,7 @@ public class BaiduOAuth2Token implements OAuth2RefreshableToken {
      * @see com.github.wautsns.okauth.core.client.builtin.baidu.BaiduOAuth2AppInfo.Scope
      */
     public String getScopes() {
-        return originalDataMap.getAsString("scope");
+        return getOriginalDataMap().getAsString("scope");
     }
 
 }

@@ -18,8 +18,7 @@ package com.github.wautsns.okauth.core.client.builtin.gitee.model;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
 /**
  * Gitee oauth2 token.
@@ -38,35 +37,37 @@ import lombok.experimental.Accessors;
  * @author wautsns
  * @since May 17, 2020
  */
-@Data
-@Accessors(chain = true)
-public class GiteeOAuth2Token implements OAuth2RefreshableToken {
+public class GiteeOAuth2Token extends OAuth2RefreshableToken {
 
     private static final long serialVersionUID = 7155633421437700449L;
 
-    /** Token id. */
-    private String tokenId;
-    /** Original data map. */
-    private final DataMap originalDataMap;
+    /**
+     * Construct a Gitee oauth2 refreshable token.
+     *
+     * @param originalDataMap original data map
+     */
+    public GiteeOAuth2Token(DataMap originalDataMap) {
+        super(originalDataMap);
+    }
 
     @Override
-    public String getOpenPlatform() {
+    public OpenPlatform getOpenPlatform() {
         return BuiltInOpenPlatformNames.GITEE;
     }
 
     @Override
     public String getAccessToken() {
-        return originalDataMap.getAsString("access_token");
+        return getOriginalDataMap().getAsString("access_token");
     }
 
     @Override
     public Integer getAccessTokenExpirationSeconds() {
-        return originalDataMap.getAsInteger("expires_in");
+        return getOriginalDataMap().getAsInteger("expires_in");
     }
 
     @Override
     public String getRefreshToken() {
-        return originalDataMap.getAsString("refresh_token");
+        return getOriginalDataMap().getAsString("refresh_token");
     }
 
     /** FIXME Gitee oauth2 refresh token expires in ??(Assume 7 days). */
@@ -84,7 +85,7 @@ public class GiteeOAuth2Token implements OAuth2RefreshableToken {
      * @see com.github.wautsns.okauth.core.client.builtin.gitee.GiteeOAuth2AppInfo.Scope
      */
     public String getScopes() {
-        return originalDataMap.getAsString("scope");
+        return getOriginalDataMap().getAsString("scope");
     }
 
     /**
@@ -93,7 +94,7 @@ public class GiteeOAuth2Token implements OAuth2RefreshableToken {
      * @return created at(seconds timestamp)
      */
     public Long getCreatedAt() {
-        return originalDataMap.getAsLong("created_at");
+        return getOriginalDataMap().getAsLong("created_at");
     }
 
 }
