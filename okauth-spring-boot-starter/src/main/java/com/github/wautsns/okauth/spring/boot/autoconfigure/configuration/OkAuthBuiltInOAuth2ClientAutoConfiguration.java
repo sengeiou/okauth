@@ -158,7 +158,7 @@ public class OkAuthBuiltInOAuth2ClientAutoConfiguration {
     // #################### WechatOfficialAccount #######################################
 
     @Bean
-    @ConditionalOnProperty("okauth.apps-info.oschina.enabled")
+    @ConditionalOnProperty("okauth.apps-info.wechat-official-account.enabled")
     @ConditionalOnMissingBean
     public WechatOfficialAccountOAuth2Client weChatOfficialAccountOAuth2Client(
             OkAuthProperties okauthProps,
