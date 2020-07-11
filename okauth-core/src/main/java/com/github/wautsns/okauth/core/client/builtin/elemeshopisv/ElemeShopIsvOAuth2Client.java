@@ -23,7 +23,7 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.entity.builtin.OAuth2HttpJsonEntity;
 import com.github.wautsns.okauth.core.assist.http.kernel.util.WriteUtils;
-import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.builtin.elemeshopisv.model.ElemeShopIsvOAuth2Token;
 import com.github.wautsns.okauth.core.client.builtin.elemeshopisv.model.ElemeShopIsvOAuth2User;
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
@@ -79,7 +79,7 @@ public class ElemeShopIsvOAuth2Client
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatformNames.ELEME_SHOP_ISV;
+        return BuiltInOpenPlatforms.ELEME_SHOP_ISV;
     }
 
     // #################### initialize api ##############################################

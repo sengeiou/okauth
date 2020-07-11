@@ -21,7 +21,7 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
-import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.builtin.tiktok.model.TikTokOAuth2Token;
 import com.github.wautsns.okauth.core.client.builtin.tiktok.model.TikTokOAuth2User;
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
@@ -70,7 +70,7 @@ public class TikTokOAuth2Client
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatformNames.TIK_TOK;
+        return BuiltInOpenPlatforms.TIK_TOK;
     }
 
     // #################### initialize api ##############################################

@@ -17,9 +17,11 @@ package com.github.wautsns.okauth.spring.boot.test;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
 import com.github.wautsns.okauth.core.client.OAuth2ClientManager;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.OkAuthAutoConfiguration;
+import com.github.wautsns.okauth.spring.boot.test.basic.BasicOkAuthTest;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -42,13 +44,14 @@ import java.util.Set;
 @Getter
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OkAuthAutoConfiguration.class)
+@SuppressWarnings("SpellCheckingInspection")
 public class OkAuthTest extends BasicOkAuthTest {
 
     @Autowired
     private OAuth2ClientManager manager;
 
     @Test
-    public void testListAuthorizeUrls() {
+    public void listAuthorizeUrls() {
         Set<OAuth2Client<?, ?>> clients = new HashSet<>();
         manager.forEach((name, client) -> clients.add(client));
         clients.stream()
@@ -63,55 +66,55 @@ public class OkAuthTest extends BasicOkAuthTest {
     @Test
     public void baidu() {
         String code = "5b72c01ee1d79cd151576cb2fddf72c8";
-        test("Baidu", code);
+        test(BuiltInOpenPlatforms.BAIDU, code);
     }
 
     @Test
     public void dingTalk() {
         String code = "";
-        test("dingTalk", code);
+        test(BuiltInOpenPlatforms.DING_TALK, code);
     }
 
     @Test
     public void elemeShopIsv() {
         String code = "";
-        test("elemeShopIsv", code);
+        test(BuiltInOpenPlatforms.ELEME_SHOP_ISV, code);
     }
 
     @Test
     public void gitee() {
-        String code = "7014fe5a35a1b5a057ca8901521bf88edf25a011ffb428ceb8f53e7602e3682c";
-        test("Gitee", code);
+        String code = "";
+        test(BuiltInOpenPlatforms.GITEE, code);
     }
 
     @Test
     public void gitHub() {
         String code = "48d566c91d824c84578a";
-        test("GitHub", code);
+        test(BuiltInOpenPlatforms.GITHUB, code);
     }
 
     @Test
     public void oschina() {
-        String code = "llAQLA";
-        test("OSChina", code);
+        String code = "";
+        test(BuiltInOpenPlatforms.OSCHINA, code);
     }
 
     @Test
     public void tikTok() {
-        String code = "llAQLA";
-        test("TikTok", code);
+        String code = "";
+        test(BuiltInOpenPlatforms.TIK_TOK, code);
     }
 
     @Test
     public void wechatOfficialAccount() {
-        String code = "llAQLA";
-        test("WechatOfficialAccount", code);
+        String code = "";
+        test(BuiltInOpenPlatforms.WECHAT_OFFICIAL_ACCOUNT, code);
     }
 
     @Test
     public void wechatWorkCorp() throws OAuth2Exception {
-        String code = "llAQLA";
-        test("WechatWorkCorp", code);
+        String code = "";
+        test(BuiltInOpenPlatforms.WECHAT_WORK_CORP, code);
     }
 
 }

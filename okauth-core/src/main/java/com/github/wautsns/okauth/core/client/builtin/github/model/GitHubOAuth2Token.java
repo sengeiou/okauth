@@ -16,7 +16,7 @@
 package com.github.wautsns.okauth.core.client.builtin.github.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
-import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
@@ -49,7 +49,7 @@ public class GitHubOAuth2Token extends OAuth2Token {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatformNames.GITHUB;
+        return BuiltInOpenPlatforms.GITHUB;
     }
 
     @Override

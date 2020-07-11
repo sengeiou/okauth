@@ -21,7 +21,7 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpRequest
 import com.github.wautsns.okauth.core.assist.http.kernel.model.OAuth2HttpResponse;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
-import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.builtin.baidu.model.BaiduOAuth2Token;
 import com.github.wautsns.okauth.core.client.builtin.baidu.model.BaiduOAuth2User;
 import com.github.wautsns.okauth.core.client.kernel.TokenRefreshableOAuth2Client;
@@ -68,7 +68,7 @@ public class BaiduOAuth2Client
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatformNames.BAIDU;
+        return BuiltInOpenPlatforms.BAIDU;
     }
 
     // #################### initialize api ##############################################

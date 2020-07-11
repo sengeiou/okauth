@@ -16,7 +16,7 @@
 package com.github.wautsns.okauth.core.client.builtin.wechatofficialaccount.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
-import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
@@ -41,7 +41,7 @@ public class WechatOfficialAccountOAuth2Token extends OAuth2RefreshableToken {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatformNames.WECHAT_OFFICIAL_ACCOUNT;
+        return BuiltInOpenPlatforms.WECHAT_OFFICIAL_ACCOUNT;
     }
 
     @Override

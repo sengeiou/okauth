@@ -16,6 +16,7 @@
 package com.github.wautsns.okauth.core.client;
 
 import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.specific.openplatform.UnsupportedOpenPlatformException;
 import lombok.RequiredArgsConstructor;
 
@@ -38,10 +39,10 @@ public class OAuth2ClientManager {
     /**
      * Get oauth2 client.
      *
-     * @param name open platform name.
-     * @param <C> type of oauth2 client.
-     * @return oauth2 client.
-     * @throws UnsupportedOpenPlatformException if there is no oauth2 client named the specified name.
+     * @param name open platform name
+     * @param <C> type of oauth2 client
+     * @return oauth2 client
+     * @throws UnsupportedOpenPlatformException if there is no oauth2 client named the specified name
      */
     @SuppressWarnings("unchecked")
     public <C extends OAuth2Client<?, ?>> C get(String name) throws UnsupportedOpenPlatformException {
@@ -51,6 +52,18 @@ public class OAuth2ClientManager {
         } else {
             throw new UnsupportedOpenPlatformException(name);
         }
+    }
+
+    /**
+     * Get oauth2 client.
+     *
+     * @param openPlatform open platform
+     * @param <C> type of oauth2 client
+     * @return oauth2 client
+     * @throws UnsupportedOpenPlatformException if there is no oauth2 client named the specified name
+     */
+    public <C extends OAuth2Client<?, ?>> C get(OpenPlatform openPlatform) throws UnsupportedOpenPlatformException {
+        return get(openPlatform.getName());
     }
 
     /**

@@ -16,7 +16,7 @@
 package com.github.wautsns.okauth.core.client.builtin.baidu.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
-import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
@@ -56,7 +56,7 @@ public class BaiduOAuth2User extends OAuth2User {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatformNames.BAIDU;
+        return BuiltInOpenPlatforms.BAIDU;
     }
 
     @Override

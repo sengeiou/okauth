@@ -16,7 +16,7 @@
 package com.github.wautsns.okauth.core.client.builtin.elemeshopisv.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
-import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
 import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import lombok.Data;
@@ -47,7 +47,7 @@ public class ElemeShopIsvOAuth2User extends OAuth2User {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatformNames.ELEME_SHOP_ISV;
+        return BuiltInOpenPlatforms.ELEME_SHOP_ISV;
     }
 
     @Override

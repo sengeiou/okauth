@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.okauth.spring.boot.test;
+package com.github.wautsns.okauth.spring.boot.test.basic;
 
 import com.github.wautsns.okauth.core.client.OAuth2ClientManager;
 import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
@@ -23,6 +23,7 @@ import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RedirectUriQuery
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2RefreshableToken;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2User;
+import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.core.exception.specific.openplatform.UnsupportedOpenPlatformException;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public abstract class BasicOkAuthTest {
 
     protected abstract OAuth2ClientManager getManager();
 
-    protected void test(String openPlatform, String code) {
+    protected void test(OpenPlatform openPlatform, String code) {
         try {
             OAuth2Client<?, ?> client = getManager().get(openPlatform);
             if (client instanceof TokenRefreshableOAuth2Client) {
@@ -52,7 +53,7 @@ public abstract class BasicOkAuthTest {
                 testOAuth2Client(client, code);
             }
         } catch (UnsupportedOpenPlatformException e) {
-            log.error(e.getMessage(), e);
+            log.warn(e.getMessage());
         } catch (OAuth2Exception e) {
             log.error(e.getMessage(), e);
             Assert.fail(e.getMessage());

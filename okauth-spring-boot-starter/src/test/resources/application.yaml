@@ -1,6 +1,6 @@
 okauth:
   enabled: true
-  apps-info:
+#  apps-info:
 #    baidu:
 #      enabled: true
 #      app-info:
@@ -33,8 +33,8 @@ okauth:
 #        redirect-uri:
 #      http-client:
 #        properties:
-#          connect-timeout: 60S
-#          read-timeout: 60S
+#          connect-timeout: 15S
+#          read-timeout: 15S
 #          retry-times: 3
 #    oschina:
 #      enabled: true

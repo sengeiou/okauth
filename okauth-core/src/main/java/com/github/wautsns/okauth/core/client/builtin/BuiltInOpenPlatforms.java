@@ -19,13 +19,13 @@ import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 import lombok.experimental.UtilityClass;
 
 /**
- * Built-in open platform names.
+ * Built-in open platforms.
  *
  * @author wautsns
  * @since May 17, 2020
  */
 @UtilityClass
-public class BuiltInOpenPlatformNames {
+public class BuiltInOpenPlatforms {
 
     /** Baidu(百度). */
     public static final OpenPlatform BAIDU = new OpenPlatform("Baidu");

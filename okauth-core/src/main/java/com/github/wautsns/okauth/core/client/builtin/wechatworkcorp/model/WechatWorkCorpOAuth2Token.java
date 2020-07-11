@@ -16,7 +16,7 @@
 package com.github.wautsns.okauth.core.client.builtin.wechatworkcorp.model;
 
 import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.DataMap;
-import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatformNames;
+import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.model.OAuth2Token;
 import com.github.wautsns.okauth.core.client.kernel.openplatform.OpenPlatform;
 
@@ -48,7 +48,7 @@ public class WechatWorkCorpOAuth2Token extends OAuth2Token {
 
     @Override
     public OpenPlatform getOpenPlatform() {
-        return BuiltInOpenPlatformNames.WECHAT_WORK_CORP;
+        return BuiltInOpenPlatforms.WECHAT_WORK_CORP;
     }
 
     @Override
