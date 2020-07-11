@@ -55,42 +55,6 @@ public class BaiduOAuth2Token extends OAuth2RefreshableToken {
         return BuiltInOpenPlatforms.BAIDU;
     }
 
-    @Override
-    public String getAccessToken() {
-        return getOriginalDataMap().getAsString("access_token");
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return {@inheritDoc}
-     * @see <a href="http://developer.baidu.com/wiki/index.php?title=docs/oauth/overview">Access token life cycle.</a>
-     */
-    @Override
-    public Integer getAccessTokenExpirationSeconds() {
-        return getOriginalDataMap().getAsInteger("expire_in");
-    }
-
-    @Override
-    public String getRefreshToken() {
-        return getOriginalDataMap().getAsString("refresh_token");
-    }
-
-    /** Baidu oauth2 refresh token expires in ten years. */
-    private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 10 * 365 * 24 * 3600;
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Baidu oauth2 refresh token expires in ten years.
-     *
-     * @return {@inheritDoc}
-     */
-    @Override
-    public Integer getRefreshTokenExpirationSeconds() {
-        return REFRESH_TOKEN_EXPIRATION_SECONDS;
-    }
-
     /**
      * Get scopes(delimiter: space).
      *

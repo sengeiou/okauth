@@ -19,7 +19,6 @@ import com.github.wautsns.okauth.core.assist.http.kernel.model.basic.OAuth2Url;
 import com.github.wautsns.okauth.core.client.OAuth2ClientManager;
 import com.github.wautsns.okauth.core.client.builtin.BuiltInOpenPlatforms;
 import com.github.wautsns.okauth.core.client.kernel.OAuth2Client;
-import com.github.wautsns.okauth.core.exception.OAuth2Exception;
 import com.github.wautsns.okauth.spring.boot.autoconfigure.OkAuthAutoConfiguration;
 import com.github.wautsns.okauth.spring.boot.test.basic.BasicOkAuthTest;
 import lombok.Getter;
@@ -112,7 +111,7 @@ public class OkAuthTest extends BasicOkAuthTest {
     }
 
     @Test
-    public void wechatWorkCorp() throws OAuth2Exception {
+    public void wechatWorkCorp() {
         String code = "";
         test(BuiltInOpenPlatforms.WECHAT_WORK_CORP, code);
     }

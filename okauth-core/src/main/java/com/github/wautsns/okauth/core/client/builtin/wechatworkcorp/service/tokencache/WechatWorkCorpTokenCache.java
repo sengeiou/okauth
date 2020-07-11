@@ -23,7 +23,7 @@ import com.github.wautsns.okauth.core.client.kernel.api.basic.OAuth2SupplierApi;
 /**
  * WeCharWorkCorp token cache.
  *
- * <p><strong>No need to consider concurrency issues.(See {@link WechatWorkCorpOAuth2Client#getToken()} for
+ * <p><strong>No need to consider concurrency problem.(See {@link WechatWorkCorpOAuth2Client#getToken()} for
  * details)</strong>
  *
  * @author wautsns

@@ -39,6 +39,7 @@ import com.github.wautsns.okauth.core.exception.specific.token.InvalidAccessToke
 import com.github.wautsns.okauth.core.exception.specific.user.InvalidUserAuthorizationException;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
 
 /**
  * WechatWorkCorp oauth2 client.

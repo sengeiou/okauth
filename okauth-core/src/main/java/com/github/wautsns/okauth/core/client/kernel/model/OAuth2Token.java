@@ -53,13 +53,17 @@ public abstract class OAuth2Token implements OpenPlatformSupplier, Serializable 
      *
      * @return access token
      */
-    public abstract String getAccessToken();
+    public String getAccessToken() {
+        return originalDataMap.getAsString("access_token");
+    }
 
     /**
      * Get access token expiration seconds.
      *
      * @return access token expiration seconds
      */
-    public abstract Integer getAccessTokenExpirationSeconds();
+    public Integer getAccessTokenExpirationSeconds() {
+        return originalDataMap.getAsInteger("expires_in");
+    }
 
 }

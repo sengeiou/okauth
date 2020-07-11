@@ -51,25 +51,4 @@ public class WechatWorkCorpOAuth2Token extends OAuth2Token {
         return BuiltInOpenPlatforms.WECHAT_WORK_CORP;
     }
 
-    @Override
-    public String getAccessToken() {
-        return getOriginalDataMap().getAsString("access_token");
-    }
-
-    @Override
-    public Integer getAccessTokenExpirationSeconds() {
-        return getOriginalDataMap().getAsInteger("expires_in");
-    }
-
-    /**
-     * Set access token expiration seconds.
-     *
-     * @param accessTokenExpirationSeconds access token expiration seconds
-     * @return self reference
-     */
-    public WechatWorkCorpOAuth2Token setAccessTokenExpirationSeconds(Integer accessTokenExpirationSeconds) {
-        getOriginalDataMap().put("expires_in", accessTokenExpirationSeconds);
-        return this;
-    }
-
 }

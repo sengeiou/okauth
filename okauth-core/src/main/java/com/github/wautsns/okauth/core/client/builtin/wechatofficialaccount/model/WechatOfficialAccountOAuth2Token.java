@@ -44,29 +44,6 @@ public class WechatOfficialAccountOAuth2Token extends OAuth2RefreshableToken {
         return BuiltInOpenPlatforms.WECHAT_OFFICIAL_ACCOUNT;
     }
 
-    @Override
-    public String getAccessToken() {
-        return getOriginalDataMap().getAsString("access_token");
-    }
-
-    @Override
-    public Integer getAccessTokenExpirationSeconds() {
-        return getOriginalDataMap().getAsInteger("expires_in");
-    }
-
-    @Override
-    public String getRefreshToken() {
-        return getOriginalDataMap().getAsString("refresh_token");
-    }
-
-    /** WechatOfficialAccount oauth2 refresh token expires in thirty days. */
-    private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 30 * 24 * 3600;
-
-    @Override
-    public Integer getRefreshTokenExpirationSeconds() {
-        return REFRESH_TOKEN_EXPIRATION_SECONDS;
-    }
-
     /**
      * Get openid.
      *

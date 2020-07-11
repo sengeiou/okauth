@@ -54,29 +54,6 @@ public class OSChinaOAuth2Token extends OAuth2RefreshableToken {
         return BuiltInOpenPlatforms.OSCHINA;
     }
 
-    @Override
-    public String getAccessToken() {
-        return getOriginalDataMap().getAsString("access_token");
-    }
-
-    @Override
-    public Integer getAccessTokenExpirationSeconds() {
-        return getOriginalDataMap().getAsInteger("expires_in");
-    }
-
-    @Override
-    public String getRefreshToken() {
-        return getOriginalDataMap().getAsString("refresh_token");
-    }
-
-    /** FIXME OSChina oauth2 refresh token expires in ??(Assume 7 days). */
-    private static final Integer REFRESH_TOKEN_EXPIRATION_SECONDS = 7 * 24 * 3600;
-
-    @Override
-    public Integer getRefreshTokenExpirationSeconds() {
-        return REFRESH_TOKEN_EXPIRATION_SECONDS;
-    }
-
     /**
      * Get token type.
      *

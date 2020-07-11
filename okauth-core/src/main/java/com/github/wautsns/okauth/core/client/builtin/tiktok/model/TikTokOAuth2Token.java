@@ -55,26 +55,6 @@ public class TikTokOAuth2Token extends OAuth2RefreshableToken {
         return BuiltInOpenPlatforms.TIK_TOK;
     }
 
-    @Override
-    public String getAccessToken() {
-        return getOriginalDataMap().getAsString("access_token");
-    }
-
-    @Override
-    public Integer getAccessTokenExpirationSeconds() {
-        return getOriginalDataMap().getAsInteger("expires_in");
-    }
-
-    @Override
-    public String getRefreshToken() {
-        return getOriginalDataMap().getAsString("refresh_token");
-    }
-
-    @Override
-    public Integer getRefreshTokenExpirationSeconds() {
-        return getOriginalDataMap().getAsInteger("refresh_expires_in");
-    }
-
     /**
      * Get openid.
      *

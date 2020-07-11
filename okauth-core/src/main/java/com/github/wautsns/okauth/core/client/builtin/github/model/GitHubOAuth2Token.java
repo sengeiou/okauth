@@ -52,11 +52,6 @@ public class GitHubOAuth2Token extends OAuth2Token {
         return BuiltInOpenPlatforms.GITHUB;
     }
 
-    @Override
-    public String getAccessToken() {
-        return getOriginalDataMap().getAsString("access_token");
-    }
-
     /** FIXME GitHub oauth2 access token expires in ??(Assume 1 day). */
     private static final Integer ACCESS_TOKEN_EXPIRATION_SECONDS = 24 * 3600;
 

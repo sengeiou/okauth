@@ -109,7 +109,6 @@ public class ElemeShopIsvOAuth2Client
                 .addGrantTypeWithValueAuthorizationCode()
                 .addRedirectUri(appInfo.getRedirectUri())
                 .addClientId(appInfo.getKey());
-        Integer refreshTokenExpiresIn = getRefreshTokenExpiresInOfCurrentEnv();
         return redirectUriQuery -> {
             String error = redirectUriQuery.getError();
             if (error != null) {
@@ -118,9 +117,7 @@ public class ElemeShopIsvOAuth2Client
             } else {
                 OAuth2HttpRequest request = basic.copy();
                 request.getEntityFormUrlEncoded().addCode(redirectUriQuery.getCode());
-                ElemeShopIsvOAuth2Token token = new ElemeShopIsvOAuth2Token(executeGetOrRefreshTokenAndCheck(request));
-                token.getOriginalDataMap().put("refresh_token_expires_in", refreshTokenExpiresIn);
-                return token;
+                return new ElemeShopIsvOAuth2Token(executeGetOrRefreshTokenAndCheck(request));
             }
         };
     }
@@ -131,13 +128,10 @@ public class ElemeShopIsvOAuth2Client
         OAuth2HttpRequest basic = OAuth2HttpRequest.initPost(url);
         basic.getHeaders().addAuthorizationBasic(appInfo.getKey(), appInfo.getSecret());
         basic.getEntityFormUrlEncoded().addGrantTypeWithValueRefreshToken();
-        Integer refreshTokenExpiresIn = getRefreshTokenExpiresInOfCurrentEnv();
         return token -> {
             OAuth2HttpRequest request = basic.copy();
             request.getEntityFormUrlEncoded().addRefreshToken(token.getRefreshToken());
-            token = new ElemeShopIsvOAuth2Token(executeGetOrRefreshTokenAndCheck(request));
-            token.getOriginalDataMap().put("refresh_token_expires_in", refreshTokenExpiresIn);
-            return token;
+            return new ElemeShopIsvOAuth2Token(executeGetOrRefreshTokenAndCheck(request));
         };
     }
 
@@ -210,22 +204,6 @@ public class ElemeShopIsvOAuth2Client
                 .collect(Collectors.joining());
         String signature = Encryptors.MD5.encrypt(action + token + metasAndParamsPart + appInfo.getSecret());
         entity.putUnchangedValue("signature", signature);
-    }
-
-    /**
-     * Get refresh_token_expires_in of the current environment.
-     *
-     * @return refresh_token_expires_in
-     */
-    private Integer getRefreshTokenExpiresInOfCurrentEnv() {
-        switch (appInfo.getEnv()) {
-            case PRODUCTION:
-                return 24 * 3600;
-            case SANDBOX:
-                return 30 * 24 * 3600;
-            default:
-                throw new IllegalStateException("Unsupported env: " + appInfo.getEnv());
-        }
     }
 
     // #################### execute request and check response ##########################

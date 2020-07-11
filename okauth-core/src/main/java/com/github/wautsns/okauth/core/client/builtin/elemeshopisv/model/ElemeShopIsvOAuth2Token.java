@@ -52,27 +52,6 @@ public class ElemeShopIsvOAuth2Token extends OAuth2RefreshableToken {
         return BuiltInOpenPlatforms.ELEME_SHOP_ISV;
     }
 
-    @Override
-    public String getAccessToken() {
-        return getOriginalDataMap().getAsString("access_token");
-    }
-
-    @Override
-    public Integer getAccessTokenExpirationSeconds() {
-        return getOriginalDataMap().getAsInteger("expires_in");
-    }
-
-    @Override
-    public String getRefreshToken() {
-        return getOriginalDataMap().getAsString("refresh_token");
-    }
-
-    @Override
-    public Integer getRefreshTokenExpirationSeconds() {
-        // *** The value `refresh_token_expires_in` is added by okauth.
-        return getOriginalDataMap().getAsInteger("refresh_token_expires_in");
-    }
-
     /**
      * Get token type.
      *

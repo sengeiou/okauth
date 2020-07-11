@@ -41,13 +41,8 @@ public abstract class OAuth2RefreshableToken extends OAuth2Token {
      *
      * @return refresh token
      */
-    public abstract String getRefreshToken();
-
-    /**
-     * Get refresh token expiration seconds.
-     *
-     * @return refresh token expiration seconds
-     */
-    public abstract Integer getRefreshTokenExpirationSeconds();
+    public String getRefreshToken() {
+        return getOriginalDataMap().getAsString("refresh_token");
+    }
 
 }
