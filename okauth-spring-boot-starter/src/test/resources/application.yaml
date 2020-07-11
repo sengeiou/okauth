@@ -1,0 +1,62 @@
+okauth:
+  enabled: true
+  apps-info:
+#    baidu:
+#      enabled: true
+#      app-info:
+#        api-key:
+#        secret-key:
+#        redirect-uri:
+#    ding-talk:
+#      enabled: true
+#      app-info:
+#        app-id:
+#        app-secret:
+#        redirect-uri:
+#    eleme-shop-isv:
+#      enabled: true
+#      app-info:
+#        key:
+#        secret:
+#        redirect-uri:
+#    gitee:
+#      enabled: true
+#      app-info:
+#        client-id:
+#        client-secret:
+#        redirect-uri:
+#    github:
+#      enabled: true
+#      app-info:
+#        client-id:
+#        client-secret:
+#        redirect-uri:
+#      http-client:
+#        properties:
+#          connect-timeout: 60S
+#          read-timeout: 60S
+#          retry-times: 3
+#    oschina:
+#      enabled: true
+#      app-info:
+#        client-id:
+#        client-secret:
+#        redirect-uri:
+#    tik-tok:
+#      enabled: true
+#      app-info:
+#        client-key:
+#        client-secret:
+#        redirect-uri:
+#    wechat-official-account:
+#      enabled: true
+#      app-info:
+#        unique-identifier:
+#        app-secret:
+#        redirect-uri:
+#    wechat-work-corp:
+#      enabled: true
+#      app-info:
+#        corp-id:
+#        corp-secret:
+#        agent-id:

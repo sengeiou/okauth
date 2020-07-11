@@ -37,7 +37,6 @@ class OAuth2HttpRequestRetryHandler extends DefaultHttpRequestRetryHandler {
     private static final List<Class<? extends IOException>> EXCEPTIONS_NOT_RETRIED = Arrays.asList(
             InterruptedIOException.class,
             UnknownHostException.class,
-            HttpHostConnectException.class,
             SSLException.class);
 
     /**

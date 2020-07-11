@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 
 /**
  * OAuth2 client manager.
@@ -50,6 +51,15 @@ public class OAuth2ClientManager {
         } else {
             throw new UnsupportedOpenPlatformException(name);
         }
+    }
+
+    /**
+     * For each name and oauth2 client.
+     *
+     * @param action action
+     */
+    public void forEach(BiConsumer<String, OAuth2Client<?, ?>> action) {
+        clients.forEach(action);
     }
 
     // #################### register ####################################################

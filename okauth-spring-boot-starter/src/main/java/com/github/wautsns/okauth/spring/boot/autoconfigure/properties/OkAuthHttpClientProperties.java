@@ -37,4 +37,35 @@ public class OkAuthHttpClientProperties {
     @NestedConfigurationProperty
     private OAuth2HttpClientProperties properties;
 
+    /**
+     * Create and return a copy of this object.
+     *
+     * @return a copy of this properties
+     */
+    public OkAuthHttpClientProperties copy() {
+        return new OkAuthHttpClientProperties()
+                .setImplementation(implementation)
+                .setProperties((properties == null) ? null : properties.copy());
+    }
+
+    /**
+     * Fill null properties.
+     *
+     * @param target target properties
+     * @param source source properties
+     * @return target properties
+     */
+    public static OkAuthHttpClientProperties fillNullProperties(
+            OkAuthHttpClientProperties target, OkAuthHttpClientProperties source) {
+        if (source == null) { return target; }
+        if (target == null) { return source.copy(); }
+        if (target.implementation == null) { target.implementation = source.implementation; }
+        if (source.properties == null) {
+            target.properties = OAuth2HttpClientProperties.initDefault();
+        } else {
+            target.properties = OAuth2HttpClientProperties.fillNullProperties(target.properties, source.properties);
+        }
+        return target;
+    }
+
 }

@@ -23,8 +23,6 @@ import com.github.wautsns.okauth.spring.boot.autoconfigure.properties.OkAuthProp
 import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
 
 /**
  * OkAuth auto-configure utils.
@@ -44,7 +42,7 @@ public class OkAuthAutoConfigureUtils {
      */
     public static OAuth2HttpClient initOAuth2HttpClient(
             OkAuthProperties okauthProps, OkAuthAppsInfoProperties.OkAuthAppInfo okauthAppInfoProps) {
-        OkAuthHttpClientProperties okauthHttpClientProps = fillNullProperties(
+        OkAuthHttpClientProperties okauthHttpClientProps = OkAuthHttpClientProperties.fillNullProperties(
                 okauthAppInfoProps.getHttpClient(), okauthProps.getDefaultHttpClient());
         try {
             Constructor<? extends OAuth2HttpClient> constructor = okauthHttpClientProps
@@ -59,36 +57,6 @@ public class OkAuthAutoConfigureUtils {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
-    }
-
-    /**
-     * Fill null properties.
-     *
-     * @param target target value
-     * @param source source value
-     * @param <T> type of value
-     * @return value after filling
-     */
-    private static <T> T fillNullProperties(T target, T source) {
-        if (target == null) { return source; }
-        Arrays.stream(target.getClass().getDeclaredFields())
-                .filter(field -> !Modifier.isStatic(field.getModifiers()))
-                .forEach(field -> {
-                    try {
-                        field.setAccessible(true);
-                        Class<?> type = field.getType();
-                        Object value;
-                        if (type.isPrimitive() || Modifier.isFinal(type.getModifiers())) {
-                            value = field.get(source);
-                        } else {
-                            value = fillNullProperties(field.get(target), field.get(source));
-                        }
-                        field.set(target, value);
-                    } catch (IllegalAccessException e) {
-                        throw new IllegalStateException(e);
-                    }
-                });
-        return target;
     }
 
 }

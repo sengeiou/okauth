@@ -19,7 +19,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.Duration;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -63,7 +63,7 @@ public class OAuth2HttpClientProperties {
                 .setKeepAliveTimeout(keepAliveTimeout)
                 .setReadTimeout(readTimeout)
                 .setProxy(proxy)
-                .setCustomProperties(new HashMap<>(customProperties));
+                .setCustomProperties((customProperties == null) ? null : new LinkedHashMap<>(customProperties));
     }
 
     // #################### utils #######################################################
@@ -90,6 +90,34 @@ public class OAuth2HttpClientProperties {
                 .setMaxIdleTime(Duration.parse("PT5M"))
                 .setKeepAliveTimeout(Duration.parse("PT3M"))
                 .setRetryTimes(1);
+    }
+
+    /**
+     * Fill null properties.
+     *
+     * @param target target properties
+     * @param source source properties
+     * @return target properties
+     */
+    public static OAuth2HttpClientProperties fillNullProperties(
+            OAuth2HttpClientProperties target, OAuth2HttpClientProperties source) {
+        if (source == null) { return target; }
+        if (target == null) { return source.copy(); }
+        if (target.connectTimeout == null) { target.connectTimeout = source.connectTimeout; }
+        if (target.readTimeout == null) { target.readTimeout = source.readTimeout; }
+        if (target.maxConcurrentRequests == null) { target.maxConcurrentRequests = source.maxConcurrentRequests; }
+        if (target.maxIdleTime == null) { target.maxIdleTime = source.maxIdleTime; }
+        if (target.keepAliveTimeout == null) { target.keepAliveTimeout = source.keepAliveTimeout; }
+        if (target.retryTimes == null) { target.retryTimes = source.retryTimes; }
+        if (target.proxy == null) { target.proxy = source.proxy; }
+        if (source.customProperties != null) {
+            Map<String, Object> targetCustomProperties = new LinkedHashMap<>(source.customProperties);
+            if (target.customProperties != null) {
+                targetCustomProperties.putAll(target.customProperties);
+            }
+            target.customProperties = targetCustomProperties;
+        }
+        return target;
     }
 
 }
