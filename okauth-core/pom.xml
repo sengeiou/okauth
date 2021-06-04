@@ -15,7 +15,7 @@
 
     <properties>
         <jackson.version>2.10.5.1</jackson.version>
-        <httpclient.version>4.5.12</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
 
         <lombok.version>1.18.12</lombok.version>
     </properties>
